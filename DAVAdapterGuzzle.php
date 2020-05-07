@@ -94,7 +94,6 @@ class DAVAdapterGuzzle extends DAVAdapter
 	#   - headers => array('headername' => val (string) OR array(val1, val2, ...))
 	public function propfind($uri, $body, $options=array())
 	{
-		$options = parent::propfindMinimalOptions($options);
 		$guzzleOptions = self::prepareGuzzleOptions($options);
 		$guzzleOptions['body'] = $body;
 

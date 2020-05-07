@@ -198,31 +198,6 @@ abstract class DAVAdapter
 
 		return $contentTypeMatches;
 	}
-
-	protected static function propfindMinimalOptions($options)
-	{
-		if (!array_key_exists("headers", $options))
-		{
-			$options["headers"] = array();
-		}
-
-		$hasDepthHeader = false;
-		foreach ($options["headers"] as $name => $values)
-		{
-			if (strcasecmp($name, "Depth") == 0)
-			{
-				$hasDepthHeader = true;
-				break;
-			}
-		}
-
-		if (!$hasDepthHeader)
-		{
-			$options["headers"]["Depth"] = "0";
-		}
-
-		return $options;
-	}
 }
 
 ?>

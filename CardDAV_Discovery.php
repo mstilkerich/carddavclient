@@ -4,6 +4,12 @@ require_once 'DAVAdapterGuzzle.php';
 
 class CardDAV_Discovery
 {
+	private static $known_servers =
+	[
+		"gmail.com" => "www.googleapis.com",
+		"googlemail.com" => "www.googleapis.com",
+	];
+
 	public function discover_addressbooks($url, $usr, $pw)
 	{
 		if (!preg_match(';^(([^:]+)://)?(([^/:]+)(:([0-9]+))?)(/?.*)$;', $url, $match))
@@ -31,6 +37,14 @@ class CardDAV_Discovery
 		// servers in the array are ordered by precedence, highest first
 		// dnsrr is only set when the server was discovered by lookup of DNS SRV record
 		$servers = $this->discoverServers($host, $force_ssl);
+
+		// some builtins for providers that have discovery for the domains known to
+		// users not properly set up
+		if (array_key_exists($host, self::$known_servers))
+		{
+			$servers[] = [ "host" => self::$known_servers[$host], "port" => $port, "scheme" => $protocol];
+		}
+
 		// as a fallback, we will last try what the user provided
 		$servers[] = [ "host" => $host, "port" => $port, "scheme" => $protocol];
 

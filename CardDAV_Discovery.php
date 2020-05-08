@@ -1,6 +1,6 @@
 <?php
 
-require_once 'DAVAdapterGuzzle.php';
+require_once 'DAVAdapter.php';
 
 class CardDAV_Discovery
 {
@@ -51,7 +51,7 @@ class CardDAV_Discovery
 		// (2) Discover the "initial context path" for each servers (until first success)
 		foreach ($servers as $server)
 		{
-			$dav = new DAVAdapterGuzzle();
+			$dav = DAVAdapter::createAdapter();
 			$baseuri = $server["scheme"] . "://" . $server["host"] . ":" . $server["port"];
 			$dav->init($baseuri, $usr, $pw, [
 				"debugfile" => 'http.log'

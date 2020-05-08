@@ -2,7 +2,7 @@
 
 require 'vendor/autoload.php';
 
-require 'DAVAdapter.php';
+require_once 'DAVAdapter.php';
 
 use GuzzleHttp\Client;
 

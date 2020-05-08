@@ -9,7 +9,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
  */
 
-require_once 'DAVAdapterGuzzle.php';
 require_once 'CardDAV_Discovery.php';
 
 include 'accounts.php';
@@ -25,7 +24,7 @@ $body = <<<EOF
 </D:prop></D:propfind>
 EOF;
 
-$dav = new DAVAdapterGuzzle();
+$dav = DAVAdapter::createAdapter();
 
 $dav->init("https://$srv", $usr, $pw, [
 	"headers" =>

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'DAVAdapterGuzzle.php';
+
 /*
 
 Plugin response object for HTTP requests:
@@ -29,6 +31,13 @@ abstract class DAVAdapter
 {
 	const NSDAV     = 'DAV:';
 	const NSCARDDAV = 'urn:ietf:params:xml:ns:carddav';
+
+	// factory method
+	public static function createAdapter()
+	{
+		$dav = new DAVAdapterGuzzle();
+		return $dav;
+	}
 
 	abstract public function init($base_uri, $username, $password, $options=array());
 

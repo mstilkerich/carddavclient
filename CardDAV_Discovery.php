@@ -48,12 +48,13 @@ class CardDAV_Discovery
 		// as a fallback, we will last try what the user provided
 		$servers[] = [ "host" => $host, "port" => $port, "scheme" => $protocol];
 
+		$addressbooks = array();
+
 		// (2) Discover the "initial context path" for each servers (until first success)
 		foreach ($servers as $server)
 		{
-			$dav = DAVAdapter::createAdapter();
 			$baseuri = $server["scheme"] . "://" . $server["host"] . ":" . $server["port"];
-			$dav->init($baseuri, $usr, $pw, [
+			$dav = DAVAdapter::createAdapter("", $usr, $pw, [
 				"debugfile" => 'http.log'
 			]);
 
@@ -80,6 +81,8 @@ class CardDAV_Discovery
 				}
 			}
 		}
+
+		return $addressbooks;
 	}
 
 	private function discoverServers($host, $force_ssl)

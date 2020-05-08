@@ -13,33 +13,6 @@ require_once 'CardDAV_Discovery.php';
 
 include 'accounts.php';
 
-/*
-$body = <<<EOF
-<?xml version="1.0" encoding="utf-8"?>
-<D:propfind xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:carddav"><D:prop>
-	<D:current-user-principal/>
-	<D:resourcetype />
-	<D:displayname />
-	<C:addressbook-home-set/>
-</D:prop></D:propfind>
-EOF;
-
-$dav = DAVAdapter::createAdapter();
-
-$dav->init("https://$srv", $usr, $pw, [
-	"headers" =>
-	[
-		'User-Agent' => 'Carddav4RC'
-	],
-	"debugfile" => 'http.log'
-]);
-$reply = $dav->propfind('/carddav/v1/principals/stilkerich@gmail.com/lists/default', $body, [
-	"headers" => [ 'X-Foo' => "Testheader" ]
-]);
-
-echo "REPLY: " . $reply["body"];
- */
-
 function set_credentials($srv, $usr, $pw)
 {
 	global $accountdata;
@@ -127,45 +100,4 @@ while ($cmd = readline("> "))
 	}
 }
 
-/*
-$onRedirect = function(
-	RequestInterface $request,
-	ResponseInterface $response,
-	UriInterface $uri
-) {
-	echo 'Redirecting! ' . $request->getUri() . ' to ' . $uri . "\n";
-};
-
-
-$client = new Client([
-	'base_uri' => "https://$srv",
-	'debug' => true,
-	'auth'  => [$usr, $pw],
-]);
-
-$response = $client->request('PROPFIND',
-	'/co',
-	[
-		'allow_redirects' => [
-			'max'             => 10,        // allow at most 10 redirects.
-			'strict'          => true,      // use "strict" RFC compliant redirects.
-			'referer'         => true,      // add a Referer header
-			'protocols'       => ['https'], // only allow https URLs
-			'on_redirect'     => $onRedirect,
-			'track_redirects' => true
-		],
-		'body'=> <<<EOF
-<?xml version="1.0" encoding="utf-8"?>
-<D:propfind xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:carddav"><D:prop>
-	<D:current-user-principal/>
-	<D:resourcetype />
-	<D:displayname />
-	<C:addressbook-home-set/>
-</D:prop></D:propfind>
-EOF
-	]
-);
-
-echo $response->getBody();
- */
 ?>

@@ -24,8 +24,10 @@ class DAVAdapterGuzzle extends DAVAdapter
 	# Options: default options for request
 	#   - headers => array('headername' => val (string) OR array(val1, val2, ...))
 	#   - debugfile => string (filename)
-	public function init($base_uri, $username, $password, $options=array())
+	public function __construct($base_uri, $username, $password, $options=array())
 	{
+		parent::__construct($base_uri);
+
 		$guzzleOptions = self::prepareGuzzleOptions($options);
 
 		if (array_key_exists("debugfile", $options))
@@ -41,34 +43,26 @@ class DAVAdapterGuzzle extends DAVAdapter
 		$this->client = new Client($guzzleOptions);
 	}
 
-	private function convertGuzzleToInternal($guzzleResponse)
+	private function responsePostProcessing($guzzleResponse)
 	{
-		$reply = array();
-		$statuscode = $guzzleResponse->getStatusCode();
-		$reply['success'] = ($statuscode >= 200) && ($statuscode < 300);
-		$reply['status'] = $statuscode;
-		$reply['statusmsg'] = $guzzleResponse->getReasonPhrase();
-		$reply['headers'] = array();
-		foreach ($guzzleResponse->getHeaders() as $name => $values)
-		{
-			$reply['headers'][strtolower($name)] = $values;
-		}
-		$reply['body'] = $guzzleResponse->getBody()->getContents();
-
 		if ($this->debughandle !== false)
 		{
-			fwrite($this->debughandle, $reply['body']);
+			fwrite($this->debughandle, $guzzleResponse->getBody());
 		}
-		return $reply;
+
+		return $guzzleResponse;
 	}
 
 	private static function prepareGuzzleOptions($options)
 	{
 		$guzzleOptions = array();
 
-		if ( array_key_exists("headers", $options) )
+		foreach ( [ "headers", "body" ] as $copyopt )
 		{
-			$guzzleOptions["headers"] = $options["headers"];
+			if ( array_key_exists($copyopt, $options) )
+			{
+				$guzzleOptions[$copyopt] = $options[$copyopt];
+			}
 		}
 
 		if (array_key_exists("allow_redirects", $options) && $options["allow_redirects"] === false)
@@ -83,56 +77,22 @@ class DAVAdapterGuzzle extends DAVAdapter
 				'strict'          => true, // keep original request method, i.e. do not perform GET on redirection target
 				'referer'         => false,
 				'protocols'       => ['http', 'https'],
-				'track_redirects' => false
+				'track_redirects' => true  // to be able to get the final resource location from a response object
 			];
 		}
 
 		return $guzzleOptions;
 	}
 
-	# Options: default options for request
-	#   - headers => array('headername' => val (string) OR array(val1, val2, ...))
-	public function propfind($uri, $body, $options=array())
-	{
-		$guzzleOptions = self::prepareGuzzleOptions($options);
-		$guzzleOptions['body'] = $body;
-
-		$response = $this->client->request('PROPFIND', $uri, $guzzleOptions);
-		return $this->convertGuzzleToInternal($response);
-	}
-
-	public function report($uri, $body, $options=array())
-	{
-		$guzzleOptions = self::prepareGuzzleOptions($options);
-		$guzzleOptions['body'] = $body;
-
-		$response = $this->client->request('REPORT', $uri, $guzzleOptions);
-		return $this->convertGuzzleToInternal($response);
-	}
-
-	public function get($uri, $options=array())
+	// Options: default options for request
+	//   - headers => array('headername' => val (string) OR array(val1, val2, ...))
+	//   - body => string (optional body content)
+	public function request($method, $uri, $options=array())
 	{
 		$guzzleOptions = self::prepareGuzzleOptions($options);
 
-		$response = $this->client->get($uri, $guzzleOptions);
-		return $this->convertGuzzleToInternal($response);
-	}
-
-	public function delete($uri, $options=array())
-	{
-		$guzzleOptions = self::prepareGuzzleOptions($options);
-
-		$response = $this->client->delete($uri, $guzzleOptions);
-		return $this->convertGuzzleToInternal($response);
-	}
-
-	public function put($uri, $body, $options=array())
-	{
-		$guzzleOptions = self::prepareGuzzleOptions($options);
-		$guzzleOptions['body'] = $body;
-
-		$response = $this->client->put($uri, $guzzleOptions);
-		return $this->convertGuzzleToInternal($response);
+		$response = $this->client->request($method, $uri, $guzzleOptions);
+		return $this->responsePostProcessing($response);
 	}
 }
 

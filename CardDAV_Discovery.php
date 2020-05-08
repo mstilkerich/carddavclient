@@ -10,6 +10,16 @@ class CardDAV_Discovery
 		"googlemail.com" => "www.googleapis.com",
 	];
 
+	private $davOptions = array();
+
+	public function __construct($options = [])
+	{
+		if (array_key_exists("debugfile", $options))
+		{
+			$davOptions["debugfile"] = $options["debugfile"];
+		}
+	}
+
 	public function discover_addressbooks($url, $usr, $pw)
 	{
 		if (!preg_match(';^(([^:]+)://)?(([^/:]+)(:([0-9]+))?)(/?.*)$;', $url, $match))
@@ -54,9 +64,7 @@ class CardDAV_Discovery
 		foreach ($servers as $server)
 		{
 			$baseuri = $server["scheme"] . "://" . $server["host"] . ":" . $server["port"];
-			$dav = DAVAdapter::createAdapter("", $usr, $pw, [
-				"debugfile" => 'http.log'
-			]);
+			$dav = DAVAdapter::createAdapter($baseuri, $usr, $pw, $this->davOptions);
 
 			$contextpaths = $this->discoverContextPath($dav, $server);
 			foreach ($contextpaths as $contextpath)

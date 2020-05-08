@@ -212,9 +212,9 @@ abstract class DAVAdapter
 			// 307	Temporary Redirect
 			$isRedirect = (($scode==301) || ($scode==302) || ($scode==307) || ($scode==308));
 
-			if($isRedirect && $reply->hasHeader('Location'))
+			if($isRedirect && $response->hasHeader('Location'))
 			{
-				$uri = self::absoluteUrl($baseurl, $reply->getHeaderLine['Location']);
+				$uri = self::absoluteUrl($uri, $response->getHeaderLine['Location']);
 				$redirAttempt++;
 			}
 			else

@@ -22,7 +22,7 @@ class CardDavDiscovery
     public function __construct(array $options = [])
     {
         if (array_key_exists("debugfile", $options)) {
-            $davOptions["debugfile"] = $options["debugfile"];
+            $this->davOptions["debugfile"] = $options["debugfile"];
         }
     }
 
@@ -155,8 +155,8 @@ class CardDavDiscovery
             if (is_array($dnsresults)) {
                 foreach ($dnsresults as $dnsresult) {
                     if (array_key_exists('txt', $dnsresult) && preg_match('/^path=(.+)/', $dnsresult['txt'], $match)) {
-                        $contextpaths[] = $match;
-                        echo "Discovered context path $match per DNS TXT record\n";
+                        $contextpaths[] = $match[1];
+                        echo "Discovered context path $match[1] per DNS TXT record\n";
                     }
                 }
             }

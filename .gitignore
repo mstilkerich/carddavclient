@@ -3,3 +3,4 @@ accounts.php
 composer.lock
 composer.phar
 vendor
+http.log

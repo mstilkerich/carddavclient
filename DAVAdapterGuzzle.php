@@ -52,7 +52,7 @@ class DAVAdapterGuzzle extends DAVAdapter
     private function responsePostProcessing(Psr7Response $guzzleResponse): Psr7Response
     {
         if ($this->debughandle !== false) {
-            fwrite($this->debughandle, $guzzleResponse->getBody());
+            fwrite($this->debughandle, (string) $guzzleResponse->getBody());
         }
 
         return $guzzleResponse;

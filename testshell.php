@@ -51,7 +51,7 @@ function discover($srv, ?string $usr = null, ?string $pw = null): bool
     if (isset($username) && isset($password)) {
         echo "Discover($srv, $username, $password)\n";
 
-        $discover = new CardDavDiscovery();
+        $discover = new CardDavDiscovery(["debugfile" => "http.log"]);
         $discover->discoverAddressbooks($srv, $username, $password);
         $retval = true;
     }

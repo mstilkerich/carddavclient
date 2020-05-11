@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Class HttpClientAdapterGuzzle
+ * Adapter for the Guzzle HTTP client library.
+ *
+ * @author Michael Stilkerich <michael@stilkerich.eu>
+ * @copyright 2020 Michael Stilkerich
+ * @license http://opensource.org/licenses/gpl-license.php GNU General Public License, version 2 (or later)
+ * @internal
  */
 
 declare(strict_types=1);
@@ -12,20 +17,30 @@ use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Http\Client\ClientInterface as Psr18ClientInterface;
 
+/**
+ * Adapter for the Guzzle HTTP client library.
+ */
 class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
 {
     /********* PROPERTIES *********/
 
-    /** @var GuzzleClient */
+    /** @var GuzzleClient The Client object of the Guzzle HTTP library. */
     private $client;
 
-    /** @var resource|null */
+    /** @var resource|null Handle of the debug file if debugging is enabled. */
     private $debughandle = null;
 
     /********* PUBLIC FUNCTIONS *********/
-    # Options: default options for request
-    #   - headers => array('headername' => val (string) OR array(val1, val2, ...))
-    #   - debugfile => string (filename)
+
+    /** Constructs a HttpClientAdapterGuzzle object.
+     *
+     * @param string $base_uri Base URI to be used when relative URIs are given to requests.
+     * @param string $username Username used to authenticate with the server.
+     * @param string $password Password used to authenticate with the server.
+     * @param array  $options  Options for the HTTP client, and default request options. May include any of the options
+     *               accepted by {@see HttpClientAdapterInterface::sendRequest()}, plus the following:
+     *               'debugfile' => string: Filename to be used for debug logging of all HTTP traffic.
+     */
     public function __construct(string $base_uri, string $username, string $password, array $options = [])
     {
         $guzzleOptions = self::prepareGuzzleOptions($options);
@@ -42,11 +57,44 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
         $this->client = new GuzzleClient($guzzleOptions);
     }
 
+    /** Destructor of the adapter.
+     *
+     * Closes the debug file if enabled.
+     */
     public function __destruct()
     {
         if (isset($this->debughandle)) {
             echo "Closing Debug Handle\n";
             fclose($this->debughandle);
+        }
+    }
+
+    /**
+     * Sends a PSR-7 request and returns a PSR-7 response.
+     *
+     * @todo throw Psr\Http\Client\ClientExceptionInterface exception if request could not be sent or response could
+     *   not be parsed
+     * @todo throw Psr\Http\Client\RequestExceptionInterface if request is not a well-formed HTTP request or is missing
+     *   some critical piece of information (such as a Host or Method)
+     * @todo throw Psr\Http\Client\NetworkExceptionInterface if the request cannot be sent due to a network failure of
+     *   any kind, including a timeout
+     */
+    public function sendRequest(string $method, string $uri, array $options = []): Psr7Response
+    {
+        $guzzleOptions = self::prepareGuzzleOptions($options);
+
+        try {
+            $response = $this->client->request($method, $uri, $guzzleOptions);
+            return $this->responsePostProcessing($response);
+        } catch (GuzzleHttp\Exception\ConnectException $e) {
+            // thrown in the event of a networking error
+            //
+            // TODO map to Psr\Http\Client\NetworkExceptionInterface
+        } catch (\InvalidArgumentException $e) {
+            // TODO map to Psr\Http\Client\RequestExceptionInterface
+        } catch (GuzzleHttp\Exception\GuzzleException $e) {
+            // Anything else
+            // TODO map to Psr\Http\Client\ClientExceptionInterface
         }
     }
 
@@ -78,39 +126,11 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
                 'strict'          => true, // keep original method, i.e. do not perform GET on redirection target
                 'referer'         => false,
                 'protocols'       => ['http', 'https'],
-                'track_redirects' => true  // to be able to get the final resource location from a response object
+                'track_redirects' => false
             ];
         }
 
         return $guzzleOptions;
-    }
-
-    // Options: default options for request
-    //   - headers => array('headername' => val (string) OR array(val1, val2, ...))
-    //   - body => string (optional body content)
-    //   TODO throw Psr\Http\Client\ClientExceptionInterface exception if request could not be sent or response could
-    //   not be parsed
-    //   TODO throw Psr\Http\Client\RequestExceptionInterface if request is not a well-formed HTTP request or is missing
-    //   some critical piece of information (such as a Host or Method)
-    //   TODO throw Psr\Http\Client\NetworkExceptionInterface if the request cannot be sent due to a network failure of
-    //   any kind, including a timeout
-    /**
-     * Sends a PSR-7 request and returns a PSR-7 response.
-     *
-     * @param string $method
-     * @param string $uri
-     * @param array $options
-     *
-     * @return Psr7Response
-     *
-     * @throws \Psr\Http\Client\ClientExceptionInterface If an error happens while processing the request.
-     */
-    public function sendRequest(string $method, string $uri, array $options = []): Psr7Response
-    {
-        $guzzleOptions = self::prepareGuzzleOptions($options);
-
-        $response = $this->client->request($method, $uri, $guzzleOptions);
-        return $this->responsePostProcessing($response);
     }
 }
 

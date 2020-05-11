@@ -20,11 +20,17 @@
 		"docs": "https://github.com/mstilkerich/carddavclient"
 	},
     "require": {
-        "guzzlehttp/guzzle": "~6.0"
+        "php": ">=7.1.0",
+        "guzzlehttp/guzzle": "~6.0",
+        "psr/http-client": "^1.0",
+        "psr/http-message": "^1.0"
     },
 	"autoload": {
 		"psr-4": {
 			"MStilkerich\\CardDavClient\\": ""
 		}
-	}
+	},
+    "require-dev": {
+        "vimeo/psalm": "^3.11"
+    }
 }

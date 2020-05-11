@@ -16,13 +16,13 @@ class CardDavDiscovery
         "googlemail.com" => "www.googleapis.com",
     ];
 
-    private $davOptions = [];
+    private $davClientOptions = [];
 
     /********* PUBLIC FUNCTIONS *********/
     public function __construct(array $options = [])
     {
         if (array_key_exists("debugfile", $options)) {
-            $this->davOptions["debugfile"] = $options["debugfile"];
+            $this->davClientOptions["debugfile"] = $options["debugfile"];
         }
     }
 
@@ -69,19 +69,19 @@ class CardDavDiscovery
         // (2) Discover the "initial context path" for each servers (until first success)
         foreach ($servers as $server) {
             $baseuri = $server["scheme"] . "://" . $server["host"] . ":" . $server["port"];
-            $dav = DAVAdapter::createAdapter($baseuri, $usr, $pw, $this->davOptions);
+            $davClient = new CardDavClient($baseuri, $usr, $pw, $this->davClientOptions);
 
-            $contextpaths = $this->discoverContextPath($dav, $server);
+            $contextpaths = $this->discoverContextPath($davClient, $server);
             foreach ($contextpaths as $contextpath) {
                 echo "Try context path $contextpath\n";
                 // (3) Attempt a PROPFIND asking for the DAV:current-user-principal property
-                $principalUri = $dav->findCurrentUserPrincipal($contextpath);
+                $principalUri = $davClient->findCurrentUserPrincipal($contextpath);
                 if (isset($principalUri)) {
                     // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
-                    $addressbookHomeUri = $dav->findAddressbookHome($principalUri);
+                    $addressbookHomeUri = $davClient->findAddressbookHome($principalUri);
                     if (isset($addressbookHomeUri)) {
                         // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
-                        $addressbooks = $dav->findAddressbooks($addressbookHomeUri);
+                        $addressbooks = $davClient->findAddressbooks($addressbookHomeUri);
 
                         if (count($addressbooks) > 0) {
                             break 2;
@@ -119,7 +119,7 @@ class CardDavDiscovery
             // order according to priority and weight
             // TODO weight is not quite correctly handled atm, see RFC2782,
             // but this is not crucial to functionality
-            $sortPrioWeight = function ($a, $b) {
+            $sortPrioWeight = function (array $a, array $b): int {
                 if ($a['pri'] != $b['pri']) {
                     return $b['pri'] - $a['pri'];
                 }
@@ -146,7 +146,7 @@ class CardDavDiscovery
         return $servers;
     }
 
-    private function discoverContextPath(DAVAdapter $dav, array $server): array
+    private function discoverContextPath(CardDavClient $davClient, array $server): array
     {
         $contextpaths = array();
 

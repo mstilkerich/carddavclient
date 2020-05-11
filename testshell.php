@@ -43,7 +43,7 @@ function set_credentials(string $srv, ?string $usr, ?string $pw): array
     return [$username, $password];
 }
 
-function discover($srv, ?string $usr = null, ?string $pw = null): bool
+function discover(string $srv, ?string $usr = null, ?string $pw = null): bool
 {
     list($username, $password) = set_credentials($srv, $usr, $pw);
     $retval = false;
@@ -64,20 +64,18 @@ while ($cmd = readline("> ")) {
 
     $tokens = explode(" ", $cmd);
 
-    if (is_array($tokens) && count($tokens) > 0) {
-        $command = array_shift($tokens);
-        switch ($command) {
-            case "discover":
-                if (count($tokens) > 0) {
-                    $command_ok = call_user_func_array('MStilkerich\CardDavClient\discover', $tokens);
-                } else {
-                    echo "Usage: discover <servername> [<username>] [<password>]\n";
-                }
-                break;
-            default:
-                echo "Unknown command $command\n";
-                break;
-        }
+    $command = array_shift($tokens);
+    switch ($command) {
+        case "discover":
+            if (count($tokens) > 0) {
+                $command_ok = call_user_func_array('MStilkerich\CardDavClient\discover', $tokens);
+            } else {
+                echo "Usage: discover <servername> [<username>] [<password>]\n";
+            }
+            break;
+        default:
+            echo "Unknown command $command\n";
+            break;
     }
 
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Abstract Class DAVAdapter
+ * Class CardDavClient
  */
 
 declare(strict_types=1);
@@ -16,29 +16,29 @@ Other needed features:
   - Setting extra headers (Depth, Content-Type, charset, If-Match, If-None-Match)
   - Debug output HTTP traffic to logfile
  */
-abstract class DAVAdapter
+class CardDavClient
 {
     /********* CONSTANTS *********/
-    const NSDAV     = 'DAV:';
-    const NSCARDDAV = 'urn:ietf:params:xml:ns:carddav';
+    public const NSDAV     = 'DAV:';
+    public const NSCARDDAV = 'urn:ietf:params:xml:ns:carddav';
 
     /********* PROPERTIES *********/
+    /** @var string */
     protected $base_uri;
 
-    /********* PUBLIC FUNCTIONS *********/
+    /** @var HttpClientAdapterInterface */
+    protected $httpClient;
 
-    // factory method
-    public static function createAdapter(
+    /********* PUBLIC FUNCTIONS *********/
+    public function __construct(
         string $base_uri,
         string $username,
         string $password,
         array $options = []
-    ): DAVAdapter {
-        $dav = new DAVAdapterGuzzle($base_uri, $username, $password, $options);
-        return $dav;
+    ) {
+        $this->base_uri = $base_uri;
+        $this->httpClient = new HttpClientAdapterGuzzle($base_uri, $username, $password, $options);
     }
-
-    abstract public function request(string $method, string $uri, array $options = []): Psr7Response;
 
     /**
      * Queries the given URI for the current-user-principal property.
@@ -48,8 +48,8 @@ abstract class DAVAdapter
      *
      * @return
      *  The principal URI (string), or NULL in case of error. The returned URI is suited
-     *  to be used for queries with this DAVAdapter object (i.e. either a full URI,
-     *  or meaningful as relative URI to the base URI of this DAVAdapter).
+     *  to be used for queries with this client (i.e. either a full URI,
+     *  or meaningful as relative URI to the base URI of this client).
      */
     public function findCurrentUserPrincipal(string $contextPathUri): ?string
     {
@@ -76,8 +76,8 @@ abstract class DAVAdapter
      *
      * @return
      *  The user's addressbook home URI (string), or false in case of error. The returned URI is suited
-     *  to be used for queries with this DAVAdapter object (i.e. either a full URI,
-     *  or meaningful as relative URI to the base URI of this DAVAdapter).
+     *  to be used for queries with this client (i.e. either a full URI,
+     *  or meaningful as relative URI to the base URI of this client).
      */
     public function findAddressbookHome(string $principalUri): ?string
     {
@@ -134,12 +134,6 @@ abstract class DAVAdapter
         return $abooksResult;
     }
 
-    /********* PROTECTED FUNCTIONS *********/
-    protected function __construct(string $base_uri)
-    {
-        $this->base_uri = $base_uri;
-    }
-
     /********* PRIVATE FUNCTIONS *********/
     // $props is either a single property or an array of properties
     // Namespace shortcuts: DAV for DAV, CARDDAV for the CardDAV namespace
@@ -187,7 +181,7 @@ abstract class DAVAdapter
         try {
             $xml = new SimpleXMLElement($xmlString);
             self::registerNamespaces($xml);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "XML could not be parsed: " . $e->getMessage() . "\n";
             $xml = null;
         }
@@ -195,7 +189,7 @@ abstract class DAVAdapter
         return $xml;
     }
 
-    private static function registerNamespaces(SimpleXMLElement $xml)
+    private static function registerNamespaces(SimpleXMLElement $xml): void
     {
         $xml->registerXPathNamespace('CARDDAV', self::NSCARDDAV);
         $xml->registerXPathNamespace('DAV', self::NSDAV);
@@ -211,7 +205,7 @@ abstract class DAVAdapter
         $uri = self::absoluteUrl($this->base_uri, $uri);
 
         do {
-            $response = $this->request($method, $uri, $options);
+            $response = $this->httpClient->sendRequest($method, $uri, $options);
             $scode = $response->getStatusCode();
 
             // 301 Moved Permanently

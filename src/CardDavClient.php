@@ -96,15 +96,33 @@ class CardDavClient
         return $addressbookHomeUriAbsolute;
     }
 
+    // RFC6352: An address book collection MUST report the DAV:collection and CARDDAV:addressbook XML elements in the
+    // value of the DAV:resourcetype property.
+    // CARDDAV:supported-address-data (supported Media Types (e.g. vCard3, vCard4) of an addressbook collectioan)
+    // CARDDAV:addressbook-description (property of an addressbook collection)
+    // CARDDAV:max-resource-size (maximum size in bytes for an address object of the addressbook collection)
     public function findAddressbooks(string $addressbookHomeUri): array
     {
-        $result = $this->findProperties($addressbookHomeUri, ['DAV:resourcetype', 'DAV:displayname'], "1");
+        $result = $this->findProperties(
+            $addressbookHomeUri,
+            [
+                'DAV:resourcetype',
+                'DAV:displayname',
+                'CARDDAV:supported-address-data',
+                'CARDDAV:addressbook-description',
+                'CARDDAV:max-resource-size'
+            ],
+            "1"
+        );
         $xml = $result["xml"];
 
         $abooksResult = [];
         if (isset($xml)) { // select the responses that have a successful (status 200) resourcetype addressbook response
             $abooks = $xml->xpath(
-                "//DAV:response[DAV:propstat[contains(DAV:status,' 200 ')]/DAV:prop/DAV:resourcetype/CARDDAV:addressbook]"
+                "//DAV:response"
+                . "["
+                . "DAV:propstat[contains(DAV:status,' 200 ')]/DAV:prop/DAV:resourcetype/CARDDAV:addressbook"
+                . "]"
             );
             if (is_array($abooks)) {
                 foreach ($abooks as $abook) {
@@ -154,7 +172,15 @@ class CardDavClient
         $result = $this->requestWithRedirectionTarget(
             'PROPFIND',
             $uri,
-            ["headers" => ["Depth" => $depth], "body" => $body]
+            [
+                "headers" =>
+                [
+                    "Depth" => $depth,
+                    // Prefer: reduce reply size if supported, see RFC8144
+                    "Prefer" => "return=minimal" . ($depth==0 ? "" : ", depth-noroot")
+                ],
+                "body" => $body
+            ]
         );
         $result["xml"] = self::checkAndParseXML($result["response"]);
         return $result;
@@ -248,6 +274,11 @@ class CardDavClient
 
         return $targeturl;
     }
+
+
+
+    // Addressbook collections only contain 1) address objects or 2) collections that are (recursively) NOT addressbooks
+    // I.e. all address objects an be found directly within the addressbook collection, and no nesting of addressbooks
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

@@ -82,12 +82,9 @@ class CardDavClient
      */
     public function findCurrentUserPrincipal(string $contextPathUri): ?string
     {
-        $result = $this->findProperties($contextPathUri, ['DAV:current-user-principal']);
+        $result = $this->findProperties($contextPathUri, ["DAV:current-user-principal"]);
 
-        $princUrlAbsolute =
-            (count($result) > 0 && isset($result[0]["props"]['DAV:current-user-principal']))
-            ? $result[0]["props"]['DAV:current-user-principal']
-            : null;
+        $princUrlAbsolute = $result[0]["props"]["DAV:current-user-principal"] ?? null;
 
         if (isset($princUrlAbsolute)) {
             echo "principal URL: $princUrlAbsolute\n";
@@ -109,12 +106,9 @@ class CardDavClient
      */
     public function findAddressbookHome(string $principalUri): ?string
     {
-        $result = $this->findProperties($principalUri, ['CARDDAV:addressbook-home-set']);
+        $result = $this->findProperties($principalUri, ["CARDDAV:addressbook-home-set"]);
 
-        $addressbookHomeUriAbsolute =
-            (count($result) > 0 && isset($result[0]["props"]['CARDDAV:addressbook-home-set']))
-            ? $result[0]["props"]['CARDDAV:addressbook-home-set']
-            : null;
+        $addressbookHomeUriAbsolute = $result[0]["props"]["CARDDAV:addressbook-home-set"] ?? null;
 
         if (isset($addressbookHomeUriAbsolute)) {
             echo "addressbook home: $addressbookHomeUriAbsolute\n";
@@ -130,22 +124,22 @@ class CardDavClient
     // CARDDAV:max-resource-size (maximum size in bytes for an address object of the addressbook collection)
     public function findAddressbooks(string $addressbookHomeUri): array
     {
-        $results = $this->findProperties(
+        $abooks = $this->findProperties(
             $addressbookHomeUri,
             [
-                'DAV:resourcetype',
-                'DAV:displayname',
-                'CARDDAV:supported-address-data',
-                'CARDDAV:addressbook-description',
-                'CARDDAV:max-resource-size'
+                "DAV:resourcetype",
+                "DAV:displayname",
+                "CARDDAV:supported-address-data",
+                "CARDDAV:addressbook-description",
+                "CARDDAV:max-resource-size"
             ],
             "1",
             "DAV:propstat[contains(DAV:status,' 200 ')]/DAV:prop/DAV:resourcetype/CARDDAV:addressbook"
         );
 
         $abooksResult = [];
-        foreach ($results as $abook) {
-            $abookUri = $abook["uri"];
+        foreach ($abooks as $abook) {
+            $abookUri = self::absoluteUrl($addressbookHomeUri, $abook["uri"]);
 
             if (isset($abook["props"]["DAV:displayname"])) {
                 $abookName = $abook["props"]["DAV:displayname"];
@@ -153,9 +147,15 @@ class CardDavClient
                 $abookName = basename($abookUri);
                 echo "Autosetting name from $abookUri to $abookName\n";
             }
-
             echo "Found addressbook at $abookUri named $abookName\n";
-            $abooksResult[] = [ "name" => $abookName, "uri" => $abookUri ];
+
+            $abooksResult[] = [
+                "uri"  => $abookUri,
+                "name" => $abookName,
+                "mediatypes" => $abook["props"]["CARDDAV:supported-address-data"] ??  null,
+                "description" => $abook["props"]["CARDDAV:addressbook-description"] ?? null,
+                "max-resource-size" => $abook["props"]["CARDDAV:max-resource-size"] ?? null
+            ];
         }
 
         return $abooksResult;
@@ -196,45 +196,36 @@ class CardDavClient
         $xml = self::checkAndParseXML($result["response"]);
 
         $resultProperties = [];
-
         // extract retrieved properties
         if (isset($xml)) {
-            $okResponses = $xml->xpath("//DAV:response[$responseXPathPredicate]");
-            if (is_array($okResponses)) {
-                foreach ($okResponses as $responseXml) {
-                    self::registerNamespaces($responseXml);
-                    $uri = $responseXml->xpath('child::DAV:href');
-                    if (is_array($uri) && count($uri) > 0) {
-                        $resultProperty = [ 'uri' => (string) $uri[0], 'props' => [] ];
+            $okResponses = $xml->xpath("//DAV:response[$responseXPathPredicate]") ?: [];
+            foreach ($okResponses as $responseXml) {
+                self::registerNamespaces($responseXml);
+                $uri = $responseXml->xpath('child::DAV:href') ?: [];
+                if (isset($uri[0])) {
+                    $resultProperty = [ 'uri' => (string) $uri[0], 'props' => [] ];
 
-                        $okProps = $responseXml->xpath("DAV:propstat[contains(DAV:status,' 200 ')]/DAV:prop/*");
-                        if (is_array($okProps)) {
-                            foreach ($okProps as $propXml) {
-                                self::registerNamespaces($propXml);
-                                $propShort = $propXml->getName();
-                                $propFQ = $propShort;
+                    $okProps = $responseXml->xpath("DAV:propstat[contains(DAV:status,' 200 ')]/DAV:prop/*") ?: [];
+                    foreach ($okProps as $propXml) {
+                        self::registerNamespaces($propXml);
+                        $propShort = $propXml->getName();
+                        $propFQ = (self::DAV_PROPERTIES[$propShort]["ns"] ?? "") . $propShort;
 
-                                if (isset(self::DAV_PROPERTIES[$propShort])) {
-                                    $propFQ = self::DAV_PROPERTIES[$propShort]["ns"] . $propShort;
-                                }
-
-                                if (in_array($propFQ, $props)) {
-                                    if (isset(self::DAV_PROPERTIES[$propShort]['converter'])) {
-                                        $val = call_user_func(
-                                            self::DAV_PROPERTIES[$propShort]['converter'],
-                                            $propXml,
-                                            $result
-                                        );
-                                    } else {
-                                        $val = (string) $propXml;
-                                    }
-                                    $resultProperty["props"][$propFQ] = $val;
-                                }
+                        if (in_array($propFQ, $props)) {
+                            if (isset(self::DAV_PROPERTIES[$propShort]['converter'])) {
+                                $val = call_user_func(
+                                    self::DAV_PROPERTIES[$propShort]['converter'],
+                                    $propXml,
+                                    $result
+                                );
+                            } else {
+                                $val = (string) $propXml;
                             }
+                            $resultProperty["props"][$propFQ] = $val;
                         }
-
-                        $resultProperties[] = $resultProperty;
                     }
+
+                    $resultProperties[] = $resultProperty;
                 }
             }
         }
@@ -305,9 +296,9 @@ class CardDavClient
         } while ($redirAttempt < $redirLimit);
 
         return [
-            'redirected' => ($redirAttempt == 0),
-            'location' => $uri,
-            'response' => $response
+            "redirected" => ($redirAttempt == 0),
+            "location" => $uri,
+            "response" => $response
         ];
     }
 
@@ -336,9 +327,9 @@ class CardDavClient
         $hrefAbsolute = null;
 
         self::registerNamespaces($parentElement);
-        $href = $parentElement->xpath('child::DAV:href');
-        if (is_array($href) && count($href) > 0) {
-            $hrefAbsolute = self::absoluteUrl($findPropertiesResult['location'], (string) $href[0]);
+        $href = $parentElement->xpath("child::DAV:href");
+        if (isset($href[0])) {
+            $hrefAbsolute = self::absoluteUrl($findPropertiesResult["location"], (string) $href[0]);
         }
 
         return $hrefAbsolute;

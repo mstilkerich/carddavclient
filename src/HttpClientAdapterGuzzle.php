@@ -46,7 +46,7 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
     {
         $guzzleOptions = self::prepareGuzzleOptions($options);
 
-        if (array_key_exists("debugfile", $options)) {
+        if (key_exists("debugfile", $options)) {
             $this->debughandle = fopen($options["debugfile"], "a");
             $guzzleOptions["debug"] = $this->debughandle;
         }
@@ -104,12 +104,12 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
         $guzzleOptions = [];
 
         foreach ([ "headers", "body" ] as $copyopt) {
-            if (array_key_exists($copyopt, $options)) {
+            if (key_exists($copyopt, $options)) {
                 $guzzleOptions[$copyopt] = $options[$copyopt];
             }
         }
 
-        if (array_key_exists("allow_redirects", $options) && $options["allow_redirects"] === false) {
+        if (key_exists("allow_redirects", $options) && $options["allow_redirects"] === false) {
             $guzzleOptions["allow_redirects"] = false;
         } else {
             $guzzleOptions["allow_redirects"] = [

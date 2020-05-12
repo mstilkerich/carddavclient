@@ -24,7 +24,7 @@ class CardDavDiscovery
     /********* PUBLIC FUNCTIONS *********/
     public function __construct(array $options = [])
     {
-        if (array_key_exists("debugfile", $options)) {
+        if (key_exists("debugfile", $options)) {
             $this->davClientOptions["debugfile"] = $options["debugfile"];
         }
     }
@@ -60,7 +60,7 @@ class CardDavDiscovery
 
         // some builtins for providers that have discovery for the domains known to
         // users not properly set up
-        if (array_key_exists($host, self::$known_servers)) {
+        if (key_exists($host, self::$known_servers)) {
             $servers[] = [ "host" => self::$known_servers[$host], "port" => $port, "scheme" => $protocol];
         }
 
@@ -153,11 +153,11 @@ class CardDavDiscovery
     {
         $contextpaths = array();
 
-        if (array_key_exists("dnsrr", $server)) {
+        if (key_exists("dnsrr", $server)) {
             $dnsresults = dns_get_record($server["dnsrr"], DNS_TXT);
             if (is_array($dnsresults)) {
                 foreach ($dnsresults as $dnsresult) {
-                    if (array_key_exists('txt', $dnsresult) && preg_match('/^path=(.+)/', $dnsresult['txt'], $match)) {
+                    if (key_exists('txt', $dnsresult) && preg_match('/^path=(.+)/', $dnsresult['txt'], $match)) {
                         $contextpaths[] = $match[1];
                         echo "Discovered context path $match[1] per DNS TXT record\n";
                     }

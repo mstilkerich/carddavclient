@@ -21,7 +21,7 @@ function set_credentials(string $srv, ?string $usr, ?string $pw): array
     $username = $usr;
     $password = $pw;
 
-    if (array_key_exists($srv, $accountdata)) {
+    if (key_exists($srv, $accountdata)) {
         $def = $accountdata[$srv];
     }
 
@@ -62,7 +62,7 @@ function discover(string $srv, ?string $usr = null, ?string $pw = null): bool
 while ($cmd = readline("> ")) {
     $command_ok = false;
 
-    $tokens = explode(" ", $cmd);
+    $tokens = preg_split("/\s+/", $cmd);
 
     $command = array_shift($tokens);
     switch ($command) {

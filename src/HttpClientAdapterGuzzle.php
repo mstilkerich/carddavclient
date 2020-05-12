@@ -16,6 +16,7 @@ namespace MStilkerich\CardDavClient;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Http\Client\ClientInterface as Psr18ClientInterface;
+use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
 
 /**
  * Adapter for the Guzzle HTTP client library.
@@ -71,13 +72,6 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
 
     /**
      * Sends a PSR-7 request and returns a PSR-7 response.
-     *
-     * @todo throw Psr\Http\Client\ClientExceptionInterface exception if request could not be sent or response could
-     *   not be parsed
-     * @todo throw Psr\Http\Client\RequestExceptionInterface if request is not a well-formed HTTP request or is missing
-     *   some critical piece of information (such as a Host or Method)
-     * @todo throw Psr\Http\Client\NetworkExceptionInterface if the request cannot be sent due to a network failure of
-     *   any kind, including a timeout
      */
     public function sendRequest(string $method, string $uri, array $options = []): Psr7Response
     {
@@ -86,15 +80,12 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
         try {
             $response = $this->client->request($method, $uri, $guzzleOptions);
             return $this->responsePostProcessing($response);
-        } catch (GuzzleHttp\Exception\ConnectException $e) {
-            // thrown in the event of a networking error
-            //
-            // TODO map to Psr\Http\Client\NetworkExceptionInterface
-        } catch (\InvalidArgumentException $e) {
-            // TODO map to Psr\Http\Client\RequestExceptionInterface
-        } catch (GuzzleHttp\Exception\GuzzleException $e) {
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            // thrown in the event of a networking error or too many redirects
+            throw new NetworkException($e->getMessage(), intval($e->getCode()), $e->getRequest(), $e);
+        } catch (\InvalidArgumentException | \GuzzleHttp\Exception\GuzzleException $e) {
             // Anything else
-            // TODO map to Psr\Http\Client\ClientExceptionInterface
+            throw new ClientException($e->getMessage(), intval($e->getCode()), $e);
         }
     }
 

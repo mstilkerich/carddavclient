@@ -11,11 +11,14 @@ namespace MStilkerich\CardDavClient;
 class CardDavDiscovery
 {
     /********* PROPERTIES *********/
+
+    /** @var array Some builtins for public providers that don't have discovery properly set up. */
     private static $known_servers = [
         "gmail.com" => "www.googleapis.com",
         "googlemail.com" => "www.googleapis.com",
     ];
 
+    /** @var array Options to the HttpClient */
     private $davClientOptions = [];
 
     /********* PUBLIC FUNCTIONS *********/

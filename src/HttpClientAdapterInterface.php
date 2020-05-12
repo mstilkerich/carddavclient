@@ -2,7 +2,7 @@
 
 /**
  * Interface for the internal HTTP client adapter.
- * 
+ *
  * This interface intends to decouple the rest of this library from the underlying HTTP client library to allow for
  * future replacement.
  *

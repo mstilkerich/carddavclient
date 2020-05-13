@@ -187,7 +187,7 @@ class CardDavClient
                     // RFC4918: A client MUST submit a Depth header with a value of "0", "1", or "infinity"
                     "Depth" => $depth,
                     // Prefer: reduce reply size if supported, see RFC8144
-                    "Prefer" => "return=minimal" . (($depth == 0) ? "" : ", depth-noroot")
+                    "Prefer" => "return=minimal")
                 ],
                 "body" => $body
             ]

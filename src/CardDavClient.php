@@ -141,20 +141,9 @@ class CardDavClient
         foreach ($abooks as $abook) {
             $abookUri = self::absoluteUrl($addressbookHomeUri, $abook["uri"]);
 
-            if (isset($abook["props"]["DAV:displayname"])) {
-                $abookName = $abook["props"]["DAV:displayname"];
-            } else {
-                $abookName = basename($abookUri);
-                echo "Autosetting name from $abookUri to $abookName\n";
-            }
-            echo "Found addressbook at $abookUri named $abookName\n";
-
             $abooksResult[] = [
-                "uri"  => $abookUri,
-                "name" => $abookName,
-                "mediatypes" => $abook["props"]["CARDDAV:supported-address-data"] ??  null,
-                "description" => $abook["props"]["CARDDAV:addressbook-description"] ?? null,
-                "max-resource-size" => $abook["props"]["CARDDAV:max-resource-size"] ?? null
+                "uri"   => $abookUri,
+                "props" => $abook["props"]
             ];
         }
 
@@ -187,7 +176,7 @@ class CardDavClient
                     // RFC4918: A client MUST submit a Depth header with a value of "0", "1", or "infinity"
                     "Depth" => $depth,
                     // Prefer: reduce reply size if supported, see RFC8144
-                    "Prefer" => "return=minimal")
+                    "Prefer" => "return=minimal"
                 ],
                 "body" => $body
             ]

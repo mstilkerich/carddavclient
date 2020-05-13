@@ -4,3 +4,6 @@ composer.lock
 composer.phar
 vendor
 http.log
+tags
+.*.swp
+.phpdoc/

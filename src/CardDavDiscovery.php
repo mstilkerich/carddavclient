@@ -84,7 +84,9 @@ class CardDavDiscovery
                     $addressbookHomeUri = $davClient->findAddressbookHome($principalUri);
                     if (isset($addressbookHomeUri)) {
                         // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
-                        $addressbooks = $davClient->findAddressbooks($addressbookHomeUri);
+                        foreach ($davClient->findAddressbooks($addressbookHomeUri) as $davAbook) {
+                            $addressbooks[] = new AddressbookCollection($davAbook["uri"], $davAbook["props"]);
+                        }
 
                         if (count($addressbooks) > 0) {
                             break 2;

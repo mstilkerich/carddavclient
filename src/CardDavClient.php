@@ -22,37 +22,35 @@ class CardDavClient
     public const NSDAV     = 'DAV:';
     public const NSCARDDAV = 'urn:ietf:params:xml:ns:carddav';
 
+    private const MAP_NS2PREFIX = [
+        self::NSDAV => 'DAV',
+        self::NSCARDDAV => 'CARDDAV'
+    ];
+
     public const DAV_PROPERTIES = [
-        'current-user-principal' => [
+        'DAV:current-user-principal' => [
             'friendlyname' => 'Principal URI',
-            'ns'           => 'DAV:',
             'converter'    => array('self', 'extractAbsoluteHref')
         ],
-        'addressbook-home-set' => [
+        'CARDDAV:addressbook-home-set' => [
             'friendlyname' => 'Addressbooks Home URI',
-            'ns'           => 'CARDDAV:',
             'converter'    => array('self', 'extractAbsoluteHref')
         ],
-        'displayname' => [
+        'DAV:displayname' => [
             'friendlyname' => 'Collection Name',
-            'ns'           => 'DAV:'
         ],
-        'supported-report-set' => [
+        'DAV:supported-report-set' => [
             'friendlyname' => 'Supported Reports',
-            'ns'           => 'DAV:',
             'converter'    => array('self', 'extractReportSet')
         ],
-        'supported-address-data' => [
+        'CARDDAV:supported-address-data' => [
             'friendlyname' => 'Supported media types for address objects',
-            'ns'           => 'CARDDAV:'
         ],
-        'addressbook-description' => [
+        'CARDDAV:addressbook-description' => [
             'friendlyname' => 'Addressbook description',
-            'ns'           => 'CARDDAV:'
         ],
-        'max-resource-size' => [
+        'CARDDAV:max-resource-size' => [
             'friendlyname' => 'Maximum allowed size (octets) of an address object',
-            'ns'           => 'CARDDAV:'
         ]
     ];
 
@@ -218,21 +216,20 @@ class CardDavClient
 
                     $okProps = $responseXml->xpath("DAV:propstat[contains(DAV:status,' 200 ')]/DAV:prop/*") ?: [];
                     foreach ($okProps as $propXml) {
-                        self::registerNamespaces($propXml);
-                        $propShort = $propXml->getName();
-                        $propFQ = (self::DAV_PROPERTIES[$propShort]["ns"] ?? "") . $propShort;
+                        $propNs = array_values($propXml->getNamespaces())[0];
+                        $propName = self::MAP_NS2PREFIX[$propNs] . ":" . $propXml->getName();
 
-                        if (in_array($propFQ, $props)) {
-                            if (isset(self::DAV_PROPERTIES[$propShort]['converter'])) {
+                        if (in_array($propName, $props)) {
+                            if (isset(self::DAV_PROPERTIES[$propName]['converter'])) {
                                 $val = call_user_func(
-                                    self::DAV_PROPERTIES[$propShort]['converter'],
+                                    self::DAV_PROPERTIES[$propName]['converter'],
                                     $propXml,
                                     $result
                                 );
                             } else {
                                 $val = (string) $propXml;
                             }
-                            $resultProperty["props"][$propFQ] = $val;
+                            $resultProperty["props"][$propName] = $val;
                         }
                     }
 
@@ -275,8 +272,8 @@ class CardDavClient
 
     private static function registerNamespaces(SimpleXMLElement $xml): void
     {
-        $xml->registerXPathNamespace('CARDDAV', self::NSCARDDAV);
-        $xml->registerXPathNamespace('DAV', self::NSDAV);
+        $xml->registerXPathNamespace(self::MAP_NS2PREFIX[self::NSCARDDAV], self::NSCARDDAV);
+        $xml->registerXPathNamespace(self::MAP_NS2PREFIX[self::NSDAV], self::NSDAV);
     }
 
     private function requestWithRedirectionTarget(string $method, string $uri, array $options = []): array

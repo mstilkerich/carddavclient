@@ -7,3 +7,4 @@ http.log
 tags
 .*.swp
 .phpdoc/
+.davshell_history

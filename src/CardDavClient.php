@@ -22,7 +22,7 @@ class CardDavClient
     public const NSDAV     = 'DAV:';
     public const NSCARDDAV = 'urn:ietf:params:xml:ns:carddav';
 
-    protected const DAV_PROPERTIES = [
+    public const DAV_PROPERTIES = [
         'current-user-principal' => [
             'friendlyname' => 'Principal URI',
             'ns'           => 'DAV:',
@@ -36,6 +36,11 @@ class CardDavClient
         'displayname' => [
             'friendlyname' => 'Collection Name',
             'ns'           => 'DAV:'
+        ],
+        'supported-report-set' => [
+            'friendlyname' => 'Supported Reports',
+            'ns'           => 'DAV:',
+            'converter'    => array('self', 'extractReportSet')
         ],
         'supported-address-data' => [
             'friendlyname' => 'Supported media types for address objects',
@@ -72,6 +77,16 @@ class CardDavClient
     /**
      * Queries the given URI for the current-user-principal property.
      *
+     * Property description by RFC5397: The DAV:current-user-principal property contains either a DAV:href or
+     * DAV:unauthenticated XML element. The DAV:href element contains a URL to a principal resource corresponding to the
+     * currently authenticated user. That URL MUST be one of the URLs in the DAV:principal-URL or DAV:alternate-URI-set
+     * properties defined on the principal resource and MUST be an http(s) scheme URL. When authentication has not been
+     * done or has failed, this property MUST contain the DAV:unauthenticated pseudo-principal.
+     * In some cases, there may be multiple principal resources corresponding to the same authenticated principal. In
+     * that case, the server is free to choose any one of the principal resource URIs for the value of the
+     * DAV:current-user-principal property. However, servers SHOULD be consistent and use the same principal resource
+     * URI for each authenticated principal.
+     *
      * @param string $contextPathUri
      *  The given URI should typically be a context path per the terminology of RFC6764.
      *
@@ -96,6 +111,12 @@ class CardDavClient
     /**
      * Queries the given URI for the current-user-principal property.
      *
+     * Property description by RFC6352: The CARDDAV:addressbook-home-set property is meant to allow users to easily find
+     * the address book collections owned by the principal. Typically, users will group all the address book collections
+     * that they own under a common collection. This property specifies the URL of collections that are either address
+     * book collections or ordinary collections that have child or descendant address book collections owned by the
+     * principal.
+     *
      * @param string $principalUri
      *  The given URI should be (one of) the authenticated user's principal URI(s).
      *
@@ -119,7 +140,7 @@ class CardDavClient
 
     // RFC6352: An address book collection MUST report the DAV:collection and CARDDAV:addressbook XML elements in the
     // value of the DAV:resourcetype property.
-    // CARDDAV:supported-address-data (supported Media Types (e.g. vCard3, vCard4) of an addressbook collectioan)
+    // CARDDAV:supported-address-data (supported Media Types (e.g. vCard3, vCard4) of an addressbook collection)
     // CARDDAV:addressbook-description (property of an addressbook collection)
     // CARDDAV:max-resource-size (maximum size in bytes for an address object of the addressbook collection)
     public function findAddressbooks(string $addressbookHomeUri): array
@@ -129,6 +150,7 @@ class CardDavClient
             [
                 "DAV:resourcetype",
                 "DAV:displayname",
+                "DAV:supported-report-set",
                 "CARDDAV:supported-address-data",
                 "CARDDAV:addressbook-description",
                 "CARDDAV:max-resource-size"
@@ -322,6 +344,20 @@ class CardDavClient
         }
 
         return $hrefAbsolute;
+    }
+
+    private static function extractReportSet(SimpleXMLElement $parentElement, array $findPropertiesResult): array
+    {
+        self::registerNamespaces($parentElement);
+        $reports = $parentElement->xpath("child::DAV:supported-report/DAV:report/*") ?: [];
+
+        $result = [];
+        foreach ($reports as $report) {
+            self::registerNamespaces($report);
+            $result[] = $report->getName();
+        }
+
+        return $result;
     }
 
 

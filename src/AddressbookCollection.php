@@ -21,6 +21,25 @@ class AddressbookCollection extends WebDavCollection
         $desc  = $this->getName() . " (" . $this->uri . ")";
         return $desc;
     }
+
+    public function getDetails(): string
+    {
+        $desc  = "Addressbook " . $this->getName() . "\n";
+        $desc .= "    URI: " . $this->uri . "\n";
+        foreach ($this->props as $propName => $propVal) {
+            $desc .= "    $propName: ";
+
+            if (is_array($propVal)) {
+                $desc .= implode(", ", $propVal);
+            } else {
+                $desc .= $propVal;
+            }
+
+            $desc .= "\n";
+        }
+
+        return $desc;
+    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

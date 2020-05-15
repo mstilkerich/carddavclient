@@ -43,14 +43,22 @@ class CardDavClient
             'friendlyname' => 'Supported Reports',
             'converter'    => array('self', 'extractReportSet')
         ],
+        'DAV:resourcetype' => [
+            'friendlyname' => 'Resource types of a DAV resource',
+            'converter'    => array('self', 'extractResourceType')
+        ],
         'CARDDAV:supported-address-data' => [
             'friendlyname' => 'Supported media types for address objects',
+            'converter'    => array('self', 'extractAddressDataTypes')
         ],
         'CARDDAV:addressbook-description' => [
             'friendlyname' => 'Addressbook description',
         ],
         'CARDDAV:max-resource-size' => [
             'friendlyname' => 'Maximum allowed size (octets) of an address object',
+        ],
+        'DAV:sync-token' => [
+            'friendlyname' => 'Sync token as returned by sync-collection report',
         ]
     ];
 
@@ -149,6 +157,7 @@ class CardDavClient
                 "DAV:resourcetype",
                 "DAV:displayname",
                 "DAV:supported-report-set",
+                "DAV:sync-token",
                 "CARDDAV:supported-address-data",
                 "CARDDAV:addressbook-description",
                 "CARDDAV:max-resource-size"
@@ -216,8 +225,7 @@ class CardDavClient
 
                     $okProps = $responseXml->xpath("DAV:propstat[contains(DAV:status,' 200 ')]/DAV:prop/*") ?: [];
                     foreach ($okProps as $propXml) {
-                        $propNs = array_values($propXml->getNamespaces())[0];
-                        $propName = self::MAP_NS2PREFIX[$propNs] . ":" . $propXml->getName();
+                        $propName = self::addNamespacePrefixToXmlName($propXml);
 
                         if (in_array($propName, $props)) {
                             if (isset(self::DAV_PROPERTIES[$propName]['converter'])) {
@@ -343,6 +351,36 @@ class CardDavClient
         return $hrefAbsolute;
     }
 
+    private static function extractResourceType(SimpleXMLElement $parentElement, array $findPropertiesResult): array
+    {
+        self::registerNamespaces($parentElement);
+        $restypes = $parentElement->xpath("child::*") ?: [];
+
+        $result = [];
+        foreach ($restypes as $restype) {
+            $result[] = self::addNamespacePrefixToXmlName($restype);
+        }
+
+        return $result;
+    }
+
+    private static function extractAddressDataTypes(SimpleXMLElement $parentElement, array $findPropertiesResult): array
+    {
+        self::registerNamespaces($parentElement);
+        $addrdatatypes = $parentElement->xpath("child::CARDDAV:address-data-type") ?: [];
+
+        $result = [];
+        foreach ($addrdatatypes as $addrdatatype) {
+            $contenttype = $addrdatatype['content-type'] ?? null;
+            $contenttypeversion = $addrdatatype['version'] ?? null;
+            if (isset($contenttype) && isset($contenttypeversion)) {
+                $result[] = [ $contenttype, $contenttypeversion ];
+            }
+        }
+
+        return $result;
+    }
+
     private static function extractReportSet(SimpleXMLElement $parentElement, array $findPropertiesResult): array
     {
         self::registerNamespaces($parentElement);
@@ -350,17 +388,40 @@ class CardDavClient
 
         $result = [];
         foreach ($reports as $report) {
-            self::registerNamespaces($report);
-            $result[] = $report->getName();
+            $result[] = self::addNamespacePrefixToXmlName($report);
         }
 
         return $result;
     }
 
-
-
     // Addressbook collections only contain 1) address objects or 2) collections that are (recursively) NOT addressbooks
     // I.e. all address objects an be found directly within the addressbook collection, and no nesting of addressbooks
+
+    /**
+     * Returns the element name of the given element, prefixed with the proper namespace prefix used in this library.
+     *
+     * The names provided by the {@see SimpleXMLElement::getName()} function of @{see SimpleXMLElement} objects returns
+     * the unqualified element name only. There is no way to retrieve the namespace of the element name. It is, however,
+     * possible, to retrieve the namespaces used by the element using the {@see SimpleXMLElement::getNamespaces()}
+     * function. This function returns an array mapping namespace prefixes to the namespace URNs. It may contain several
+     * entries if the element contains attributes belonging to a different namespace. Since the prefix is not part of
+     * the name returned by {@see SimpleXMLElement::getName()}, there is no way to know which of the namespaces provided
+     * by {@see SimpleXMLElement::getNamespaces()} the element name belongs to.
+     *
+     * Currently, I know of no instance where an attribute is used with one of the XML elements we are interested in,
+     * that belongs to a different namespace. So this function assumes that {@see SimpleXMLElement::getNamespaces() will
+     * only return a single namespace that the element's name belongs to.
+     *
+     * @param SimpleXMLElement $xml The XML element whose qualified name should be returned.
+     * @return string The qualified name of the given XML element (by means of adding one of the prefixes used by
+     *     convention inside this library.
+     */
+    private static function addNamespacePrefixToXmlName(SimpleXMLElement $xml): string
+    {
+        $ns = array_values($xml->getNamespaces())[0];
+        $name = self::MAP_NS2PREFIX[$ns] . ":" . $xml->getName();
+        return $name;
+    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

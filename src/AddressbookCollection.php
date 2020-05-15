@@ -30,6 +30,14 @@ class AddressbookCollection extends WebDavCollection
             $desc .= "    $propName: ";
 
             if (is_array($propVal)) {
+                if (isset($propVal[0]) && is_array($propVal[0])) {
+                    $propVal = array_map(
+                        function (array $subarray): string {
+                            return implode(" ", $subarray);
+                        },
+                        $propVal
+                    );
+                }
                 $desc .= implode(", ", $propVal);
             } else {
                 $desc .= $propVal;

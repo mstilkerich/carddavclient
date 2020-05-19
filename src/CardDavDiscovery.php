@@ -72,7 +72,8 @@ class CardDavDiscovery
         // (2) Discover the "initial context path" for each servers (until first success)
         foreach ($servers as $server) {
             $baseuri = $server["scheme"] . "://" . $server["host"] . ":" . $server["port"];
-            $davClient = new CardDavClient($baseuri, $usr, $pw, $this->davClientOptions);
+            $davAccount = new Account($baseuri, $usr, $pw);
+            $davClient = $davAccount->getClient($this->davClientOptions);
 
             $contextpaths = $this->discoverContextPath($davClient, $server);
             foreach ($contextpaths as $contextpath) {
@@ -85,7 +86,11 @@ class CardDavDiscovery
                     if (isset($addressbookHomeUri)) {
                         // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
                         foreach ($davClient->findAddressbooks($addressbookHomeUri) as $davAbook) {
-                            $addressbooks[] = new AddressbookCollection($davAbook["uri"], $davAbook["props"]);
+                            $addressbooks[] = new AddressbookCollection(
+                                $davAbook["uri"],
+                                $davAccount,
+                                $davAbook["props"]
+                            );
                         }
 
                         if (count($addressbooks) > 0) {

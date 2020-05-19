@@ -16,9 +16,13 @@ class WebDavCollection
     /** @var array WebDAV properties of the Collection */
     protected $props;
 
-    public function __construct(string $uri, array $props)
+    /** @var Account The CardDAV account this WebDAV resource is associated/accessible with. */
+    protected $account;
+
+    public function __construct(string $uri, Account $account, array $props)
     {
         $this->uri = $uri;
+        $this->account = $account;
         $this->props = $props;
     }
 }

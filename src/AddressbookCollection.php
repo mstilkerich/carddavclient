@@ -48,6 +48,12 @@ class AddressbookCollection extends WebDavCollection
 
         return $desc;
     }
+
+    public function supportsSyncCollection(): bool
+    {
+        // FIXME check if property is available
+        return in_array("DAV:sync-collection", $this->props["DAV:supported-report-set"], true);
+    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

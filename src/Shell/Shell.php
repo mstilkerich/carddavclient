@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Shell;
 
-use MStilkerich\CardDavClient\{AddressbookCollection, CardDavDiscovery};
+use MStilkerich\CardDavClient\{AddressbookCollection, CardDavDiscovery, CardDavSync};
 
 class Shell
 {
@@ -65,6 +65,13 @@ class Shell
             'usage'    => 'Usage: show_addressbook [<addressbook_id>]',
             'help'     => "addressbook_id: Identifier of the addressbook as provided by the \"addressbooks\" command.",
             'callback' => 'showAddressbook',
+            'minargs'  => 1
+        ],
+        'synchronize' => [
+            'synopsis' => 'Synchronizes an addressbook to the local cache.',
+            'usage'    => 'Usage: synchronize [<addressbook_id>]',
+            'help'     => "addressbook_id: Identifier of the addressbook as provided by the \"addressbooks\" command.",
+            'callback' => 'syncAddressbook',
             'minargs'  => 1
         ],
     ];
@@ -217,6 +224,30 @@ class Shell
 
             if (isset($abook)) {
                 echo $abook->getDetails();
+                $ret = true;
+            } else {
+                echo "Invalid addressbook ID $abookId\n";
+            }
+        } else {
+            echo "Invalid addressbook ID $abookId\n";
+        }
+
+        return $ret;
+    }
+
+    private function syncAddressbook(string $abookId): bool
+    {
+        $ret = false;
+
+        if (preg_match("/^(.*)@(\d+)$/", $abookId, $matches)) {
+            [, $accountName, $abookIdx] = $matches;
+
+            $abook = $this->accounts[$accountName]["addressbooks"][$abookIdx] ?? null;
+
+            if (isset($abook)) {
+                $synchandler = new ShellSyncHandler();
+                $syncmgr = new CardDavSync(["debugfile" => "http.log"]);
+                $synctoken = $syncmgr->synchronize($abook, $synchandler);
                 $ret = true;
             } else {
                 echo "Invalid addressbook ID $abookId\n";

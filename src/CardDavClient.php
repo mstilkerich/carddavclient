@@ -21,10 +21,12 @@ class CardDavClient
     /********* CONSTANTS *********/
     public const NSDAV     = 'DAV:';
     public const NSCARDDAV = 'urn:ietf:params:xml:ns:carddav';
+    public const NSCS      = 'http://calendarserver.org/ns/';
 
     private const MAP_NS2PREFIX = [
         self::NSDAV => 'DAV',
-        self::NSCARDDAV => 'CARDDAV'
+        self::NSCARDDAV => 'CARDDAV',
+        self::NSCS => 'CS',
     ];
 
     public const DAV_PROPERTIES = [
@@ -59,6 +61,10 @@ class CardDavClient
         ],
         'DAV:sync-token' => [
             'friendlyname' => 'Sync token as returned by sync-collection report',
+        ],
+        'CS:getctag' => [
+            'friendlyname' => 'Identifies the state of a collection. '
+            . 'Replaced by DAV:sync-token on servers supporting the sync-collection report.',
         ]
     ];
 
@@ -158,6 +164,7 @@ class CardDavClient
                 "DAV:displayname",
                 "DAV:supported-report-set",
                 "DAV:sync-token",
+                "CS:getctag",
                 "CARDDAV:supported-address-data",
                 "CARDDAV:addressbook-description",
                 "CARDDAV:max-resource-size"
@@ -179,7 +186,82 @@ class CardDavClient
         return $abooksResult;
     }
 
+    public function syncCollection(string $addressbookHomeUri, string $syncToken): array
+    {
+        $result = [
+            "truncated" => false
+        ];
+        $body  = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
+        $body .= "<DAV:sync-collection";
+        $body .= self::xmlNamespacePrefixDefs();
+        $body .= ">\n";
+        $body .= "  <DAV:sync-token>$syncToken</DAV:sync-token>\n";
+        $body .= "  <DAV:sync-level>1</DAV:sync-level>\n";
+        $body .= "  <DAV:prop><DAV:getetag/></DAV:prop>\n";
+        $body .= "</DAV:sync-collection>\n";
+
+        $uri = self::absoluteUrl($this->base_uri, $addressbookHomeUri);
+        $response = $this->httpClient->sendRequest('REPORT', $uri, [
+            "headers" =>
+            [
+                // RFC6578: Depth header is required to be 0 for sync-collection report
+                "Depth" => 0,
+            ],
+            "body" => $body
+        ]);
+
+        $xml = self::checkAndParseXML($response);
+
+        // Response must contain one DAV:sync-token element plus DAV:response elements for each new/changed/deleted
+        // address object
+        // Added/changed members contain propstat element (and no status element)
+        // Deleted members contain status element with value 404 Not Found (and no propstat element)
+        // The server may truncate the results and include  a response with status 507 (Insufficient Storage); the
+        // returned sync-token in this case reflects the partial changes already received, so sync collection can be
+        // repeated for the remaining changes
+        $newSyncToken = "";
+        $changedObjects = [];
+        $deletedObjects = [];
+
+        if (isset($xml)) {
+            $newSyncToken = $xml->xpath('child::DAV:sync-token')[0] ?? "";
+
+            if (!empty($newSyncToken)) {
+                $responses = $xml->xpath("child::DAV:response") ?: [];
+                foreach ($responses as $responseXml) {
+                    self::registerNamespaces($responseXml);
+                    $uri = $responseXml->xpath('child::DAV:href') ?: [];
+                    if (isset($uri[0])) {
+                        if (!empty($responseXml->xpath('child::DAV:propstat'))) {
+                            $changedObjects[] = (string) $uri[0];
+                        } elseif (!empty($responseXml->xpath(".[contains(DAV:status,' 404 ')]"))) {
+                            $deletedObjects[] = (string) $uri[0];
+                        } elseif (!empty($responseXml->xpath(".[contains(DAV:status,' 507 ')]"))) {
+                            $result["truncated"] = true;
+                        } else {
+                            echo "Unexpected response element in sync-collection result\n";
+                        }
+                    }
+                }
+            }
+        }
+
+        $result["synctoken"] = $newSyncToken;
+        $result["changedObjects"] = $changedObjects;
+        $result["deletedObjects"] = $deletedObjects;
+        return $result;
+    }
+
     /********* PRIVATE FUNCTIONS *********/
+    private static function xmlNamespacePrefixDefs(): string
+    {
+        $header = "";
+        foreach (self::MAP_NS2PREFIX as $ns => $prefix) {
+            $header .= " xmlns:$prefix=\"$ns\"";
+        }
+        return $header;
+    }
+
     // $props is either a single property or an array of properties
     // Namespace shortcuts: DAV for DAV, CARDDAV for the CardDAV namespace
     // RFC4918: There is always only a single value for a property, which is an XML fragment
@@ -190,7 +272,10 @@ class CardDavClient
         string $responseXPathPredicate = "true()"
     ): array {
         $body  = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-        $body .= '<DAV:propfind xmlns:DAV="DAV:" xmlns:CARDDAV="urn:ietf:params:xml:ns:carddav"><DAV:prop>' . "\n";
+        $body .= '<DAV:propfind';
+        $body .= self::xmlNamespacePrefixDefs();
+        $body .= '><DAV:prop>' . "\n";
+
         foreach ($props as $prop) {
             $body .= "<" . $prop . "/>\n";
         }
@@ -280,8 +365,9 @@ class CardDavClient
 
     private static function registerNamespaces(SimpleXMLElement $xml): void
     {
-        $xml->registerXPathNamespace(self::MAP_NS2PREFIX[self::NSCARDDAV], self::NSCARDDAV);
-        $xml->registerXPathNamespace(self::MAP_NS2PREFIX[self::NSDAV], self::NSDAV);
+        foreach (self::MAP_NS2PREFIX as $ns => $prefix) {
+            $xml->registerXPathNamespace($prefix, $ns);
+        }
     }
 
     private function requestWithRedirectionTarget(string $method, string $uri, array $options = []): array

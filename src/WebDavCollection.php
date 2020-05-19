@@ -25,6 +25,16 @@ class WebDavCollection
         $this->account = $account;
         $this->props = $props;
     }
+
+    public function getAccount(): Account
+    {
+        return $this->account;
+    }
+
+    public function getUri(): string
+    {
+        return $this->uri;
+    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

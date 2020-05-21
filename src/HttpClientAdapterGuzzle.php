@@ -78,6 +78,13 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
         $guzzleOptions = self::prepareGuzzleOptions($options);
 
         try {
+            if (isset($this->debughandle)) {
+                if (isset($options["body"])) {
+                    fwrite($this->debughandle, "Body of following request:\n");
+                    fwrite($this->debughandle, $options["body"]);
+                }
+            }
+
             $response = $this->client->request($method, $uri, $guzzleOptions);
             return $this->responsePostProcessing($response);
         } catch (\GuzzleHttp\Exception\RequestException $e) {

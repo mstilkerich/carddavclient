@@ -24,7 +24,9 @@
         "guzzlehttp/guzzle": "~6.0",
         "psr/http-client": "^1.0",
         "psr/http-message": "^1.0",
-        "sabre/vobject": "^4.3"
+        "sabre/vobject": "^4.3",
+        "sabre/xml": "^2.2",
+        "sabre/uri": "^2.2"
     },
 	"autoload": {
 		"psr-4": {

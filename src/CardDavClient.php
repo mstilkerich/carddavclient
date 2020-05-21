@@ -10,6 +10,7 @@ namespace MStilkerich\CardDavClient;
 
 use SimpleXMLElement;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
+use MStilkerich\CardDavClient\XmlElements\Multistatus;
 
 /*
 Other needed features:
@@ -175,7 +176,7 @@ class CardDavClient
 
         $abooksResult = [];
         foreach ($abooks as $abook) {
-            $abookUri = self::absoluteUrl($addressbookHomeUri, $abook["uri"]);
+            $abookUri = self::concatUrl($addressbookHomeUri, $abook["uri"]);
 
             $abooksResult[] = [
                 "uri"   => $abookUri,
@@ -186,11 +187,8 @@ class CardDavClient
         return $abooksResult;
     }
 
-    public function syncCollection(string $addressbookHomeUri, string $syncToken): array
+    public function syncCollection(string $addressbookHomeUri, string $syncToken): Multistatus
     {
-        $result = [
-            "truncated" => false
-        ];
         $body  = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
         $body .= "<DAV:sync-collection";
         $body .= self::xmlNamespacePrefixDefs();
@@ -200,56 +198,73 @@ class CardDavClient
         $body .= "  <DAV:prop><DAV:getetag/></DAV:prop>\n";
         $body .= "</DAV:sync-collection>\n";
 
-        $uri = self::absoluteUrl($this->base_uri, $addressbookHomeUri);
+        $uri = $this->absoluteUrl($addressbookHomeUri);
         $response = $this->httpClient->sendRequest('REPORT', $uri, [
             "headers" =>
             [
                 // RFC6578: Depth header is required to be 0 for sync-collection report
                 "Depth" => 0,
+                "Content-Type" => "application/xml; charset=UTF-8"
             ],
             "body" => $body
         ]);
 
-        $xml = self::checkAndParseXML($response);
+        return self::checkAndParseXMLMultistatus($response);
+    }
 
-        // Response must contain one DAV:sync-token element plus DAV:response elements for each new/changed/deleted
-        // address object
-        // Added/changed members contain propstat element (and no status element)
-        // Deleted members contain status element with value 404 Not Found (and no propstat element)
-        // The server may truncate the results and include  a response with status 507 (Insufficient Storage); the
-        // returned sync-token in this case reflects the partial changes already received, so sync collection can be
-        // repeated for the remaining changes
-        $newSyncToken = "";
-        $changedObjects = [];
-        $deletedObjects = [];
-
-        if (isset($xml)) {
-            $newSyncToken = $xml->xpath('child::DAV:sync-token')[0] ?? "";
-
-            if (!empty($newSyncToken)) {
-                $responses = $xml->xpath("child::DAV:response") ?: [];
-                foreach ($responses as $responseXml) {
-                    self::registerNamespaces($responseXml);
-                    $uri = $responseXml->xpath('child::DAV:href') ?: [];
-                    if (isset($uri[0])) {
-                        if (!empty($responseXml->xpath('child::DAV:propstat'))) {
-                            $changedObjects[] = (string) $uri[0];
-                        } elseif (!empty($responseXml->xpath(".[contains(DAV:status,' 404 ')]"))) {
-                            $deletedObjects[] = (string) $uri[0];
-                        } elseif (!empty($responseXml->xpath(".[contains(DAV:status,' 507 ')]"))) {
-                            $result["truncated"] = true;
-                        } else {
-                            echo "Unexpected response element in sync-collection result\n";
-                        }
-                    }
-                }
+    private static function addRequiredVCardProperties(array $requestedVCardProps): array
+    {
+        $minimumProps = [ 'BEGIN', 'END', 'FN', 'VERSION', 'UID' ];
+        foreach ($minimumProps as $prop) {
+            if (!in_array($prop, $requestedVCardProps)) {
+                $requestedVCardProps[] = $prop;
             }
         }
 
-        $result["synctoken"] = $newSyncToken;
-        $result["changedObjects"] = $changedObjects;
-        $result["deletedObjects"] = $deletedObjects;
-        return $result;
+        return $requestedVCardProps;
+    }
+
+    public function multiGet(
+        string $addressbookHomeUri,
+        array $requestedUris,
+        array $requestedVCardProps = []
+    ): Multistatus {
+        $body  = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
+        $body .= "<CARDDAV:addressbook-multiget";
+        $body .= self::xmlNamespacePrefixDefs();
+        $body .= ">\n";
+        $body .= "  <DAV:prop>\n";
+        $body .= "    <DAV:getetag/>\n";
+
+        if (!empty($requestedVCardProps)) {
+            $requestedVCardProps = self::addRequiredVCardProperties($requestedVCardProps);
+
+            $body .= "    <CARDDAV:address-data>\n";
+            foreach ($requestedVCardProps as $prop) {
+                $body .= "      <CARDDAV:prop name=\"$prop\"/>\n";
+            }
+            $body .= "    </CARDDAV:address-data>\n";
+        }
+        $body .= "  </DAV:prop>\n";
+
+        foreach ($requestedUris as $uri) {
+            $body .= "  <DAV:href>$uri</DAV:href>\n";
+        }
+
+        $body .= "</CARDDAV:addressbook-multiget>\n";
+
+        $uri = $this->absoluteUrl($addressbookHomeUri);
+        $response = $this->httpClient->sendRequest('REPORT', $uri, [
+            "headers" =>
+            [
+                // RFC6352: Depth: 0 header is required for addressbook-multiget report.
+                "Depth" => 0,
+                "Content-Type" => "application/xml; charset=UTF-8"
+            ],
+            "body" => $body
+        ]);
+
+        return self::checkAndParseXMLMultistatus($response);
     }
 
     /********* PRIVATE FUNCTIONS *********/
@@ -350,6 +365,23 @@ class CardDavClient
         return $xml;
     }
 
+    private static function checkAndParseXMLMultistatus(Psr7Response $davReply): Multistatus
+    {
+        $multistatus = null;
+
+        $status = $davReply->getStatusCode();
+        if (($status === 207) && preg_match(';(?i)(text|application)/xml;', $davReply->getHeaderLine('Content-Type'))) {
+            $service = Multistatus::getParserService();
+            $multistatus = $service->expect('{DAV:}multistatus', (string) $davReply->getBody());
+        }
+
+        if (!($multistatus instanceof Multistatus)) {
+            throw new \Exception('Response is not the expected Multistatus response.');
+        }
+
+        return $multistatus;
+    }
+
     private static function parseXML(string $xmlString): ?SimpleXMLElement
     {
         try {
@@ -377,7 +409,7 @@ class CardDavClient
         $redirAttempt = 0;
         $redirLimit = 5;
 
-        $uri = self::absoluteUrl($this->base_uri, $uri);
+        $uri = $this->absoluteUrl($uri);
 
         do {
             $response = $this->httpClient->sendRequest($method, $uri, $options);
@@ -390,7 +422,7 @@ class CardDavClient
             $isRedirect = (($scode == 301) || ($scode == 302) || ($scode == 307) || ($scode == 308));
 
             if ($isRedirect && $response->hasHeader('Location')) {
-                $uri = self::absoluteUrl($uri, $response->getHeaderLine('Location'));
+                $uri = self::concatUrl($uri, $response->getHeaderLine('Location'));
                 $redirAttempt++;
             } else {
                 break;
@@ -404,24 +436,24 @@ class CardDavClient
         ];
     }
 
-    private static function absoluteUrl(string $baseurl, string $relurl): string
+    public function absoluteUrl(string $relurl): string
     {
-        $basecomp = parse_url($baseurl);
-        $targetcomp = parse_url($relurl);
+        return self::concatUrl($this->base_uri, $relurl);
+    }
 
-        foreach (["scheme", "host", "port"] as $k) {
-            if (!key_exists($k, $targetcomp)) {
-                $targetcomp[$k] = $basecomp[$k];
-            }
-        }
+    public static function concatUrl(string $baseurl, string $relurl): string
+    {
+        $targeturl = \Sabre\Uri\resolve($baseurl, $relurl);
+        return \Sabre\Uri\normalize($targeturl);
+    }
 
-        $targeturl = $targetcomp["scheme"] . "://" . $targetcomp["host"];
-        if (key_exists("port", $basecomp)) {
-            $targeturl .= ":" . $targetcomp["port"];
-        }
-        $targeturl .= $targetcomp["path"];
-
-        return $targeturl;
+    public static function compareUrlPaths(string $url1, string $url2): bool
+    {
+        $comp1 = \Sabre\Uri\parse($url1);
+        $comp2 = \Sabre\Uri\parse($url2);
+        $p1 = rtrim($comp1["path"], "/");
+        $p2 = rtrim($comp2["path"], "/");
+        return $p1 === $p2;
     }
 
     private static function extractAbsoluteHref(SimpleXMLElement $parentElement, array $findPropertiesResult): ?string
@@ -431,7 +463,7 @@ class CardDavClient
         self::registerNamespaces($parentElement);
         $href = $parentElement->xpath("child::DAV:href");
         if (isset($href[0])) {
-            $hrefAbsolute = self::absoluteUrl($findPropertiesResult["location"], (string) $href[0]);
+            $hrefAbsolute = self::concatUrl($findPropertiesResult["location"], (string) $href[0]);
         }
 
         return $hrefAbsolute;

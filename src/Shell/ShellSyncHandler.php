@@ -15,12 +15,12 @@ class ShellSyncHandler implements CardDavSyncHandler
 {
     public function addressObjectChanged(string $uri, string $etag, VCard $card): void
     {
-        echo "Changed object: $uri (" . $card->FN . ")\n";
+        Shell::$logger->info("Changed object: $uri (" . $card->FN . ")");
     }
 
     public function addressObjectDeleted(string $uri): void
     {
-        echo "Deleted object: $uri\n";
+        Shell::$logger->info("Deleted object: $uri");
     }
 
     public function getExistingETagForVCard(string $uri): ?string

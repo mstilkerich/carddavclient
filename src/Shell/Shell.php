@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace MStilkerich\CardDavClient\Shell;
 
 use MStilkerich\CardDavClient\{AddressbookCollection, CardDavDiscovery, CardDavSync, Config};
+use Psr\Log\LoggerInterface;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
@@ -83,6 +84,9 @@ class Shell
     /** @var array */
     private $accounts;
 
+    /** @var LoggerInterface */
+    public static $logger;
+
     public function __construct(array $accountdata = [])
     {
         $this->accounts = $accountdata;
@@ -92,12 +96,13 @@ class Shell
         $handler = new StreamHandler('php://stdout', Logger::DEBUG);
         $handler->setFormatter(new ColoredLineFormatter(
             null,
-            "%level_name%: %message% %context% %extra%\n",
+            "%message% %context% %extra%\n",
             "",   // no date output needed
             true, // allow linebreaks in message
             true  // remove empty context and extra fields (trailing [] [])
         ));
         $log->pushHandler($handler);
+        self::$logger = $log;
 
         $httplog = new Logger('davshell');
         $httphandler = new StreamHandler('http.log', Logger::DEBUG, true, 0600);
@@ -117,12 +122,10 @@ class Shell
         $showPw = ($opt == "-p");
 
         foreach ($this->accounts as $name => $accountInfo) {
-            echo "Account $name\n";
-            echo "    Server:   " . $accountInfo['server'] . "\n";
-            echo "    Username: " . $accountInfo['username'] . "\n";
-            if ($showPw) {
-                echo "    Password: " . $accountInfo['password'] . "\n";
+            if (!$showPw) {
+                unset($accountInfo['password']);
             }
+            self::$logger->info("Account $name", $accountInfo);
         }
 
         return true;
@@ -154,7 +157,7 @@ class Shell
         $ret = false;
 
         if (key_exists($name, $this->accounts)) {
-            echo "Account named $name already exists!\n";
+            self::$logger->error("Account named $name already exists!");
         } else {
             $this->accounts[$name] = [
                 'server'   => $srv,
@@ -173,16 +176,16 @@ class Shell
 
         if (isset($command)) {
             if (isset(self::COMMANDS[$command])) {
-                echo "$command - " . self::COMMANDS[$command]['synopsis'] . "\n";
-                echo self::COMMANDS[$command]['usage'] . "\n";
-                echo self::COMMANDS[$command]['help'] . "\n";
+                self::$logger->info("$command - " . self::COMMANDS[$command]['synopsis']);
+                self::$logger->info(self::COMMANDS[$command]['usage']);
+                self::$logger->info(self::COMMANDS[$command]['help']);
                 $ret = true;
             } else {
-                echo "Unknown command: $command\n";
+                self::$logger->error("Unknown command: $command");
             }
         } else {
             foreach (self::COMMANDS as $command => $commandDesc) {
-                echo "$command: " . $commandDesc['synopsis'] . "\n";
+                self::$logger->info("$command: " . $commandDesc['synopsis']);
             }
         }
 
@@ -195,19 +198,18 @@ class Shell
 
         if (isset($this->accounts[$accountName])) {
             [ 'server' => $srv, 'username' => $username, 'password' => $password ] = $this->accounts[$accountName];
-            echo "Discover($srv, $username, $password)\n";
 
             $discover = new CardDavDiscovery();
             $abooks = $discover->discoverAddressbooks($srv, $username, $password);
 
             $this->accounts[$accountName]['addressbooks'] = [];
             foreach ($abooks as $abook) {
-                echo "Found addressbook: " . (string) $abook . "\n";
+                self::$logger->notice("Found addressbook: $abook");
                 $this->accounts[$accountName]['addressbooks'][] = $abook;
             }
             $retval = true;
         } else {
-            echo "Unknown account $accountName\n";
+            self::$logger->error("Unknown account $accountName");
         }
 
         return $retval;
@@ -222,7 +224,7 @@ class Shell
                 $accounts = [ $accountName => $this->accounts[$accountName] ];
                 $ret = true;
             } else {
-                echo "Unknown account $accountName\n";
+                self::$logger->error("Unknown account $accountName");
             }
         } else {
             $accounts = $this->accounts;
@@ -233,7 +235,7 @@ class Shell
             $id = 0;
 
             foreach (($accountInfo["addressbooks"] ?? []) as $abook) {
-                echo "$name@$id - " . (string) $abook . "\n";
+                self::$logger->info("$name@$id - $abook");
                 ++$id;
             }
         }
@@ -251,13 +253,13 @@ class Shell
             $abook = $this->accounts[$accountName]["addressbooks"][$abookIdx] ?? null;
 
             if (isset($abook)) {
-                echo $abook->getDetails();
+                self::$logger->info($abook->getDetails());
                 $ret = true;
             } else {
-                echo "Invalid addressbook ID $abookId\n";
+                self::$logger->error("Invalid addressbook ID $abookId");
             }
         } else {
-            echo "Invalid addressbook ID $abookId\n";
+            self::$logger->error("Invalid addressbook ID $abookId");
         }
 
         return $ret;
@@ -278,10 +280,10 @@ class Shell
                 $synctoken = $syncmgr->synchronize($abook, $synchandler);
                 $ret = true;
             } else {
-                echo "Invalid addressbook ID $abookId\n";
+                self::$logger->error("Invalid addressbook ID $abookId");
             }
         } else {
-            echo "Invalid addressbook ID $abookId\n";
+            self::$logger->error("Invalid addressbook ID $abookId");
         }
 
         return $ret;
@@ -302,11 +304,11 @@ class Shell
                         readline_add_history($cmd);
                     }
                 } else {
-                    echo "Too few arguments to $command.\n";
-                    echo self::COMMANDS[$command]['usage'] . "\n";
+                    self::$logger->error("Too few arguments to $command.");
+                    self::$logger->info(self::COMMANDS[$command]['usage']);
                 }
             } else {
-                echo "Unknown command $command. Type \"help\" for a list of available commands\n";
+                self::$logger->error("Unknown command $command. Type \"help\" for a list of available commands");
             }
         }
 

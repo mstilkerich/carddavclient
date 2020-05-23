@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
-use SimpleXMLElement;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use MStilkerich\CardDavClient\XmlElements\Multistatus;
 
@@ -28,45 +27,6 @@ class CardDavClient
         self::NSDAV => 'DAV',
         self::NSCARDDAV => 'CARDDAV',
         self::NSCS => 'CS',
-    ];
-
-    public const DAV_PROPERTIES = [
-        'DAV:current-user-principal' => [
-            'friendlyname' => 'Principal URI',
-            'converter'    => array('self', 'extractAbsoluteHref')
-        ],
-        'CARDDAV:addressbook-home-set' => [
-            'friendlyname' => 'Addressbooks Home URI',
-            'converter'    => array('self', 'extractAbsoluteHref')
-        ],
-        'DAV:displayname' => [
-            'friendlyname' => 'Collection Name',
-        ],
-        'DAV:supported-report-set' => [
-            'friendlyname' => 'Supported Reports',
-            'converter'    => array('self', 'extractReportSet')
-        ],
-        'DAV:resourcetype' => [
-            'friendlyname' => 'Resource types of a DAV resource',
-            'converter'    => array('self', 'extractResourceType')
-        ],
-        'CARDDAV:supported-address-data' => [
-            'friendlyname' => 'Supported media types for address objects',
-            'converter'    => array('self', 'extractAddressDataTypes')
-        ],
-        'CARDDAV:addressbook-description' => [
-            'friendlyname' => 'Addressbook description',
-        ],
-        'CARDDAV:max-resource-size' => [
-            'friendlyname' => 'Maximum allowed size (octets) of an address object',
-        ],
-        'DAV:sync-token' => [
-            'friendlyname' => 'Sync token as returned by sync-collection report',
-        ],
-        'CS:getctag' => [
-            'friendlyname' => 'Identifies the state of a collection. '
-            . 'Replaced by DAV:sync-token on servers supporting the sync-collection report.',
-        ]
     ];
 
     /********* PROPERTIES *********/
@@ -110,9 +70,9 @@ class CardDavClient
      */
     public function findCurrentUserPrincipal(string $contextPathUri): ?string
     {
-        $result = $this->findProperties($contextPathUri, ["DAV:current-user-principal"]);
+        $result = $this->findProperties($contextPathUri, ["{DAV:}current-user-principal"]);
 
-        $princUrlAbsolute = $result[0]["props"]["DAV:current-user-principal"] ?? null;
+        $princUrlAbsolute = $result[0]["props"]["{DAV:}current-user-principal"]->href ?? null;
 
         if (isset($princUrlAbsolute)) {
             Config::$logger->info("principal URL: $princUrlAbsolute");
@@ -140,9 +100,12 @@ class CardDavClient
      */
     public function findAddressbookHome(string $principalUri): ?string
     {
-        $result = $this->findProperties($principalUri, ["CARDDAV:addressbook-home-set"]);
+        $propname = "{" . self::NSCARDDAV . "}addressbook-home-set";
+        $result = $this->findProperties($principalUri, [$propname]);
 
-        $addressbookHomeUriAbsolute = $result[0]["props"]["CARDDAV:addressbook-home-set"] ?? null;
+        // FIXME per RFC several home locations could be returned, but we currently only use one. However, it is rather
+        // unlikely that there would be several addressbook home locations.
+        $addressbookHomeUriAbsolute = $result[0]["props"][$propname]->href[0] ?? null;
 
         if (isset($addressbookHomeUriAbsolute)) {
             Config::$logger->info("addressbook home: $addressbookHomeUriAbsolute");
@@ -161,27 +124,30 @@ class CardDavClient
         $abooks = $this->findProperties(
             $addressbookHomeUri,
             [
-                "DAV:resourcetype",
-                "DAV:displayname",
-                "DAV:supported-report-set",
-                "DAV:sync-token",
-                "CS:getctag",
-                "CARDDAV:supported-address-data",
-                "CARDDAV:addressbook-description",
-                "CARDDAV:max-resource-size"
+                "{" . self::NSDAV . "}resourcetype",
+                "{" . self::NSDAV . "}displayname",
+                "{" . self::NSDAV . "}supported-report-set",
+                "{" . self::NSDAV . "}sync-token",
+                "{" . self::NSCS . "}getctag",
+                "{" . self::NSCARDDAV . "}supported-address-data",
+                "{" . self::NSCARDDAV . "}addressbook-description",
+                "{" . self::NSCARDDAV . "}max-resource-size"
             ],
-            "1",
-            "DAV:propstat[contains(DAV:status,' 200 ')]/DAV:prop/DAV:resourcetype/CARDDAV:addressbook"
+            "1"
         );
+
+        $abookResourceType = "{" . self::NSCARDDAV . "}addressbook";
 
         $abooksResult = [];
         foreach ($abooks as $abook) {
-            $abookUri = self::concatUrl($addressbookHomeUri, $abook["uri"]);
+            if (in_array($abookResourceType, $abook["props"]["{DAV:}resourcetype"])) {
+                $abookUri = self::concatUrl($addressbookHomeUri, $abook["uri"]);
 
-            $abooksResult[] = [
-                "uri"   => $abookUri,
-                "props" => $abook["props"]
-            ];
+                $abooksResult[] = [
+                    "uri"   => $abookUri,
+                    "props" => $abook["props"]
+                ];
+            }
         }
 
         return $abooksResult;
@@ -189,14 +155,14 @@ class CardDavClient
 
     public function syncCollection(string $addressbookHomeUri, string $syncToken): Multistatus
     {
-        $body  = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-        $body .= "<DAV:sync-collection";
-        $body .= self::xmlNamespacePrefixDefs();
-        $body .= ">\n";
-        $body .= "  <DAV:sync-token>$syncToken</DAV:sync-token>\n";
-        $body .= "  <DAV:sync-level>1</DAV:sync-level>\n";
-        $body .= "  <DAV:prop><DAV:getetag/></DAV:prop>\n";
-        $body .= "</DAV:sync-collection>\n";
+        $srv = self::getParserService();
+        $body = $srv->write('{DAV:}sync-collection', [
+            '{DAV:}sync-token' => $syncToken,
+            '{DAV:}sync-level' => 1,
+            '{DAV:}prop' => [
+                '{DAV:}getetag' => null
+            ]
+        ]);
 
         $uri = $this->absoluteUrl($addressbookHomeUri);
         $response = $this->httpClient->sendRequest('REPORT', $uri, [
@@ -229,29 +195,35 @@ class CardDavClient
         array $requestedUris,
         array $requestedVCardProps = []
     ): Multistatus {
-        $body  = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-        $body .= "<CARDDAV:addressbook-multiget";
-        $body .= self::xmlNamespacePrefixDefs();
-        $body .= ">\n";
-        $body .= "  <DAV:prop>\n";
-        $body .= "    <DAV:getetag/>\n";
+        $srv = self::getParserService();
 
+        $reqprops = [ '{DAV:}getetag' => null ];
         if (!empty($requestedVCardProps)) {
             $requestedVCardProps = self::addRequiredVCardProperties($requestedVCardProps);
 
-            $body .= "    <CARDDAV:address-data>\n";
-            foreach ($requestedVCardProps as $prop) {
-                $body .= "      <CARDDAV:prop name=\"$prop\"/>\n";
-            }
-            $body .= "    </CARDDAV:address-data>\n";
+            $reqprops['{' . self::NSCARDDAV . '}address-data'] = array_map(
+                function (string $prop): array {
+                    return [
+                        'name' => '{' . self::NSCARDDAV . '}prop',
+                        'attributes' => [ 'name' => $prop ]
+                    ];
+                },
+                $requestedVCardProps
+            );
         }
-        $body .= "  </DAV:prop>\n";
 
-        foreach ($requestedUris as $uri) {
-            $body .= "  <DAV:href>$uri</DAV:href>\n";
-        }
-
-        $body .= "</CARDDAV:addressbook-multiget>\n";
+        $body = $srv->write(
+            '{' . self::NSCARDDAV . '}addressbook-multiget',
+            array_merge(
+                [ [ 'name' => '{DAV:}prop', 'value' => $reqprops ] ],
+                array_map(
+                    function (string $uri): array {
+                        return [ 'name' => '{DAV:}href', 'value' => $uri ];
+                    },
+                    $requestedUris
+                )
+            )
+        );
 
         $uri = $this->absoluteUrl($addressbookHomeUri);
         $response = $this->httpClient->sendRequest('REPORT', $uri, [
@@ -268,14 +240,6 @@ class CardDavClient
     }
 
     /********* PRIVATE FUNCTIONS *********/
-    private static function xmlNamespacePrefixDefs(): string
-    {
-        $header = "";
-        foreach (self::MAP_NS2PREFIX as $ns => $prefix) {
-            $header .= " xmlns:$prefix=\"$ns\"";
-        }
-        return $header;
-    }
 
     // $props is either a single property or an array of properties
     // Namespace shortcuts: DAV for DAV, CARDDAV for the CardDAV namespace
@@ -283,18 +247,12 @@ class CardDavClient
     private function findProperties(
         string $uri,
         array $props,
-        string $depth = "0",
-        string $responseXPathPredicate = "true()"
+        string $depth = "0"
     ): array {
-        $body  = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-        $body .= '<DAV:propfind';
-        $body .= self::xmlNamespacePrefixDefs();
-        $body .= '><DAV:prop>' . "\n";
-
-        foreach ($props as $prop) {
-            $body .= "<" . $prop . "/>\n";
-        }
-        $body .= '</DAV:prop></DAV:propfind>';
+        $srv = self::getParserService();
+        $body = $srv->write('{DAV:}propfind', [
+            '{DAV:}prop' => array_fill_keys($props, null)
+        ]);
 
         $result = $this->requestWithRedirectionTarget(
             'PROPFIND',
@@ -311,58 +269,23 @@ class CardDavClient
             ]
         );
 
-        $xml = self::checkAndParseXML($result["response"]);
+        $multistatus = self::checkAndParseXMLMultistatus($result["response"]);
 
         $resultProperties = [];
-        // extract retrieved properties
-        if (isset($xml)) {
-            $okResponses = $xml->xpath("//DAV:response[$responseXPathPredicate]") ?: [];
-            foreach ($okResponses as $responseXml) {
-                self::registerNamespaces($responseXml);
-                $uri = $responseXml->xpath('child::DAV:href') ?: [];
-                if (isset($uri[0])) {
-                    $resultProperty = [ 'uri' => (string) $uri[0], 'props' => [] ];
 
-                    $okProps = $responseXml->xpath("DAV:propstat[contains(DAV:status,' 200 ')]/DAV:prop/*") ?: [];
-                    foreach ($okProps as $propXml) {
-                        $propName = self::addNamespacePrefixToXmlName($propXml);
+        foreach ($multistatus->responses as $response) {
+            $respUri = $response->href;
 
-                        if (in_array($propName, $props)) {
-                            if (isset(self::DAV_PROPERTIES[$propName]['converter'])) {
-                                $val = call_user_func(
-                                    self::DAV_PROPERTIES[$propName]['converter'],
-                                    $propXml,
-                                    $result
-                                );
-                            } else {
-                                $val = (string) $propXml;
-                            }
-                            $resultProperty["props"][$propName] = $val;
-                        }
+            if (!empty($response->propstat)) {
+                foreach ($response->propstat as $propstat) {
+                    if (isset($propstat->status) && stripos($propstat->status, " 200 ") !== false) {
+                        $resultProperties[] = [ 'uri' => $respUri, 'props' => $propstat->prop->props ];
                     }
-
-                    $resultProperties[] = $resultProperty;
                 }
             }
         }
 
         return $resultProperties;
-    }
-
-    // XML helpers
-    private static function checkAndParseXML(Psr7Response $davReply): ?SimpleXMLElement
-    {
-        $xml = null;
-        $status = $davReply->getStatusCode();
-
-        if (
-            (($status >= 200) && ($status < 300))
-            && preg_match(';(?i)(text|application)/xml;', $davReply->getHeaderLine('Content-Type'))
-        ) {
-            $xml = self::parseXML((string) $davReply->getBody());
-        }
-
-        return $xml;
     }
 
     private static function checkAndParseXMLMultistatus(Psr7Response $davReply): Multistatus
@@ -371,35 +294,15 @@ class CardDavClient
 
         $status = $davReply->getStatusCode();
         if (($status === 207) && preg_match(';(?i)(text|application)/xml;', $davReply->getHeaderLine('Content-Type'))) {
-            $service = Multistatus::getParserService();
+            $service = self::getParserService();
             $multistatus = $service->expect('{DAV:}multistatus', (string) $davReply->getBody());
         }
 
         if (!($multistatus instanceof Multistatus)) {
-            throw new \Exception('Response is not the expected Multistatus response.');
+            throw new \Exception("Response is not the expected Multistatus response. (Status $status)");
         }
 
         return $multistatus;
-    }
-
-    private static function parseXML(string $xmlString): ?SimpleXMLElement
-    {
-        try {
-            $xml = new SimpleXMLElement($xmlString);
-            self::registerNamespaces($xml);
-        } catch (\Exception $e) {
-            Config::$logger->error("Received XML could not be parsed", [ 'exception' => $e ]);
-            $xml = null;
-        }
-
-        return $xml;
-    }
-
-    private static function registerNamespaces(SimpleXMLElement $xml): void
-    {
-        foreach (self::MAP_NS2PREFIX as $ns => $prefix) {
-            $xml->registerXPathNamespace($prefix, $ns);
-        }
     }
 
     private function requestWithRedirectionTarget(string $method, string $uri, array $options = []): array
@@ -456,89 +359,24 @@ class CardDavClient
         return $p1 === $p2;
     }
 
-    private static function extractAbsoluteHref(SimpleXMLElement $parentElement, array $findPropertiesResult): ?string
+    private static function getParserService(): \Sabre\Xml\Service
     {
-        $hrefAbsolute = null;
 
-        self::registerNamespaces($parentElement);
-        $href = $parentElement->xpath("child::DAV:href");
-        if (isset($href[0])) {
-            $hrefAbsolute = self::concatUrl($findPropertiesResult["location"], (string) $href[0]);
-        }
+        $service = new \Sabre\Xml\Service();
+        $service->namespaceMap = self::MAP_NS2PREFIX;
+        $service->elementMap = [
+            '{DAV:}multistatus' => XmlElements\Multistatus::class,
+            '{DAV:}prop' => XmlElements\Prop::class,
+            '{' . self::NSCARDDAV . '}addressbook-home-set' => XmlElements\AddressbookHomeSet::class,
+            '{DAV:}resourcetype' => 'Sabre\Xml\Deserializer\enum',
+            '{DAV:}supported-report-set' => XmlElements\SupportedReportSet::class,
+        ];
 
-        return $hrefAbsolute;
-    }
+        $service->mapValueObject('{DAV:}response', XmlElements\Response::class);
+        $service->mapValueObject('{DAV:}propstat', XmlElements\Propstat::class);
+        $service->mapValueObject('{DAV:}current-user-principal', XmlElements\CurrentUserPrincipal::class);
 
-    private static function extractResourceType(SimpleXMLElement $parentElement, array $findPropertiesResult): array
-    {
-        self::registerNamespaces($parentElement);
-        $restypes = $parentElement->xpath("child::*") ?: [];
-
-        $result = [];
-        foreach ($restypes as $restype) {
-            $result[] = self::addNamespacePrefixToXmlName($restype);
-        }
-
-        return $result;
-    }
-
-    private static function extractAddressDataTypes(SimpleXMLElement $parentElement, array $findPropertiesResult): array
-    {
-        self::registerNamespaces($parentElement);
-        $addrdatatypes = $parentElement->xpath("child::CARDDAV:address-data-type") ?: [];
-
-        $result = [];
-        foreach ($addrdatatypes as $addrdatatype) {
-            $contenttype = $addrdatatype['content-type'] ?? null;
-            $contenttypeversion = $addrdatatype['version'] ?? null;
-            if (isset($contenttype) && isset($contenttypeversion)) {
-                $result[] = [ $contenttype, $contenttypeversion ];
-            }
-        }
-
-        return $result;
-    }
-
-    private static function extractReportSet(SimpleXMLElement $parentElement, array $findPropertiesResult): array
-    {
-        self::registerNamespaces($parentElement);
-        $reports = $parentElement->xpath("child::DAV:supported-report/DAV:report/*") ?: [];
-
-        $result = [];
-        foreach ($reports as $report) {
-            $result[] = self::addNamespacePrefixToXmlName($report);
-        }
-
-        return $result;
-    }
-
-    // Addressbook collections only contain 1) address objects or 2) collections that are (recursively) NOT addressbooks
-    // I.e. all address objects an be found directly within the addressbook collection, and no nesting of addressbooks
-
-    /**
-     * Returns the element name of the given element, prefixed with the proper namespace prefix used in this library.
-     *
-     * The names provided by the {@see SimpleXMLElement::getName()} function of @{see SimpleXMLElement} objects returns
-     * the unqualified element name only. There is no way to retrieve the namespace of the element name. It is, however,
-     * possible, to retrieve the namespaces used by the element using the {@see SimpleXMLElement::getNamespaces()}
-     * function. This function returns an array mapping namespace prefixes to the namespace URNs. It may contain several
-     * entries if the element contains attributes belonging to a different namespace. Since the prefix is not part of
-     * the name returned by {@see SimpleXMLElement::getName()}, there is no way to know which of the namespaces provided
-     * by {@see SimpleXMLElement::getNamespaces()} the element name belongs to.
-     *
-     * Currently, I know of no instance where an attribute is used with one of the XML elements we are interested in,
-     * that belongs to a different namespace. So this function assumes that {@see SimpleXMLElement::getNamespaces() will
-     * only return a single namespace that the element's name belongs to.
-     *
-     * @param SimpleXMLElement $xml The XML element whose qualified name should be returned.
-     * @return string The qualified name of the given XML element (by means of adding one of the prefixes used by
-     *     convention inside this library.
-     */
-    private static function addNamespacePrefixToXmlName(SimpleXMLElement $xml): string
-    {
-        $ns = array_values($xml->getNamespaces())[0];
-        $name = self::MAP_NS2PREFIX[$ns] . ":" . $xml->getName();
-        return $name;
+        return $service;
     }
 }
 

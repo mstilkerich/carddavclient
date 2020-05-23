@@ -13,7 +13,7 @@ class AddressbookCollection extends WebDavCollection
 {
     public function getName(): string
     {
-        return $this->props["DAV:displayname"] ?? basename($this->uri);
+        return $this->props["{DAV:}displayname"] ?? basename($this->uri);
     }
 
     public function __toString(): string
@@ -52,13 +52,21 @@ class AddressbookCollection extends WebDavCollection
     public function supportsSyncCollection(): bool
     {
         // FIXME check if property is available
-        return in_array("DAV:sync-collection", $this->props["DAV:supported-report-set"], true);
+        return in_array(
+            "{DAV:}sync-collection",
+            $this->props["{DAV:}supported-report-set"],
+            true
+        );
     }
 
     public function supportsMultiGet(): bool
     {
         // FIXME check if property is available
-        return in_array("CARDDAV:addressbook-multiget", $this->props["DAV:supported-report-set"], true);
+        return in_array(
+            "{" . CardDavClient::NSCARDDAV . "}addressbook-multiget",
+            $this->props["{DAV:}supported-report-set"],
+            true
+        );
     }
 }
 

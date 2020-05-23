@@ -31,20 +31,6 @@ class Multistatus implements \Sabre\Xml\XmlDeserializable
         }
         return $multistatus;
     }
-
-    public static function getParserService(): \Sabre\Xml\Service
-    {
-        $service = new \Sabre\Xml\Service();
-        $service->elementMap = [
-            '{DAV:}multistatus' => Multistatus::class,
-            '{DAV:}prop' => Prop::class
-        ];
-
-        $service->mapValueObject('{DAV:}response', Response::class);
-        $service->mapValueObject('{DAV:}propstat', Propstat::class);
-
-        return $service;
-    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

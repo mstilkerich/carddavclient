@@ -115,7 +115,7 @@ class CardDavClient
         $princUrlAbsolute = $result[0]["props"]["DAV:current-user-principal"] ?? null;
 
         if (isset($princUrlAbsolute)) {
-            echo "principal URL: $princUrlAbsolute\n";
+            Config::$logger->info("principal URL: $princUrlAbsolute");
         }
 
         return $princUrlAbsolute;
@@ -145,7 +145,7 @@ class CardDavClient
         $addressbookHomeUriAbsolute = $result[0]["props"]["CARDDAV:addressbook-home-set"] ?? null;
 
         if (isset($addressbookHomeUriAbsolute)) {
-            echo "addressbook home: $addressbookHomeUriAbsolute\n";
+            Config::$logger->info("addressbook home: $addressbookHomeUriAbsolute");
         }
 
         return $addressbookHomeUriAbsolute;
@@ -388,7 +388,7 @@ class CardDavClient
             $xml = new SimpleXMLElement($xmlString);
             self::registerNamespaces($xml);
         } catch (\Exception $e) {
-            echo "XML could not be parsed: " . $e->getMessage() . "\n";
+            Config::$logger->error("Received XML could not be parsed", [ 'exception' => $e ]);
             $xml = null;
         }
 

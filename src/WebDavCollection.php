@@ -26,9 +26,9 @@ class WebDavCollection
         $this->props = $props;
     }
 
-    public function getAccount(): Account
+    public function getClient(array $davClientOptions = []): CardDavClient
     {
-        return $this->account;
+        return $this->account->getClient($davClientOptions, $this->uri);
     }
 
     public function getUri(): string

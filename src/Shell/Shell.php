@@ -8,7 +8,11 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Shell;
 
-use MStilkerich\CardDavClient\{AddressbookCollection, CardDavDiscovery, CardDavSync};
+use MStilkerich\CardDavClient\{AddressbookCollection, CardDavDiscovery, CardDavSync, Config};
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Formatter\LineFormatter;
+use Bramus\Monolog\Formatter\ColoredLineFormatter;
 
 class Shell
 {
@@ -82,6 +86,30 @@ class Shell
     public function __construct(array $accountdata = [])
     {
         $this->accounts = $accountdata;
+
+
+        $log = new Logger('davshell');
+        $handler = new StreamHandler('php://stdout', Logger::DEBUG);
+        $handler->setFormatter(new ColoredLineFormatter(
+            null,
+            "%level_name%: %message% %context% %extra%\n",
+            "",   // no date output needed
+            true, // allow linebreaks in message
+            true  // remove empty context and extra fields (trailing [] [])
+        ));
+        $log->pushHandler($handler);
+
+        $httplog = new Logger('davshell');
+        $httphandler = new StreamHandler('http.log', Logger::DEBUG, true, 0600);
+        $httphandler->setFormatter(new LineFormatter(
+            "[%datetime%] %level_name%: %message% %context% %extra%",
+            'Y-m-d H:i:s', // simplified date format
+            true, // allow linebreaks in message
+            true  // remove empty context and extra fields (trailing [] [])
+        ));
+        $httplog->pushHandler($httphandler);
+
+        Config::init($log, $httplog);
     }
 
     private function listAccounts(string $opt = ""): bool
@@ -169,7 +197,7 @@ class Shell
             [ 'server' => $srv, 'username' => $username, 'password' => $password ] = $this->accounts[$accountName];
             echo "Discover($srv, $username, $password)\n";
 
-            $discover = new CardDavDiscovery(["debugfile" => "http.log"]);
+            $discover = new CardDavDiscovery();
             $abooks = $discover->discoverAddressbooks($srv, $username, $password);
 
             $this->accounts[$accountName]['addressbooks'] = [];
@@ -246,7 +274,7 @@ class Shell
 
             if (isset($abook)) {
                 $synchandler = new ShellSyncHandler();
-                $syncmgr = new CardDavSync(["debugfile" => "http.log"]);
+                $syncmgr = new CardDavSync();
                 $synctoken = $syncmgr->synchronize($abook, $synchandler);
                 $ret = true;
             } else {

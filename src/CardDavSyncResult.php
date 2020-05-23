@@ -45,11 +45,11 @@ class CardDavSyncResult
                 try {
                     $obj["vcard"] = \Sabre\VObject\Reader::read($obj["vcf"]);
                 } catch (\Exception $e) {
-                    echo "Could not parse VCF for " . $obj["uri"] . ": " . $e->getMessage() . "\n";
+                    Config::$logger->error("Could not parse VCF for " . $obj["uri"], [ 'exception' => $e ]);
                     $ret = false;
                 }
             } else {
-                echo "No VCF for address object " . $obj["uri"] . " available\n";
+                Config::$logger->warning("No VCF for address object " . $obj["uri"] . " available");
                 $ret = false;
             }
         }

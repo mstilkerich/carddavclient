@@ -38,9 +38,9 @@ class Account
      * @return CardDavClient
      *  A CardDavClient object to interact with the server for this account.
      */
-    public function getClient(array $davClientOptions = []): CardDavClient
+    public function getClient(array $davClientOptions = [], string $baseUri = null): CardDavClient
     {
-        $davClient = new CardDavClient($this->baseUri, $this->username, $this->password, $davClientOptions);
+        $davClient = new CardDavClient($baseUri ?? $this->baseUri, $this->username, $this->password, $davClientOptions);
         return $davClient;
     }
 }

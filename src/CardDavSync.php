@@ -12,16 +12,8 @@ class CardDavSync
 {
     /********* PROPERTIES *********/
 
-    /** @var array Options to the HttpClient */
-    private $davClientOptions = [];
 
     /********* PUBLIC FUNCTIONS *********/
-    public function __construct(array $options = [])
-    {
-        if (key_exists("debugfile", $options)) {
-            $this->davClientOptions["debugfile"] = $options["debugfile"];
-        }
-    }
 
     /**
      * Performs a synchronization of the given addressbook.
@@ -35,7 +27,7 @@ class CardDavSync
         array $requestedVCardProps = [],
         string $prevSyncToken = ""
     ): string {
-        $client = $abook->getAccount()->getClient($this->davClientOptions);
+        $client = $abook->getClient();
 
         $syncResult = null;
 
@@ -71,7 +63,7 @@ class CardDavSync
         }
 
         if ($syncResult->createVCards() === false) {
-            echo "Not for all changed objects, the VCard data was provided by the server\n";
+            Config::$logger->warning("Not for all changed objects, the VCard data was provided by the server");
         }
 
         foreach ($syncResult->changedObjects as $obj) {
@@ -105,7 +97,7 @@ class CardDavSync
                 if (isset($response->status) && stripos($response->status, " 507 ") !== false) {
                     $syncResult->syncAgain = true;
                 } else {
-                    echo "Ignoring response on addressbook itself\n";
+                    Config::$logger->debug("Ignoring response on addressbook itself");
                 }
 
             // For members that have been removed, the DAV:response MUST contain one DAV:status with a value set to
@@ -126,7 +118,7 @@ class CardDavSync
                     }
                 }
             } else {
-                echo "Unexpected response element in sync-collection result\n";
+                Config::$logger->warning("Unexpected response element in sync-collection result\n");
             }
         }
 
@@ -162,7 +154,7 @@ class CardDavSync
                     }
                 }
             } else {
-                echo "Unexpected response element in sync-collection result\n";
+                Config::$logger->warning("Unexpected response element in multiget result\n");
             }
         }
     }

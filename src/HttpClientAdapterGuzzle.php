@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
-use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\{Client, HandlerStack, Middleware, MessageFormatter};
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Http\Client\ClientInterface as Psr18ClientInterface;
 use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
@@ -25,11 +25,8 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
 {
     /********* PROPERTIES *********/
 
-    /** @var GuzzleClient The Client object of the Guzzle HTTP library. */
+    /** @var Client The Client object of the Guzzle HTTP library. */
     private $client;
-
-    /** @var resource|null Handle of the debug file if debugging is enabled. */
-    private $debughandle = null;
 
     /********* PUBLIC FUNCTIONS *********/
 
@@ -39,35 +36,24 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
      * @param string $username Username used to authenticate with the server.
      * @param string $password Password used to authenticate with the server.
      * @param array  $options  Options for the HTTP client, and default request options. May include any of the options
-     *               accepted by {@see HttpClientAdapterInterface::sendRequest()}, plus the following:
-     *               'debugfile' => string: Filename to be used for debug logging of all HTTP traffic.
+     *               accepted by {@see HttpClientAdapterInterface::sendRequest()}.
      */
     public function __construct(string $base_uri, string $username, string $password, array $options = [])
     {
         $guzzleOptions = self::prepareGuzzleOptions($options);
 
-        if (key_exists("debugfile", $options)) {
-            $this->debughandle = fopen($options["debugfile"], "a");
-            $guzzleOptions["debug"] = $this->debughandle;
-        }
+        $stack = HandlerStack::create();
+        $stack->push(Middleware::log(
+            Config::$httplogger,
+            new MessageFormatter("\"{method} {target} HTTP/{version}\" {code}\n" . MessageFormatter::DEBUG)
+        ));
+        $guzzleOptions['handler'] = $stack;
 
         $guzzleOptions['http_errors'] = false; // no exceptions on 4xx/5xx status, also required by PSR-18
         $guzzleOptions['base_uri'] = $base_uri;
         $guzzleOptions['auth'] = [$username, $password];
 
-        $this->client = new GuzzleClient($guzzleOptions);
-    }
-
-    /** Destructor of the adapter.
-     *
-     * Closes the debug file if enabled.
-     */
-    public function __destruct()
-    {
-        if (isset($this->debughandle)) {
-            echo "Closing Debug Handle\n";
-            fclose($this->debughandle);
-        }
+        $this->client = new Client($guzzleOptions);
     }
 
     /**
@@ -78,15 +64,8 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
         $guzzleOptions = self::prepareGuzzleOptions($options);
 
         try {
-            if (isset($this->debughandle)) {
-                if (isset($options["body"])) {
-                    fwrite($this->debughandle, "Body of following request:\n");
-                    fwrite($this->debughandle, $options["body"]);
-                }
-            }
-
             $response = $this->client->request($method, $uri, $guzzleOptions);
-            return $this->responsePostProcessing($response);
+            return $response;
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             // thrown in the event of a networking error or too many redirects
             throw new NetworkException($e->getMessage(), intval($e->getCode()), $e->getRequest(), $e);
@@ -97,15 +76,6 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
     }
 
     /********* PRIVATE FUNCTIONS *********/
-    private function responsePostProcessing(Psr7Response $guzzleResponse): Psr7Response
-    {
-        if (isset($this->debughandle)) {
-            fwrite($this->debughandle, (string) $guzzleResponse->getBody());
-        }
-
-        return $guzzleResponse;
-    }
-
     private static function prepareGuzzleOptions(array $options): array
     {
         $guzzleOptions = [];

@@ -72,13 +72,14 @@ class CardDavClient
     {
         $result = $this->findProperties($contextPathUri, ["{DAV:}current-user-principal"]);
 
-        $princUrlAbsolute = $result[0]["props"]["{DAV:}current-user-principal"]->href ?? null;
+        $princUrl = $result[0]["props"]["{DAV:}current-user-principal"]->href ?? null;
 
-        if (isset($princUrlAbsolute)) {
-            Config::$logger->info("principal URL: $princUrlAbsolute");
+        if (isset($princUrl)) {
+            $princUrl = self::concatUrl($result[0]["uri"], $princUrl);
+            Config::$logger->info("principal URL: $princUrl");
         }
 
-        return $princUrlAbsolute;
+        return $princUrl;
     }
 
     /**
@@ -105,13 +106,14 @@ class CardDavClient
 
         // FIXME per RFC several home locations could be returned, but we currently only use one. However, it is rather
         // unlikely that there would be several addressbook home locations.
-        $addressbookHomeUriAbsolute = $result[0]["props"][$propname]->href[0] ?? null;
+        $addressbookHomeUri = $result[0]["props"][$propname]->href[0] ?? null;
 
-        if (isset($addressbookHomeUriAbsolute)) {
-            Config::$logger->info("addressbook home: $addressbookHomeUriAbsolute");
+        if (isset($addressbookHomeUri)) {
+            $addressbookHomeUri = self::concatUrl($result[0]["uri"], $addressbookHomeUri);
+            Config::$logger->info("addressbook home: $addressbookHomeUri");
         }
 
-        return $addressbookHomeUriAbsolute;
+        return $addressbookHomeUri;
     }
 
     // RFC6352: An address book collection MUST report the DAV:collection and CARDDAV:addressbook XML elements in the
@@ -141,10 +143,8 @@ class CardDavClient
         $abooksResult = [];
         foreach ($abooks as $abook) {
             if (in_array($abookResourceType, $abook["props"]["{DAV:}resourcetype"])) {
-                $abookUri = self::concatUrl($addressbookHomeUri, $abook["uri"]);
-
                 $abooksResult[] = [
-                    "uri"   => $abookUri,
+                    "uri"   => $abook["uri"],
                     "props" => $abook["props"]
                 ];
             }
@@ -153,7 +153,7 @@ class CardDavClient
         return $abooksResult;
     }
 
-    public function syncCollection(string $addressbookHomeUri, string $syncToken): Multistatus
+    public function syncCollection(string $addressbookUri, string $syncToken): Multistatus
     {
         $srv = self::getParserService();
         $body = $srv->write('{DAV:}sync-collection', [
@@ -164,8 +164,7 @@ class CardDavClient
             ]
         ]);
 
-        $uri = $this->absoluteUrl($addressbookHomeUri);
-        $response = $this->httpClient->sendRequest('REPORT', $uri, [
+        $response = $this->httpClient->sendRequest('REPORT', $addressbookUri, [
             "headers" =>
             [
                 // RFC6578: Depth header is required to be 0 for sync-collection report
@@ -191,7 +190,7 @@ class CardDavClient
     }
 
     public function multiGet(
-        string $addressbookHomeUri,
+        string $addressbookUri,
         array $requestedUris,
         array $requestedVCardProps = []
     ): Multistatus {
@@ -225,8 +224,7 @@ class CardDavClient
             )
         );
 
-        $uri = $this->absoluteUrl($addressbookHomeUri);
-        $response = $this->httpClient->sendRequest('REPORT', $uri, [
+        $response = $this->httpClient->sendRequest('REPORT', $addressbookUri, [
             "headers" =>
             [
                 // RFC6352: Depth: 0 header is required for addressbook-multiget report.
@@ -274,7 +272,10 @@ class CardDavClient
         $resultProperties = [];
 
         foreach ($multistatus->responses as $response) {
-            $respUri = $response->href;
+            // There may have been redirects involved in querying the properties, particularly during addressbook
+            // discovery. They may even point to a different server than the original request URI. Return absolute URL
+            // in the responses to allow the caller to know the actual location on that the properties where reported
+            $respUri = self::concatUrl($result["location"], $response->href);
 
             if (!empty($response->propstat)) {
                 foreach ($response->propstat as $propstat) {

@@ -23,9 +23,9 @@ class ShellSyncHandler implements CardDavSyncHandler
         Shell::$logger->info("Deleted object: $uri");
     }
 
-    public function getExistingETagForVCard(string $uri): ?string
+    public function getExistingVCardETags(): array
     {
-        return null;
+        return [];
     }
 }
 

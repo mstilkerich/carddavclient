@@ -44,21 +44,17 @@ interface CardDavSyncHandler
     public function addressObjectDeleted(string $uri): void;
 
     /**
-     * Provides the ETag corresponding to the local version of an address object.
+     * Provides the URIs and ETags of all VCards existing locally.
      *
      * During synchronization, it may be required to identify the version of locally existing address objects to
      * determine whether the server-side version is newer than the local version. This is the case if the server does
      * not support the sync-collection report, or if the sync-token has expired on the server and thus the server is not
      * able to report the changes against the local state.
      *
-     * @param string $uri
-     *  URI of the queried address object.
-     *
-     * @return ?string
-     *  ETag of the local copy of the address object identified by the $uri parameter. Return null if no local copy of
-     *  the address object exists.
+     * @return array
+     *  Associative array with URIs (URL path component without server) as keys, ETags as values.
      */
-    public function getExistingETagForVCard(string $uri): ?string;
+    public function getExistingVCardETags(): array;
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

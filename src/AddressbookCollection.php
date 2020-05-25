@@ -11,6 +11,13 @@ namespace MStilkerich\CardDavClient;
 
 class AddressbookCollection extends WebDavCollection
 {
+    private const PROPNAMES = [
+        "{" . CardDavClient::NSCS . "}getctag",
+        "{" . CardDavClient::NSCARDDAV . "}supported-address-data",
+        "{" . CardDavClient::NSCARDDAV . "}addressbook-description",
+        "{" . CardDavClient::NSCARDDAV . "}max-resource-size"
+    ];
+
     public function getName(): string
     {
         return $this->props["{DAV:}displayname"] ?? basename($this->uri);
@@ -51,22 +58,29 @@ class AddressbookCollection extends WebDavCollection
 
     public function supportsSyncCollection(): bool
     {
-        // FIXME check if property is available
-        return in_array(
-            "{DAV:}sync-collection",
-            $this->props["{DAV:}supported-report-set"],
-            true
-        );
+        return $this->supportsReport("{DAV:}sync-collection");
     }
 
     public function supportsMultiGet(): bool
     {
-        // FIXME check if property is available
-        return in_array(
-            "{" . CardDavClient::NSCARDDAV . "}addressbook-multiget",
-            $this->props["{DAV:}supported-report-set"],
-            true
-        );
+        return $this->supportsReport("{" . CardDavClient::NSCARDDAV . "}addressbook-multiget");
+    }
+
+    public function getCTag(): ?string
+    {
+        return $this->props["{http://calendarserver.org/ns/}getctag"] ?? null;
+    }
+
+    protected function getNeededCollectionPropertyNames(): array
+    {
+        $parentPropNames = parent::getNeededCollectionPropertyNames();
+        $propNames = array_merge($parentPropNames, self::PROPNAMES);
+        return array_unique($propNames);
+    }
+
+    protected function supportsReport(string $reportElement): bool
+    {
+        return in_array($reportElement, $this->props["{DAV:}supported-report-set"], true);
     }
 }
 

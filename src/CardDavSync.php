@@ -34,6 +34,7 @@ class CardDavSync
         // DETERMINE WHICH ADDRESS OBJECTS HAVE CHANGED
         // If sync-collection is supported by the server, attempt synchronization using the report
         if ($abook->supportsSyncCollection()) {
+            Config::$logger->debug("Attempting sync using sync-collection report of " . $abook->getUri());
             $syncResult = $this->syncCollection($client, $abook, $prevSyncToken);
         }
 
@@ -41,15 +42,15 @@ class CardDavSync
         // objects' etags
         if (!isset($syncResult)) {
             // if server supports getctag, take a short cut if nothing changed
-//            $newSyncToken = $this->getCTag($abook);
+            $newSyncToken = $abook->getCTag();
 
-//          if (empty($prevSyncToken) || empty($newSyncToken) || ($prevSyncToken !== $newSyncToken)) {
-//              $this->getCardEtags($abook, $prevSyncToken);
-//          }
-        }
-
-        if (!isset($syncResult)) {
-            throw new \Exception('CardDavSync could not determine the changes for synchronization');
+            if (empty($prevSyncToken) || empty($newSyncToken) || ($prevSyncToken !== $newSyncToken)) {
+                Config::$logger->debug("Attempting sync by ETag comparison against local state of " . $abook->getUri());
+                $syncResult = $this->determineChangesViaETags($client, $abook, $handler);
+            } else {
+                Config::$logger->debug("Skipping sync of up-to-date addressbook (by ctag) " . $abook->getUri());
+                $syncResult = new CardDavSyncResult($prevSyncToken);
+            }
         }
 
         // DELETE THE DELETED ADDRESS OBJECTS
@@ -58,18 +59,28 @@ class CardDavSync
         }
 
         // FETCH THE CHANGED ADDRESS OBJECTS
-        if ($abook->supportsMultiGet()) {
-            $this->multiGetChanges($client, $abook, $syncResult, $requestedVCardProps);
+        if (!empty($syncResult->changedObjects)) {
+            if ($abook->supportsMultiGet()) {
+                $this->multiGetChanges($client, $abook, $syncResult, $requestedVCardProps);
+            }
+
+            // try to manually fill all VCards where multiget did not provide VCF data
+            foreach ($syncResult->changedObjects as &$objref) {
+                if (!isset($objref["vcf"])) {
+                    [ 'etag' => $etag, 'vcf' => $objref["vcf"] ] = $client->getAddressObject($objref["uri"]);
+                }
+            }
+
+            if ($syncResult->createVCards() === false) {
+                Config::$logger->warning("Not for all changed objects, the VCard data was provided by the server");
+            }
+
+            foreach ($syncResult->changedObjects as $obj) {
+                $handler->addressObjectChanged($obj["uri"], $obj["etag"], $obj["vcard"]);
+            }
         }
 
-        if ($syncResult->createVCards() === false) {
-            Config::$logger->warning("Not for all changed objects, the VCard data was provided by the server");
-        }
-
-        foreach ($syncResult->changedObjects as $obj) {
-            $handler->addressObjectChanged($obj["uri"], $obj["etag"], $obj["vcard"]);
-        }
-        return "";
+        return $syncResult->syncToken;
     }
 
     /********* PRIVATE FUNCTIONS *********/
@@ -78,8 +89,8 @@ class CardDavSync
         AddressbookCollection $abook,
         string $prevSyncToken
     ): CardDavSyncResult {
-        $abookUri = $abook->getUri();
-        $multistatus = $client->syncCollection($abookUri, $prevSyncToken);
+        $abookUrl = $abook->getUri();
+        $multistatus = $client->syncCollection($abookUrl, $prevSyncToken);
 
         if (!isset($multistatus->synctoken)) {
             throw new \Exception("No sync token contained in response to sync-collection REPORT.");
@@ -90,7 +101,7 @@ class CardDavSync
         foreach ($multistatus->responses as $response) {
             $respUri = $response->href;
 
-            if (CardDavClient::compareUrlPaths($respUri, $abookUri)) {
+            if (CardDavClient::compareUrlPaths($respUri, $abookUrl)) {
                 // If the result set is truncated, the response MUST use status code 207 (Multi-Status), return a
                 // DAV:multistatus response body, and indicate a status of 507 (Insufficient Storage) for the
                 // request-URI.
@@ -121,6 +132,65 @@ class CardDavSync
                 Config::$logger->warning("Unexpected response element in sync-collection result\n");
             }
         }
+
+        return $syncResult;
+    }
+
+    private function determineChangesViaETags(
+        CardDavClient $client,
+        AddressbookCollection $abook,
+        CardDavSyncHandler $handler
+    ): CardDavSyncResult {
+        $abookUrl = $abook->getUri();
+
+        $cTagPropName = "{" . CardDavClient::NSCS . "}getctag";
+        $eTagPropName = "{" . CardDavClient::NSDAV . "}getetag";
+        $syncTokenPropName = "{" . CardDavClient::NSDAV . "}sync-token";
+
+        $responses = $client->findProperties($abookUrl, [ $cTagPropName, $eTagPropName, $syncTokenPropName ], "1");
+
+        // array of local VCards basename (i.e. only the filename) => etag
+        $localCacheState = $handler->getExistingVCardETags();
+
+        $newSyncToken = "";
+        $changes = [];
+        foreach ($responses as $response) {
+            $url = $response["uri"];
+            $props = $response["props"];
+
+            if (CardDavClient::compareUrlPaths($url, $abookUrl)) {
+                $newSyncToken = $props[$cTagPropName] ?? $props[$syncTokenPropName] ?? "";
+                if (empty($newSyncToken)) {
+                    Config::$logger->notice("The server provides no token that identifies the addressbook version");
+                }
+            } else {
+                $etag = $props[$eTagPropName] ?? null;
+                if (!isset($etag)) {
+                    Config::$logger->warning("Server did not provide an ETag for $url, skipping");
+                } else {
+                    ['path' => $uri] = \Sabre\Uri\parse($url);
+
+                    // add new or changed cards to the list of changes
+                    if (
+                        (!isset($localCacheState[$uri]))
+                        || ($etag !== $localCacheState[$uri])
+                    ) {
+                        $changes[] = [
+                            'uri' => $uri,
+                            'etag' => $etag
+                        ];
+                    }
+
+                    // remove seen so that only the unseen remain for removal
+                    if (isset($localCacheState[$uri])) {
+                        unset($localCacheState[$uri]);
+                    }
+                }
+            }
+        }
+        $syncResult = new CardDavSyncResult($newSyncToken);
+        $syncResult->deletedObjects = array_keys($localCacheState);
+        $syncResult->changedObjects = $changes;
 
         return $syncResult;
     }

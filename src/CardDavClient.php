@@ -189,6 +189,45 @@ class CardDavClient
         return $requestedVCardProps;
     }
 
+    public function getAddressObject(string $uri): array
+    {
+        $response = $this->httpClient->sendRequest('GET', $uri);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception(
+                "Address object $uri GET request was not successful ("
+                . $response->getStatusCode()
+                . "): "
+                . $response->getReasonPhrase()
+            );
+        }
+
+        // presence of this header is required per RFC6352:
+        // "A response to a GET request targeted at an address object resource MUST contain an ETag response header
+        // field indicating the current value of the strong entity tag of the address object resource."
+        $etag = $response->getHeaderLine("ETag");
+        if (empty($etag)) {
+            throw new \Exception(
+                "Response to address object $uri GET request does not include ETag header ("
+                . $response->getStatusCode()
+                . "): "
+                . $response->getReasonPhrase()
+            );
+        }
+
+        $body = (string) $response->getBody();
+        if (empty($body)) {
+            throw new \Exception(
+                "Response to address object $uri GET request does not include a body ("
+                . $response->getStatusCode()
+                . "): "
+                . $response->getReasonPhrase()
+            );
+        }
+
+        return [ 'etag' => $etag, 'vcf' => $body ];
+    }
+
     public function multiGet(
         string $addressbookUri,
         array $requestedUris,
@@ -237,12 +276,10 @@ class CardDavClient
         return self::checkAndParseXMLMultistatus($response);
     }
 
-    /********* PRIVATE FUNCTIONS *********/
-
     // $props is either a single property or an array of properties
     // Namespace shortcuts: DAV for DAV, CARDDAV for the CardDAV namespace
     // RFC4918: There is always only a single value for a property, which is an XML fragment
-    private function findProperties(
+    public function findProperties(
         string $uri,
         array $props,
         string $depth = "0"
@@ -288,6 +325,8 @@ class CardDavClient
 
         return $resultProperties;
     }
+
+    /********* PRIVATE FUNCTIONS *********/
 
     private static function checkAndParseXMLMultistatus(Psr7Response $davReply): Multistatus
     {

@@ -23,6 +23,8 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
 
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+
 class SupportedReportSet implements \Sabre\Xml\XmlDeserializable
 {
     public static function xmlDeserialize(\Sabre\Xml\Reader $reader)
@@ -33,11 +35,11 @@ class SupportedReportSet implements \Sabre\Xml\XmlDeserializable
         // First run over all the supported-report elements (there is one for each supported report)
         if (is_array($supportedReports)) {
             foreach ($supportedReports as $supportedReport) {
-                if (strcasecmp($supportedReport['name'], '{DAV:}supported-report') === 0) {
+                if (strcasecmp($supportedReport['name'], XmlEN::SUPPORTED_REPORT) === 0) {
                     if (is_array($supportedReport['value'])) {
                         // Second run over all the report elements (there should be exactly one per RFC3253)
                         foreach ($supportedReport['value'] as $report) {
-                            if (strcasecmp($report['name'], '{DAV:}report') === 0) {
+                            if (strcasecmp($report['name'], XmlEN::REPORT) === 0) {
                                 if (is_array($report['value'])) {
                                     // Finally, get the actual element specific for the supported report
                                     // (there should be exactly one per RFC3253)

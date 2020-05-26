@@ -10,6 +10,7 @@ namespace MStilkerich\CardDavClient;
 
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use MStilkerich\CardDavClient\XmlElements\Multistatus;
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
 /*
 Other needed features:
@@ -19,14 +20,10 @@ Other needed features:
 class CardDavClient
 {
     /********* CONSTANTS *********/
-    public const NSDAV     = 'DAV:';
-    public const NSCARDDAV = 'urn:ietf:params:xml:ns:carddav';
-    public const NSCS      = 'http://calendarserver.org/ns/';
-
     private const MAP_NS2PREFIX = [
-        self::NSDAV => 'DAV',
-        self::NSCARDDAV => 'CARDDAV',
-        self::NSCS => 'CS',
+        XmlEN::NSDAV => 'DAV',
+        XmlEN::NSCARDDAV => 'CARDDAV',
+        XmlEN::NSCS => 'CS',
     ];
 
     /********* PROPERTIES *********/
@@ -70,9 +67,9 @@ class CardDavClient
      */
     public function findCurrentUserPrincipal(string $contextPathUri): ?string
     {
-        $result = $this->findProperties($contextPathUri, ["{DAV:}current-user-principal"]);
+        $result = $this->findProperties($contextPathUri, [XmlEN::CURUSRPRINC]);
 
-        $princUrl = $result[0]["props"]["{DAV:}current-user-principal"]->href ?? null;
+        $princUrl = $result[0]["props"][XmlEN::CURUSRPRINC]->href ?? null;
 
         if (isset($princUrl)) {
             $princUrl = self::concatUrl($result[0]["uri"], $princUrl);
@@ -101,12 +98,11 @@ class CardDavClient
      */
     public function findAddressbookHome(string $principalUri): ?string
     {
-        $propname = "{" . self::NSCARDDAV . "}addressbook-home-set";
-        $result = $this->findProperties($principalUri, [$propname]);
+        $result = $this->findProperties($principalUri, [XmlEN::ABOOK_HOME]);
 
         // FIXME per RFC several home locations could be returned, but we currently only use one. However, it is rather
         // unlikely that there would be several addressbook home locations.
-        $addressbookHomeUri = $result[0]["props"][$propname]->href[0] ?? null;
+        $addressbookHomeUri = $result[0]["props"][XmlEN::ABOOK_HOME]->href[0] ?? null;
 
         if (isset($addressbookHomeUri)) {
             $addressbookHomeUri = self::concatUrl($result[0]["uri"], $addressbookHomeUri);
@@ -123,30 +119,12 @@ class CardDavClient
     // CARDDAV:max-resource-size (maximum size in bytes for an address object of the addressbook collection)
     public function findAddressbooks(string $addressbookHomeUri): array
     {
-        $abooks = $this->findProperties(
-            $addressbookHomeUri,
-            [
-                "{" . self::NSDAV . "}resourcetype",
-                "{" . self::NSDAV . "}displayname",
-                "{" . self::NSDAV . "}supported-report-set",
-                "{" . self::NSDAV . "}sync-token",
-                "{" . self::NSCS . "}getctag",
-                "{" . self::NSCARDDAV . "}supported-address-data",
-                "{" . self::NSCARDDAV . "}addressbook-description",
-                "{" . self::NSCARDDAV . "}max-resource-size"
-            ],
-            "1"
-        );
-
-        $abookResourceType = "{" . self::NSCARDDAV . "}addressbook";
+        $abooks = $this->findProperties($addressbookHomeUri, [ XmlEN::RESTYPE ], "1");
 
         $abooksResult = [];
         foreach ($abooks as $abook) {
-            if (in_array($abookResourceType, $abook["props"]["{DAV:}resourcetype"])) {
-                $abooksResult[] = [
-                    "uri"   => $abook["uri"],
-                    "props" => $abook["props"]
-                ];
+            if (in_array(XmlEN::RESTYPE_ABOOK, $abook["props"][XmlEN::RESTYPE])) {
+                $abooksResult[] = $abook["uri"];
             }
         }
 
@@ -156,12 +134,10 @@ class CardDavClient
     public function syncCollection(string $addressbookUri, string $syncToken): Multistatus
     {
         $srv = self::getParserService();
-        $body = $srv->write('{DAV:}sync-collection', [
-            '{DAV:}sync-token' => $syncToken,
-            '{DAV:}sync-level' => 1,
-            '{DAV:}prop' => [
-                '{DAV:}getetag' => null
-            ]
+        $body = $srv->write(XmlEN::REPORT_SYNCCOLL, [
+            XmlEN::SYNCTOKEN => $syncToken,
+            XmlEN::SYNCLEVEL => "1",
+            XmlEN::PROP => [ XmlEN::GETETAG => null ]
         ]);
 
         $response = $this->httpClient->sendRequest('REPORT', $addressbookUri, [
@@ -235,14 +211,14 @@ class CardDavClient
     ): Multistatus {
         $srv = self::getParserService();
 
-        $reqprops = [ '{DAV:}getetag' => null ];
+        $reqprops = [ XmlEN::GETETAG => null ];
         if (!empty($requestedVCardProps)) {
             $requestedVCardProps = self::addRequiredVCardProperties($requestedVCardProps);
 
-            $reqprops['{' . self::NSCARDDAV . '}address-data'] = array_map(
+            $reqprops[XmlEN::ADDRDATA] = array_map(
                 function (string $prop): array {
                     return [
-                        'name' => '{' . self::NSCARDDAV . '}prop',
+                        'name' => XmlEN::VCFPROP,
                         'attributes' => [ 'name' => $prop ]
                     ];
                 },
@@ -251,12 +227,12 @@ class CardDavClient
         }
 
         $body = $srv->write(
-            '{' . self::NSCARDDAV . '}addressbook-multiget',
+            XmlEN::REPORT_MULTIGET,
             array_merge(
-                [ [ 'name' => '{DAV:}prop', 'value' => $reqprops ] ],
+                [ [ 'name' => XmlEN::PROP, 'value' => $reqprops ] ],
                 array_map(
                     function (string $uri): array {
-                        return [ 'name' => '{DAV:}href', 'value' => $uri ];
+                        return [ 'name' => XmlEN::HREF, 'value' => $uri ];
                     },
                     $requestedUris
                 )
@@ -285,8 +261,8 @@ class CardDavClient
         string $depth = "0"
     ): array {
         $srv = self::getParserService();
-        $body = $srv->write('{DAV:}propfind', [
-            '{DAV:}prop' => array_fill_keys($props, null)
+        $body = $srv->write(XmlEN::PROPFIND, [
+            XmlEN::PROP => array_fill_keys($props, null)
         ]);
 
         $result = $this->requestWithRedirectionTarget(
@@ -335,7 +311,7 @@ class CardDavClient
         $status = $davReply->getStatusCode();
         if (($status === 207) && preg_match(';(?i)(text|application)/xml;', $davReply->getHeaderLine('Content-Type'))) {
             $service = self::getParserService();
-            $multistatus = $service->expect('{DAV:}multistatus', (string) $davReply->getBody());
+            $multistatus = $service->expect(XmlEN::MULTISTATUS, (string) $davReply->getBody());
         }
 
         if (!($multistatus instanceof Multistatus)) {
@@ -405,16 +381,16 @@ class CardDavClient
         $service = new \Sabre\Xml\Service();
         $service->namespaceMap = self::MAP_NS2PREFIX;
         $service->elementMap = [
-            '{DAV:}multistatus' => XmlElements\Multistatus::class,
-            '{DAV:}prop' => XmlElements\Prop::class,
-            '{' . self::NSCARDDAV . '}addressbook-home-set' => XmlElements\AddressbookHomeSet::class,
-            '{DAV:}resourcetype' => 'Sabre\Xml\Deserializer\enum',
-            '{DAV:}supported-report-set' => XmlElements\SupportedReportSet::class,
+            XmlEN::MULTISTATUS => XmlElements\Multistatus::class,
+            XmlEN::PROP => XmlElements\Prop::class,
+            XmlEN::ABOOK_HOME => XmlElements\AddressbookHomeSet::class,
+            XmlEN::RESTYPE => 'Sabre\Xml\Deserializer\enum',
+            XmlEN::SUPPORTED_REPORT_SET => XmlElements\SupportedReportSet::class,
         ];
 
-        $service->mapValueObject('{DAV:}response', XmlElements\Response::class);
-        $service->mapValueObject('{DAV:}propstat', XmlElements\Propstat::class);
-        $service->mapValueObject('{DAV:}current-user-principal', XmlElements\CurrentUserPrincipal::class);
+        $service->mapValueObject(XmlEN::RESPONSE, XmlElements\Response::class);
+        $service->mapValueObject(XmlEN::PROPSTAT, XmlElements\Propstat::class);
+        $service->mapValueObject(XmlEN::CURUSRPRINC, XmlElements\CurrentUserPrincipal::class);
 
         return $service;
     }

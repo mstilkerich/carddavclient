@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+
 class CardDavSync
 {
     /********* PROPERTIES *********/
@@ -124,7 +126,7 @@ class CardDavSync
                     if (isset($propstat->status) && stripos($propstat->status, " 200 ") !== false) {
                         $syncResult->changedObjects[] = [
                             'uri' => $respUri,
-                            'etag' => $propstat->prop->props["{DAV:}getetag"]
+                            'etag' => $propstat->prop->props[XmlEN::GETETAG]
                         ];
                     }
                 }
@@ -143,11 +145,7 @@ class CardDavSync
     ): CardDavSyncResult {
         $abookUrl = $abook->getUri();
 
-        $cTagPropName = "{" . CardDavClient::NSCS . "}getctag";
-        $eTagPropName = "{" . CardDavClient::NSDAV . "}getetag";
-        $syncTokenPropName = "{" . CardDavClient::NSDAV . "}sync-token";
-
-        $responses = $client->findProperties($abookUrl, [ $cTagPropName, $eTagPropName, $syncTokenPropName ], "1");
+        $responses = $client->findProperties($abookUrl, [ XmlEN::GETCTAG, XmlEN::GETETAG, XmlEN::SYNCTOKEN ], "1");
 
         // array of local VCards basename (i.e. only the filename) => etag
         $localCacheState = $handler->getExistingVCardETags();
@@ -159,12 +157,12 @@ class CardDavSync
             $props = $response["props"];
 
             if (CardDavClient::compareUrlPaths($url, $abookUrl)) {
-                $newSyncToken = $props[$cTagPropName] ?? $props[$syncTokenPropName] ?? "";
+                $newSyncToken = $props[XmlEN::GETCTAG] ?? $props[XmlEN::SYNCTOKEN] ?? "";
                 if (empty($newSyncToken)) {
                     Config::$logger->notice("The server provides no token that identifies the addressbook version");
                 }
             } else {
-                $etag = $props[$eTagPropName] ?? null;
+                $etag = $props[XmlEN::GETETAG] ?? null;
                 if (!isset($etag)) {
                     Config::$logger->warning("Server did not provide an ETag for $url, skipping");
                 } else {
@@ -218,8 +216,8 @@ class CardDavSync
                     if (isset($propstat->status) && stripos($propstat->status, " 200 ") !== false) {
                         $syncResult->addVcfForChangedObj(
                             $respUri,
-                            $propstat->prop->props["{DAV:}getetag"],
-                            $propstat->prop->props["{urn:ietf:params:xml:ns:carddav}address-data"]
+                            $propstat->prop->props[XmlEN::GETETAG],
+                            $propstat->prop->props[XmlEN::ADDRDATA]
                         );
                     }
                 }

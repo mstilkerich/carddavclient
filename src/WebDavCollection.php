@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+
 class WebDavCollection
 {
     /** @var string URI of the Collection */
@@ -20,28 +22,22 @@ class WebDavCollection
     protected $account;
 
     private const PROPNAMES = [
-        "{" . CardDavClient::NSDAV . "}resourcetype",
-        "{" . CardDavClient::NSDAV . "}displayname",
-        "{" . CardDavClient::NSDAV . "}supported-report-set",
-        "{" . CardDavClient::NSDAV . "}sync-token"
+        XmlEN::RESTYPE,
+        XmlEN::SYNCTOKEN
     ];
 
-    public function __construct(string $uri, Account $account, array $props = null)
+    public function __construct(string $uri, Account $account)
     {
         $this->uri = $uri;
         $this->account = $account;
 
-        if (!isset($props)) {
-            $propNames = $this->getNeededCollectionPropertyNames();
-            $client = $this->getClient();
-            $result = $client->findProperties($this->uri, $propNames);
-            if (isset($result[0]["props"])) {
-                $this->props = $result[0]["props"];
-            } else {
-                throw new \Exception("Failed to retrieve properties for collection " . $this->uri);
-            }
+        $propNames = $this->getNeededCollectionPropertyNames();
+        $client = $this->getClient();
+        $result = $client->findProperties($this->uri, $propNames);
+        if (isset($result[0]["props"])) {
+            $this->props = $result[0]["props"];
         } else {
-            $this->props = $props;
+            throw new \Exception("Failed to retrieve properties for collection " . $this->uri);
         }
     }
 

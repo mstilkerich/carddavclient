@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
 
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+
 class Multistatus implements \Sabre\Xml\XmlDeserializable
 {
     /** @var ?string */
@@ -24,7 +26,7 @@ class Multistatus implements \Sabre\Xml\XmlDeserializable
             foreach ($children as $child) {
                 if ($child["value"] instanceof Response) {
                     $multistatus->responses[] = $child["value"];
-                } elseif ($child["name"] === "{DAV:}sync-token") {
+                } elseif ($child["name"] === XmlEN::SYNCTOKEN) {
                     $multistatus->synctoken = $child["value"];
                 }
             }

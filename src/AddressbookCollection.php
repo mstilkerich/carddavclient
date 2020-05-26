@@ -9,18 +9,22 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+
 class AddressbookCollection extends WebDavCollection
 {
     private const PROPNAMES = [
-        "{" . CardDavClient::NSCS . "}getctag",
-        "{" . CardDavClient::NSCARDDAV . "}supported-address-data",
-        "{" . CardDavClient::NSCARDDAV . "}addressbook-description",
-        "{" . CardDavClient::NSCARDDAV . "}max-resource-size"
+        XmlEN::DISPNAME,
+        XmlEN::GETCTAG,
+        XmlEN::SUPPORTED_ADDRDATA,
+        XmlEN::ABOOK_DESC,
+        XmlEN::MAX_RESSIZE,
+        XmlEN::SUPPORTED_REPORT_SET
     ];
 
     public function getName(): string
     {
-        return $this->props["{DAV:}displayname"] ?? basename($this->uri);
+        return $this->props[XmlEN::DISPNAME] ?? basename($this->uri);
     }
 
     public function __toString(): string
@@ -58,17 +62,17 @@ class AddressbookCollection extends WebDavCollection
 
     public function supportsSyncCollection(): bool
     {
-        return $this->supportsReport("{DAV:}sync-collection");
+        return $this->supportsReport(XmlEN::REPORT_SYNCCOLL);
     }
 
     public function supportsMultiGet(): bool
     {
-        return $this->supportsReport("{" . CardDavClient::NSCARDDAV . "}addressbook-multiget");
+        return $this->supportsReport(XmlEN::REPORT_MULTIGET);
     }
 
     public function getCTag(): ?string
     {
-        return $this->props["{http://calendarserver.org/ns/}getctag"] ?? null;
+        return $this->props[XmlEN::GETCTAG] ?? null;
     }
 
     protected function getNeededCollectionPropertyNames(): array
@@ -80,7 +84,7 @@ class AddressbookCollection extends WebDavCollection
 
     protected function supportsReport(string $reportElement): bool
     {
-        return in_array($reportElement, $this->props["{DAV:}supported-report-set"], true);
+        return in_array($reportElement, $this->props[XmlEN::SUPPORTED_REPORT_SET], true);
     }
 }
 

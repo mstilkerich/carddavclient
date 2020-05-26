@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
 
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+
 class AddressbookHomeSet implements \Sabre\Xml\XmlDeserializable
 {
     /** @var array URLs of collections that are either address book collections
@@ -24,7 +26,7 @@ class AddressbookHomeSet implements \Sabre\Xml\XmlDeserializable
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
             foreach ($children as $child) {
-                if (strcasecmp($child["name"], '{DAV:}href') == 0) {
+                if (strcasecmp($child["name"], XmlEN::HREF) == 0) {
                     $ahs->href[] = $child["value"];
                 }
             }

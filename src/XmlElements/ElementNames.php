@@ -28,6 +28,7 @@ class ElementNames
     public const GETCTAG = "{" . self::NSCS . "}getctag";
     public const GETETAG = "{" . self::NSDAV . "}getetag";
 
+    public const ADD_MEMBER = "{" . self::NSDAV . "}add-member";
     public const SUPPORTED_REPORT_SET = "{" . self::NSDAV . "}supported-report-set";
     public const SUPPORTED_REPORT = "{" . self::NSDAV . "}supported-report";
     public const REPORT = "{" . self::NSDAV . "}report";

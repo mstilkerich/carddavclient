@@ -23,7 +23,8 @@ class WebDavCollection
 
     private const PROPNAMES = [
         XmlEN::RESTYPE,
-        XmlEN::SYNCTOKEN
+        XmlEN::SYNCTOKEN,
+        XmlEN::ADD_MEMBER
     ];
 
     public function __construct(string $uri, Account $account)

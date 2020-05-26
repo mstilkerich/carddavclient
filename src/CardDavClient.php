@@ -11,6 +11,7 @@ namespace MStilkerich\CardDavClient;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use MStilkerich\CardDavClient\XmlElements\Multistatus;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+use MStilkerich\CardDavClient\XmlElements\Deserializers;
 
 /*
 Other needed features:
@@ -384,8 +385,9 @@ class CardDavClient
             XmlEN::MULTISTATUS => XmlElements\Multistatus::class,
             XmlEN::PROP => XmlElements\Prop::class,
             XmlEN::ABOOK_HOME => XmlElements\AddressbookHomeSet::class,
-            XmlEN::RESTYPE => 'Sabre\Xml\Deserializer\enum',
-            XmlEN::SUPPORTED_REPORT_SET => XmlElements\SupportedReportSet::class,
+            XmlEN::RESTYPE => '\Sabre\Xml\Deserializer\enum',
+            XmlEN::SUPPORTED_REPORT_SET => [ Deserializers::class, 'deserializeSupportedReportSet' ],
+            XmlEN::ADD_MEMBER => [ Deserializers::class, 'deserializeHrefSingle' ]
         ];
 
         $service->mapValueObject(XmlEN::RESPONSE, XmlElements\Response::class);

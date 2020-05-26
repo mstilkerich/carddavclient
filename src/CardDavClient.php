@@ -70,7 +70,7 @@ class CardDavClient
     {
         $result = $this->findProperties($contextPathUri, [XmlEN::CURUSRPRINC]);
 
-        $princUrl = $result[0]["props"][XmlEN::CURUSRPRINC]->href ?? null;
+        $princUrl = $result[0]["props"][XmlEN::CURUSRPRINC] ?? null;
 
         if (isset($princUrl)) {
             $princUrl = self::concatUrl($result[0]["uri"], $princUrl);
@@ -103,7 +103,7 @@ class CardDavClient
 
         // FIXME per RFC several home locations could be returned, but we currently only use one. However, it is rather
         // unlikely that there would be several addressbook home locations.
-        $addressbookHomeUri = $result[0]["props"][XmlEN::ABOOK_HOME]->href[0] ?? null;
+        $addressbookHomeUri = $result[0]["props"][XmlEN::ABOOK_HOME][0] ?? null;
 
         if (isset($addressbookHomeUri)) {
             $addressbookHomeUri = self::concatUrl($result[0]["uri"], $addressbookHomeUri);
@@ -384,15 +384,15 @@ class CardDavClient
         $service->elementMap = [
             XmlEN::MULTISTATUS => XmlElements\Multistatus::class,
             XmlEN::PROP => XmlElements\Prop::class,
-            XmlEN::ABOOK_HOME => XmlElements\AddressbookHomeSet::class,
+            XmlEN::ABOOK_HOME => [ Deserializers::class, 'deserializeHrefMulti' ],
             XmlEN::RESTYPE => '\Sabre\Xml\Deserializer\enum',
             XmlEN::SUPPORTED_REPORT_SET => [ Deserializers::class, 'deserializeSupportedReportSet' ],
-            XmlEN::ADD_MEMBER => [ Deserializers::class, 'deserializeHrefSingle' ]
+            XmlEN::ADD_MEMBER => [ Deserializers::class, 'deserializeHrefSingle' ],
+            XmlEN::CURUSRPRINC => [ Deserializers::class, 'deserializeHrefSingle' ]
         ];
 
         $service->mapValueObject(XmlEN::RESPONSE, XmlElements\Response::class);
         $service->mapValueObject(XmlEN::PROPSTAT, XmlElements\Propstat::class);
-        $service->mapValueObject(XmlEN::CURUSRPRINC, XmlElements\CurrentUserPrincipal::class);
 
         return $service;
     }

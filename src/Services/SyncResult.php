@@ -1,14 +1,16 @@
 <?php
 
 /**
- * Class CardDavSyncResult
+ * Class SyncResult
  */
 
 declare(strict_types=1);
 
-namespace MStilkerich\CardDavClient;
+namespace MStilkerich\CardDavClient\Services;
 
-class CardDavSyncResult
+use MStilkerich\CardDavClient\{CardDavClient, Config};
+
+class SyncResult
 {
     /** @var string */
     public $syncToken;

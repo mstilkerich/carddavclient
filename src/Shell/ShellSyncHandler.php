@@ -9,9 +9,10 @@ declare(strict_types=1);
 namespace MStilkerich\CardDavClient\Shell;
 
 use Sabre\VObject\Component\VCard;
-use MStilkerich\CardDavClient\{AddressbookCollection, CardDavSyncHandler};
+use MStilkerich\CardDavClient\AddressbookCollection;
+use MStilkerich\CardDavClient\Services\SyncHandler;
 
-class ShellSyncHandler implements CardDavSyncHandler
+class ShellSyncHandler implements SyncHandler
 {
     public function addressObjectChanged(string $uri, string $etag, VCard $card): void
     {

@@ -14,14 +14,14 @@
 
 declare(strict_types=1);
 
-namespace MStilkerich\CardDavClient;
+namespace MStilkerich\CardDavClient\Services;
 
 use Sabre\VObject\Component\VCard;
 
 /**
  * Interface for application-level synchronization handler.
  */
-interface CardDavSyncHandler
+interface SyncHandler
 {
     /**
      * This method is called for each changed address object, including new address objects.

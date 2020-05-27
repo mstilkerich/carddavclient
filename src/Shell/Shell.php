@@ -8,7 +8,8 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Shell;
 
-use MStilkerich\CardDavClient\{AddressbookCollection, CardDavDiscovery, CardDavSync, Config};
+use MStilkerich\CardDavClient\{AddressbookCollection, Config};
+use MStilkerich\CardDavClient\Services\{Discovery, Sync};
 use Psr\Log\LoggerInterface;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -199,7 +200,7 @@ class Shell
         if (isset($this->accounts[$accountName])) {
             [ 'server' => $srv, 'username' => $username, 'password' => $password ] = $this->accounts[$accountName];
 
-            $discover = new CardDavDiscovery();
+            $discover = new Discovery();
             $abooks = $discover->discoverAddressbooks($srv, $username, $password);
 
             $this->accounts[$accountName]['addressbooks'] = [];
@@ -276,7 +277,7 @@ class Shell
 
             if (isset($abook)) {
                 $synchandler = new ShellSyncHandler();
-                $syncmgr = new CardDavSync();
+                $syncmgr = new Sync();
                 $synctoken = $syncmgr->synchronize($abook, $synchandler);
                 $ret = true;
             } else {

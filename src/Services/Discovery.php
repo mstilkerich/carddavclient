@@ -1,14 +1,16 @@
 <?php
 
 /**
- * Class CardDavDiscovery
+ * Class Discovery
  */
 
 declare(strict_types=1);
 
-namespace MStilkerich\CardDavClient;
+namespace MStilkerich\CardDavClient\Services;
 
-class CardDavDiscovery
+use MStilkerich\CardDavClient\{Account, AddressbookCollection, CardDavClient, Config};
+
+class Discovery
 {
     /********* PROPERTIES *********/
 

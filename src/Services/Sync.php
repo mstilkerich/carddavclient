@@ -1,16 +1,17 @@
 <?php
 
 /**
- * Class CardDavSync
+ * Class Sync
  */
 
 declare(strict_types=1);
 
-namespace MStilkerich\CardDavClient;
+namespace MStilkerich\CardDavClient\Services;
 
+use MStilkerich\CardDavClient\{AddressbookCollection, CardDavClient, Config};
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
-class CardDavSync
+class Sync
 {
     /********* PROPERTIES *********/
 
@@ -25,7 +26,7 @@ class CardDavSync
      */
     public function synchronize(
         AddressbookCollection $abook,
-        CardDavSyncHandler $handler,
+        SyncHandler $handler,
         array $requestedVCardProps = [],
         string $prevSyncToken = ""
     ): string {
@@ -51,7 +52,7 @@ class CardDavSync
                 $syncResult = $this->determineChangesViaETags($client, $abook, $handler);
             } else {
                 Config::$logger->debug("Skipping sync of up-to-date addressbook (by ctag) " . $abook->getUri());
-                $syncResult = new CardDavSyncResult($prevSyncToken);
+                $syncResult = new SyncResult($prevSyncToken);
             }
         }
 
@@ -90,7 +91,7 @@ class CardDavSync
         CardDavClient $client,
         AddressbookCollection $abook,
         string $prevSyncToken
-    ): CardDavSyncResult {
+    ): SyncResult {
         $abookUrl = $abook->getUri();
         $multistatus = $client->syncCollection($abookUrl, $prevSyncToken);
 
@@ -98,7 +99,7 @@ class CardDavSync
             throw new \Exception("No sync token contained in response to sync-collection REPORT.");
         }
 
-        $syncResult = new CardDavSyncResult($multistatus->synctoken);
+        $syncResult = new SyncResult($multistatus->synctoken);
 
         foreach ($multistatus->responses as $response) {
             $respUri = $response->href;
@@ -141,8 +142,8 @@ class CardDavSync
     private function determineChangesViaETags(
         CardDavClient $client,
         AddressbookCollection $abook,
-        CardDavSyncHandler $handler
-    ): CardDavSyncResult {
+        SyncHandler $handler
+    ): SyncResult {
         $abookUrl = $abook->getUri();
 
         $responses = $client->findProperties($abookUrl, [ XmlEN::GETCTAG, XmlEN::GETETAG, XmlEN::SYNCTOKEN ], "1");
@@ -186,7 +187,7 @@ class CardDavSync
                 }
             }
         }
-        $syncResult = new CardDavSyncResult($newSyncToken);
+        $syncResult = new SyncResult($newSyncToken);
         $syncResult->deletedObjects = array_keys($localCacheState);
         $syncResult->changedObjects = $changes;
 
@@ -196,7 +197,7 @@ class CardDavSync
     private function multiGetChanges(
         CardDavClient $client,
         AddressbookCollection $abook,
-        CardDavSyncResult $syncResult,
+        SyncResult $syncResult,
         array $requestedVCardProps
     ): void {
         $requestedUris = array_map(

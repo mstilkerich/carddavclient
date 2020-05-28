@@ -28,7 +28,6 @@ class Shell
                 . "otherwise prints help on the specified command.",
             'callback' => 'showHelp',
             'minargs'  => 0,
-            'argArray' => false
         ],
         'discover' => [
             'synopsis' => 'Discovers the available addressbooks in a specified CardDAV account',
@@ -37,7 +36,6 @@ class Shell
                 . "described by RFC6764 (DNS SRV/TXT lookups, /.well-known URI lookup, plus default locations).",
             'callback' => 'discoverAddressbooks',
             'minargs'  => 1,
-            'argArray' => false
         ],
         'accounts' => [
             'synopsis' => 'Lists the available accounts',
@@ -46,7 +44,6 @@ class Shell
                 . "Option -p: Include the passwords with the output",
             'callback' => 'listAccounts',
             'minargs'  => 0,
-            'argArray' => false
         ],
         'add_account' => [
             'synopsis' => 'Adds an account',
@@ -58,7 +55,6 @@ class Shell
                 . "password: Password used to authenticate with the server.\n",
             'callback' => 'addAccount',
             'minargs'  => 4,
-            'argArray' => false
         ],
         'addressbooks' => [
             'synopsis' => 'Lists the available addressbooks',
@@ -69,7 +65,6 @@ class Shell
                 . "operations",
             'callback' => 'listAddressbooks',
             'minargs'  => 0,
-            'argArray' => false
         ],
         'show_addressbook' => [
             'synopsis' => 'Shows detailed information on the given addressbook.',
@@ -77,7 +72,6 @@ class Shell
             'help'     => "addressbook_id: Identifier of the addressbook as provided by the \"addressbooks\" command.",
             'callback' => 'showAddressbook',
             'minargs'  => 1,
-            'argArray' => false
         ],
         'synchronize' => [
             'synopsis' => 'Synchronizes an addressbook to the local cache.',
@@ -86,7 +80,6 @@ class Shell
                 . "sync-token: Synchronization token that identifies the base state of the synchronization.",
             'callback' => 'syncAddressbook',
             'minargs'  => 1,
-            'argArray' => false
         ],
         'clone' => [
             'synopsis' => 'Clones an addressbook to another addressbok',
@@ -98,7 +91,6 @@ class Shell
                 . "Option -n: Only add cards not existing in destination yet, leave the rest alone.",
             'callback' => 'cloneAddressbook',
             'minargs'  => 2,
-            'argArray' => false
         ],
         'sweep' => [
             'synopsis' => 'Deletes all address objects of the given addressbook',
@@ -106,7 +98,6 @@ class Shell
             'help'     => "addressbook_id: Identifier of the addressbook as provided by the \"addressbooks\" command.",
             'callback' => 'sweepAddressbook',
             'minargs'  => 1,
-            'argArray' => false
         ],
         'time' => [
             'synopsis' => 'Measures and outputs the time taken by the following command',
@@ -114,7 +105,6 @@ class Shell
             'help'     => "",
             'callback' => 'timedExecution',
             'minargs'  => 1,
-            'argArray' => true
         ],
     ];
 
@@ -369,7 +359,7 @@ class Shell
         return $abook ?? null;
     }
 
-    private function timedExecution(array $tokens): bool
+    private function timedExecution(string ...$tokens): bool
     {
         $start = time();
         $ret = $this->execCommand($tokens);
@@ -388,11 +378,7 @@ class Shell
         if (isset(self::COMMANDS[$command])) {
             if (count($tokens) >= self::COMMANDS[$command]['minargs']) {
                 try {
-                    if (self::COMMANDS[$command]['argArray']) {
-                        $ret = call_user_func_array([$this, self::COMMANDS[$command]['callback']], [$tokens]);
-                    } else {
-                        $ret = call_user_func_array([$this, self::COMMANDS[$command]['callback']], $tokens);
-                    }
+                    $ret = call_user_func_array([$this, self::COMMANDS[$command]['callback']], $tokens);
                 } catch (\Exception $e) {
                     self::$logger->error("Command raised Exception: " . $e);
                 }

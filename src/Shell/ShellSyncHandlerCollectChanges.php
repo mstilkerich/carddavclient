@@ -13,10 +13,10 @@ use Sabre\VObject\Component\VCard;
 use MStilkerich\CardDavClient\AddressbookCollection;
 use MStilkerich\CardDavClient\Services\SyncHandler;
 
-class ShellSyncHandlerCollectCards implements SyncHandler
+class ShellSyncHandlerCollectChanges implements SyncHandler
 {
     /** @var array */
-    private $existingCards = [];
+    private $changedCards = [];
 
     /** @var array */
     private $deletedCards = [];
@@ -25,7 +25,7 @@ class ShellSyncHandlerCollectCards implements SyncHandler
     {
         $uid = (string) $card->UID;
         Shell::$logger->debug("Existing object: $uri ($uid)");
-        $this->existingCards[$uid] = [
+        $this->changedCards[$uid] = [
             'uri'   => $uri,
             'etag'  => $etag,
             'vcard' => $card
@@ -39,7 +39,7 @@ class ShellSyncHandlerCollectCards implements SyncHandler
     }
 
     /**
-     * This sync handler is meant to collect all the existing cards in an addressbook, which we
+     * This sync handler is meant to collect all the changed cards in an addressbook, which we
      * do by emulating an empty/unsynchronized local cache.
      */
     public function getExistingVCardETags(): array
@@ -49,12 +49,17 @@ class ShellSyncHandlerCollectCards implements SyncHandler
 
     public function getCardByUID(string $uid): ?array
     {
-        return $this->existingCards[$uid] ?? null;
+        return $this->changedCards[$uid] ?? null;
     }
 
-    public function getExistingCards(): array
+    public function getChangedCards(): array
     {
-        return $this->existingCards;
+        return $this->changedCards;
+    }
+
+    public function getRemovedCards(): array
+    {
+        return $this->deletedCards;
     }
 }
 

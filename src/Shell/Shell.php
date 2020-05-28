@@ -289,9 +289,18 @@ class Shell
 
         $abook = $this->getAddressbookFromId($abookId);
         if (isset($abook)) {
-            $synchandler = new ShellSyncHandler();
+            $synchandler = new ShellSyncHandlerCollectChanges();
             $syncmgr = new Sync();
             $synctoken = $syncmgr->synchronize($abook, $synchandler, [ ], $syncToken);
+
+            foreach ($synchandler->getChangedCards() as $card) {
+                self::$logger->info("Changed object: " . $card["uri"] . " (" . $card["vcard"]->FN . ")");
+            }
+
+            foreach ($synchandler->getRemovedCards() as $cardUri) {
+                self::$logger->info("Deleted object: $cardUri");
+            }
+
             $ret = true;
         }
 
@@ -304,11 +313,11 @@ class Shell
 
         $abook = $this->getAddressbookFromId($abookId);
         if (isset($abook)) {
-            $synchandler = new ShellSyncHandlerCollectCards();
+            $synchandler = new ShellSyncHandlerCollectChanges();
             $syncmgr = new Sync();
             $synctoken = $syncmgr->synchronize($abook, $synchandler);
 
-            foreach ($synchandler->getExistingCards() as $card) {
+            foreach ($synchandler->getChangedCards() as $card) {
                 $uri = $card["uri"];
                 self::$logger->info("Deleting card $uri");
                 $abook->deleteCard($uri);
@@ -329,7 +338,7 @@ class Shell
         $dest = $this->getAddressbookFromId($targetAbookId);
 
         if (isset($src) && isset($dest)) {
-            $destState = new ShellSyncHandlerCollectCards();
+            $destState = new ShellSyncHandlerCollectChanges();
             $syncmgr = new Sync();
             $destSynctoken = $syncmgr->synchronize($dest, $destState);
 

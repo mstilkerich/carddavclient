@@ -17,7 +17,7 @@ class ShellSyncHandlerClone implements SyncHandler
     /** @var AddressbookCollection */
     private $destAbook;
 
-    /** @var ShellSyncHandlerCollectCards */
+    /** @var ShellSyncHandlerCollectChanges */
     private $destState;
 
     /**
@@ -27,7 +27,7 @@ class ShellSyncHandlerClone implements SyncHandler
 
     public function __construct(
         AddressbookCollection $target,
-        ShellSyncHandlerCollectCards $destState,
+        ShellSyncHandlerCollectChanges $destState,
         bool $newOnly = false
     ) {
         $this->destAbook = $target;
@@ -42,17 +42,18 @@ class ShellSyncHandlerClone implements SyncHandler
         $existingCard = $this->destState->getCardByUID($uid);
 
         if (isset($existingCard)) {
-            if ($this->newOnly) {
-                Shell::$logger->debug("Skip existing card: $uid (" . $existingCard["vcard"]->FN . ")");
-                return;
-            } else {
-                Shell::$logger->debug("Deleting existing card: $uid (" . $existingCard["vcard"]->FN . ")");
-                $this->destAbook->deleteCard($existingCard["uri"]);
-            }
-        }
+            $fn = $existingCard["vcard"]->FN;
 
-        [ "uri" => $newuri ] = $this->destAbook->createCard($card);
-        Shell::$logger->debug("Cloned object: $uri (" . $card->FN . ") to $newuri");
+            if ($this->newOnly) {
+                Shell::$logger->debug("Skip existing card: $uid ($fn)");
+            } else {
+                Shell::$logger->debug("Overwriting existing card: $uid ($fn)");
+                $this->destAbook->updateCard($existingCard["uri"], $card, $existingCard["etag"]);
+            }
+        } else {
+            [ "uri" => $newuri ] = $this->destAbook->createCard($card);
+            Shell::$logger->debug("Cloned object: $uri (" . $card->FN . ") to $newuri");
+        }
     }
 
     public function addressObjectDeleted(string $uri): void

@@ -104,9 +104,6 @@ class AddressbookCollection extends WebDavCollection
 
     public function createCard(VCard $vcard): array
     {
-        $hasError = false;
-        $errors = "";
-
         // Add UID if not present
         if (empty($vcard->select("UID"))) {
             $uuid = UUIDUtil::getUUID();
@@ -114,7 +111,33 @@ class AddressbookCollection extends WebDavCollection
             $vcard->UID = $uuid;
         }
 
-        // Workaround: iCloud requires N property or will reject the VCard with a Parse Error (as of 2020-05-28)
+        // Assert validity of the Card for CardDAV, including valid UID property
+        $this->validateCard($vcard);
+
+        $client = $this->getClient();
+        $newResInfo = $client->createResource(
+            $vcard->serialize(),
+            $client->absoluteUrl($vcard->UID . ".vcf")
+        );
+
+        return $newResInfo;
+    }
+
+    public function updateCard(string $uri, VCard $vcard, string $etag): ?string
+    {
+        // Assert validity of the Card for CardDAV, including valid UID property
+        $this->validateCard($vcard);
+
+        $client = $this->getClient();
+        $etag = $client->updateResource($vcard->serialize(), $uri, $etag);
+
+        return $etag;
+    }
+
+    protected function validateCard(VCard $vcard): void
+    {
+        $hasError = false;
+        $errors = "";
 
         // Assert validity of the Card for CardDAV, including valid UID property
         $validityIssues = $vcard->validate(\Sabre\VObject\Node::PROFILE_CARDDAV | \Sabre\VObject\Node::REPAIR);
@@ -135,14 +158,6 @@ class AddressbookCollection extends WebDavCollection
             Config::$logger->debug($vcard->serialize());
             throw new \InvalidArgumentException($errors);
         }
-
-        $client = $this->getClient();
-        $newResInfo = $client->createResource(
-            $vcard->serialize(),
-            $client->absoluteUrl($vcard->UID . ".vcf")
-        );
-
-        return $newResInfo;
     }
 
     protected function getNeededCollectionPropertyNames(): array

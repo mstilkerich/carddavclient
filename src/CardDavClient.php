@@ -102,6 +102,45 @@ class CardDavClient
     }
 
     /**
+     * Requests the server to update the given resource.
+     *
+     * Normally, the ETag of the existing expected server-side resource should be given to make the update
+     * conditional on that no other changes have been done to the server-side resource, otherwise lost updates might
+     * occur. However, if no ETag is given, the server-side resource is overwritten unconditionally.
+     *
+     * @return ?string
+     *  ETag of the updated resource, an empty string if no ETag was given by the server, or null if the update failed
+     *  because the server-side ETag did not match the given one.
+     */
+    public function updateResource(string $body, string $uri, string $etag = ""): ?string
+    {
+        $headers = [ "Content-Type" => "text/vcard" ];
+        if (!empty($etag)) {
+            $headers["If-Match"] = $etag;
+        }
+
+        $response = $this->httpClient->sendRequest(
+            'PUT',
+            $uri,
+            [
+                "headers" => $headers,
+                "body" => $body
+            ]
+        );
+
+        $status = $response->getStatusCode();
+
+        if ($status == 412) {
+            $etag = null;
+        } else {
+            self::assertHttpStatus($response, 200, 204, "PUT $uri");
+            $etag = $response->getHeaderLine("ETag");
+        }
+
+        return $etag;
+    }
+
+    /**
      * Requests the server to create the given resource.
      *
      * @return array

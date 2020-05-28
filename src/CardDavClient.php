@@ -46,92 +46,9 @@ class CardDavClient
     }
 
     /**
-     * Queries the given URI for the current-user-principal property.
-     *
-     * Property description by RFC5397: The DAV:current-user-principal property contains either a DAV:href or
-     * DAV:unauthenticated XML element. The DAV:href element contains a URL to a principal resource corresponding to the
-     * currently authenticated user. That URL MUST be one of the URLs in the DAV:principal-URL or DAV:alternate-URI-set
-     * properties defined on the principal resource and MUST be an http(s) scheme URL. When authentication has not been
-     * done or has failed, this property MUST contain the DAV:unauthenticated pseudo-principal.
-     * In some cases, there may be multiple principal resources corresponding to the same authenticated principal. In
-     * that case, the server is free to choose any one of the principal resource URIs for the value of the
-     * DAV:current-user-principal property. However, servers SHOULD be consistent and use the same principal resource
-     * URI for each authenticated principal.
-     *
-     * @param string $contextPathUri
-     *  The given URI should typically be a context path per the terminology of RFC6764.
-     *
-     * @return
-     *  The principal URI (string), or NULL in case of error. The returned URI is suited
-     *  to be used for queries with this client (i.e. either a full URI,
-     *  or meaningful as relative URI to the base URI of this client).
+     * Note: Google's server does not accept an empty syncToken, though explicitly allowed for initial sync by RFC6578.
+     * It will respond with 400 Bad Request and error message "Request contains an invalid argument."
      */
-    public function findCurrentUserPrincipal(string $contextPathUri): ?string
-    {
-        $result = $this->findProperties($contextPathUri, [XmlEN::CURUSRPRINC]);
-
-        $princUrl = $result[0]["props"][XmlEN::CURUSRPRINC] ?? null;
-
-        if (isset($princUrl)) {
-            $princUrl = self::concatUrl($result[0]["uri"], $princUrl);
-            Config::$logger->info("principal URL: $princUrl");
-        }
-
-        return $princUrl;
-    }
-
-    /**
-     * Queries the given URI for the current-user-principal property.
-     *
-     * Property description by RFC6352: The CARDDAV:addressbook-home-set property is meant to allow users to easily find
-     * the address book collections owned by the principal. Typically, users will group all the address book collections
-     * that they own under a common collection. This property specifies the URL of collections that are either address
-     * book collections or ordinary collections that have child or descendant address book collections owned by the
-     * principal.
-     *
-     * @param string $principalUri
-     *  The given URI should be (one of) the authenticated user's principal URI(s).
-     *
-     * @return
-     *  The user's addressbook home URI (string), or false in case of error. The returned URI is suited
-     *  to be used for queries with this client (i.e. either a full URI,
-     *  or meaningful as relative URI to the base URI of this client).
-     */
-    public function findAddressbookHome(string $principalUri): ?string
-    {
-        $result = $this->findProperties($principalUri, [XmlEN::ABOOK_HOME]);
-
-        // FIXME per RFC several home locations could be returned, but we currently only use one. However, it is rather
-        // unlikely that there would be several addressbook home locations.
-        $addressbookHomeUri = $result[0]["props"][XmlEN::ABOOK_HOME][0] ?? null;
-
-        if (isset($addressbookHomeUri)) {
-            $addressbookHomeUri = self::concatUrl($result[0]["uri"], $addressbookHomeUri);
-            Config::$logger->info("addressbook home: $addressbookHomeUri");
-        }
-
-        return $addressbookHomeUri;
-    }
-
-    // RFC6352: An address book collection MUST report the DAV:collection and CARDDAV:addressbook XML elements in the
-    // value of the DAV:resourcetype property.
-    // CARDDAV:supported-address-data (supported Media Types (e.g. vCard3, vCard4) of an addressbook collection)
-    // CARDDAV:addressbook-description (property of an addressbook collection)
-    // CARDDAV:max-resource-size (maximum size in bytes for an address object of the addressbook collection)
-    public function findAddressbooks(string $addressbookHomeUri): array
-    {
-        $abooks = $this->findProperties($addressbookHomeUri, [ XmlEN::RESTYPE ], "1");
-
-        $abooksResult = [];
-        foreach ($abooks as $abook) {
-            if (in_array(XmlEN::RESTYPE_ABOOK, $abook["props"][XmlEN::RESTYPE])) {
-                $abooksResult[] = $abook["uri"];
-            }
-        }
-
-        return $abooksResult;
-    }
-
     public function syncCollection(string $addressbookUri, string $syncToken): Multistatus
     {
         $srv = self::getParserService();
@@ -154,55 +71,77 @@ class CardDavClient
         return self::checkAndParseXMLMultistatus($response);
     }
 
-    private static function addRequiredVCardProperties(array $requestedVCardProps): array
-    {
-        $minimumProps = [ 'BEGIN', 'END', 'FN', 'VERSION', 'UID' ];
-        foreach ($minimumProps as $prop) {
-            if (!in_array($prop, $requestedVCardProps)) {
-                $requestedVCardProps[] = $prop;
-            }
-        }
-
-        return $requestedVCardProps;
-    }
-
     public function getAddressObject(string $uri): array
     {
         $response = $this->httpClient->sendRequest('GET', $uri);
-
-        if ($response->getStatusCode() !== 200) {
-            throw new \Exception(
-                "Address object $uri GET request was not successful ("
-                . $response->getStatusCode()
-                . "): "
-                . $response->getReasonPhrase()
-            );
-        }
+        self::assertHttpStatus($response, 200, 200, "GET $uri");
 
         // presence of this header is required per RFC6352:
         // "A response to a GET request targeted at an address object resource MUST contain an ETag response header
         // field indicating the current value of the strong entity tag of the address object resource."
         $etag = $response->getHeaderLine("ETag");
         if (empty($etag)) {
-            throw new \Exception(
-                "Response to address object $uri GET request does not include ETag header ("
-                . $response->getStatusCode()
-                . "): "
-                . $response->getReasonPhrase()
-            );
+            throw new \Exception("Response to address object $uri GET request does not include ETag header");
         }
 
         $body = (string) $response->getBody();
         if (empty($body)) {
-            throw new \Exception(
-                "Response to address object $uri GET request does not include a body ("
-                . $response->getStatusCode()
-                . "): "
-                . $response->getReasonPhrase()
-            );
+            throw new \Exception("Response to address object $uri GET request does not include a body");
         }
 
         return [ 'etag' => $etag, 'vcf' => $body ];
+    }
+
+    /**
+     * Requests the server to delete the given resource.
+     */
+    public function deleteResource(string $uri): void
+    {
+        $response = $this->httpClient->sendRequest('DELETE', $uri);
+        self::assertHttpStatus($response, 200, 204, "DELETE $uri");
+    }
+
+    /**
+     * Requests the server to create the given resource.
+     *
+     * @return array
+     *  Associative array with keys
+     *   - uri (string): URI of the new resource if the request was successful
+     *   - etag (?string): Entity tag of the created resource if returned by server, or null.
+     */
+    public function createResource(string $body, string $suggestedUri): array
+    {
+        $retryLimit = 5;
+        $attempt = 1;
+        $etag = null;
+
+        do {
+            $response = $this->httpClient->sendRequest(
+                'PUT',
+                $suggestedUri,
+                [
+                    "headers" => [
+                        "If-None-Match" => "*",
+                        "Content-Type" => "text/vcard"
+                    ],
+                    "body" => $body
+                ]
+            );
+            $status = $response->getStatusCode();
+            // 201 -> New resource created
+            // 200/204 -> Existing resource modified (should not happen b/c of If-None-Match
+            // 412 -> Precondition failed
+            if ($status == 412) {
+                // make up a new random filename until retry limit is hit
+                $randint = rand();
+                $suggestedUri = preg_replace("/(\.[^.]*)?$/", "-$randint$0", $suggestedUri, 1);
+            }
+        } while (($status == 412) && (++$attempt < $retryLimit));
+
+        self::assertHttpStatus($response, 201, 201, "PUT $suggestedUri");
+
+        $etag = $response->getHeaderLine("ETag");
+        return [ 'uri' => $suggestedUri, 'etag' => $etag ];
     }
 
     public function multiGet(
@@ -212,7 +151,7 @@ class CardDavClient
     ): Multistatus {
         $srv = self::getParserService();
 
-        $reqprops = [ XmlEN::GETETAG => null ];
+        $reqprops = [ XmlEN::GETETAG => null, XmlEN::ADDRDATA => null ];
         if (!empty($requestedVCardProps)) {
             $requestedVCardProps = self::addRequiredVCardProperties($requestedVCardProps);
 
@@ -305,18 +244,42 @@ class CardDavClient
 
     /********* PRIVATE FUNCTIONS *********/
 
+    private static function addRequiredVCardProperties(array $requestedVCardProps): array
+    {
+        $minimumProps = [ 'BEGIN', 'END', 'FN', 'VERSION', 'UID' ];
+        foreach ($minimumProps as $prop) {
+            if (!in_array($prop, $requestedVCardProps)) {
+                $requestedVCardProps[] = $prop;
+            }
+        }
+
+        return $requestedVCardProps;
+    }
+
+    private static function assertHttpStatus(Psr7Response $davReply, int $minCode, int $maxCode, string $nfo): void
+    {
+        $status = $davReply->getStatusCode();
+
+        if (($status < $minCode) || ($status > $maxCode)) {
+            $reason = $davReply->getReasonPhrase();
+            $body = (string) $davReply->getBody();
+
+            throw new \Exception("$nfo HTTP request was not successful ($status $reason): $body");
+        }
+    }
+
     private static function checkAndParseXMLMultistatus(Psr7Response $davReply): Multistatus
     {
         $multistatus = null;
 
-        $status = $davReply->getStatusCode();
-        if (($status === 207) && preg_match(';(?i)(text|application)/xml;', $davReply->getHeaderLine('Content-Type'))) {
+        self::assertHttpStatus($davReply, 207, 207, "Expected Multistatus");
+        if (preg_match(';(?i)(text|application)/xml;', $davReply->getHeaderLine('Content-Type'))) {
             $service = self::getParserService();
             $multistatus = $service->expect(XmlEN::MULTISTATUS, (string) $davReply->getBody());
         }
 
         if (!($multistatus instanceof Multistatus)) {
-            throw new \Exception("Response is not the expected Multistatus response. (Status $status)");
+            throw new \Exception("Response is not the expected Multistatus response.");
         }
 
         return $multistatus;
@@ -363,8 +326,7 @@ class CardDavClient
 
     public static function concatUrl(string $baseurl, string $relurl): string
     {
-        $targeturl = \Sabre\Uri\resolve($baseurl, $relurl);
-        return \Sabre\Uri\normalize($targeturl);
+        return \Sabre\Uri\resolve($baseurl, $relurl);
     }
 
     public static function compareUrlPaths(string $url1, string $url2): bool

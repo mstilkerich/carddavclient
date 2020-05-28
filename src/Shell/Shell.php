@@ -27,7 +27,8 @@ class Shell
             'help'     => "If no command is specified, prints a list of available commands,\n"
                 . "otherwise prints help on the specified command.",
             'callback' => 'showHelp',
-            'minargs'  => 0
+            'minargs'  => 0,
+            'argArray' => false
         ],
         'discover' => [
             'synopsis' => 'Discovers the available addressbooks in a specified CardDAV account',
@@ -35,7 +36,8 @@ class Shell
             'help'     => "Discovers the available addressbooks in the specified account using the mechanisms\n"
                 . "described by RFC6764 (DNS SRV/TXT lookups, /.well-known URI lookup, plus default locations).",
             'callback' => 'discoverAddressbooks',
-            'minargs'  => 1
+            'minargs'  => 1,
+            'argArray' => false
         ],
         'accounts' => [
             'synopsis' => 'Lists the available accounts',
@@ -43,7 +45,8 @@ class Shell
             'help'     => "Lists the available accounts.\n"
                 . "Option -p: Include the passwords with the output",
             'callback' => 'listAccounts',
-            'minargs'  => 0
+            'minargs'  => 0,
+            'argArray' => false
         ],
         'add_account' => [
             'synopsis' => 'Adds an account',
@@ -54,7 +57,8 @@ class Shell
                 . "username: Username used to authenticate with the server.\n"
                 . "password: Password used to authenticate with the server.\n",
             'callback' => 'addAccount',
-            'minargs'  => 4
+            'minargs'  => 4,
+            'argArray' => false
         ],
         'addressbooks' => [
             'synopsis' => 'Lists the available addressbooks',
@@ -64,21 +68,53 @@ class Shell
                 . "identifier for each addressbooks to be used within this shell to reference this addressbook in"
                 . "operations",
             'callback' => 'listAddressbooks',
-            'minargs'  => 0
+            'minargs'  => 0,
+            'argArray' => false
         ],
         'show_addressbook' => [
             'synopsis' => 'Shows detailed information on the given addressbook.',
             'usage'    => 'Usage: show_addressbook [<addressbook_id>]',
             'help'     => "addressbook_id: Identifier of the addressbook as provided by the \"addressbooks\" command.",
             'callback' => 'showAddressbook',
-            'minargs'  => 1
+            'minargs'  => 1,
+            'argArray' => false
         ],
         'synchronize' => [
             'synopsis' => 'Synchronizes an addressbook to the local cache.',
-            'usage'    => 'Usage: synchronize [<addressbook_id>]',
-            'help'     => "addressbook_id: Identifier of the addressbook as provided by the \"addressbooks\" command.",
+            'usage'    => 'Usage: synchronize <addressbook_id> [<sync-token>]',
+            'help'     => "addressbook_id: Identifier of the addressbook as provided by the \"addressbooks\" command.\n"
+                . "sync-token: Synchronization token that identifies the base state of the synchronization.",
             'callback' => 'syncAddressbook',
-            'minargs'  => 1
+            'minargs'  => 1,
+            'argArray' => false
+        ],
+        'clone' => [
+            'synopsis' => 'Clones an addressbook to another addressbok',
+            'usage'    => 'Usage: clone <source_addressbook_id> <target_addressbook_id> [-n]',
+            'help'     => "source_addressbook_id: Identifier of the source addressbook as provided by the"
+                . "\"addressbooks\" command.\n"
+                . "target_addressbook_id: Identifier of the target addressbook as provided by the"
+                . "\"addressbooks\" command.\n"
+                . "Option -n: Only add cards not existing in destination yet, leave the rest alone.",
+            'callback' => 'cloneAddressbook',
+            'minargs'  => 2,
+            'argArray' => false
+        ],
+        'sweep' => [
+            'synopsis' => 'Deletes all address objects of the given addressbook',
+            'usage'    => 'Usage: sweep <addressbook_id>',
+            'help'     => "addressbook_id: Identifier of the addressbook as provided by the \"addressbooks\" command.",
+            'callback' => 'sweepAddressbook',
+            'minargs'  => 1,
+            'argArray' => false
+        ],
+        'time' => [
+            'synopsis' => 'Measures and outputs the time taken by the following command',
+            'usage'    => 'Usage: time <command> [<command_args>]',
+            'help'     => "",
+            'callback' => 'timedExecution',
+            'minargs'  => 1,
+            'argArray' => true
         ],
     ];
 
@@ -248,43 +284,124 @@ class Shell
     {
         $ret = false;
 
-        if (preg_match("/^(.*)@(\d+)$/", $abookId, $matches)) {
-            [, $accountName, $abookIdx] = $matches;
-
-            $abook = $this->accounts[$accountName]["addressbooks"][$abookIdx] ?? null;
-
-            if (isset($abook)) {
+        $abook = $this->getAddressbookFromId($abookId);
+        if (isset($abook)) {
                 self::$logger->info($abook->getDetails());
                 $ret = true;
-            } else {
+        }
+
+        return $ret;
+    }
+
+    private function syncAddressbook(string $abookId, string $syncToken = ""): bool
+    {
+        $ret = false;
+
+        $abook = $this->getAddressbookFromId($abookId);
+        if (isset($abook)) {
+            $synchandler = new ShellSyncHandler();
+            $syncmgr = new Sync();
+            $synctoken = $syncmgr->synchronize($abook, $synchandler, [ ], $syncToken);
+            $ret = true;
+        }
+
+        return $ret;
+    }
+
+    private function sweepAddressbook(string $abookId): bool
+    {
+        $ret = false;
+
+        $abook = $this->getAddressbookFromId($abookId);
+        if (isset($abook)) {
+            $synchandler = new ShellSyncHandlerCollectCards();
+            $syncmgr = new Sync();
+            $synctoken = $syncmgr->synchronize($abook, $synchandler);
+
+            foreach ($synchandler->getExistingCards() as $card) {
+                $uri = $card["uri"];
+                self::$logger->info("Deleting card $uri");
+                $abook->deleteCard($uri);
+            }
+
+            $ret = true;
+        }
+
+        return $ret;
+    }
+
+    private function cloneAddressbook(string $srcAbookId, string $targetAbookId, string $opt = ""): bool
+    {
+        $ret = false;
+        $addOnly = ($opt == "-n");
+
+        $src = $this->getAddressbookFromId($srcAbookId);
+        $dest = $this->getAddressbookFromId($targetAbookId);
+
+        if (isset($src) && isset($dest)) {
+            $destState = new ShellSyncHandlerCollectCards();
+            $syncmgr = new Sync();
+            $destSynctoken = $syncmgr->synchronize($dest, $destState);
+
+            $cloneMgr = new ShellSyncHandlerClone($dest, $destState, $addOnly);
+            $syncmgr = new Sync();
+            $srcSyncToken = $syncmgr->synchronize($src, $cloneMgr);
+
+            $ret = true;
+        }
+
+        return $ret;
+    }
+
+    private function getAddressbookFromId(string $abookId): ?AddressBookCollection
+    {
+        if (preg_match("/^(.*)@(\d+)$/", $abookId, $matches)) {
+            [, $accountName, $abookIdx] = $matches;
+            $abook = $this->accounts[$accountName]["addressbooks"][$abookIdx] ?? null;
+
+            if (!isset($abook)) {
                 self::$logger->error("Invalid addressbook ID $abookId");
             }
         } else {
             self::$logger->error("Invalid addressbook ID $abookId");
         }
 
+        return $abook ?? null;
+    }
+
+    private function timedExecution(array $tokens): bool
+    {
+        $start = time();
+        $ret = $this->execCommand($tokens);
+        $duration = time() - $start;
+
+        self::$logger->notice("Execution of command $tokens[0] took $duration seconds");
+
         return $ret;
     }
 
-    private function syncAddressbook(string $abookId): bool
+    private function execCommand(array $tokens): bool
     {
         $ret = false;
+        $command = array_shift($tokens);
 
-        if (preg_match("/^(.*)@(\d+)$/", $abookId, $matches)) {
-            [, $accountName, $abookIdx] = $matches;
-
-            $abook = $this->accounts[$accountName]["addressbooks"][$abookIdx] ?? null;
-
-            if (isset($abook)) {
-                $synchandler = new ShellSyncHandler();
-                $syncmgr = new Sync();
-                $synctoken = $syncmgr->synchronize($abook, $synchandler);
-                $ret = true;
+        if (isset(self::COMMANDS[$command])) {
+            if (count($tokens) >= self::COMMANDS[$command]['minargs']) {
+                try {
+                    if (self::COMMANDS[$command]['argArray']) {
+                        $ret = call_user_func_array([$this, self::COMMANDS[$command]['callback']], [$tokens]);
+                    } else {
+                        $ret = call_user_func_array([$this, self::COMMANDS[$command]['callback']], $tokens);
+                    }
+                } catch (\Exception $e) {
+                    self::$logger->error("Command raised Exception: " . $e);
+                }
             } else {
-                self::$logger->error("Invalid addressbook ID $abookId");
+                self::$logger->error("Too few arguments to $command.");
+                self::$logger->info(self::COMMANDS[$command]['usage']);
             }
         } else {
-            self::$logger->error("Invalid addressbook ID $abookId");
+            self::$logger->error("Unknown command $command. Type \"help\" for a list of available commands");
         }
 
         return $ret;
@@ -297,19 +414,9 @@ class Shell
         while ($cmd = readline("> ")) {
             $cmd = trim($cmd);
             $tokens = preg_split("/\s+/", $cmd);
-            $command = array_shift($tokens);
 
-            if (isset(self::COMMANDS[$command])) {
-                if (count($tokens) >= self::COMMANDS[$command]['minargs']) {
-                    if (call_user_func_array([$this, self::COMMANDS[$command]['callback']], $tokens)) {
-                        readline_add_history($cmd);
-                    }
-                } else {
-                    self::$logger->error("Too few arguments to $command.");
-                    self::$logger->info(self::COMMANDS[$command]['usage']);
-                }
-            } else {
-                self::$logger->error("Unknown command $command. Type \"help\" for a list of available commands");
+            if ($this->execCommand($tokens)) {
+                readline_add_history($cmd);
             }
         }
 

@@ -52,6 +52,7 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
         $guzzleOptions['http_errors'] = false; // no exceptions on 4xx/5xx status, also required by PSR-18
         $guzzleOptions['base_uri'] = $base_uri;
         $guzzleOptions['auth'] = [$username, $password];
+        $guzzleOptions['version'] = 2.0; // HTTP2
 
         $this->client = new Client($guzzleOptions);
     }

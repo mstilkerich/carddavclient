@@ -26,33 +26,23 @@ class SyncResult
         $this->syncToken = $syncToken;
     }
 
-    public function addVcfForChangedObj(string $uri, string $etag, string $vcf): bool
-    {
-        foreach ($this->changedObjects as &$obj) {
-            if (CardDavClient::compareUrlPaths($obj["uri"], $uri)) {
-                $obj["vcf"] = $vcf;
-                $obj["etag"] = $etag;
-                return true;
-            }
-        }
-        return false;
-    }
-
     public function createVCards(): bool
     {
         $ret = true;
 
         foreach ($this->changedObjects as &$obj) {
-            if (isset($obj["vcf"])) {
-                try {
-                    $obj["vcard"] = \Sabre\VObject\Reader::read($obj["vcf"]);
-                } catch (\Exception $e) {
-                    Config::$logger->error("Could not parse VCF for " . $obj["uri"], [ 'exception' => $e ]);
+            if (!isset($obj["vcard"])) {
+                if (isset($obj["vcf"])) {
+                    try {
+                        $obj["vcard"] = \Sabre\VObject\Reader::read($obj["vcf"]);
+                    } catch (\Exception $e) {
+                        Config::$logger->error("Could not parse VCF for " . $obj["uri"], [ 'exception' => $e ]);
+                        $ret = false;
+                    }
+                } else {
+                    Config::$logger->warning("No VCF for address object " . $obj["uri"] . " available");
                     $ret = false;
                 }
-            } else {
-                Config::$logger->warning("No VCF for address object " . $obj["uri"] . " available");
-                $ret = false;
             }
         }
 

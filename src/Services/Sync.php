@@ -38,7 +38,12 @@ class Sync
         // If sync-collection is supported by the server, attempt synchronization using the report
         if ($abook->supportsSyncCollection()) {
             Config::$logger->debug("Attempting sync using sync-collection report of " . $abook->getUri());
-            $syncResult = $this->syncCollection($client, $abook, $prevSyncToken);
+
+            try {
+                $syncResult = $this->syncCollection($client, $abook, $prevSyncToken);
+            } catch (\Exception $e) {
+                Config::$logger->error("sync-collection REPORT produced exception", [ 'exception' => $e ]);
+            }
         }
 
         // If sync-collection failed or is not supported, determine changes using getctag property, PROPFIND and address
@@ -70,7 +75,13 @@ class Sync
             // try to manually fill all VCards where multiget did not provide VCF data
             foreach ($syncResult->changedObjects as &$objref) {
                 if (!isset($objref["vcf"])) {
-                    [ 'etag' => $etag, 'vcf' => $objref["vcf"] ] = $client->getAddressObject($objref["uri"]);
+                    Config::$logger->debug("Fetching " . $objref['uri'] . " via GET");
+                    print_r($objref);
+                    [
+                        'etag' => $objref["etag"],
+                        'vcf' => $objref["vcf"],
+                        'vcard' => $objref["vcard"]
+                    ] = $abook->getCard($objref["uri"]);
                 }
             }
 
@@ -209,21 +220,32 @@ class Sync
 
         $multistatus = $client->multiGet($abook->getUri(), $requestedUris, $requestedVCardProps);
 
+        $results = [];
         foreach ($multistatus->responses as $response) {
             $respUri = $response->href;
 
             if (!empty($response->propstat)) {
                 foreach ($response->propstat as $propstat) {
                     if (isset($propstat->status) && stripos($propstat->status, " 200 ") !== false) {
-                        $syncResult->addVcfForChangedObj(
-                            $respUri,
-                            $propstat->prop->props[XmlEN::GETETAG],
-                            $propstat->prop->props[XmlEN::ADDRDATA]
-                        );
+                        Config::$logger->debug("VCF for $respUri received via multiget");
+                        $results[$respUri] = [
+                            "etag" => $propstat->prop->props[XmlEN::GETETAG],
+                            "vcf" => $propstat->prop->props[XmlEN::ADDRDATA]
+                        ];
                     }
                 }
             } else {
                 Config::$logger->warning("Unexpected response element in multiget result\n");
+            }
+        }
+
+        foreach ($syncResult->changedObjects as &$objref) {
+            $couri = $objref["uri"];
+            if (isset($results[$couri])) {
+                $objref["etag"] = $results[$couri]["etag"];
+                $objref["vcf"] = $results[$couri]["vcf"];
+            } else {
+                Config::$logger->warning("Server did not return data for $couri");
             }
         }
     }

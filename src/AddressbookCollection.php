@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
+use Sabre\VObject\UUIDUtil;
+use Sabre\VObject\Component\VCard;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
 class AddressbookCollection extends WebDavCollection
@@ -73,6 +75,74 @@ class AddressbookCollection extends WebDavCollection
     public function getCTag(): ?string
     {
         return $this->props[XmlEN::GETCTAG] ?? null;
+    }
+
+    /**
+     * Retrieves an address object from the addressbook collection and parses it to a VObject.
+     *
+     * @param $uri string
+     *  URI of the address object to fetch
+     * @return array
+     *  Associative array with keys
+     *   - etag(string): Entity tag of the returned card
+     *   - vcf(string): VCard as string
+     *   - vcard(VCard): VCard as Sabre/VObject VCard
+     */
+    public function getCard(string $uri): array
+    {
+        $client = $this->getClient();
+        $response = $client->getAddressObject($uri);
+        $response["vcard"] = \Sabre\VObject\Reader::read($response["vcf"]);
+        return $response;
+    }
+
+    public function deleteCard(string $uri): void
+    {
+        $client = $this->getClient();
+        $client->deleteResource($uri);
+    }
+
+    public function createCard(VCard $vcard): array
+    {
+        $hasError = false;
+        $errors = "";
+
+        // Add UID if not present
+        if (empty($vcard->select("UID"))) {
+            $uuid = UUIDUtil::getUUID();
+            Config::$logger->notice("Adding missing UID property to new VCard ($uuid)");
+            $vcard->UID = $uuid;
+        }
+
+        // Workaround: iCloud requires N property or will reject the VCard with a Parse Error (as of 2020-05-28)
+
+        // Assert validity of the Card for CardDAV, including valid UID property
+        $validityIssues = $vcard->validate(\Sabre\VObject\Node::PROFILE_CARDDAV | \Sabre\VObject\Node::REPAIR);
+        foreach ($validityIssues as $issue) {
+            $name = $issue["node"]->name;
+            $msg = "Issue with $name of new VCard: " . $issue["message"];
+
+            if ($issue["level"] <= 2) { // warning
+                Config::$logger->warning($msg);
+            } else { // error
+                Config::$logger->error($msg);
+                $errors .= "$msg\n";
+                $hasError = true;
+            }
+        }
+
+        if ($hasError) {
+            Config::$logger->debug($vcard->serialize());
+            throw new \InvalidArgumentException($errors);
+        }
+
+        $client = $this->getClient();
+        $newResInfo = $client->createResource(
+            $vcard->serialize(),
+            $client->absoluteUrl($vcard->UID . ".vcf")
+        );
+
+        return $newResInfo;
     }
 
     protected function getNeededCollectionPropertyNames(): array

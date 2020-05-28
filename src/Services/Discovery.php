@@ -65,19 +65,18 @@ class Discovery
         foreach ($servers as $server) {
             $baseuri = $server["scheme"] . "://" . $server["host"] . ":" . $server["port"];
             $davAccount = new Account($baseuri, $usr, $pw);
-            $davClient = $davAccount->getClient();
 
-            $contextpaths = $this->discoverContextPath($davClient, $server);
+            $contextpaths = $this->discoverContextPath($server);
             foreach ($contextpaths as $contextpath) {
                 Config::$logger->debug("Try context path $contextpath");
                 // (3) Attempt a PROPFIND asking for the DAV:current-user-principal property
-                $principalUri = $davClient->findCurrentUserPrincipal($contextpath);
+                $principalUri = $davAccount->findCurrentUserPrincipal($contextpath);
                 if (isset($principalUri)) {
                     // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
-                    $addressbookHomeUri = $davClient->findAddressbookHome($principalUri);
+                    $addressbookHomeUri = $davAccount->findAddressbookHome($principalUri);
                     if (isset($addressbookHomeUri)) {
                         // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
-                        foreach ($davClient->findAddressbooks($addressbookHomeUri) as $davAbookUri) {
+                        foreach ($davAccount->findAddressbooks($addressbookHomeUri) as $davAbookUri) {
                             $addressbooks[] = new AddressbookCollection($davAbookUri, $davAccount);
                         }
 
@@ -144,7 +143,7 @@ class Discovery
         return $servers;
     }
 
-    private function discoverContextPath(CardDavClient $davClient, array $server): array
+    private function discoverContextPath(array $server): array
     {
         $contextpaths = array();
 

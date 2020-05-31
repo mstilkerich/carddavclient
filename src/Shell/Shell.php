@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Shell;
 
-use MStilkerich\CardDavClient\{AddressbookCollection, Config};
+use MStilkerich\CardDavClient\{Account, AddressbookCollection, Config};
 use MStilkerich\CardDavClient\Services\{Discovery, Sync};
 use Psr\Log\LoggerInterface;
 use Monolog\Logger;
@@ -18,6 +18,7 @@ use Bramus\Monolog\Formatter\ColoredLineFormatter;
 
 class Shell
 {
+    private const CONFFILE = ".davshellrc";
     private const HISTFILE = ".davshell_history";
 
     private const COMMANDS = [
@@ -39,9 +40,8 @@ class Shell
         ],
         'accounts' => [
             'synopsis' => 'Lists the available accounts',
-            'usage'    => 'Usage: accounts [-p]',
-            'help'     => "Lists the available accounts.\n"
-                . "Option -p: Include the passwords with the output",
+            'usage'    => 'Usage: accounts',
+            'help'     => "Lists the available accounts.",
             'callback' => 'listAccounts',
             'minargs'  => 0,
         ],
@@ -108,17 +108,14 @@ class Shell
         ],
     ];
 
-    /** @var array */
-    private $accounts;
+    /** @var array Configuration of the shell */
+    private $config;
 
     /** @var LoggerInterface */
     public static $logger;
 
-    public function __construct(array $accountdata = [])
+    public function __construct()
     {
-        $this->accounts = $accountdata;
-
-
         $log = new Logger('davshell');
         $handler = new StreamHandler('php://stdout', Logger::DEBUG);
         $handler->setFormatter(new ColoredLineFormatter(
@@ -142,17 +139,14 @@ class Shell
         $httplog->pushHandler($httphandler);
 
         Config::init($log, $httplog);
+
+        $this->readConfig();
     }
 
     private function listAccounts(string $opt = ""): bool
     {
-        $showPw = ($opt == "-p");
-
-        foreach ($this->accounts as $name => $accountInfo) {
-            if (!$showPw) {
-                unset($accountInfo['password']);
-            }
-            self::$logger->info("Account $name", $accountInfo);
+        foreach ($this->config["accounts"] as $name => $account) {
+            self::$logger->info("Account $name ($account)");
         }
 
         return true;
@@ -183,14 +177,13 @@ class Shell
     {
         $ret = false;
 
-        if (key_exists($name, $this->accounts)) {
+        if (isset($this->config["accounts"][$name])) {
             self::$logger->error("Account named $name already exists!");
         } else {
-            $this->accounts[$name] = [
-                'server'   => $srv,
-                'username' => $usr,
-                'password' => $pw
-            ];
+            $newAccount = new Account($srv, $usr, $pw);
+            $this->config["accounts"][$name] = $newAccount;
+
+            $this->writeConfig();
             $ret = true;
         }
 
@@ -222,19 +215,23 @@ class Shell
     private function discoverAddressbooks(string $accountName): bool
     {
         $retval = false;
+        $account = $this->config["accounts"][$accountName] ?? null;
 
-        if (isset($this->accounts[$accountName])) {
-            [ 'server' => $srv, 'username' => $username, 'password' => $password ] = $this->accounts[$accountName];
-
+        if (isset($account)) {
             $discover = new Discovery();
-            $abooks = $discover->discoverAddressbooks($srv, $username, $password);
+            $abooks = $discover->discoverAddressbooks($account);
 
-            $this->accounts[$accountName]['addressbooks'] = [];
-            foreach ($abooks as $abook) {
-                self::$logger->notice("Found addressbook: $abook");
-                $this->accounts[$accountName]['addressbooks'][] = $abook;
+            if (empty($abooks)) {
+                self::$logger->error("No addressbooks found for account $accountName");
+            } else {
+                foreach ($abooks as $abook) {
+                    self::$logger->notice("Found addressbook: $abook");
+                }
+
+                $this->config['addressbooks'][$accountName] = $abooks;
+                $this->writeConfig();
+                $retval = true;
             }
-            $retval = true;
         } else {
             self::$logger->error("Unknown account $accountName");
         }
@@ -245,23 +242,25 @@ class Shell
     private function listAddressbooks(string $accountName = null): bool
     {
         $ret = false;
+        $accounts = [];
 
         if (isset($accountName)) {
-            if (isset($this->accounts[$accountName])) {
-                $accounts = [ $accountName => $this->accounts[$accountName] ];
+            $abooks = $this->config["addressbooks"][$accountName] ?? null;
+            if (isset($abooks)) {
+                $accounts = [ $accountName => $abooks ];
                 $ret = true;
             } else {
                 self::$logger->error("Unknown account $accountName");
             }
         } else {
-            $accounts = $this->accounts;
+            $accounts = $this->config["addressbooks"];
             $ret = true;
         }
 
-        foreach ($this->accounts as $name => $accountInfo) {
+        foreach ($accounts as $name => $abooks) {
             $id = 0;
 
-            foreach (($accountInfo["addressbooks"] ?? []) as $abook) {
+            foreach ($abooks as $abook) {
                 self::$logger->info("$name@$id - $abook");
                 ++$id;
             }
@@ -356,7 +355,7 @@ class Shell
     {
         if (preg_match("/^(.*)@(\d+)$/", $abookId, $matches)) {
             [, $accountName, $abookIdx] = $matches;
-            $abook = $this->accounts[$accountName]["addressbooks"][$abookIdx] ?? null;
+            $abook = $this->config["addressbooks"][$accountName][$abookIdx] ?? null;
 
             if (!isset($abook)) {
                 self::$logger->error("Invalid addressbook ID $abookId");
@@ -377,6 +376,63 @@ class Shell
         self::$logger->notice("Execution of command $tokens[0] took $duration seconds");
 
         return $ret;
+    }
+
+    private function readConfig(): void
+    {
+        $this->config = [];
+
+        $cfgstr = file_get_contents(self::CONFFILE);
+        if ($cfgstr !== false) {
+            $this->config = json_decode($cfgstr, true);
+        }
+
+        if (empty($this->config)) {
+            $this->config = [
+                "accounts" => [],
+                "addressbooks" => []
+            ];
+        }
+
+        // convert arrays back to objects
+        $accounts = [];
+        foreach ($this->config["accounts"] as $name => $arr) {
+            $accounts[$name] = Account::constructFromArray($arr);
+        }
+        $this->config["accounts"] = $accounts;
+
+        $accAbooks = [];
+        foreach ($this->config["addressbooks"] as $name => $abooks) {
+            $account = $accounts[$name] ?? null;
+            if (isset($account)) {
+                $accAbooks["$name"] = [];
+
+                foreach ($abooks as $abook) {
+                    if (empty($abook["uri"])) {
+                        self::$logger->error("Config contains addressbook without URI");
+                    } else {
+                        $accAbooks[$name][] = new AddressbookCollection($abook["uri"], $account);
+                    }
+                }
+            } else {
+                self::$logger->error("Config contains addressbooks for undefined account $name");
+            }
+        }
+        $this->config["addressbooks"] = $accAbooks;
+    }
+
+    private function writeConfig(): void
+    {
+        $config = $this->config;
+
+        $cfgstr = json_encode($config, JSON_PRETTY_PRINT);
+
+        if ($cfgstr !== false) {
+            file_put_contents(self::CONFFILE, $cfgstr);
+            chmod(self::CONFFILE, 0600);
+        } else {
+            self::$logger->error("Could not serialize config to JSON");
+        }
     }
 
     private function execCommand(array $tokens): bool

@@ -21,10 +21,11 @@ class Discovery
     ];
 
     /********* PUBLIC FUNCTIONS *********/
-    public function discoverAddressbooks(string $url, string $usr, string $pw): array
+    public function discoverAddressbooks(Account $account): array
     {
-        if (!preg_match(';^(([^:]+)://)?(([^/:]+)(:([0-9]+))?)(/?.*)$;', $url, $match)) {
-            return []; // TODO throw Exception
+        $uri = $account->getDiscoveryUri();
+        if (!preg_match(';^(([^:]+)://)?(([^/:]+)(:([0-9]+))?)(/?.*)$;', $uri, $match)) {
+            throw new \InvalidArgumentException("The account's discovery URI must contain a hostname (got: $uri)");
         }
 
         $protocol = $match[2]; // optional
@@ -63,21 +64,21 @@ class Discovery
 
         // (2) Discover the "initial context path" for each servers (until first success)
         foreach ($servers as $server) {
-            $baseuri = $server["scheme"] . "://" . $server["host"] . ":" . $server["port"];
-            $davAccount = new Account($baseuri, $usr, $pw);
+            $baseurl = $server["scheme"] . "://" . $server["host"] . ":" . $server["port"];
+            $account->setUrl($baseurl);
 
             $contextpaths = $this->discoverContextPath($server);
             foreach ($contextpaths as $contextpath) {
                 Config::$logger->debug("Try context path $contextpath");
                 // (3) Attempt a PROPFIND asking for the DAV:current-user-principal property
-                $principalUri = $davAccount->findCurrentUserPrincipal($contextpath);
+                $principalUri = $account->findCurrentUserPrincipal($contextpath);
                 if (isset($principalUri)) {
                     // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
-                    $addressbookHomeUri = $davAccount->findAddressbookHome($principalUri);
+                    $addressbookHomeUri = $account->findAddressbookHome($principalUri);
                     if (isset($addressbookHomeUri)) {
                         // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
-                        foreach ($davAccount->findAddressbooks($addressbookHomeUri) as $davAbookUri) {
-                            $addressbooks[] = new AddressbookCollection($davAbookUri, $davAccount);
+                        foreach ($account->findAddressbooks($addressbookHomeUri) as $davAbookUri) {
+                            $addressbooks[] = new AddressbookCollection($davAbookUri, $account);
                         }
 
                         if (count($addressbooks) > 0) {

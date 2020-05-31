@@ -1,8 +1,7 @@
 .*.swp
-accounts.php
 /*.xml
 /.phpdoc/
-/.davshell_history
+/.davshell*
 /test*.php
 /http.log
 /tags

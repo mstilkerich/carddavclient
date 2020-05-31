@@ -10,7 +10,7 @@ namespace MStilkerich\CardDavClient;
 
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
-class WebDavCollection
+class WebDavCollection implements \JsonSerializable
 {
     /** @var string URI of the Collection */
     protected $uri;
@@ -40,6 +40,16 @@ class WebDavCollection
         } else {
             throw new \Exception("Failed to retrieve properties for collection " . $this->uri);
         }
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [ "uri" => $this->uri ];
+    }
+
+    public function getAccount(): Account
+    {
+        return $this->account;
     }
 
     public function getClient(array $davClientOptions = []): CardDavClient

@@ -10,25 +10,50 @@ namespace MStilkerich\CardDavClient;
 
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
-class Account
+class Account implements \JsonSerializable
 {
     /********* PROPERTIES *********/
-
     /** @var string */
     private $username;
 
     /** @var string */
     private $password;
 
-    /** @var string */
-    private $baseUri;
+    /** @var string URI originally used to discover the account. */
+    private $discoveryUri;
+
+    /** @var ?string URL of the discovered CardDAV server, with empty path. May be null if not discovered yet. */
+    private $baseUrl;
 
     /********* PUBLIC FUNCTIONS *********/
-    public function __construct(string $baseUri, string $username, string $password)
+    public function __construct(string $discoveryUri, string $username, string $password, string $baseUrl = null)
     {
-        $this->baseUri  = $baseUri;
+        $this->discoveryUri = $discoveryUri;
         $this->username = $username;
         $this->password = $password;
+        $this->baseUrl  = $baseUrl;
+    }
+
+    public static function constructFromArray(array $a): Account
+    {
+        $requiredProps = [ 'discoveryUri', 'username', 'password' ];
+        foreach ($requiredProps as $prop) {
+            if (!isset($a[$prop])) {
+                throw new \Exception("Array used to reconstruct account does not contain required property $prop");
+            }
+        }
+
+        return new Account($a["discoveryUri"], $a["username"], $a["password"], $a["baseUrl"] ?? null);
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            "username" => $this->username,
+            "password" => $this->password,
+            "discoveryUri" => $this->discoveryUri,
+            "baseUrl" => $this->baseUrl
+        ];
     }
 
     /**
@@ -40,10 +65,41 @@ class Account
      * @return CardDavClient
      *  A CardDavClient object to interact with the server for this account.
      */
-    public function getClient(array $davClientOptions = [], string $baseUri = null): CardDavClient
+    public function getClient(array $davClientOptions = [], string $baseUrl = null): CardDavClient
     {
-        $davClient = new CardDavClient($baseUri ?? $this->baseUri, $this->username, $this->password, $davClientOptions);
-        return $davClient;
+        $clientUri = $baseUrl ?? $this->getUrl();
+        return new CardDavClient($clientUri, $this->username, $this->password, $davClientOptions);
+    }
+
+    public function getDiscoveryUri(): string
+    {
+        return $this->discoveryUri;
+    }
+
+    /**
+     * Set the base URL of this account once the server has been discovered.
+     */
+    public function setUrl(string $url): void
+    {
+        $this->baseUrl = $url;
+    }
+
+    public function getUrl(): string
+    {
+        if (empty($this->baseUrl)) {
+            throw new \Exception("The base URI of the account has not been discovered yet");
+        }
+
+        return $this->baseUrl;
+    }
+
+    public function __toString(): string
+    {
+        $str = $this->discoveryUri;
+        $str .= ", user: " . $this->username;
+        $str .= ", CardDAV URI: ";
+        $str .= $this->baseUrl ?? "not discovered yet";
+        return $str;
     }
 
     /**

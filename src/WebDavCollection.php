@@ -62,6 +62,14 @@ class WebDavCollection implements \JsonSerializable
         return $this->uri;
     }
 
+    public function downloadResource(string $uri): array
+    {
+        $client = $this->getClient();
+        $response = $client->getResource($uri);
+        $body = (string) $response->getBody(); // checked to be present in CardDavClient::getResource()
+        return [ 'body' => $body ];
+    }
+
     protected function getNeededCollectionPropertyNames(): array
     {
         return self::PROPNAMES;

@@ -1,7 +1,6 @@
 .*.swp
 /*.xml
 /.phpdoc/
-/.davshell*
 /test*.php
 /http.log
 /tags

@@ -55,6 +55,12 @@ interface SyncHandler
      *  Associative array with URIs (URL path component without server) as keys, ETags as values.
      */
     public function getExistingVCardETags(): array;
+
+    /**
+     * Called upon completion of the synchronization process to enable the handler to
+     * perform final actions if needed.
+     */
+    public function finalizeSync(): void;
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

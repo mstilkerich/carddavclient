@@ -94,6 +94,8 @@ class Sync
             }
         }
 
+        $handler->finalizeSync();
+
         return $syncResult->syncToken;
     }
 

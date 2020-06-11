@@ -10,4 +10,4 @@ staticanalysis:
 
 doc:
 	rm -r ~/www/carddavclient/*
-	phpDocumentor.phar -d src/ -t ~/www/carddavclient --ignore accounts.php --title="CardDAV Client Library" 
+	phpDocumentor.phar -d src/ -t ~/www/carddavclient --title="CardDAV Client Library" 

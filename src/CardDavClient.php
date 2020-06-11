@@ -71,10 +71,22 @@ class CardDavClient
         return self::checkAndParseXMLMultistatus($response);
     }
 
-    public function getAddressObject(string $uri): array
+    public function getResource(string $uri): Psr7Response
     {
         $response = $this->httpClient->sendRequest('GET', $uri);
         self::assertHttpStatus($response, 200, 200, "GET $uri");
+
+        $body = (string) $response->getBody();
+        if (empty($body)) {
+            throw new \Exception("Response to GET $uri request does not include a body");
+        }
+
+        return $response;
+    }
+
+    public function getAddressObject(string $uri): array
+    {
+        $response = $this->getResource($uri);
 
         // presence of this header is required per RFC6352:
         // "A response to a GET request targeted at an address object resource MUST contain an ETag response header
@@ -84,11 +96,7 @@ class CardDavClient
             throw new \Exception("Response to address object $uri GET request does not include ETag header");
         }
 
-        $body = (string) $response->getBody();
-        if (empty($body)) {
-            throw new \Exception("Response to address object $uri GET request does not include a body");
-        }
-
+        $body = (string) $response->getBody(); // checked to be present in getResource()
         return [ 'etag' => $etag, 'vcf' => $body ];
     }
 

@@ -13,7 +13,30 @@ This is a library for PHP applications to interact with addressbooks stored on C
   - OAuth/OAuth2 is *not* supported at the moment
 - Uses [Sabre/VObject](https://github.com/sabre-io/vobject) at the application-side interface to exchange VCards
 
+## Tested Servers
+
+Currently, this library has been tested to interoperate with:
+
+* Nextcloud 18
+* iCloud
+* Google Contacts via CardDAV API (using HTTP Basic Authentication, which is deprecated and will be disabled by Google in the future for OAuth2)
+
 ## Installation
 
 This library is intended to be used with [composer](https://getcomposer.org/) to install/update the library and its dependencies.
 It is intended to be used with a PSR-4 compliant autoloader (as provided by composer).
+
+To use the library in your application with composer, simply load composer's autoloader:
+```php
+require 'vendor/autoload.php';
+```
+
+## Documentation
+
+Documentation is currently only available inside the php files.
+
+### Sample Application
+
+For a simple demo application that makes use of this library, see [davshell](https://github.com/mstilkerich/davshell/). It shows how to use the library for the discovery and synchronization of addressbooks and is currently the best available quick start information.
+
+You can also take a look at my fork of the [Roundcube CardDAV](https://github.com/mstilkerich/rcmcarddav) plugin, which also uses this library for the interaction with the CardDAV server.

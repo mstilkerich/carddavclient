@@ -2,19 +2,19 @@
     "name": "mstilkerich/carddavclient",
     "description": "CardDAV client library to discover and synchronize with CardDAV servers",
     "type": "library",
-	"keywords": ["addressbook","carddav","contacts","owncloud","davical","nextcloud"],
+	"keywords": ["addressbook","carddav","contacts","owncloud","nextcloud"],
 	"homepage": "https://github.com/mstilkerich/carddavclient",
-	"license": "GPL-2.0-or-later",
+	"license": "GPL-3.0-or-later",
 	"authors": [
 		{
 			"name": "Michael Stilkerich",
-			"email": "michael@stilkerich.eu",
+			"email": "ms@mike2k.de",
 			"homepage": "https://github.com/mstilkerich",
 			"role": "Developer"
 		}
 	],
 	"support": {
-		"email": "ms+carddavclient@mike2k.de",
+		"email": "ms@mike2k.de",
 		"issues": "https://github.com/mstilkerich/carddavclient/issues",
 		"source": "https://github.com/mstilkerich/carddavclient",
 		"docs": "https://github.com/mstilkerich/carddavclient"

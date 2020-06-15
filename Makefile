@@ -10,4 +10,5 @@ staticanalysis:
 
 doc:
 	rm -r ~/www/carddavclient/*
-	phpDocumentor.phar -d src/ -t ~/www/carddavclient --title="CardDAV Client Library" 
+	#phpDocumentor.phar -d src/ -t ~/www/carddavclient --title="CardDAV Client Library" 
+	../phpdocumentor/bin/phpdoc -d src/ -t ~/www/carddavclient --title="CardDAV Client Library" 

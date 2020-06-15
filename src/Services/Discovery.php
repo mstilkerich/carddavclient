@@ -21,27 +21,37 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Class Discovery
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Services;
 
 use MStilkerich\CardDavClient\{Account, AddressbookCollection, CardDavClient, Config};
 
+/**
+ * Class Discovery - Provides a service to discovery the addressbooks for a CardDAV account.
+ */
 class Discovery
 {
     /********* PROPERTIES *********/
 
     /** @var array Some builtins for public providers that don't have discovery properly set up. */
-    private static $known_servers = [
+    private const KNOWN_SERVERS = [
         "gmail.com" => "www.googleapis.com",
         "googlemail.com" => "www.googleapis.com",
     ];
 
     /********* PUBLIC FUNCTIONS *********/
+
+    /**
+     * Discover the addressbooks for a CardDAV account.
+     *
+     * @param Account $account The CardDAV account providing credentials and initial discovery URI.
+     *
+     * @return AddressbookCollection[] An array of the discovered addressbooks.
+     *
+     * @throws \Exception In case of error, sub-classes of \Exception are thrown, with an error message contained within
+     *         the \Exception object.
+     */
     public function discoverAddressbooks(Account $account): array
     {
         $uri = $account->getDiscoveryUri();
@@ -74,8 +84,8 @@ class Discovery
 
         // some builtins for providers that have discovery for the domains known to
         // users not properly set up
-        if (key_exists($host, self::$known_servers)) {
-            $servers[] = [ "host" => self::$known_servers[$host], "port" => $port, "scheme" => $protocol];
+        if (key_exists($host, self::KNOWN_SERVERS)) {
+            $servers[] = [ "host" => self::KNOWN_SERVERS[$host], "port" => $port, "scheme" => $protocol];
         }
 
         // as a fallback, we will last try what the user provided
@@ -114,6 +124,17 @@ class Discovery
     }
 
     /********* PRIVATE FUNCTIONS *********/
+
+    /**
+     * Discovers the CardDAV service for the given domain using DNS SRV lookups.
+     *
+     * @param string $host A domain name to discover the service for
+     * @param bool   $force_ssl If true, only services with transport encryption (carddavs) will be discovered,
+     *                          otherwise the function will try to discover unencrypted (carddav) services after failing
+     *                          to discover encrypted ones.
+     * @return array Returns an array of associative arrays of services discovered via DNS. If nothing was found, the
+     *               returned array is empty.
+     */
     private function discoverServers(string $host, bool $force_ssl): array
     {
         $servers = array();
@@ -165,6 +186,17 @@ class Discovery
         return $servers;
     }
 
+    /**
+     * Provides a list of URIs to check for discovering the location of the CardDAV service.
+     *
+     * The provided context paths comprise both well-known URIs as well as paths discovered via DNS TXT records. DNS TXT
+     * lookup is only performed for servers that have themselves been discovery using DNS SRV lookups, using the same
+     * service resource record.
+     *
+     * @param array $server An server record (associative array) as returned by discoverServers()
+     * @return string[] Returns an array of context paths that should be tried for discovery in the provided order.
+     * @see Discovery::discoverServers()
+     */
     private function discoverContextPath(array $server): array
     {
         $contextpaths = array();

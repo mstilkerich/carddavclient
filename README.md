@@ -54,29 +54,27 @@ Generally, an application using this library will want to do some or all of the 
 
 1. Discover addressbooks from the information provided by a user: For this operation, the library provides a service
    class *MStilkerich\CardDavClient\Services\Discovery*.
-
-The service takes the account credentials and a partial URI (at the minimum a domain name) and with that attempts to
-discover the user's addressbooks. It returns an array of *MStilkerich\CardDavClient\AddressbookCollection* objects, each
-representing an addressbook.
+   The service takes the account credentials and a partial URI (at the minimum a domain name) and with that attempts to
+   discover the user's addressbooks. It returns an array of *MStilkerich\CardDavClient\AddressbookCollection* objects, each
+   representing an addressbook.
 
 2. Recreate addressbooks in known locations, discovered earlier. This is possible by simply creating instances of
    *MStilkerich\CardDavClient\AddressbookCollection*.
 
 3. Initially and periodically synchronize the server-side addressbook with a local cache: For this operation, the
    library provides a service class *MStilkerich\CardDavClient\Services\Sync*.
-
-This service performs synchronization given *MStilkerich\CardDavClient\AddressbookCollection* object and optionally a
-synchronization token returned by the previous sync operation. A synchronization token is a server-side identification
-of the state of the addressbook at a certain time. When a synchronization token is given, the server will be asked to
-only report the delta between the state identified by the synchronization token and the current state. This may not work
-for various reasons, the most common being that synchronization tokens are not kept indefinitly by the server. In such
-cases, a full synchronization will be performed. At the end of the sync, the service returns the synchronization token
-reflecting the synchronized state of the addressbook, if provided by the server.
+   This service performs synchronization given *MStilkerich\CardDavClient\AddressbookCollection* object and optionally a
+   synchronization token returned by the previous sync operation. A synchronization token is a server-side identification
+   of the state of the addressbook at a certain time. When a synchronization token is given, the server will be asked to
+   only report the delta between the state identified by the synchronization token and the current state. This may not work
+   for various reasons, the most common being that synchronization tokens are not kept indefinitly by the server. In such
+   cases, a full synchronization will be performed. At the end of the sync, the service returns the synchronization token
+   reflecting the synchronized state of the addressbook, if provided by the server.
 
 3. Perform changes to the server-side addressbook such as creating new address objects. These operations are directly
    provided as methods of the *MStilkerich\CardDavClient\AddressbookCollection* class.
 
-There is a demo script [doc/quickstart.php] distributed with the library that shows how to perform all the above
+There is a demo script [doc/quickstart.php](doc/quickstart.php) distributed with the library that shows how to perform all the above
 operations.
 
 ### Sample Applications

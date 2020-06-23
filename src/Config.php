@@ -45,7 +45,7 @@ class Config
         self::$httplogger = $httplogger ?? new NullLogger();
     }
 
-    // TODO: whether to allow repairing errors in VCards
+    // TODO whether to allow repairing errors in VCards
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

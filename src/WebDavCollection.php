@@ -53,6 +53,11 @@ class WebDavCollection implements \JsonSerializable
         $this->uri = $uri;
         $this->account = $account;
 
+        $this->refreshProperties();
+    }
+
+    public function refreshProperties(): void
+    {
         $propNames = $this->getNeededCollectionPropertyNames();
         $client = $this->getClient();
         $result = $client->findProperties($this->uri, $propNames);
@@ -81,6 +86,11 @@ class WebDavCollection implements \JsonSerializable
     public function getUri(): string
     {
         return $this->uri;
+    }
+
+    public function getSyncToken(): ?string
+    {
+        return $this->props[XmlEN::SYNCTOKEN] ?? null;
     }
 
     public function downloadResource(string $uri): array

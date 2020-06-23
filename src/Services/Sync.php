@@ -62,6 +62,12 @@ class Sync
 
             try {
                 $syncResult = $this->syncCollection($client, $abook, $prevSyncToken);
+
+                // even if the sync-collection failed, the server claims it supports the report. There are
+                // implementations (Google Contacts), that do not accept a sync-collection report with empty sync token.
+                // For these, we will subsequently perform the etag-based sync, but store the sync-token property so
+                // that future syncs may use the sync-collection report
+                $newSyncToken = $abook->getSyncToken();
             } catch (\Exception $e) {
                 Config::$logger->error("sync-collection REPORT produced exception", [ 'exception' => $e ]);
             }
@@ -70,8 +76,11 @@ class Sync
         // If sync-collection failed or is not supported, determine changes using getctag property, PROPFIND and address
         // objects' etags
         if (!isset($syncResult)) {
-            // if server supports getctag, take a short cut if nothing changed
-            $newSyncToken = $abook->getCTag();
+            // Fall back to using the deprecated CTag property to determine whether a collection has changed if
+            // sync-token is not supported
+            if (empty($newSyncToken)) {
+                $newSyncToken = $abook->getCTag();
+            }
 
             if (empty($prevSyncToken) || empty($newSyncToken) || ($prevSyncToken !== $newSyncToken)) {
                 Config::$logger->debug("Attempting sync by ETag comparison against local state of " . $abook->getUri());

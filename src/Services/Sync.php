@@ -61,13 +61,13 @@ class Sync
             Config::$logger->debug("Attempting sync using sync-collection report of " . $abook->getUri());
 
             try {
-                $syncResult = $this->syncCollection($client, $abook, $prevSyncToken);
-
                 // even if the sync-collection failed, the server claims it supports the report. There are
                 // implementations (Google Contacts), that do not accept a sync-collection report with empty sync token.
                 // For these, we will subsequently perform the etag-based sync, but store the sync-token property so
                 // that future syncs may use the sync-collection report
                 $newSyncToken = $abook->getSyncToken();
+
+                $syncResult = $this->syncCollection($client, $abook, $prevSyncToken);
             } catch (\Exception $e) {
                 Config::$logger->error("sync-collection REPORT produced exception", [ 'exception' => $e ]);
             }

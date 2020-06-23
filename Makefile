@@ -1,11 +1,16 @@
-.PHONY: stylecheck staticanalysis
+.PHONY: all stylecheck phpcompatcheck staticanalyses psalmanalysis doc
 
 all: stylecheck staticanalysis doc
 
-stylecheck:
-	phpcs.phar --colors --standard=PSR12 src/
+staticanalyses: stylecheck phpcompatcheck psalmanalysis
 
-staticanalysis:
+stylecheck:
+	vendor/bin/phpcs --colors --standard=PSR12 src/
+
+phpcompatcheck:
+	vendor/bin/phpcs --colors --standard=PHPCompatibility --runtime-set testVersion 7.1 src/
+
+psalmanalysis:
 	vendor/bin/psalm
 
 doc:

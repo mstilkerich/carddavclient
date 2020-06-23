@@ -201,7 +201,7 @@ class Sync
             $props = $response["props"];
 
             if (CardDavClient::compareUrlPaths($url, $abookUrl)) {
-                $newSyncToken = $props[XmlEN::GETCTAG] ?? $props[XmlEN::SYNCTOKEN] ?? "";
+                $newSyncToken = $props[XmlEN::SYNCTOKEN] ?? $props[XmlEN::GETCTAG] ?? "";
                 if (empty($newSyncToken)) {
                     Config::$logger->notice("The server provides no token that identifies the addressbook version");
                 }

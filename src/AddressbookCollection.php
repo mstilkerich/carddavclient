@@ -45,6 +45,14 @@ class AddressbookCollection extends WebDavCollection
         XmlEN::SUPPORTED_REPORT_SET
     ];
 
+    /**
+     * Returns a displayname for the addressbook.
+     *
+     * If a server-side displayname exists in the DAV:displayname property, it is returned. Otherwise, the last
+     * component of the URL is returned. This is suggested by RFC6352 to compose the addressbook name.
+     *
+     * @return string Name of the addressbook
+     */
     public function getName(): string
     {
         return $this->props[XmlEN::DISPNAME] ?? basename($this->uri);
@@ -136,10 +144,21 @@ class AddressbookCollection extends WebDavCollection
         $this->validateCard($vcard);
 
         $client = $this->getClient();
-        $newResInfo = $client->createResource(
-            $vcard->serialize(),
-            $client->absoluteUrl($vcard->UID . ".vcf")
-        );
+
+        $addMemberUrl = $this->props[XmlEN::ADD_MEMBER] ?? null;
+
+        if (isset($addMemberUrl)) {
+            $newResInfo = $client->createResource(
+                $vcard->serialize(),
+                $client->absoluteUrl($addMemberUrl),
+                true
+            );
+        } else {
+            $newResInfo = $client->createResource(
+                $vcard->serialize(),
+                $client->absoluteUrl($vcard->UID . ".vcf")
+            );
+        }
 
         return $newResInfo;
     }

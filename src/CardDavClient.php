@@ -172,44 +172,56 @@ class CardDavClient
     /**
      * Requests the server to create the given resource.
      *
+     * @param bool $post If true
+     *
      * @return array
      *  Associative array with keys
      *   - uri (string): URI of the new resource if the request was successful
      *   - etag (?string): Entity tag of the created resource if returned by server, or null.
      */
-    public function createResource(string $body, string $suggestedUri): array
+    public function createResource(string $body, string $suggestedUri, bool $post = false): array
     {
-        $retryLimit = 5;
-        $attempt = 1;
+        $uri = $suggestedUri;
+        $attempt = 0;
         $etag = null;
+
+        $headers = [ "Content-Type" => "text/vcard" ];
+        if ($post) {
+            $reqtype = 'POST';
+            $retryLimit = 1;
+        } else {
+            $reqtype = 'PUT';
+            // for PUT, we have to guess a free URI, so we give it several tries
+            $retryLimit = 5;
+            $headers["If-None-Match"] = "*";
+        }
 
         do {
             $response = $this->httpClient->sendRequest(
-                'PUT',
-                $suggestedUri,
-                [
-                    "headers" => [
-                        "If-None-Match" => "*",
-                        "Content-Type" => "text/vcard"
-                    ],
-                    "body" => $body
-                ]
+                $reqtype,
+                $uri,
+                [ "headers" => $headers, "body" => $body ]
             );
+
             $status = $response->getStatusCode();
             // 201 -> New resource created
             // 200/204 -> Existing resource modified (should not happen b/c of If-None-Match
             // 412 -> Precondition failed
             if ($status == 412) {
-                // make up a new random filename until retry limit is hit
+                // make up a new random filename until retry limit is hit (append a random integer to the suggested
+                // filename, e.g. /newcard.vcf could become /newcard-1234.vcf)
                 $randint = rand();
-                $suggestedUri = preg_replace("/(\.[^.]*)?$/", "-$randint$0", $suggestedUri, 1);
+                $uri = preg_replace("/(\.[^.]*)?$/", "-$randint$0", $suggestedUri, 1);
             }
         } while (($status == 412) && (++$attempt < $retryLimit));
 
-        self::assertHttpStatus($response, 201, 201, "PUT $suggestedUri");
+        self::assertHttpStatus($response, 201, 201, "$reqtype $suggestedUri");
 
         $etag = $response->getHeaderLine("ETag");
-        return [ 'uri' => $suggestedUri, 'etag' => $etag ];
+        if ($post) {
+            $uri = $response->getHeaderLine("Location");
+        }
+        return [ 'uri' => $uri, 'etag' => $etag ];
     }
 
     public function multiGet(

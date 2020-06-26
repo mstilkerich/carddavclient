@@ -37,7 +37,7 @@ class WebDavCollection implements \JsonSerializable
     protected $uri;
 
     /** @var array WebDAV properties of the Collection */
-    protected $props;
+    private $props = [];
 
     /** @var Account The CardDAV account this WebDAV resource is associated/accessible with. */
     protected $account;
@@ -45,6 +45,7 @@ class WebDavCollection implements \JsonSerializable
     private const PROPNAMES = [
         XmlEN::RESTYPE,
         XmlEN::SYNCTOKEN,
+        XmlEN::SUPPORTED_REPORT_SET,
         XmlEN::ADD_MEMBER
     ];
 
@@ -52,8 +53,14 @@ class WebDavCollection implements \JsonSerializable
     {
         $this->uri = $uri;
         $this->account = $account;
+    }
 
-        $this->refreshProperties();
+    protected function getProperties(): array
+    {
+        if (empty($this->props)) {
+            $this->refreshProperties();
+        }
+        return $this->props;
     }
 
     public function refreshProperties(): void
@@ -90,7 +97,13 @@ class WebDavCollection implements \JsonSerializable
 
     public function getSyncToken(): ?string
     {
-        return $this->props[XmlEN::SYNCTOKEN] ?? null;
+        $props = $this->getProperties();
+        return $props[XmlEN::SYNCTOKEN] ?? null;
+    }
+
+    public function supportsSyncCollection(): bool
+    {
+        return $this->supportsReport(XmlEN::REPORT_SYNCCOLL);
     }
 
     public function downloadResource(string $uri): array
@@ -104,6 +117,12 @@ class WebDavCollection implements \JsonSerializable
     protected function getNeededCollectionPropertyNames(): array
     {
         return self::PROPNAMES;
+    }
+
+    protected function supportsReport(string $reportElement): bool
+    {
+        $props = $this->getProperties();
+        return in_array($reportElement, $props[XmlEN::SUPPORTED_REPORT_SET], true);
     }
 }
 

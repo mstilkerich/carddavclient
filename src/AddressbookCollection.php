@@ -41,8 +41,7 @@ class AddressbookCollection extends WebDavCollection
         XmlEN::GETCTAG,
         XmlEN::SUPPORTED_ADDRDATA,
         XmlEN::ABOOK_DESC,
-        XmlEN::MAX_RESSIZE,
-        XmlEN::SUPPORTED_REPORT_SET
+        XmlEN::MAX_RESSIZE
     ];
 
     /**
@@ -55,7 +54,8 @@ class AddressbookCollection extends WebDavCollection
      */
     public function getName(): string
     {
-        return $this->props[XmlEN::DISPNAME] ?? basename($this->uri);
+        $props = $this->getProperties();
+        return $props[XmlEN::DISPNAME] ?? basename($this->uri);
     }
 
     public function __toString(): string
@@ -68,7 +68,9 @@ class AddressbookCollection extends WebDavCollection
     {
         $desc  = "Addressbook " . $this->getName() . "\n";
         $desc .= "    URI: " . $this->uri . "\n";
-        foreach ($this->props as $propName => $propVal) {
+
+        $props = $this->getProperties();
+        foreach ($props as $propName => $propVal) {
             $desc .= "    $propName: ";
 
             if (is_array($propVal)) {
@@ -91,11 +93,6 @@ class AddressbookCollection extends WebDavCollection
         return $desc;
     }
 
-    public function supportsSyncCollection(): bool
-    {
-        return $this->supportsReport(XmlEN::REPORT_SYNCCOLL);
-    }
-
     public function supportsMultiGet(): bool
     {
         return $this->supportsReport(XmlEN::REPORT_MULTIGET);
@@ -103,7 +100,8 @@ class AddressbookCollection extends WebDavCollection
 
     public function getCTag(): ?string
     {
-        return $this->props[XmlEN::GETCTAG] ?? null;
+        $props = $this->getProperties();
+        return $props[XmlEN::GETCTAG] ?? null;
     }
 
     /**
@@ -133,6 +131,8 @@ class AddressbookCollection extends WebDavCollection
 
     public function createCard(VCard $vcard): array
     {
+        $props = $this->getProperties();
+
         // Add UID if not present
         if (empty($vcard->select("UID"))) {
             $uuid = UUIDUtil::getUUID();
@@ -145,7 +145,7 @@ class AddressbookCollection extends WebDavCollection
 
         $client = $this->getClient();
 
-        $addMemberUrl = $this->props[XmlEN::ADD_MEMBER] ?? null;
+        $addMemberUrl = $props[XmlEN::ADD_MEMBER] ?? null;
 
         if (isset($addMemberUrl)) {
             $newResInfo = $client->createResource(
@@ -205,11 +205,6 @@ class AddressbookCollection extends WebDavCollection
         $parentPropNames = parent::getNeededCollectionPropertyNames();
         $propNames = array_merge($parentPropNames, self::PROPNAMES);
         return array_unique($propNames);
-    }
-
-    protected function supportsReport(string $reportElement): bool
-    {
-        return in_array($reportElement, $this->props[XmlEN::SUPPORTED_REPORT_SET], true);
     }
 }
 

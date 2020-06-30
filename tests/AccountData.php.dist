@@ -48,6 +48,10 @@ final class AccountData
 
     public static function init(): void
     {
+        if (! empty(self::$accounts)) {
+            return;
+        }
+
         if (file_exists('tests.log')) {
             unlink('tests.log');
         }

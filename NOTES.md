@@ -22,4 +22,5 @@ issues have so far been encountered:
   is needed as otherwise the Google server apparently will only report on the collection itself, i. e. the
   sync result would look like there were no changes. According to RFC 6578, a Depth: 0 header is required and
   a bad request result should occur for any other value.
-
+- Google reports cards as deleted that have not been deleted between the last sync and the current one,
+  but probably before that.

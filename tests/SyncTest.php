@@ -17,9 +17,15 @@ final class SyncTest extends TestCase
      */
     private static $insertedUris;
 
+    /**
+     * @var array $cacheState Simulate a local VCard cache for the sync.
+     */
+    private static $cacheState;
+
     public static function setUpBeforeClass(): void
     {
         self::$insertedUris = [];
+        self::$cacheState = [];
         AccountData::init();
     }
 
@@ -59,10 +65,40 @@ final class SyncTest extends TestCase
         $syncHandler = new SyncTestHandler($abook, true, $createdCards);
         $syncmgr = new Sync();
         $synctoken = $syncmgr->synchronize($abook, $syncHandler);
-        $this->assertNotEmpty($synctoken, "Synctoken after initial sync");
+        $this->assertNotEmpty($synctoken, "Empty synctoken after initial sync");
 
         // run sync handler's verification routine after the test
-        $syncHandler->testVerify();
+        $cacheState = $syncHandler->testVerify();
+
+        self::$cacheState[$abookname] = [
+            'cache' => $cacheState,
+            'synctoken' => $synctoken
+        ];
+    }
+
+    /**
+     * @depends testInitialSyncWorks
+     * @dataProvider addressbookProvider
+     */
+    public function testImmediateFollowupSyncEmpty(string $abookname, array $cfg): void
+    {
+        $abook = AccountData::$addressbooks[$abookname];
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+        $this->assertArrayHasKey($abookname, self::$cacheState);
+
+        // insert two cards we can expect to be reported by the initial sync
+        $syncHandler = new SyncTestHandler($abook, false, [], [], self::$cacheState[$abookname]["cache"]);
+        $syncmgr = new Sync();
+        $synctoken = $syncmgr->synchronize($abook, $syncHandler, [], self::$cacheState[$abookname]["synctoken"]);
+        $this->assertNotEmpty($synctoken, "Empty synctoken after followup sync");
+
+        // run sync handler's verification routine after the test
+        $cacheState = $syncHandler->testVerify();
+
+        self::$cacheState[$abookname] = [
+            'cache' => $cacheState,
+            'synctoken' => $synctoken
+        ];
     }
 
     private function createCards(AddressbookCollection $abook, string $abookname, int $num): array

@@ -69,6 +69,8 @@ class CardDavClient
     /**
      * Note: Google's server does not accept an empty syncToken, though explicitly allowed for initial sync by RFC6578.
      * It will respond with 400 Bad Request and error message "Request contains an invalid argument."
+     *
+     * The Google issues have been reported to Google: https://issuetracker.google.com/issues/160190530
      */
     public function syncCollection(string $addressbookUri, string $syncToken): Multistatus
     {
@@ -79,11 +81,20 @@ class CardDavClient
             XmlEN::PROP => [ XmlEN::GETETAG => null ]
         ]);
 
+        // RFC6578: Depth: 0 header is required for sync-collection report
+        // Google requires a Depth: 1 header or the REPORT will only target the collection itself
+        // This hack seems to be the simplest solution to behave RFC-compliant in general but have Google work
+        // nonetheless
+        if (strpos(self::concatUrl($this->base_uri, $addressbookUri), "www.googleapis.com") !== false) {
+            $depthValue = "1";
+        } else {
+            $depthValue = "0";
+        }
+
         $response = $this->httpClient->sendRequest('REPORT', $addressbookUri, [
             "headers" =>
             [
-                // RFC6578: Depth header is required to be 0 for sync-collection report
-                "Depth" => 0,
+                "Depth" => $depthValue,
                 "Content-Type" => "application/xml; charset=UTF-8"
             ],
             "body" => $body

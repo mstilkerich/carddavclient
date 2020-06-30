@@ -1,9 +1,11 @@
+.phpunit.result.cache
 .*.swp
 /*.xml
 /.phpdoc/
 /test*.php
-/http.log
+/*.log
 /tags
 /composer.lock
 /composer.phar
 /vendor
+/tests/AccountData.php

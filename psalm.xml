@@ -6,9 +6,23 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
->
+    >
     <projectFiles>
-		<directory name="src/" />
-		<file name="doc/quickstart.php" />
+        <directory name="src/" />
+        <directory name="tests/" />
+        <file name="doc/quickstart.php" />
     </projectFiles>
+
+    <issueHandlers>
+        <RedundantConditionGivenDocblockType>
+            <errorLevel type="suppress">
+                <directory name="tests" /> <!-- all RedundantConditionGivenDocblockType issues in this directory are suppressed -->
+            </errorLevel>
+        </RedundantConditionGivenDocblockType>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <directory name="tests" /> <!-- all PropertyNotSetInConstructor issues in this directory are suppressed -->
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+    </issueHandlers>
 </psalm>

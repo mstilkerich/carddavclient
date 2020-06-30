@@ -1,0 +1,82 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MStilkerich\Tests\CardDavClient;
+
+use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config};
+
+final class AccountData
+{
+    public const ACCOUNTS = [
+        "Provider 1" => [
+            "username" => "username1",
+            "password" => "password1",
+            "discoveryUri" => "example.com"
+        ],
+        "Provider 2" => [
+            "username" => "...",
+            "password" => "...",
+            "discoveryUri" => "..."
+        ]
+    ];
+
+    public const ADDRESSBOOKS = [
+        "Provider 1 - Book 1" => [
+            "account" => "Provider 1",
+            "url" => "https://carddav.example.com/username1/carddav/contacts",
+            "displayname" => "contacts",
+            "supports_synccoll" => true,
+            "supports_multiget" => true,
+            "supports_ctag" => false,
+        ],
+        "Provider 2 - Book 1" => [
+            "account" => "Provider 2",
+            "url" => "...",
+            "displayname" => "...",
+            "supports_synccoll" => true,
+            "supports_multiget" => true,
+            "supports_ctag" => true,
+        ],
+    ];
+
+    /** @var Account[] Caches the Account objects for all accounts from ACCOUNTS*/
+    public static $accounts = [];
+
+    /** @var AddressbookCollection[] Caches the AddressbookCollection objects for all addressbooks from ADDRESSBOOKS */
+    public static $addressbooks = [];
+
+    public static function init(): void
+    {
+        if (file_exists('tests.log')) {
+            unlink('tests.log');
+        }
+        if (file_exists('tests_http.log')) {
+            unlink('tests_http.log');
+        }
+
+        Config::init(
+            $logger = new \Wa72\SimpleLogger\FileLogger('tests.log', \Psr\Log\LogLevel::DEBUG),
+            $logger = new \Wa72\SimpleLogger\FileLogger('tests_http.log', \Psr\Log\LogLevel::DEBUG)
+        );
+
+        foreach (self::ACCOUNTS as $name => $cfg) {
+            self::$accounts[$name] = new Account($cfg["discoveryUri"], $cfg["username"], $cfg["password"]);
+        }
+
+        foreach (self::ADDRESSBOOKS as $name => $cfg) {
+            self::$addressbooks[$name] = new AddressbookCollection($cfg["url"], self::$accounts[$cfg["account"]]);
+        }
+    }
+
+    public static function addressbookProvider(): array
+    {
+        $ret = [];
+        foreach (self::ADDRESSBOOKS as $name => $cfg) {
+            $ret[$name] = [ $name, $cfg ];
+        }
+        return $ret;
+    }
+}
+
+// vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120:ft=php

@@ -1,0 +1,145 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MStilkerich\Tests\CardDavClient;
+
+use MStilkerich\CardDavClient\{Account,AddressbookCollection};
+use MStilkerich\CardDavClient\Services\{SyncHandler};
+use PHPUnit\Framework\Assert;
+use Sabre\VObject\Component\VCard;
+
+/**
+ * This is a sync handler to test reported sync results against expected ones.
+ *
+ * Generally, the sync handler will check that the changes performed by the test case between two syncs are reported in
+ * the 2nd sync. In the first sync, the contents of the addressbook are not known, so any cards reported have to be
+ * accepted. However, if the test performed some changes before the first sync, it can check for those. Between the two
+ * syncs, no external changes to the addressbook are assumed, to the handler can check for the exact changes.
+ */
+final class SyncTestHandler implements SyncHandler
+{
+    /**
+     * @var AddressbookCollection The addressbook on that the sync is performed.
+     */
+    private $abook;
+
+    /**
+     * @var bool $allowAdditionalChanges If true, the sync result may include unknown changes which are accepted.
+     */
+    private $allowAdditionalChanges;
+
+    /**
+     * Maps URI to [ 'vcard' => VCard object, 'etag' => string expected etag ]
+     * @var array $expectedChangedCards The new/changed cards that are expected to be reported by the sync
+     */
+    private $expectedChangedCards;
+
+    /**
+     * @var bool[] $expectedDeletedUris An array of URIs => bool expected to be reported as deleted by the Sync.
+     *    The values are used to record which cards have been reported as deleted during the sync.
+     */
+    private $expectedDeletedUris;
+
+    /**
+     * @var string $opSequence A log of the operation sequence invoked on this sync handler.
+     *
+     * String contains the characters:
+     *   - C (addressObjectChanged)
+     *   - D (addressObjectDeleted)
+     *   - F (finalizeSync)
+     *
+     *  getExistingVCardETags is not recorded as no logical ordering is defined.
+     */
+    private $opSequence = "";
+
+    public function __construct(
+        AddressBookCollection $abook,
+        bool $allowAdditionalChanges,
+        array $expectedChangedCards = [],
+        array $expectedDeletedUris = []
+    ) {
+        $this->abook = $abook;
+        $this->expectedChangedCards = $expectedChangedCards;
+        $this->expectedDeletedUris = array_fill_keys($expectedDeletedUris, false);
+        $this->allowAdditionalChanges = $allowAdditionalChanges;
+    }
+
+    public function addressObjectChanged(string $uri, string $etag, VCard $card): void
+    {
+        $this->opSequence .= "C";
+
+        $uri = TestUtils::normalizeUri($this->abook, $uri);
+
+        if ($this->allowAdditionalChanges === false) {
+            Assert::assertArrayHasKey($uri, $this->expectedChangedCards, "Unexpected change reported: $uri");
+        }
+
+        if (isset($this->expectedChangedCards[$uri])) {
+            Assert::assertArrayNotHasKey(
+                "seen",
+                $this->expectedChangedCards[$uri],
+                "Change reported multiple times: $uri"
+            );
+            $this->expectedChangedCards[$uri]["seen"] = true;
+
+            // the ETag is optional in the expected cards - the server may not report it after the insert in case
+            // the card was changed server side
+            if (isset($this->expectedChangedCards[$uri]["etag"])) {
+                Assert::assertEquals(
+                    $this->expectedChangedCards[$uri]["etag"],
+                    $etag,
+                    "ETag of changed card different from time ETag reported after change"
+                );
+            }
+
+            TestUtils::compareVCard($this->expectedChangedCards[$uri]["vcard"], $card);
+        }
+    }
+
+    public function addressObjectDeleted(string $uri): void
+    {
+        $this->opSequence .= "D";
+
+        $uri = TestUtils::normalizeUri($this->abook, $uri);
+
+        Assert::assertArrayHasKey($uri, $this->expectedDeletedUris, "Unexpected delete reported: $uri");
+        Assert::assertFalse($this->expectedDeletedUris[$uri], "Delete reported multiple times: $uri");
+        $this->expectedDeletedUris[$uri] = true;
+    }
+
+    public function getExistingVCardETags(): array
+    {
+        return [];
+    }
+
+    public function finalizeSync(): void
+    {
+        $this->opSequence .= "F";
+    }
+
+    public function testVerify(): void
+    {
+        $numDel =  '{' . count($this->expectedDeletedUris) . '}';
+        $numChgMin = count($this->expectedChangedCards);
+        $numChgMax = $this->allowAdditionalChanges ? "" : $numChgMin;
+        $numChg = '{' . $numChgMin . ',' . $numChgMax . '}';
+
+        Assert::assertRegExp(
+            "/^D${numDel}C${numChg}F$/",
+            $this->opSequence,
+            "Delete must be reported before changes"
+        );
+
+        foreach ($this->expectedDeletedUris as $uri => $seen) {
+            Assert::assertTrue($seen, "Card reported as deleted: $uri");
+        }
+
+        foreach ($this->expectedChangedCards as $uri => $attr) {
+            Assert::assertArrayHasKey("seen", $attr, "Changed card NOT reported as changed: $uri");
+            Assert::assertTrue($attr["seen"], "Changed card NOT reported as changed: $uri");
+        }
+    }
+}
+
+// vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

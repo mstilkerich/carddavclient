@@ -1,6 +1,5 @@
 .phpunit.result.cache
 .*.swp
-/*.xml
 /.phpdoc/
 /test*.php
 /*.log

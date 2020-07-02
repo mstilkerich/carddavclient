@@ -12,12 +12,19 @@ final class AccountData
         "Provider 1" => [
             "username" => "username1",
             "password" => "password1",
-            "discoveryUri" => "example.com"
+            "discoveryUri" => "example.com",
+
+            /* For providers that report extra changes or deleted cards between two syncs, set this to true to limit the
+             * sync tests to check whether all known changes are actually reported, without raising an error on any
+             * additional changes that the server reports. (Google has been observed to behave like this)
+             */
+            "syncAllowExtraChanges" => false,
         ],
         "Provider 2" => [
             "username" => "...",
             "password" => "...",
-            "discoveryUri" => "..."
+            "discoveryUri" => "...",
+            "syncAllowExtraChanges" => false,
         ]
     ];
 

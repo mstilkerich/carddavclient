@@ -82,12 +82,23 @@ final class SyncTest extends TestCase
      */
     public function testImmediateFollowupSyncEmpty(string $abookname, array $cfg): void
     {
+        $accountname = AccountData::ADDRESSBOOKS[$abookname]["account"];
+        $this->assertArrayHasKey($accountname, AccountData::ACCOUNTS);
+        $accountcfg = AccountData::ACCOUNTS[$accountname];
+        $this->assertArrayHasKey("syncAllowExtraChanges", $accountcfg);
+
         $abook = AccountData::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$cacheState);
 
         // insert two cards we can expect to be reported by the initial sync
-        $syncHandler = new SyncTestHandler($abook, false, [], [], self::$cacheState[$abookname]["cache"]);
+        $syncHandler = new SyncTestHandler(
+            $abook,
+            $accountcfg["syncAllowExtraChanges"],
+            [],
+            [],
+            self::$cacheState[$abookname]["cache"]
+        );
         $syncmgr = new Sync();
         $synctoken = $syncmgr->synchronize($abook, $syncHandler, [], self::$cacheState[$abookname]["synctoken"]);
         $this->assertNotEmpty($synctoken, "Empty synctoken after followup sync");

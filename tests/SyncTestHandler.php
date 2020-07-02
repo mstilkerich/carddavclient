@@ -25,7 +25,8 @@ final class SyncTestHandler implements SyncHandler
     private $abook;
 
     /**
-     * @var bool $allowAdditionalChanges If true, the sync result may include unknown changes which are accepted.
+     * @var bool $allowAdditionalChanges If true, the sync result may include unknown changes/deletes which are
+     *    accepted.
      */
     private $allowAdditionalChanges;
 
@@ -112,13 +113,20 @@ final class SyncTestHandler implements SyncHandler
     {
         $this->opSequence .= "D";
 
-        Assert::assertArrayHasKey($uri, $this->cacheState, "Delete for URI not in cache: $uri");
+        if (! $this->allowAdditionalChanges) {
+            Assert::assertArrayHasKey($uri, $this->cacheState, "Delete for URI not in cache: $uri");
+        }
         unset($this->cacheState[$uri]);
 
         $uri = TestUtils::normalizeUri($this->abook, $uri);
 
-        Assert::assertArrayHasKey($uri, $this->expectedDeletedUris, "Unexpected delete reported: $uri");
-        Assert::assertFalse($this->expectedDeletedUris[$uri], "Delete reported multiple times: $uri");
+        if (! $this->allowAdditionalChanges) {
+            Assert::assertArrayHasKey($uri, $this->expectedDeletedUris, "Unexpected delete reported: $uri");
+        }
+
+        if (isset($this->expectedDeletedUris[$uri])) {
+            Assert::assertFalse($this->expectedDeletedUris[$uri], "Delete reported multiple times: $uri");
+        }
         $this->expectedDeletedUris[$uri] = true;
     }
 

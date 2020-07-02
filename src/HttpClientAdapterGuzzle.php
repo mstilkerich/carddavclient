@@ -39,10 +39,32 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
  */
 class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
 {
+    /** @var string[] A list of authentication schemes that can be handled by Guzzle itself,
+     *     independent on whether it works only with the Guzzle Curl HTTP handler or not.
+     */
+    private const GUZZLE_KNOWN_AUTHSCHEMES = [ 'basic', 'digest', 'ntlm' ];
+
     /********* PROPERTIES *********/
 
     /** @var Client The Client object of the Guzzle HTTP library. */
     private $client;
+
+    /** @var string The username to use for authentication */
+    private $username;
+
+    /** @var string The password to use for authentication */
+    private $password;
+
+    /** @var ?string The HTTP authentication scheme to use */
+    private $authScheme;
+
+    /** @var string[] Auth-schemes tried without success */
+    private $failedAuthSchemes = [];
+
+    /** @var ?array Maps lowercase auth-schemes to their CURLAUTH_XXX constant.
+     *     Only values not part of GUZZLE_KNOWN_AUTHSCHEMES are relevant here.
+     */
+    private static $schemeToCurlOpt;
 
     /********* PUBLIC FUNCTIONS *********/
 
@@ -51,37 +73,71 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
      * @param string $base_uri Base URI to be used when relative URIs are given to requests.
      * @param string $username Username used to authenticate with the server.
      * @param string $password Password used to authenticate with the server.
-     * @param array  $options  Options for the HTTP client, and default request options. May include any of the options
-     *               accepted by {@see HttpClientAdapterInterface::sendRequest()}.
      */
-    public function __construct(string $base_uri, string $username, string $password, array $options = [])
+    public function __construct(string $base_uri, string $username, string $password)
     {
-        $guzzleOptions = self::prepareGuzzleOptions($options);
+        $this->username = $username;
+        $this->password = $password;
+
+        if (!isset(self::$schemeToCurlOpt)) {
+            if (extension_loaded("curl")) {
+                self::$schemeToCurlOpt = [
+                    'negotiate' => CURLAUTH_NEGOTIATE,
+                ];
+            } else {
+                self::$schemeToCurlOpt = [];
+            }
+        }
 
         $stack = HandlerStack::create();
         $stack->push(Middleware::log(
             Config::$httplogger,
             new MessageFormatter("\"{method} {target} HTTP/{version}\" {code}\n" . MessageFormatter::DEBUG)
         ));
-        $guzzleOptions['handler'] = $stack;
 
+        $guzzleOptions = $this->prepareGuzzleOptions([]);
+        $guzzleOptions['handler'] = $stack;
         $guzzleOptions['http_errors'] = false; // no exceptions on 4xx/5xx status, also required by PSR-18
         $guzzleOptions['base_uri'] = $base_uri;
-        $guzzleOptions['auth'] = [$username, $password];
-        $guzzleOptions['version'] = 2.0; // HTTP2
 
         $this->client = new Client($guzzleOptions);
     }
 
     /**
      * Sends a PSR-7 request and returns a PSR-7 response.
+     *
+     * @param array  $options  Options for the HTTP client, and default request options. May include any of the options
+     *               accepted by {@see HttpClientAdapterInterface::sendRequest()}.
      */
     public function sendRequest(string $method, string $uri, array $options = []): Psr7Response
     {
-        $guzzleOptions = self::prepareGuzzleOptions($options);
+        $guzzleOptions = $this->prepareGuzzleOptions($options);
 
         try {
             $response = $this->client->request($method, $uri, $guzzleOptions);
+
+            if ($response->getStatusCode() == 401) {
+                foreach ($this->getSupportedAuthSchemes($response) as $scheme) {
+                    $this->authScheme = $scheme;
+
+                    Config::$logger->debug("Trying auth scheme $scheme");
+
+                    $guzzleOptions = $this->prepareGuzzleOptions($options);
+                    $response = $this->client->request($method, $uri, $guzzleOptions);
+
+                    if ($response->getStatusCode() != 401) {
+                        break;
+                    } else {
+                        $this->failedAuthSchemes[] = $scheme;
+                    }
+                }
+
+                if ($response->getStatusCode() >= 400) {
+                    Config::$logger->debug("None of the available auth schemes worked");
+                    unset($this->authScheme);
+                }
+            }
+
             return $response;
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             // thrown in the event of a networking error or too many redirects
@@ -93,9 +149,10 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
     }
 
     /********* PRIVATE FUNCTIONS *********/
-    private static function prepareGuzzleOptions(array $options): array
+    private function prepareGuzzleOptions(array $options): array
     {
         $guzzleOptions = [];
+        $curlLoaded = extension_loaded("curl");
 
         foreach ([ "headers", "body" ] as $copyopt) {
             if (key_exists($copyopt, $options)) {
@@ -115,7 +172,60 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
             ];
         }
 
+        if (isset($this->authScheme)) {
+            $authScheme = $this->authScheme;
+            Config::$logger->debug("Using auth scheme $authScheme");
+
+            if (in_array($authScheme, self::GUZZLE_KNOWN_AUTHSCHEMES)) {
+                $guzzleOptions['auth'] = [$this->username, $this->password, $this->authScheme];
+            } elseif (isset(self::$schemeToCurlOpt[$authScheme])) { // will always be true
+                $guzzleOptions["curl"] = [
+                    CURLOPT_HTTPAUTH => self::$schemeToCurlOpt[$authScheme],
+                    CURLOPT_USERNAME => $this->username,
+                    CURLOPT_PASSWORD => $this->password
+                ];
+            }
+        }
+
+        if ($curlLoaded && (curl_version()["features"] & CURL_VERSION_HTTP2 !== 0)) {
+            $guzzleOptions["version"] = 2.0; // HTTP2
+        }
+
         return $guzzleOptions;
+    }
+
+    /**
+     * Extracts HTTP authentication schemes from a WWW-Authenticate header.
+     *
+     * The schemes offered by the server in the WWW-Authenticate header are intersected with those supported by Guzzle /
+     * curl. Schemes that havev been tried with this object without success are filtered.
+     *
+     * @param Psr7Response $response A status 401 response returned by the server.
+     *
+     * @return string[] An array of authentication schemes that can be tried.
+     */
+    private function getSupportedAuthSchemes(Psr7Response $response): array
+    {
+        $authHeaders = $response->getHeader("WWW-Authenticate");
+        $schemes = [];
+
+        foreach ($authHeaders as $authHeader) {
+            $authHeader = trim($authHeader);
+            foreach (preg_split("/\s*,\s*/", $authHeader) as $challenge) {
+                if (preg_match("/^([^ =]+)(\s+[^=].*)?$/", $challenge, $matches)) { // filter auth-params
+                    $scheme = strtolower($matches[1]);
+                    if (
+                        (in_array($scheme, self::GUZZLE_KNOWN_AUTHSCHEMES)
+                          || isset($scheme, self::$schemeToCurlOpt[$scheme]))
+                        && (! in_array($scheme, $this->failedAuthSchemes))
+                    ) {
+                        $schemes[] = $scheme;
+                    }
+                }
+            }
+        }
+
+        return $schemes;
     }
 }
 

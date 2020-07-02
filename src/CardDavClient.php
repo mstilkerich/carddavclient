@@ -56,14 +56,10 @@ class CardDavClient
     protected $httpClient;
 
     /********* PUBLIC FUNCTIONS *********/
-    public function __construct(
-        string $base_uri,
-        string $username,
-        string $password,
-        array $options = []
-    ) {
+    public function __construct(string $base_uri, string $username, string $password)
+    {
         $this->base_uri = $base_uri;
-        $this->httpClient = new HttpClientAdapterGuzzle($base_uri, $username, $password, $options);
+        $this->httpClient = new HttpClientAdapterGuzzle($base_uri, $username, $password);
     }
 
     /**

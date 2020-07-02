@@ -80,16 +80,13 @@ class Account implements \JsonSerializable
     /**
      * Provides a CardDavClient object to interact with the server for this account.
      *
-     * @param array $davClientOptions
-     *  Default options for the CardDavClient object.
-     *
      * @return CardDavClient
      *  A CardDavClient object to interact with the server for this account.
      */
-    public function getClient(array $davClientOptions = [], string $baseUrl = null): CardDavClient
+    public function getClient(string $baseUrl = null): CardDavClient
     {
         $clientUri = $baseUrl ?? $this->getUrl();
-        return new CardDavClient($clientUri, $this->username, $this->password, $davClientOptions);
+        return new CardDavClient($clientUri, $this->username, $this->password);
     }
 
     public function getDiscoveryUri(): string

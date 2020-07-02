@@ -42,6 +42,9 @@ class WebDavCollection implements \JsonSerializable
     /** @var Account The CardDAV account this WebDAV resource is associated/accessible with. */
     protected $account;
 
+    /** @var CardDavClient A CardDavClient object for the account's base URI */
+    private $client;
+
     private const PROPNAMES = [
         XmlEN::RESTYPE,
         XmlEN::SYNCTOKEN,
@@ -53,6 +56,8 @@ class WebDavCollection implements \JsonSerializable
     {
         $this->uri = $uri;
         $this->account = $account;
+
+        $this->client = $account->getClient($uri);
     }
 
     protected function getProperties(): array
@@ -85,9 +90,9 @@ class WebDavCollection implements \JsonSerializable
         return $this->account;
     }
 
-    public function getClient(array $davClientOptions = []): CardDavClient
+    public function getClient(): CardDavClient
     {
-        return $this->account->getClient($davClientOptions, $this->uri);
+        return $this->client;
     }
 
     public function getUri(): string

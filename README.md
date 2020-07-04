@@ -23,6 +23,9 @@ Currently, this library has been tested to interoperate with:
 * Nextcloud 18
 * iCloud
 * Google Contacts via CardDAV API (using HTTP Basic Authentication, which is deprecated and will be disabled by Google in the future for OAuth2)
+* Radicale 3
+* Owncloud 10
+* Baïkal 0.7
 
 In theory, it should work with any CardDAV server.
 
@@ -80,8 +83,7 @@ operations.
 ### Sample Applications
 
 For a simple demo application that makes use of this library, see [davshell](https://github.com/mstilkerich/davshell/).
-It shows how to use the library for the discovery and synchronization of addressbooks and is currently the best
-available quick start information.
+It shows how to use the library for the discovery and synchronization of addressbooks.
 
 You can also take a look at my fork of the [Roundcube CardDAV](https://github.com/mstilkerich/rcmcarddav) plugin, which
 also uses this library for the interaction with the CardDAV server.

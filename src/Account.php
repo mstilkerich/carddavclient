@@ -142,21 +142,25 @@ class Account implements \JsonSerializable
      */
     public function findCurrentUserPrincipal(string $contextPathUri): ?string
     {
-        $client = $this->getClient();
-        $result = $client->findProperties($contextPathUri, [XmlEN::CURUSRPRINC]);
+        try {
+            $client = $this->getClient();
+            $result = $client->findProperties($contextPathUri, [XmlEN::CURUSRPRINC]);
 
-        $princUrl = $result[0]["props"][XmlEN::CURUSRPRINC] ?? null;
+            $princUrl = $result[0]["props"][XmlEN::CURUSRPRINC] ?? null;
 
-        if (isset($princUrl)) {
-            $princUrl = CardDavClient::concatUrl($result[0]["uri"], $princUrl);
-            Config::$logger->info("principal URL: $princUrl");
+            if (isset($princUrl)) {
+                $princUrl = CardDavClient::concatUrl($result[0]["uri"], $princUrl);
+                Config::$logger->info("principal URL: $princUrl");
+            }
+        } catch (\Exception $e) {
+            $princUrl = null;
         }
 
         return $princUrl;
     }
 
     /**
-     * Queries the given URI for the current-user-principal property.
+     * Queries the given URI for the CARDDAV:addressbook-home-set property.
      *
      * Property description by RFC6352: The CARDDAV:addressbook-home-set property is meant to allow users to easily find
      * the address book collections owned by the principal. Typically, users will group all the address book collections
@@ -168,22 +172,26 @@ class Account implements \JsonSerializable
      *  The given URI should be (one of) the authenticated user's principal URI(s).
      *
      * @return
-     *  The user's addressbook home URI (string), or false in case of error. The returned URI is suited
+     *  The user's addressbook home URI (string), or null in case of error. The returned URI is suited
      *  to be used for queries with this client (i.e. either a full URI,
      *  or meaningful as relative URI to the base URI of this client).
      */
     public function findAddressbookHome(string $principalUri): ?string
     {
-        $client = $this->getClient();
-        $result = $client->findProperties($principalUri, [XmlEN::ABOOK_HOME]);
+        try {
+            $client = $this->getClient();
+            $result = $client->findProperties($principalUri, [XmlEN::ABOOK_HOME]);
 
-        // FIXME per RFC several home locations could be returned, but we currently only use one. However, it is rather
-        // unlikely that there would be several addressbook home locations.
-        $addressbookHomeUri = $result[0]["props"][XmlEN::ABOOK_HOME][0] ?? null;
+            // FIXME per RFC several home locations could be returned, but we currently only use one. However, it is
+            // rather unlikely that there would be several addressbook home locations.
+            $addressbookHomeUri = $result[0]["props"][XmlEN::ABOOK_HOME][0] ?? null;
 
-        if (isset($addressbookHomeUri)) {
-            $addressbookHomeUri = CardDavClient::concatUrl($result[0]["uri"], $addressbookHomeUri);
-            Config::$logger->info("addressbook home: $addressbookHomeUri");
+            if (isset($addressbookHomeUri)) {
+                $addressbookHomeUri = CardDavClient::concatUrl($result[0]["uri"], $addressbookHomeUri);
+                Config::$logger->info("addressbook home: $addressbookHomeUri");
+            }
+        } catch (\Exception $e) {
+            $addressbookHomeUri = null;
         }
 
         return $addressbookHomeUri;
@@ -196,14 +204,18 @@ class Account implements \JsonSerializable
     // CARDDAV:max-resource-size (maximum size in bytes for an address object of the addressbook collection)
     public function findAddressbooks(string $addressbookHomeUri): array
     {
-        $client = $this->getClient();
-        $abooks = $client->findProperties($addressbookHomeUri, [ XmlEN::RESTYPE ], "1");
+        try {
+            $client = $this->getClient();
+            $abooks = $client->findProperties($addressbookHomeUri, [ XmlEN::RESTYPE ], "1");
 
-        $abooksResult = [];
-        foreach ($abooks as $abook) {
-            if (in_array(XmlEN::RESTYPE_ABOOK, $abook["props"][XmlEN::RESTYPE])) {
-                $abooksResult[] = $abook["uri"];
+            $abooksResult = [];
+            foreach ($abooks as $abook) {
+                if (in_array(XmlEN::RESTYPE_ABOOK, $abook["props"][XmlEN::RESTYPE])) {
+                    $abooksResult[] = $abook["uri"];
+                }
             }
+        } catch (\Exception $e) {
+            $abooksResult = [];
         }
 
         return $abooksResult;

@@ -55,6 +55,7 @@ class Discovery
     public function discoverAddressbooks(Account $account): array
     {
         $uri = $account->getDiscoveryUri();
+        Config::$logger->debug("Starting discovery with input $uri");
         if (!preg_match(';^(([^:]+)://)?(([^/:]+)(:([0-9]+))?)(/?.*)$;', $uri, $match)) {
             throw new \InvalidArgumentException("The account's discovery URI must contain a hostname (got: $uri)");
         }
@@ -89,7 +90,7 @@ class Discovery
         }
 
         // as a fallback, we will last try what the user provided
-        $servers[] = [ "host" => $host, "port" => $port, "scheme" => $protocol];
+        $servers[] = [ "host" => $host, "port" => $port, "scheme" => $protocol, "userinput" => true ];
 
         $addressbooks = array();
 
@@ -99,6 +100,12 @@ class Discovery
             $account->setUrl($baseurl);
 
             $contextpaths = $this->discoverContextPath($server);
+
+            // as a fallback, we will last try what the user provided
+            if (($server["userinput"] ?? false) && (!empty($path))) {
+                $contextpaths[] = $path;
+            }
+
             foreach ($contextpaths as $contextpath) {
                 Config::$logger->debug("Try context path $contextpath");
                 // (3) Attempt a PROPFIND asking for the DAV:current-user-principal property

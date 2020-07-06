@@ -25,9 +25,11 @@ Currently, this library has been tested to interoperate with:
 * Google Contacts via CardDAV API (using HTTP Basic Authentication, which is deprecated and will be disabled by Google in the future for OAuth2)
 * Radicale 3
 * Owncloud 10
-* Baïkal 0.7
+* Baïkal 0.7 (Digest Auth and GSSAPI/Kerberos 5)
 
 In theory, it should work with any CardDAV server.
+
+__Note: For using any authentication mechanism other than Basic, you need to have the php-curl extension installed with support for the corresponding authentication mechanism.__
 
 ## Installation
 

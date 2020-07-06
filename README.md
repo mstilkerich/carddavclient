@@ -20,7 +20,7 @@ This is a library for PHP applications to interact with addressbooks stored on C
 
 Currently, this library has been tested to interoperate with:
 
-* Nextcloud 18
+* Nextcloud 18 (Basic Auth and GSSAPI/Kerberos 5)
 * iCloud
 * Google Contacts via CardDAV API (using HTTP Basic Authentication, which is deprecated and will be disabled by Google in the future for OAuth2)
 * Radicale 3

@@ -179,6 +179,9 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
             if (in_array($authScheme, self::GUZZLE_KNOWN_AUTHSCHEMES)) {
                 $guzzleOptions['auth'] = [$this->username, $this->password, $this->authScheme];
             } elseif (isset(self::$schemeToCurlOpt[$authScheme])) { // will always be true
+                if (isset($_SERVER['KRB5CCNAME'])) {
+                    putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
+                }
                 $guzzleOptions["curl"] = [
                     CURLOPT_HTTPAUTH => self::$schemeToCurlOpt[$authScheme],
                     CURLOPT_USERNAME => $this->username,

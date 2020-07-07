@@ -218,8 +218,7 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
                 if (preg_match("/^([^ =]+)(\s+[^=].*)?$/", $challenge, $matches)) { // filter auth-params
                     $scheme = strtolower($matches[1]);
                     if (
-                        (in_array($scheme, self::GUZZLE_KNOWN_AUTHSCHEMES)
-                          || isset($scheme, self::$schemeToCurlOpt[$scheme]))
+                        (in_array($scheme, self::GUZZLE_KNOWN_AUTHSCHEMES) || isset(self::$schemeToCurlOpt[$scheme]))
                         && (! in_array($scheme, $this->failedAuthSchemes))
                     ) {
                         $schemes[] = $scheme;

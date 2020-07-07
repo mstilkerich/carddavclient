@@ -92,6 +92,8 @@ also uses this library for the interaction with the CardDAV server.
 
 ### API documentation
 
+An overview of the API is availabe [here](doc/README.md).
+
 Documentation for the API can be generated from the source code using [phpDocumentor](https://www.phpdoc.org/).
 
 ```sh

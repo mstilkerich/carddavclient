@@ -55,6 +55,13 @@ class Account implements \JsonSerializable
         $this->baseUrl  = $baseUrl;
     }
 
+    /**
+     * Constructs an Account object from an array representation.
+     *
+     * @param string[] $a An associative array containing the Account attributes.
+     *                    Keys: discoveryUri, username, password, baseUrl with the corresponding meaning from the
+     *                    regular constructor.
+     */
     public static function constructFromArray(array $a): Account
     {
         $requiredProps = [ 'discoveryUri', 'username', 'password' ];
@@ -67,6 +74,11 @@ class Account implements \JsonSerializable
         return new Account($a["discoveryUri"], $a["username"], $a["password"], $a["baseUrl"] ?? null);
     }
 
+    /**
+     * Allows to serialize an Account object to JSON.
+     *
+     * @return (?string)[] Associative array of attributes to serialize.
+     */
     public function jsonSerialize(): array
     {
         return [
@@ -197,11 +209,12 @@ class Account implements \JsonSerializable
         return $addressbookHomeUri;
     }
 
-    // RFC6352: An address book collection MUST report the DAV:collection and CARDDAV:addressbook XML elements in the
-    // value of the DAV:resourcetype property.
-    // CARDDAV:supported-address-data (supported Media Types (e.g. vCard3, vCard4) of an addressbook collection)
-    // CARDDAV:addressbook-description (property of an addressbook collection)
-    // CARDDAV:max-resource-size (maximum size in bytes for an address object of the addressbook collection)
+    /**
+     * Finds the addressbooks in an addressbook-home location.
+     *
+     * @param string $addressbookHomeUri The/An addressbook home URI of the principal.
+     * @return string[] An array of URIs of the found addressbooks.
+     */
     public function findAddressbooks(string $addressbookHomeUri): array
     {
         try {
@@ -210,6 +223,8 @@ class Account implements \JsonSerializable
 
             $abooksResult = [];
             foreach ($abooks as $abook) {
+                // RFC6352: An address book collection MUST report the DAV:collection and CARDDAV:addressbook XML
+                // elements in the value of the DAV:resourcetype property.
                 if (in_array(XmlEN::RESTYPE_ABOOK, $abook["props"][XmlEN::RESTYPE])) {
                     $abooksResult[] = $abook["uri"];
                 }

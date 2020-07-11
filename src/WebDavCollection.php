@@ -119,6 +119,14 @@ class WebDavCollection implements \JsonSerializable
         return [ 'body' => $body ];
     }
 
+    /**
+     * Provides the list of property names that should be requested upon call of refreshProperties().
+     *
+     * @return string[] A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
+     *
+     * @see self::getProperties()
+     * @see self::refreshProperties()
+     */
     protected function getNeededCollectionPropertyNames(): array
     {
         return self::PROPNAMES;

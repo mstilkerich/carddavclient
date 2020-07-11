@@ -123,12 +123,26 @@ class AddressbookCollection extends WebDavCollection
         return $response;
     }
 
+    /**
+     * Deletes a VCard from the addressbook.
+     *
+     * @param string $uri The URI of the VCard to be deleted.
+     */
     public function deleteCard(string $uri): void
     {
         $client = $this->getClient();
         $client->deleteResource($uri);
     }
 
+    /**
+     * Creates a new VCard in the addressbook.
+     *
+     * If the given VCard lacks the mandatory UID property, one will be generated. If the server provides an add-member
+     * URI, the new card will be POSTed to that URI. Otherwise, the function attempts to store the card do a URI whose
+     * last path component (filename) is derived from the UID of the VCard.
+     *
+     * @param VCard $vcard The VCard to be stored.
+     */
     public function createCard(VCard $vcard): array
     {
         $props = $this->getProperties();
@@ -163,6 +177,19 @@ class AddressbookCollection extends WebDavCollection
         return $newResInfo;
     }
 
+    /**
+     * Updates an existing VCard of the addressbook.
+     *
+     * The update request to the server will be made conditional depending on that the provided ETag value of the card
+     * matches that on the server, meaning that the card has not been changed on the server in the meantime.
+     *
+     * @param string $uri The URI of the card to update.
+     * @param VCard $vcard The updated VCard to be stored.
+     * @param string $etag The ETag of the card that was originally retrieved and modified.
+     * @return ?string Returns the ETag of the updated card if provided by the server, null otherwise. If null is
+     *                 returned, it must be assumed that the server stored the card with modifications and the card
+     *                 should be read back from the server (this is a good idea anyway).
+     */
     public function updateCard(string $uri, VCard $vcard, string $etag): ?string
     {
         // Assert validity of the Card for CardDAV, including valid UID property
@@ -174,6 +201,12 @@ class AddressbookCollection extends WebDavCollection
         return $etag;
     }
 
+
+    /**
+     * Validates a VCard before sending it to a CardDAV server.
+     *
+     * @param VCard $vcard The VCard to be validated.
+     */
     protected function validateCard(VCard $vcard): void
     {
         $hasError = false;
@@ -200,6 +233,14 @@ class AddressbookCollection extends WebDavCollection
         }
     }
 
+    /**
+     * Provides the list of property names that should be requested upon call of refreshProperties().
+     *
+     * @return string[] A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
+     *
+     * @see parent::getProperties()
+     * @see parent::refreshProperties()
+     */
     protected function getNeededCollectionPropertyNames(): array
     {
         $parentPropNames = parent::getNeededCollectionPropertyNames();

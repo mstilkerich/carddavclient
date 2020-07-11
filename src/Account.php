@@ -136,7 +136,7 @@ class Account implements \JsonSerializable
      * @param string $contextPathUri
      *  The given URI should typically be a context path per the terminology of RFC6764.
      *
-     * @return
+     * @return ?string
      *  The principal URI (string), or NULL in case of error. The returned URI is suited to be used for queries with
      *  this client (i.e. either a full URI, or meaningful as relative URI to the base URI of this client).
      */
@@ -171,7 +171,7 @@ class Account implements \JsonSerializable
      * @param string $principalUri
      *  The given URI should be (one of) the authenticated user's principal URI(s).
      *
-     * @return
+     * @return ?string
      *  The user's addressbook home URI (string), or null in case of error. The returned URI is suited
      *  to be used for queries with this client (i.e. either a full URI,
      *  or meaningful as relative URI to the base URI of this client).

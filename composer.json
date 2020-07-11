@@ -39,7 +39,8 @@
 		"phpcompatibility/php-compatibility": "*",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.6.0",
         "phpunit/phpunit": "^8",
-        "wa72/simplelogger": "^1.1"
+        "wa72/simplelogger": "^1.1",
+        "phpstan/phpstan": "^0.12.32"
     },
 	"prefer-stable" : true
 }

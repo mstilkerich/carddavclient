@@ -107,7 +107,7 @@ class AddressbookCollection extends WebDavCollection
     /**
      * Retrieves an address object from the addressbook collection and parses it to a VObject.
      *
-     * @param $uri string
+     * @param string $uri
      *  URI of the address object to fetch
      * @return array
      *  Associative array with keys

@@ -4,7 +4,7 @@ all: stylecheck staticanalysis doc
 
 verification: staticanalyses tests
 
-staticanalyses: stylecheck phpcompatcheck psalmanalysis
+staticanalyses: stylecheck phpcompatcheck psalmanalysis phpstan
 
 stylecheck:
 	vendor/bin/phpcs --colors --standard=PSR12 src/ tests/
@@ -14,6 +14,9 @@ phpcompatcheck:
 
 psalmanalysis:
 	vendor/bin/psalm
+
+phpstan:
+	vendor/bin/phpstan analyse
 
 doc:
 	rm -r ~/www/carddavclient/*

@@ -31,6 +31,7 @@ namespace MStilkerich\CardDavClient\Services;
 
 use MStilkerich\CardDavClient\{AddressbookCollection, CardDavClient, Config};
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+use MStilkerich\CardDavClient\XmlElements\{ResponseStatus, ResponsePropstat};
 
 class Sync
 {
@@ -145,29 +146,35 @@ class Sync
         $syncResult = new SyncResult($multistatus->synctoken);
 
         foreach ($multistatus->responses as $response) {
-            $respUri = $response->href;
+            if ($response instanceof ResponseStatus) {
+                $respStatus = $response->status;
 
-            if (CardDavClient::compareUrlPaths($respUri, $abookUrl)) {
-                // If the result set is truncated, the response MUST use status code 207 (Multi-Status), return a
-                // DAV:multistatus response body, and indicate a status of 507 (Insufficient Storage) for the
-                // request-URI.
-                if (isset($response->status) && stripos($response->status, " 507 ") !== false) {
-                    $syncResult->syncAgain = true;
-                } else {
-                    Config::$logger->debug("Ignoring response on addressbook itself");
+                foreach ($response->hrefs as $respUri) {
+                    if (CardDavClient::compareUrlPaths($respUri, $abookUrl)) {
+                        // If the result set is truncated, the response MUST use status code 207 (Multi-Status), return
+                        // a DAV:multistatus response body, and indicate a status of 507 (Insufficient Storage) for the
+                        // request-URI.
+                        if (stripos($respStatus, " 507 ") !== false) {
+                            $syncResult->syncAgain = true;
+                        } else {
+                            Config::$logger->debug("Ignoring response on addressbook itself");
+                        }
+                    } elseif (stripos($respStatus, " 404 ") !== false) {
+                        // For members that have been removed, the DAV:response MUST contain one DAV:status with a value
+                        // set to "404 Not Found" and MUST NOT contain any DAV:propstat element.
+                        $syncResult->deletedObjects[] = $respUri;
+                    }
                 }
+            } elseif ($response instanceof ResponsePropstat) {
+                $respUri = $response->href;
 
-            // For members that have been removed, the DAV:response MUST contain one DAV:status with a value set to
-            // "404 Not Found" and MUST NOT contain any DAV:propstat element.
-            } elseif (isset($response->status) && stripos($response->status, " 404 ") !== false) {
-                $syncResult->deletedObjects[] = $respUri;
-
-            // For members that have changed (i.e., are new or have had their mapped resource modified), the
-            // DAV:response MUST contain at least one DAV:propstat element and MUST NOT contain any DAV:status
-            // element.
-            } elseif (!empty($response->propstat)) {
+                // For members that have changed (i.e., are new or have had their mapped resource modified), the
+                // DAV:response MUST contain at least one DAV:propstat element and MUST NOT contain any DAV:status
+                // element.
                 foreach ($response->propstat as $propstat) {
-                    if (isset($propstat->status) && stripos($propstat->status, " 200 ") !== false) {
+                    if (CardDavClient::compareUrlPaths($respUri, $abookUrl)) {
+                        Config::$logger->debug("Ignoring response on addressbook itself");
+                    } elseif (stripos($propstat->status, " 200 ") !== false) {
                         $syncResult->changedObjects[] = [
                             'uri' => $respUri,
                             'etag' => $propstat->prop->props[XmlEN::GETETAG]

@@ -21,27 +21,88 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-/**
- * Class to represent XML DAV:response elements as PHP objects.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
 
-class Response
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+use MStilkerich\CardDavClient\Exception\XmlParseException;
+
+/**
+ * Class to represent XML DAV:response elements as PHP objects.
+ *
+ * From RFC 4918:
+ *
+ * Each ’response’ element MUST have an ’href’ element to identify the resource.
+ * A Multi-Status response uses one out of two distinct formats for representing the status:
+ *
+ * 1. A ’status’ element as child of the ’response’ element indicates the status of the message execution for the
+ * identified resource as a whole (for instance, see Section 9.6.2). Some method definitions provide information about
+ * specific status codes clients should be prepared to see in a response. However, clients MUST be able to handle other
+ * status codes, using the generic rules defined in Section 10 of [RFC2616].
+ *
+ * 2. For PROPFIND and PROPPATCH, the format has been extended using the ’propstat’ element instead of ’status’,
+ * providing information about individual properties of a resource. This format is specific to PROPFIND and PROPPATCH,
+ * and is described in detail in Sections 9.1 and 9.2.
+ *
+ * The ’href’ element contains an HTTP URL pointing to a WebDAV resource when used in the ’response’ container. A
+ * particular ’href’ value MUST NOT appear more than once as the child of a ’response’ XML element under a ’multistatus’
+ * XML element. This requirement is necessary in order to keep processing costs for a response to linear time.
+ *
+ * Essentially, this prevents having to search in order to group together all the responses by ’href’. There are,
+ * however, no requirements regarding ordering based on ’href’ values. The optional precondition/postcondition element
+ * and ’responsedescription’ text can provide additional information about this resource relative to the request or
+ * result.
+ *
+ * <!ELEMENT response (href, ((href*, status)|(propstat+)), error?, responsedescription? , location?) >
+ *
+ * @psalm-immutable
+ */
+abstract class Response implements \Sabre\Xml\XmlDeserializable
 {
-    /** @var ?string MUST contain a URI or a relative reference. */
-    public $href;
+    public static function xmlDeserialize(\Sabre\Xml\Reader $reader): Response
+    {
+        $hrefs = [];
+        $propstat = [];
+        $status = null;
 
-    /** @var array */
-    public $propstat = [];
+        $children = $reader->parseInnerTree();
+        if (is_array($children)) {
+            foreach ($children as $child) {
+                if ($child["value"] instanceof Propstat) {
+                    $propstat[] = $child["value"];
+                } elseif (strcasecmp($child["name"], XmlEN::HREF) == 0) {
+                    $hrefs[] = $child["value"];
+                } elseif (strcasecmp($child["name"], XmlEN::STATUS) == 0) {
+                    if (isset($status)) {
+                        throw new XmlParseException("DAV:response contains multiple DAV:status children");
+                    }
+                    $status = $child["value"];
+                }
+            }
+        }
 
-    /** @var ?string Holds a single HTTP status-line. */
-    public $status;
+        if (count($hrefs) == 0) {
+            throw new XmlParseException("DAV:response contains no DAV:href child");
+        }
 
-    // FIXME DAV:error might also be needed
+        if (isset($status)) {
+            if (count($propstat) > 0) {
+                throw new XmlParseException("DAV:response contains both DAV:status and DAV:propstat children");
+            }
+
+            return new ResponseStatus($hrefs, $status);
+        } else {
+            if (count($propstat) == 0) {
+                throw new XmlParseException("DAV:response contains neither DAV:status nor DAV:propstat children");
+            }
+            if (count($hrefs) > 1) {
+                throw new XmlParseException("Propstat-type DAV:response contains multiple DAV:href children");
+            }
+
+            return new ResponsePropstat($hrefs[0], $propstat);
+        }
+    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

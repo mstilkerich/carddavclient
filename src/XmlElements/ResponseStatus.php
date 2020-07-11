@@ -26,26 +26,30 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
 
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+use MStilkerich\CardDavClient\Exception\XmlParseException;
+
 /**
- * Class to represent XML DAV:prop elements as PHP objects.
+ * Class to represent XML DAV:response elements with status children as PHP objects.
  *
  * @psalm-immutable
  */
-class Prop implements \Sabre\Xml\XmlDeserializable
+class ResponseStatus extends Response
 {
-    /** @var array */
-    public $props = [];
+    /** @var string[] MUST contain a URI or a relative reference. */
+    public $hrefs;
 
-    public static function xmlDeserialize(\Sabre\Xml\Reader $reader)
+    /** @var string $status */
+    public $status;
+
+    /**
+     * @param string[] $hrefs
+     * @param string $status
+     */
+    public function __construct(array $hrefs, string $status)
     {
-        $prop = new self();
-        $children = $reader->parseInnerTree();
-        if (is_array($children)) {
-            foreach ($children as $child) {
-                $prop->props[$child["name"]] = $child["value"];
-            }
-        }
-        return $prop;
+        $this->hrefs = $hrefs;
+        $this->status = $status;
     }
 }
 

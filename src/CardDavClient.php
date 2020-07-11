@@ -33,6 +33,7 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
 use MStilkerich\CardDavClient\XmlElements\Multistatus;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\XmlElements\Deserializers;
+use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /*
 Other needed features:
@@ -231,6 +232,9 @@ class CardDavClient
         return [ 'uri' => $uri, 'etag' => $etag ];
     }
 
+    /**
+     * @psalm-return Multistatus<XmlElements\ResponsePropstat>
+     */
     public function multiGet(
         string $addressbookUri,
         array $requestedUris,
@@ -276,7 +280,7 @@ class CardDavClient
             "body" => $body
         ]);
 
-        return self::checkAndParseXMLMultistatus($response);
+        return self::checkAndParseXMLMultistatus($response, XmlElements\ResponsePropstat::class);
     }
 
     // $props is either a single property or an array of properties
@@ -307,20 +311,26 @@ class CardDavClient
             ]
         );
 
-        $multistatus = self::checkAndParseXMLMultistatus($result["response"]);
+        $multistatus = self::checkAndParseXMLMultistatus($result["response"], XmlElements\ResponsePropstat::class);
 
         $resultProperties = [];
 
         foreach ($multistatus->responses as $response) {
+            $href = $response->href;
+
             // There may have been redirects involved in querying the properties, particularly during addressbook
             // discovery. They may even point to a different server than the original request URI. Return absolute URL
             // in the responses to allow the caller to know the actual location on that the properties where reported
-            $respUri = self::concatUrl($result["location"], $response->href);
+            $respUri = self::concatUrl($result["location"], $href);
 
             if (!empty($response->propstat)) {
                 foreach ($response->propstat as $propstat) {
                     if (isset($propstat->status) && stripos($propstat->status, " 200 ") !== false) {
-                        $resultProperties[] = [ 'uri' => $respUri, 'props' => $propstat->prop->props ];
+                        if (isset($propstat->prop)) {
+                            $resultProperties[] = [ 'uri' => $respUri, 'props' => $propstat->prop->props ];
+                        } else {
+                            throw new \Exception("Server provided propstat without prop element");
+                        }
                     }
                 }
             }
@@ -355,8 +365,15 @@ class CardDavClient
         }
     }
 
-    private static function checkAndParseXMLMultistatus(Psr7Response $davReply): Multistatus
-    {
+    /**
+     * @template RT of XmlElements\Response
+     * @psalm-param class-string<RT> $responseType
+     * @return MultiStatus<RT>
+     */
+    private static function checkAndParseXMLMultistatus(
+        Psr7Response $davReply,
+        string $responseType = XmlElements\Response::class
+    ): Multistatus {
         $multistatus = null;
 
         self::assertHttpStatus($davReply, 207, 207, "Expected Multistatus");
@@ -366,7 +383,13 @@ class CardDavClient
         }
 
         if (!($multistatus instanceof Multistatus)) {
-            throw new \Exception("Response is not the expected Multistatus response.");
+            throw new XmlParseException("Response is not the expected Multistatus response.");
+        }
+
+        foreach ($multistatus->responses as $response) {
+            if (!($response instanceof $responseType)) {
+                throw new XmlParseException("Multistatus contains unexpected responses (Expected: $responseType)");
+            }
         }
 
         return $multistatus;
@@ -432,6 +455,8 @@ class CardDavClient
         $service->namespaceMap = self::MAP_NS2PREFIX;
         $service->elementMap = [
             XmlEN::MULTISTATUS => XmlElements\Multistatus::class,
+            XmlEN::RESPONSE => XmlElements\Response::class,
+            XmlEN::PROPSTAT => XmlElements\Propstat::class,
             XmlEN::PROP => XmlElements\Prop::class,
             XmlEN::ABOOK_HOME => [ Deserializers::class, 'deserializeHrefMulti' ],
             XmlEN::RESTYPE => '\Sabre\Xml\Deserializer\enum',
@@ -439,9 +464,6 @@ class CardDavClient
             XmlEN::ADD_MEMBER => [ Deserializers::class, 'deserializeHrefSingle' ],
             XmlEN::CURUSRPRINC => [ Deserializers::class, 'deserializeHrefSingle' ]
         ];
-
-        $service->mapValueObject(XmlEN::RESPONSE, XmlElements\Response::class);
-        $service->mapValueObject(XmlEN::PROPSTAT, XmlElements\Propstat::class);
 
         return $service;
     }

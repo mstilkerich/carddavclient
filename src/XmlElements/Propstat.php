@@ -21,23 +21,68 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Class to represent XML DAV:propstat elements as PHP objects.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
 
-class Propstat
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+use MStilkerich\CardDavClient\Exception\XmlParseException;
+
+/**
+ * Class to represent XML DAV:propstat elements as PHP objects.
+ *
+ * From RFC 4918:
+ *
+ * The propstat XML element MUST contain one prop XML element and one status XML element. The contents of the prop XML
+ * element MUST only list the names of properties to which the result in the status element applies. The optional
+ * precondition/ postcondition element and ’responsedescription’ text also apply to the properties named in ’prop’.
+ *
+ * <!ELEMENT propstat (prop, status, error?, responsedescription?) >
+ *
+ * @psalm-immutable
+ */
+class Propstat implements \Sabre\Xml\XmlDeserializable
 {
-    /** @var ?string Holds a single HTTP status-line. */
+    /** @var string Holds a single HTTP status-line. */
     public $status;
 
-    /** @var ?Prop Contains properties related to a resource. */
+    /** @var Prop Contains properties related to a resource. */
     public $prop;
 
-    // FIXME DAV:error might also be needed
+    public function __construct(string $status, Prop $prop)
+    {
+        $this->status = $status;
+        $this->prop = $prop;
+    }
+
+    public static function xmlDeserialize(\Sabre\Xml\Reader $reader): Propstat
+    {
+        $prop = null;
+        $status = null;
+
+        $children = $reader->parseInnerTree();
+        if (is_array($children)) {
+            foreach ($children as $child) {
+                if ($child["value"] instanceof Prop) {
+                    if (isset($prop)) {
+                        throw new XmlParseException("DAV:propstat element contains multiple DAV:prop children");
+                    }
+                    $prop = $child["value"];
+                } elseif (strcasecmp($child["name"], XmlEN::STATUS) == 0) {
+                    if (isset($status)) {
+                        throw new XmlParseException("DAV:propstat element contains multiple DAV:status children");
+                    }
+                    $status = $child["value"];
+                }
+            }
+        }
+
+        if (!isset($status) || !isset($prop)) {
+            throw new XmlParseException("DAV:propstat element must have ONE DAV:status and one DAV:prop child");
+        }
+
+        return new self($status, $prop);
+    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

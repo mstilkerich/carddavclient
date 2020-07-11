@@ -21,12 +21,6 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Class Deserializers.
- *
- * This class contains static deserializer functions to be used with Sabre/XML.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
@@ -34,6 +28,11 @@ namespace MStilkerich\CardDavClient\XmlElements;
 use Sabre\Xml\Reader as Reader;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
+/**
+ * Class Deserializers.
+ *
+ * This class contains static deserializer functions to be used with Sabre/XML.
+ */
 class Deserializers
 {
     public static function deserializeHrefSingle(Reader $reader): ?string
@@ -78,7 +77,7 @@ class Deserializers
      *  @return array
      *   Array with the element names of the supported reports.
      */
-    public static function deserializeSupportedReportSet(Reader $reader)
+    public static function deserializeSupportedReportSet(Reader $reader): array
     {
         $srs = [];
         $supportedReports = $reader->parseInnerTree();

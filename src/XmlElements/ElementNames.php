@@ -21,6 +21,10 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+declare(strict_types=1);
+
+namespace MStilkerich\CardDavClient\XmlElements;
+
 /**
  * Class ElementNames.
  *
@@ -28,11 +32,6 @@
  * element names used inside this library in clark notation, i.e. including the namespace
  * as a braced prefix.
  */
-
-declare(strict_types=1);
-
-namespace MStilkerich\CardDavClient\XmlElements;
-
 class ElementNames
 {
     public const NSDAV     = 'DAV:';
@@ -67,6 +66,7 @@ class ElementNames
 
     public const MULTISTATUS = "{" . self::NSDAV . "}multistatus";
     public const RESPONSE = "{" . self::NSDAV . "}response";
+    public const STATUS = "{" . self::NSDAV . "}status";
     public const PROPFIND = "{" . self::NSDAV . "}propfind";
     public const PROPSTAT = "{" . self::NSDAV . "}propstat";
     public const PROP = "{" . self::NSDAV . "}prop";

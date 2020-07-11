@@ -21,32 +21,16 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * Exception type to indicate that a parsed XML did not comply with the requirements described in its RFC definition.
+ */
 
 declare(strict_types=1);
 
-namespace MStilkerich\CardDavClient\XmlElements;
+namespace MStilkerich\CardDavClient\Exception;
 
-/**
- * Class to represent XML DAV:prop elements as PHP objects.
- *
- * @psalm-immutable
- */
-class Prop implements \Sabre\Xml\XmlDeserializable
+class XmlParseException extends \Exception
 {
-    /** @var array */
-    public $props = [];
-
-    public static function xmlDeserialize(\Sabre\Xml\Reader $reader)
-    {
-        $prop = new self();
-        $children = $reader->parseInnerTree();
-        if (is_array($children)) {
-            foreach ($children as $child) {
-                $prop->props[$child["name"]] = $child["value"];
-            }
-        }
-        return $prop;
-    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

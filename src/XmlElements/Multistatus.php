@@ -21,38 +21,62 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Class to represent XML DAV:multistatus elements as PHP objects.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
 
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+use MStilkerich\CardDavClient\Exception\XmlParseException;
 
+/**
+ * Class to represent XML DAV:multistatus elements as PHP objects. (RFC 4918)
+ *
+ * From RFC 4918:
+ *
+ * The ’multistatus’ root element holds zero or more ’response’ elements in any order, each with information about an
+ * individual resource.
+ *
+ * RFC 6578 adds the sync-token child element:
+ * <!ELEMENT multistatus (response*, responsedescription?, sync-token?) >
+ *
+ * @psalm-immutable
+ * @template RT of Response
+ */
 class Multistatus implements \Sabre\Xml\XmlDeserializable
 {
-    /** @var ?string */
+    /** @var ?string $synctoken */
     public $synctoken;
 
-    /** @var array */
+    /** @var RT[] $responses */
     public $responses = [];
+
+    /**
+     * @param RT[] $responses
+     * @param ?string $synctoken
+     */
+    public function __construct(array $responses, ?string $synctoken)
+    {
+        $this->responses = $responses;
+        $this->synctoken = $synctoken;
+    }
 
     public static function xmlDeserialize(\Sabre\Xml\Reader $reader): Multistatus
     {
-        $multistatus = new self();
+        $responses = [];
+        $synctoken = null;
+
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
             foreach ($children as $child) {
                 if ($child["value"] instanceof Response) {
-                    $multistatus->responses[] = $child["value"];
+                    $responses[] = $child["value"];
                 } elseif ($child["name"] === XmlEN::SYNCTOKEN) {
-                    $multistatus->synctoken = $child["value"];
+                    $synctoken = $child["value"];
                 }
             }
         }
-        return $multistatus;
+
+        return new self($responses, $synctoken);
     }
 }
 

@@ -81,7 +81,7 @@ final class AddressbookCollectionTest extends TestCase
         [ 'etag' => $etagGet, 'vcard' => $vcardGet ] = $abook->getCard($cardUri);
 
         // insertCards etag return is optional
-        if (isset($cardETag)) {
+        if (!empty($cardETag)) {
             $this->assertEquals($cardETag, $etagGet);
         }
 

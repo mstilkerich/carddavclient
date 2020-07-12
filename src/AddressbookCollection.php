@@ -142,6 +142,10 @@ class AddressbookCollection extends WebDavCollection
      * last path component (filename) is derived from the UID of the VCard.
      *
      * @param VCard $vcard The VCard to be stored.
+     * @return string[]
+     *  Associative array with keys
+     *   - uri (string): URI of the new resource if the request was successful
+     *   - etag (string): Entity tag of the created resource if returned by server, otherwise empty string.
      */
     public function createCard(VCard $vcard): array
     {

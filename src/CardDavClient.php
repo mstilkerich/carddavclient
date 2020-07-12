@@ -182,10 +182,10 @@ class CardDavClient
      *
      * @param bool $post If true
      *
-     * @return array
+     * @return string[]
      *  Associative array with keys
      *   - uri (string): URI of the new resource if the request was successful
-     *   - etag (?string): Entity tag of the created resource if returned by server, or null.
+     *   - etag (string): Entity tag of the created resource if returned by server, otherwise empty string.
      */
     public function createResource(string $body, string $suggestedUri, bool $post = false): array
     {

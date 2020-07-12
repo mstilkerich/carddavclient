@@ -26,6 +26,7 @@ Currently, this library has been tested to interoperate with:
 * Radicale 3
 * Owncloud 10
 * Baïkal 0.7 (Digest Auth and GSSAPI/Kerberos 5)
+* Davical 1.1.7
 
 In theory, it should work with any CardDAV server.
 

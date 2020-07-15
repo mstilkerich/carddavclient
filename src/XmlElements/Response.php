@@ -87,9 +87,10 @@ abstract class Response implements \Sabre\Xml\XmlDeserializable
         }
 
         if (isset($status)) {
-            if (count($propstat) > 0) {
-                throw new XmlParseException("DAV:response contains both DAV:status and DAV:propstat children");
-            }
+            // Disable this exception for now as Sabre/DAV always inserts a propstat element to a response element
+            //if (count($propstat) > 0) {
+            //    throw new XmlParseException("DAV:response contains both DAV:status and DAV:propstat children");
+            //}
 
             return new ResponseStatus($hrefs, $status);
         } else {

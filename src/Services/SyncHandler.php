@@ -43,14 +43,19 @@ interface SyncHandler
     /**
      * This method is called for each changed address object, including new address objects.
      *
+     * In case an error occurs attempting to retrieve or to parse the address data for an URI that the server reported
+     * as changed, this method is invoked with a null $card parameter. This allows the client to know that there was a
+     * change that is missing from the sync, and to handle or ignore it as it sees fit.
+     *
      * @param string $uri
      *  URI of the changed or added address object.
      * @param string $etag
      *  ETag of the retrieved version of the address object.
-     * @param VCard $card
-     *  A (partial) VCard containing (at least, if available)the requested VCard properties.
+     * @param ?VCard $card
+     *  A (partial) VCard containing (at least, if available)the requested VCard properties. Null in case an error
+     *  occurred retrieving or parsing the VCard retrieved from the server.
      */
-    public function addressObjectChanged(string $uri, string $etag, VCard $card): void;
+    public function addressObjectChanged(string $uri, string $etag, ?VCard $card): void;
 
     /**
      * This method is called for each deleted address object.

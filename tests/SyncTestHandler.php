@@ -76,10 +76,12 @@ final class SyncTestHandler implements SyncHandler
         $this->cacheState = $cacheState;
     }
 
-    public function addressObjectChanged(string $uri, string $etag, VCard $card): void
+    public function addressObjectChanged(string $uri, string $etag, ?VCard $card): void
     {
         $this->opSequence .= "C";
         $this->cacheState[$uri] = $etag; // need the relative URI as reported by the server here
+
+        Assert::assertNotNull($card, "VCard data for $uri could not be retrieved/parsed");
 
         $uri = TestUtils::normalizeUri($this->abook, $uri);
 

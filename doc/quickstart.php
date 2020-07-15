@@ -45,24 +45,28 @@ class StdoutLogger extends AbstractLogger
 
 class EchoSyncHandler implements SyncHandler
 {
-	public function addressObjectChanged(string $uri, string $etag, VCard $card): void
-	{
-		echo "   +++ Changed or new card $uri (ETag $etag): " . $card->FN . "\n";
-	}
+    public function addressObjectChanged(string $uri, string $etag, ?VCard $card): void
+    {
+        if (isset($card)) {
+            echo "   +++ Changed or new card $uri (ETag $etag): " . $card->FN . "\n";
+        } else {
+            echo "   +++ Changed or new card $uri (ETag $etag): Error: failed to retrieve/parse card's address data\n";
+        }
+    }
 
     public function addressObjectDeleted(string $uri): void
-	{
-		echo "   --- Deleted Card $uri\n";
-	}
+    {
+        echo "   --- Deleted Card $uri\n";
+    }
 
-	public function getExistingVCardETags(): array
-	{
-		return [];
-	}
+    public function getExistingVCardETags(): array
+    {
+        return [];
+    }
 
-	public function finalizeSync(): void
-	{
-	}
+    public function finalizeSync(): void
+    {
+    }
 }
 
 $log = new StdoutLogger();
@@ -79,23 +83,23 @@ $account = new Account(DISCOVERY_URI, USERNAME, PASSWORD);
 
 // Discover the addressbooks for that account
 try {
-	$log->notice("Attempting discovery of addressbooks");
+    $log->notice("Attempting discovery of addressbooks");
 
-	$discover = new Discovery();
-	$abooks = $discover->discoverAddressbooks($account);
+    $discover = new Discovery();
+    $abooks = $discover->discoverAddressbooks($account);
 } catch (\Exception $e) {
-	$log->error("!!! Error during addressbook discovery: " . $e->getMessage());
-	exit(1);
+    $log->error("!!! Error during addressbook discovery: " . $e->getMessage());
+    exit(1);
 }
 
 $log->notice(">>> " . count($abooks) . " addressbooks discovered");
 foreach ($abooks as $abook) {
-	$log->info(">>> - $abook");
+    $log->info(">>> - $abook");
 }
 
 if (count($abooks) <= 0) {
-	$log->warning("Cannot proceed because no addressbooks were found - exiting");
-	exit(0);
+    $log->warning("Cannot proceed because no addressbooks were found - exiting");
+    exit(0);
 }
 //////////////////////////////////////////////////////////
 // THE FOLLOWING SHOWS HOW TO PERFORM A SYNCHRONIZATION //
@@ -127,63 +131,65 @@ $log->notice(">>> Re-Sync completed, new sync token is $lastSyncToken");
 // generate and insert automatically upon storing a new card lacking this property
 
 try {
-	$vcard =  new VCard([
-		'FN'  => 'John Doe',
-		'N'   => ['Doe', 'John', '', '', ''],
-	]);
+    $vcard =  new VCard([
+        'FN'  => 'John Doe',
+        'N'   => ['Doe', 'John', '', '', ''],
+    ]);
 
 
-	$log->notice("Attempting to create a new card on the server");
-	[ 'uri' => $cardUri, 'etag' => $cardETag ] = $abook->createCard($vcard);
-	$log->notice(">>> New card created at $cardUri with ETag $cardETag");
+    $log->notice("Attempting to create a new card on the server");
+    [ 'uri' => $cardUri, 'etag' => $cardETag ] = $abook->createCard($vcard);
+    $log->notice(">>> New card created at $cardUri with ETag $cardETag");
 
-	// now a sync should return that card as well - lets see!
-	$log->notice("Performing followup sync");
-	$lastSyncToken = $syncmgr->synchronize($abook, $synchandler, [ "FN" ], $lastSyncToken);
-	$log->notice(">>> Re-Sync completed, new sync token is $lastSyncToken");
+    // now a sync should return that card as well - lets see!
+    $log->notice("Performing followup sync");
+    $lastSyncToken = $syncmgr->synchronize($abook, $synchandler, [ "FN" ], $lastSyncToken);
+    $log->notice(">>> Re-Sync completed, new sync token is $lastSyncToken");
 
-	// add an EMAIL address to the card and update the card on the server
-	$vcard->add(
-		'EMAIL',
-		'johndoe@example.org',
-		[
-			'type' => ['home'],
-			'pref' => 1,
-		]
-	);
+    // add an EMAIL address to the card and update the card on the server
+    $vcard->add(
+        'EMAIL',
+        'johndoe@example.org',
+        [
+            'type' => ['home'],
+            'pref' => 1,
+        ]
+    );
 
-	// we pass the ETag of our local copy of the card to updateCard. This
-	// will make the update operation fail if the card has changed on the
-	// server since we fetched our local copy
-	$log->notice("Attempting to update the previously created card at $cardUri");
-	$cardETag = $abook->updateCard($cardUri, $vcard, $cardETag);
-	$log->notice(">>> Card updated, new ETag: $cardETag");
+    // we pass the ETag of our local copy of the card to updateCard. This
+    // will make the update operation fail if the card has changed on the
+    // server since we fetched our local copy
+    $log->notice("Attempting to update the previously created card at $cardUri");
+    $cardETag = $abook->updateCard($cardUri, $vcard, $cardETag);
+    $log->notice(">>> Card updated, new ETag: $cardETag");
 
-	// again, a sync should report that the card was updated
-	$log->notice("Performing followup sync");
-	$lastSyncToken = $syncmgr->synchronize($abook, $synchandler, [ "FN" ], $lastSyncToken);
-	$log->notice(">>> Re-Sync completed, new sync token is $lastSyncToken");
+    // again, a sync should report that the card was updated
+    $log->notice("Performing followup sync");
+    $lastSyncToken = $syncmgr->synchronize($abook, $synchandler, [ "FN" ], $lastSyncToken);
+    $log->notice(">>> Re-Sync completed, new sync token is $lastSyncToken");
 
-	// finally, delete the card
-	$log->notice("Deleting card at $cardUri");
-	$abook->deleteCard($cardUri);
-	// now, the sync should report the card was deleted
-	$log->notice("Performing followup sync");
-	$lastSyncToken = $syncmgr->synchronize($abook, $synchandler, [ "FN" ], $lastSyncToken);
-	$log->notice(">>> Re-Sync completed, new sync token is $lastSyncToken");
+    // finally, delete the card
+    $log->notice("Deleting card at $cardUri");
+    $abook->deleteCard($cardUri);
+    // now, the sync should report the card was deleted
+    $log->notice("Performing followup sync");
+    $lastSyncToken = $syncmgr->synchronize($abook, $synchandler, [ "FN" ], $lastSyncToken);
+    $log->notice(">>> Re-Sync completed, new sync token is $lastSyncToken");
 
-	$log->notice("All done, good bye");
+    $log->notice("All done, good bye");
 } catch (\Exception $e) {
-	$log->error("Error while making changes to the addressbook: " . $e->getMessage());
-	$log->error("Manual cleanup (deletion of the John Doe card) may be needed");
+    $log->error("Error while making changes to the addressbook: " . $e->getMessage());
+    $log->error("Manual cleanup (deletion of the John Doe card) may be needed");
 
-	// do one final attempt to delete the card
-	try {
-		if (isset($cardUri)) {
-			$abook->deleteCard($cardUri);
-		}
-	} catch (\Exception $e) {
-	}
+    // do one final attempt to delete the card
+    try {
+        if (isset($cardUri)) {
+            $abook->deleteCard($cardUri);
+        }
+    } catch (\Exception $e) {
+    }
 
-	exit(1);
+    exit(1);
 }
+
+// vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

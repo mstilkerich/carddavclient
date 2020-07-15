@@ -52,6 +52,41 @@ class Sync
         array $requestedVCardProps = [],
         string $prevSyncToken = ""
     ): string {
+        // just in case - never sync more than this number of batches in one call
+        $batchLimit = 10;
+
+        do {
+            $syncResult = $this->synchronizeOneBatch($abook, $handler, $requestedVCardProps, $prevSyncToken);
+
+            if ($syncResult->syncAgain) {
+                // if the server replies with 507 insufficient storage, it needs to provide a sync-token,
+                // otherwise we would never leave this loop.
+                if (empty($syncResult->syncToken)) {
+                    Config::$logger->warning("Server reported partial changes only, but no sync-token - not repeating");
+                    break;
+                } else {
+                    Config::$logger->debug("Server reported partial changes only, repeating sync for next batch");
+                    $prevSyncToken = $syncResult->syncToken;
+                }
+            }
+        } while ($syncResult->syncAgain && (--$batchLimit > 0));
+
+        return $syncResult->syncToken;
+    }
+
+    /********* PRIVATE FUNCTIONS *********/
+
+    /**
+     * Performs a synchronization of the given addressbook for one synchronization chunk as dicated by the server.
+     *
+     * @return SyncResult The synchronization result object.
+     */
+    private function synchronizeOneBatch(
+        AddressbookCollection $abook,
+        SyncHandler $handler,
+        array $requestedVCardProps,
+        string $prevSyncToken
+    ): SyncResult {
         $client = $abook->getClient();
 
         $syncResult = null;
@@ -127,10 +162,9 @@ class Sync
 
         $handler->finalizeSync();
 
-        return $syncResult->syncToken;
+        return $syncResult;
     }
 
-    /********* PRIVATE FUNCTIONS *********/
     private function syncCollection(
         CardDavClient $client,
         AddressbookCollection $abook,

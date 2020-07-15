@@ -91,12 +91,55 @@ final class SyncTest extends TestCase
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$cacheState);
 
-        // insert two cards we can expect to be reported by the initial sync
         $syncHandler = new SyncTestHandler(
             $abook,
             $accountcfg["syncAllowExtraChanges"],
             [],
             [],
+            self::$cacheState[$abookname]["cache"]
+        );
+        $syncmgr = new Sync();
+        $synctoken = $syncmgr->synchronize($abook, $syncHandler, [], self::$cacheState[$abookname]["synctoken"]);
+        $this->assertNotEmpty($synctoken, "Empty synctoken after followup sync");
+
+        // run sync handler's verification routine after the test
+        $cacheState = $syncHandler->testVerify();
+
+        self::$cacheState[$abookname] = [
+            'cache' => $cacheState,
+            'synctoken' => $synctoken
+        ];
+    }
+
+    /**
+     * @depends testInitialSyncWorks
+     * @dataProvider addressbookProvider
+     */
+    public function testFollowupSyncDifferencesProperlyReported(string $abookname, array $cfg): void
+    {
+        $accountname = AccountData::ADDRESSBOOKS[$abookname]["account"];
+        $this->assertArrayHasKey($accountname, AccountData::ACCOUNTS);
+        $accountcfg = AccountData::ACCOUNTS[$accountname];
+        $this->assertArrayHasKey("syncAllowExtraChanges", $accountcfg);
+
+        $abook = AccountData::$addressbooks[$abookname];
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+        $this->assertArrayHasKey($abookname, self::$cacheState);
+
+        // delete one of the cards inserted earlier
+        $delCardUri = array_shift(self::$insertedUris[$abookname]);
+        $this->assertNotEmpty($delCardUri);
+        $abook->deleteCard($delCardUri);
+
+        // and add one that should be reported as changed
+        $createdCards = $this->createCards($abook, $abookname, 1);
+        $this->assertCount(1, $createdCards);
+
+        $syncHandler = new SyncTestHandler(
+            $abook,
+            $accountcfg["syncAllowExtraChanges"],
+            $createdCards, // exp changed
+            [ $delCardUri ], // exp deleted
             self::$cacheState[$abookname]["cache"]
         );
         $syncmgr = new Sync();

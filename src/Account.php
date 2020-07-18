@@ -165,6 +165,7 @@ class Account implements \JsonSerializable
                 Config::$logger->info("principal URL: $princUrl");
             }
         } catch (\Exception $e) {
+            Config::$logger->info("Exception while querying current-user-principal: " . $e->getMessage());
             $princUrl = null;
         }
 
@@ -203,6 +204,7 @@ class Account implements \JsonSerializable
                 Config::$logger->info("addressbook home: $addressbookHomeUri");
             }
         } catch (\Exception $e) {
+            Config::$logger->info("Exception while querying addressbook-home-set: " . $e->getMessage());
             $addressbookHomeUri = null;
         }
 
@@ -230,6 +232,7 @@ class Account implements \JsonSerializable
                 }
             }
         } catch (\Exception $e) {
+            Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
             $abooksResult = [];
         }
 

@@ -196,9 +196,13 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             }
         }
 
+        // On occasion, we get CURL error 16 Error in the HTTP2 framing layer
+        // Until the source of this is clear, disable HTTP2 for now
+        /*
         if ($curlLoaded && (curl_version()["features"] & CURL_VERSION_HTTP2 !== 0)) {
             $guzzleOptions["version"] = 2.0; // HTTP2
         }
+        */
 
         return $guzzleOptions;
     }

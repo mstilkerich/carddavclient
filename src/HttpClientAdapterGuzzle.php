@@ -37,7 +37,7 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
 /**
  * Adapter for the Guzzle HTTP client library.
  */
-class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
+class HttpClientAdapterGuzzle extends HttpClientAdapter
 {
     /** @var string[] A list of authentication schemes that can be handled by Guzzle itself,
      *     independent on whether it works only with the Guzzle Curl HTTP handler or not.
@@ -61,7 +61,7 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
     /** @var string[] Auth-schemes tried without success */
     private $failedAuthSchemes = [];
 
-    /** @var ?array Maps lowercase auth-schemes to their CURLAUTH_XXX constant.
+    /** @var ?int[] Maps lowercase auth-schemes to their CURLAUTH_XXX constant.
      *     Only values not part of GUZZLE_KNOWN_AUTHSCHEMES are relevant here.
      */
     private static $schemeToCurlOpt;
@@ -76,6 +76,7 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
      */
     public function __construct(string $base_uri, string $username, string $password)
     {
+        $this->baseUri = $base_uri;
         $this->username = $username;
         $this->password = $password;
 
@@ -95,7 +96,7 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
             new MessageFormatter("\"{method} {target} HTTP/{version}\" {code}\n" . MessageFormatter::DEBUG)
         ));
 
-        $guzzleOptions = $this->prepareGuzzleOptions([]);
+        $guzzleOptions = $this->prepareGuzzleOptions();
         $guzzleOptions['handler'] = $stack;
         $guzzleOptions['http_errors'] = false; // no exceptions on 4xx/5xx status, also required by PSR-18
         $guzzleOptions['base_uri'] = $base_uri;
@@ -106,23 +107,28 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
     /**
      * Sends a PSR-7 request and returns a PSR-7 response.
      *
+     * The given URI may be relative to the base URI given on construction of this object or a full URL.
+     * Authentication is only attempted in case the domain name of the request URI matches that of the base URI
+     * (subdomains may differ).
+     *
      * @param array  $options  Options for the HTTP client, and default request options. May include any of the options
-     *               accepted by {@see HttpClientAdapterInterface::sendRequest()}.
+     *               accepted by {@see HttpClientAdapter::sendRequest()}.
      */
     public function sendRequest(string $method, string $uri, array $options = []): Psr7Response
     {
-        $guzzleOptions = $this->prepareGuzzleOptions($options);
+        $doAuth = $this->checkSameDomainAsBase($uri);
+        $guzzleOptions = $this->prepareGuzzleOptions($options, $doAuth);
 
         try {
             $response = $this->client->request($method, $uri, $guzzleOptions);
 
-            if ($response->getStatusCode() == 401) {
+            if ($doAuth && $response->getStatusCode() == 401) {
                 foreach ($this->getSupportedAuthSchemes($response) as $scheme) {
                     $this->authScheme = $scheme;
 
                     Config::$logger->debug("Trying auth scheme $scheme");
 
-                    $guzzleOptions = $this->prepareGuzzleOptions($options);
+                    $guzzleOptions = $this->prepareGuzzleOptions($options, $doAuth);
                     $response = $this->client->request($method, $uri, $guzzleOptions);
 
                     if ($response->getStatusCode() != 401) {
@@ -149,7 +155,7 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
     }
 
     /********* PRIVATE FUNCTIONS *********/
-    private function prepareGuzzleOptions(array $options): array
+    private function prepareGuzzleOptions(array $options = [], bool $doAuth = false): array
     {
         $guzzleOptions = [];
         $curlLoaded = extension_loaded("curl");
@@ -172,7 +178,7 @@ class HttpClientAdapterGuzzle implements HttpClientAdapterInterface
             ];
         }
 
-        if (isset($this->authScheme)) {
+        if ($doAuth && isset($this->authScheme)) {
             $authScheme = $this->authScheme;
             Config::$logger->debug("Using auth scheme $authScheme");
 

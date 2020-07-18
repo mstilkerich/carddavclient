@@ -53,7 +53,7 @@ class CardDavClient
     /** @var string */
     protected $base_uri;
 
-    /** @var HttpClientAdapterInterface */
+    /** @var HttpClientAdapter */
     protected $httpClient;
 
     /********* PUBLIC FUNCTIONS *********/

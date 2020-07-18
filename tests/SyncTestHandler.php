@@ -156,7 +156,7 @@ final class SyncTestHandler implements SyncHandler
         );
 
         foreach ($this->expectedDeletedUris as $uri => $seen) {
-            Assert::assertTrue($seen, "Card reported as deleted: $uri");
+            Assert::assertTrue($seen, "Deleted card NOT reported as deleted: $uri");
         }
 
         foreach ($this->expectedChangedCards as $uri => $attr) {

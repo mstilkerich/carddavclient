@@ -135,14 +135,18 @@ class Sync
         // FETCH THE CHANGED ADDRESS OBJECTS
         if (!empty($syncResult->changedObjects)) {
             if ($abook->supportsMultiGet()) {
-                $this->multiGetChanges($client, $abook, $syncResult, $requestedVCardProps);
+                try {
+                    $this->multiGetChanges($client, $abook, $syncResult, $requestedVCardProps);
+                } catch (\Exception $e) {
+                    // if the multiget failed, we can still try to get each card individually
+                    Config::$logger->error("addressbook-multiget REPORT produced exception", [ 'exception' => $e ]);
+                }
             }
 
             // try to manually fill all VCards where multiget did not provide VCF data
             foreach ($syncResult->changedObjects as &$objref) {
                 if (!isset($objref["vcf"])) {
                     Config::$logger->debug("Fetching " . $objref['uri'] . " via GET");
-                    print_r($objref);
                     [
                         'etag' => $objref["etag"],
                         'vcf' => $objref["vcf"],

@@ -304,6 +304,7 @@ class CardDavClient
                 [
                     // RFC4918: A client MUST submit a Depth header with a value of "0", "1", or "infinity"
                     "Depth" => $depth,
+                    "Content-Type" => "application/xml; charset=UTF-8",
                     // Prefer: reduce reply size if supported, see RFC8144
                     "Prefer" => "return=minimal"
                 ],

@@ -43,6 +43,7 @@ class ElementNames
 
     public const DISPNAME = "{" . self::NSDAV . "}displayname";
     public const RESTYPE = "{" . self::NSDAV . "}resourcetype";
+    public const RESTYPE_COLL = "{" . self::NSDAV . "}collection";
     public const RESTYPE_ABOOK = "{" . self::NSCARDDAV . "}addressbook";
 
     public const GETCTAG = "{" . self::NSCS . "}getctag";

@@ -31,74 +31,13 @@ namespace MStilkerich\CardDavClient;
 
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
-class WebDavCollection implements \JsonSerializable
+class WebDavCollection extends WebDavResource
 {
-    /** @var string URI of the Collection */
-    protected $uri;
-
-    /** @var array WebDAV properties of the Collection */
-    private $props = [];
-
-    /** @var Account The CardDAV account this WebDAV resource is associated/accessible with. */
-    protected $account;
-
-    /** @var CardDavClient A CardDavClient object for the account's base URI */
-    private $client;
-
     private const PROPNAMES = [
-        XmlEN::RESTYPE,
         XmlEN::SYNCTOKEN,
         XmlEN::SUPPORTED_REPORT_SET,
         XmlEN::ADD_MEMBER
     ];
-
-    public function __construct(string $uri, Account $account)
-    {
-        $this->uri = $uri;
-        $this->account = $account;
-
-        $this->client = $account->getClient($uri);
-    }
-
-    protected function getProperties(): array
-    {
-        if (empty($this->props)) {
-            $this->refreshProperties();
-        }
-        return $this->props;
-    }
-
-    public function refreshProperties(): void
-    {
-        $propNames = $this->getNeededCollectionPropertyNames();
-        $client = $this->getClient();
-        $result = $client->findProperties($this->uri, $propNames);
-        if (isset($result[0]["props"])) {
-            $this->props = $result[0]["props"];
-        } else {
-            throw new \Exception("Failed to retrieve properties for collection " . $this->uri);
-        }
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [ "uri" => $this->uri ];
-    }
-
-    public function getAccount(): Account
-    {
-        return $this->account;
-    }
-
-    public function getClient(): CardDavClient
-    {
-        return $this->client;
-    }
-
-    public function getUri(): string
-    {
-        return $this->uri;
-    }
 
     public function getSyncToken(): ?string
     {
@@ -111,12 +50,28 @@ class WebDavCollection implements \JsonSerializable
         return $this->supportsReport(XmlEN::REPORT_SYNCCOLL);
     }
 
-    public function downloadResource(string $uri): array
+
+    /**
+     * Returns the child resources of this collection.
+     *
+     * @return WebDavResource[] The children of this collection.
+     */
+    public function getChildren(): array
     {
-        $client = $this->getClient();
-        $response = $client->getResource($uri);
-        $body = (string) $response->getBody(); // checked to be present in CardDavClient::getResource()
-        return [ 'body' => $body ];
+        $childObjs = [];
+
+        try {
+            $client = $this->getClient();
+            $children = $client->findProperties($this->getUri(), [ XmlEN::RESTYPE ], "1");
+
+            foreach ($children as $child) {
+                $childObjs[] = parent::createInstance($child["uri"], $this->account, $child["props"][XmlEN::RESTYPE]);
+            }
+        } catch (\Exception $e) {
+            Config::$logger->info("Exception while querying collection children: " . $e->getMessage());
+        }
+
+        return $childObjs;
     }
 
     /**
@@ -129,7 +84,9 @@ class WebDavCollection implements \JsonSerializable
      */
     protected function getNeededCollectionPropertyNames(): array
     {
-        return self::PROPNAMES;
+        $parentPropNames = parent::getNeededCollectionPropertyNames();
+        $propNames = array_merge($parentPropNames, self::PROPNAMES);
+        return array_unique($propNames);
     }
 
     protected function supportsReport(string $reportElement): bool

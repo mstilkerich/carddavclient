@@ -2,45 +2,46 @@
     "name": "mstilkerich/carddavclient",
     "description": "CardDAV client library to discover and synchronize with CardDAV servers",
     "type": "library",
-	"keywords": ["addressbook","carddav","contacts","owncloud","nextcloud"],
-	"homepage": "https://github.com/mstilkerich/carddavclient",
-	"license": "GPL-3.0-or-later",
-	"authors": [
-		{
-			"name": "Michael Stilkerich",
-			"email": "ms@mike2k.de",
-			"homepage": "https://github.com/mstilkerich",
-			"role": "Developer"
-		}
-	],
-	"support": {
-		"email": "ms@mike2k.de",
-		"issues": "https://github.com/mstilkerich/carddavclient/issues",
-		"source": "https://github.com/mstilkerich/carddavclient",
-		"docs": "https://github.com/mstilkerich/carddavclient"
-	},
+    "keywords": ["addressbook","carddav","contacts","owncloud","nextcloud"],
+    "homepage": "https://github.com/mstilkerich/carddavclient",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Michael Stilkerich",
+            "email": "ms@mike2k.de",
+            "homepage": "https://github.com/mstilkerich",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "ms@mike2k.de",
+        "issues": "https://github.com/mstilkerich/carddavclient/issues",
+        "source": "https://github.com/mstilkerich/carddavclient",
+        "docs": "https://github.com/mstilkerich/carddavclient"
+    },
     "require": {
         "php": ">=7.1.0",
         "guzzlehttp/guzzle": "~6.0 | ~7.0",
         "psr/http-client": "^1.0",
         "psr/http-message": "^1.0",
-		"psr/log": "^1.1",
+        "psr/log": "^1.1",
         "sabre/vobject": "^4.3",
         "sabre/xml": "^2.2",
         "sabre/uri": "^2.2"
     },
-	"autoload": {
-		"psr-4": {
-			"MStilkerich\\CardDavClient\\": "src/"
-		}
-	},
+    "autoload": {
+        "psr-4": {
+            "MStilkerich\\CardDavClient\\": "src/"
+        }
+    },
     "require-dev": {
         "vimeo/psalm": "^3.11",
-		"phpcompatibility/php-compatibility": "*",
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.6.0",
-        "phpunit/phpunit": "^8",
+        "squizlabs/php_codesniffer": "^3.5.1",
+        "phpcompatibility/php-compatibility": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.6.0",
+        "phpunit/phpunit": "^8.1",
         "wa72/simplelogger": "^1.1",
         "phpstan/phpstan": "^0.12.32"
     },
-	"prefer-stable" : true
+    "prefer-stable" : true
 }

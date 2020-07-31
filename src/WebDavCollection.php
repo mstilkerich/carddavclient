@@ -64,8 +64,13 @@ class WebDavCollection extends WebDavResource
             $client = $this->getClient();
             $children = $client->findProperties($this->getUri(), [ XmlEN::RESTYPE ], "1");
 
+            $path = $this->getUriPath();
+
             foreach ($children as $child) {
-                $childObjs[] = parent::createInstance($child["uri"], $this->account, $child["props"][XmlEN::RESTYPE]);
+                $obj = parent::createInstance($child["uri"], $this->account, $child["props"][XmlEN::RESTYPE]);
+                if ($obj->getUriPath() != $path) {
+                    $childObjs[] = $obj;
+                }
             }
         } catch (\Exception $e) {
             Config::$logger->info("Exception while querying collection children: " . $e->getMessage());

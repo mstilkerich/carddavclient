@@ -14,10 +14,9 @@ final class AccountData
             "password" => "password1",
             "discoveryUri" => "example.com",
 
-            /* For providers that report extra changes or deleted cards between two syncs, set this to true to limit the
-             * sync tests to check whether all known changes are actually reported, without raising an error on any
-             * additional changes that the server reports. (Google has been observed to behave like this)
-             */
+            // For providers that report extra changes or deleted cards between two syncs, set this to true to limit the
+            // sync tests to check whether all known changes are actually reported, without raising an error on any
+            // additional changes that the server reports. (Google has been observed to behave like this)
             "syncAllowExtraChanges" => false,
         ],
         "Provider 2" => [
@@ -55,21 +54,19 @@ final class AccountData
 
     public static function init(): void
     {
-        if (! empty(self::$accounts)) {
-            return;
-        }
+        if (empty(self::$accounts)) {
+            if (file_exists('tests.log')) {
+                unlink('tests.log');
+            }
+            if (file_exists('tests_http.log')) {
+                unlink('tests_http.log');
+            }
 
-        if (file_exists('tests.log')) {
-            unlink('tests.log');
+            Config::init(
+                $logger = new \Wa72\SimpleLogger\FileLogger('tests.log', \Psr\Log\LogLevel::DEBUG),
+                $logger = new \Wa72\SimpleLogger\FileLogger('tests_http.log', \Psr\Log\LogLevel::DEBUG)
+            );
         }
-        if (file_exists('tests_http.log')) {
-            unlink('tests_http.log');
-        }
-
-        Config::init(
-            $logger = new \Wa72\SimpleLogger\FileLogger('tests.log', \Psr\Log\LogLevel::DEBUG),
-            $logger = new \Wa72\SimpleLogger\FileLogger('tests_http.log', \Psr\Log\LogLevel::DEBUG)
-        );
 
         foreach (self::ACCOUNTS as $name => $cfg) {
             self::$accounts[$name] = new Account($cfg["discoveryUri"], $cfg["username"], $cfg["password"]);
@@ -78,6 +75,15 @@ final class AccountData
         foreach (self::ADDRESSBOOKS as $name => $cfg) {
             self::$addressbooks[$name] = new AddressbookCollection($cfg["url"], self::$accounts[$cfg["account"]]);
         }
+    }
+
+    public static function accountProvider(): array
+    {
+        $ret = [];
+        foreach (self::ACCOUNTS as $name => $cfg) {
+            $ret[$name] = [ $name, $cfg ];
+        }
+        return $ret;
     }
 
     public static function addressbookProvider(): array

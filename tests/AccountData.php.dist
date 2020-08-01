@@ -55,16 +55,16 @@ final class AccountData
     public static function init(): void
     {
         if (empty(self::$accounts)) {
-            if (file_exists('tests.log')) {
-                unlink('tests.log');
+            if (file_exists('testreports/tests.log')) {
+                unlink('testreports/tests.log');
             }
-            if (file_exists('tests_http.log')) {
-                unlink('tests_http.log');
+            if (file_exists('testreports/tests_http.log')) {
+                unlink('testreports/tests_http.log');
             }
 
             Config::init(
-                $logger = new \Wa72\SimpleLogger\FileLogger('tests.log', \Psr\Log\LogLevel::DEBUG),
-                $logger = new \Wa72\SimpleLogger\FileLogger('tests_http.log', \Psr\Log\LogLevel::DEBUG)
+                $logger = new \Wa72\SimpleLogger\FileLogger('testreports/tests.log', \Psr\Log\LogLevel::DEBUG),
+                $logger = new \Wa72\SimpleLogger\FileLogger('testreports/tests_http.log', \Psr\Log\LogLevel::DEBUG)
             );
         }
 

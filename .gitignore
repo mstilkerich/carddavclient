@@ -7,5 +7,6 @@
 /composer.lock
 /composer.phar
 /vendor
+/testreports
 /tests/AccountData.php
 /xml

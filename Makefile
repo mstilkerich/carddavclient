@@ -1,6 +1,6 @@
 .PHONY: all stylecheck phpcompatcheck staticanalyses psalmanalysis doc tests verification
 
-all: staticanalysis doc
+all: staticanalyses doc
 
 verification: staticanalyses tests
 
@@ -20,8 +20,8 @@ phpstan:
 
 doc:
 	rm -r ~/www/carddavclient/*
-	#phpDocumentor.phar -d src/ -t ~/www/carddavclient --title="CardDAV Client Library" 
-	../phpdocumentor/bin/phpdoc -d src/ -t ~/www/carddavclient --title="CardDAV Client Library" 
+	#phpDocumentor.phar -d src/ -t ~/www/carddavclient --title="CardDAV Client Library"
+	../phpdocumentor/bin/phpdoc -d src/ -t ~/www/carddavclient --title="CardDAV Client Library"
 
 tests:
 	@[ -f tests/AccountData.php ] || (echo "Create tests/AccountData.php from template tests/AccountData.php.dist to execute tests"; exit 1)

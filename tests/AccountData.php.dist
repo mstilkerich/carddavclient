@@ -9,37 +9,129 @@ use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config};
 final class AccountData
 {
     public const ACCOUNTS = [
-        "Provider 1" => [
-            "username" => "username1",
-            "password" => "password1",
-            "discoveryUri" => "example.com",
+        "iCloud" => [
+            "username" => "icloudid@example.com",
+            "password" => "foobar",
+            "discoveryUri" => "icloud.com",
 
             // For providers that report extra changes or deleted cards between two syncs, set this to true to limit the
             // sync tests to check whether all known changes are actually reported, without raising an error on any
             // additional changes that the server reports. (Google has been observed to behave like this)
             "syncAllowExtraChanges" => false,
         ],
-        "Provider 2" => [
-            "username" => "...",
-            "password" => "...",
-            "discoveryUri" => "...",
+        "Google" => [
+            "username" => "gmailid@example.com",
+            "password" => "foobar",
+            "discoveryUri" => "gmail.com",
+            "syncAllowExtraChanges" => true,
+        ],
+        "Nextcloud" => [
+            "username" => "nextcloudUser",
+            "password" => "foobar",
+            "discoveryUri" => "example.com",
             "syncAllowExtraChanges" => false,
-        ]
+        ],
+        "Baikal" => [
+            "username" => "baikalUser",
+            "password" => "foobar",
+            "discoveryUri" => "http://baikal.localhost",
+            "syncAllowExtraChanges" => false,
+        ],
+        "BaikalKrb" => [
+            "username" => "",
+            "password" => "",
+            "discoveryUri" => "http://baikal.example.com",
+            "syncAllowExtraChanges" => false,
+        ],
+        "Owncloud" => [
+            "username" => "owncloudUser",
+            "password" => "foobar",
+            "discoveryUri" => "http://localhost/owncloud/remote.php/dav/addressbooks/users/owncloudUser/contacts/",
+            "syncAllowExtraChanges" => false,
+        ],
+        "Radicale" => [
+            "username" => "radicaleUser",
+            "password" => "foobar",
+            "discoveryUri" => "http://localhost:5232/",
+            "syncAllowExtraChanges" => false,
+        ],
+        "Davical" => [
+            "username" => "davicalUser",
+            "password" => "foobar",
+            "discoveryUri" => "http://localhost/davical",
+            "syncAllowExtraChanges" => false,
+        ],
     ];
 
     public const ADDRESSBOOKS = [
-        "Provider 1 - Book 1" => [
-            "account" => "Provider 1",
-            "url" => "https://carddav.example.com/username1/carddav/contacts",
-            "displayname" => "contacts",
+        "iCloud" => [
+            "account" => "iCloud",
+            "url" => "https://pXX-contacts.icloud.com:443/1234567/carddavhome/card/",
+            "displayname" => "card",
             "supports_synccoll" => true,
             "supports_multiget" => true,
             "supports_ctag" => false,
         ],
-        "Provider 2 - Book 1" => [
-            "account" => "Provider 2",
-            "url" => "...",
-            "displayname" => "...",
+        "Google" => [
+            "account" => "Google",
+            "url" => "https://www.googleapis.com:443/carddav/v1/principals/gmailid@example.com/lists/default/",
+            "displayname" => "Address Book",
+            "supports_synccoll" => true,
+            "supports_multiget" => true,
+            "supports_ctag" => true,
+        ],
+        "Nextcloud" => [
+            "account" => "Nextcloud",
+            "url" => "https://www.example.com:443/nextcloud/remote.php/dav/addressbooks/users/nextcloudUser/contacts/",
+            "displayname" => "Contacts",
+            "supports_synccoll" => true,
+            "supports_multiget" => true,
+            "supports_ctag" => true,
+        ],
+        "Owncloud" => [
+            "account" => "Owncloud",
+            "url" => "http://localhost:80/owncloud/remote.php/dav/addressbooks/users/owncloudUser/contacts/",
+            "displayname" => "Contacts",
+            "supports_synccoll" => true,
+            "supports_multiget" => true,
+            "supports_ctag" => true,
+        ],
+        "Baikal_First" => [
+            "account" => "Baikal",
+            "url" => "http://baikal.localhost/dav.php/addressbooks/baikalUser/default/",
+            "displayname" => "Default Address Book",
+            "supports_synccoll" => true,
+            "supports_multiget" => true,
+            "supports_ctag" => true,
+        ],
+        "Baikal_Second" => [
+            "account" => "Baikal",
+            "url" => "http://baikal.localhost/dav.php/addressbooks/baikalUser/abook2/",
+            "displayname" => "Addressbook 2",
+            "supports_synccoll" => true,
+            "supports_multiget" => true,
+            "supports_ctag" => true,
+        ],
+        "BaikalKrb_First" => [
+            "account" => "BaikalKrb",
+            "url" => "http://baikal.example.com/dav.php/addressbooks/baikalUser/default/",
+            "displayname" => "Default Address Book",
+            "supports_synccoll" => true,
+            "supports_multiget" => true,
+            "supports_ctag" => true,
+        ],
+        "Radicale" => [
+            "account" => "Radicale",
+            "url" => "http://localhost:5232/radicaleUser/abcdef/",
+            "displayname" => "The radical addressbook",
+            "supports_synccoll" => true,
+            "supports_multiget" => true,
+            "supports_ctag" => true,
+        ],
+        "Davical_0" => [
+            "account" => "Davical",
+            "url" => "http://localhost/davical/caldav.php/davicalUser/addresses/",
+            "displayname" => "Test addressbook",
             "supports_synccoll" => true,
             "supports_multiget" => true,
             "supports_ctag" => true,

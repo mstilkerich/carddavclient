@@ -1,6 +1,6 @@
 .PHONY: all stylecheck phpcompatcheck staticanalyses psalmanalysis doc tests verification
 
-all: stylecheck staticanalysis doc
+all: staticanalysis doc
 
 verification: staticanalyses tests
 

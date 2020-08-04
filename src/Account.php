@@ -210,34 +210,6 @@ class Account implements \JsonSerializable
 
         return $addressbookHomeUri;
     }
-
-    /**
-     * Finds the addressbooks in an addressbook-home location.
-     *
-     * @param string $addressbookHomeUri The/An addressbook home URI of the principal.
-     * @return string[] An array of URIs of the found addressbooks.
-     */
-    public function findAddressbooks(string $addressbookHomeUri): array
-    {
-        try {
-            $client = $this->getClient();
-            $abooks = $client->findProperties($addressbookHomeUri, [ XmlEN::RESTYPE ], "1");
-
-            $abooksResult = [];
-            foreach ($abooks as $abook) {
-                // RFC6352: An address book collection MUST report the DAV:collection and CARDDAV:addressbook XML
-                // elements in the value of the DAV:resourcetype property.
-                if (in_array(XmlEN::RESTYPE_ABOOK, $abook["props"][XmlEN::RESTYPE])) {
-                    $abooksResult[] = $abook["uri"];
-                }
-            }
-        } catch (\Exception $e) {
-            Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
-            $abooksResult = [];
-        }
-
-        return $abooksResult;
-    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

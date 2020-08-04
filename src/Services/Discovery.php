@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Services;
 
-use MStilkerich\CardDavClient\{Account, AddressbookCollection, CardDavClient, Config};
+use MStilkerich\CardDavClient\{Account, AddressbookCollection, CardDavClient, Config, WebDavCollection};
 
 /**
  * Class Discovery - Provides a service to discovery the addressbooks for a CardDAV account.
@@ -92,7 +92,7 @@ class Discovery
         // as a fallback, we will last try what the user provided
         $servers[] = [ "host" => $host, "port" => $port, "scheme" => $protocol, "userinput" => true ];
 
-        $addressbooks = array();
+        $addressbooks = [];
 
         // (2) Discover the "initial context path" for each servers (until first success)
         foreach ($servers as $server) {
@@ -114,13 +114,21 @@ class Discovery
                     // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
                     $addressbookHomeUri = $account->findAddressbookHome($principalUri);
                     if (isset($addressbookHomeUri)) {
-                        // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
-                        foreach ($account->findAddressbooks($addressbookHomeUri) as $davAbookUri) {
-                            $addressbooks[] = new AddressbookCollection($davAbookUri, $account);
-                        }
+                        try {
+                            // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
+                            $addressbookHome = new WebDavCollection($addressbookHomeUri, $account);
 
-                        if (count($addressbooks) > 0) {
-                            break 2;
+                            foreach ($addressbookHome->getChildren() as $abookCandidate) {
+                                if ($abookCandidate instanceof AddressbookCollection) {
+                                    $addressbooks[] = $abookCandidate;
+                                }
+                            }
+
+                            if (count($addressbooks) > 0) {
+                                break 2;
+                            }
+                        } catch (\Exception $e) {
+                            Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
                         }
                     }
                 }
@@ -144,7 +152,7 @@ class Discovery
      */
     private function discoverServers(string $host, bool $force_ssl): array
     {
-        $servers = array();
+        $servers = [];
 
         $rrnamesAndSchemes = [ ["_carddavs._tcp.$host", 'https'] ];
         if ($force_ssl === false) {
@@ -206,7 +214,7 @@ class Discovery
      */
     private function discoverContextPath(array $server): array
     {
-        $contextpaths = array();
+        $contextpaths = [];
 
         if (key_exists("dnsrr", $server)) {
             $dnsresults = dns_get_record($server["dnsrr"], DNS_TXT);

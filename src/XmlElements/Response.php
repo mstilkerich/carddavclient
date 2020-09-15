@@ -86,23 +86,40 @@ abstract class Response implements \Sabre\Xml\XmlDeserializable
             throw new XmlParseException("DAV:response contains no DAV:href child");
         }
 
-        if (isset($status)) {
+        /* By RFC 6578, there must be either a status OR a propstat child element.
+         *
+         * In practice however, we see the following uncompliances:
+         *
+         * Sabre/DAV always adds a propstat member, so for a 404 status, we will get an additional propstat with a
+         * pseudo status <d:status>HTTP/1.1 418 I'm a teapot</d:status>.
+         *
+         * SOGO on the other hand adds a status for answers where only a propstat is expected (new or changed items).
+         *
+         * To enable interoperability, we apply the following heuristic:
+         *
+         * 1) If we have a 404 status child element -> ResponseStatus
+         * 2) If we have a propstat element -> ResponsePropstat
+         * 3) If we have a status -> ResponseStatus
+         * 4) Error
+         */
+        if (isset($status) && (stripos($status, " 404 ") !== false)) {
             // Disable this exception for now as Sabre/DAV always inserts a propstat element to a response element
             //if (count($propstat) > 0) {
             //    throw new XmlParseException("DAV:response contains both DAV:status and DAV:propstat children");
             //}
 
             return new ResponseStatus($hrefs, $status);
-        } else {
-            if (count($propstat) == 0) {
-                throw new XmlParseException("DAV:response contains neither DAV:status nor DAV:propstat children");
-            }
+        } elseif (count($propstat) > 0) {
             if (count($hrefs) > 1) {
                 throw new XmlParseException("Propstat-type DAV:response contains multiple DAV:href children");
             }
 
             return new ResponsePropstat($hrefs[0], $propstat);
+        } elseif (isset($status)) {
+            return new ResponseStatus($hrefs, $status);
         }
+
+        throw new XmlParseException("DAV:response contains neither DAV:status nor DAV:propstat children");
     }
 }
 

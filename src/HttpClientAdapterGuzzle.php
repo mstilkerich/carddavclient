@@ -84,6 +84,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             if (extension_loaded("curl")) {
                 self::$schemeToCurlOpt = [
                     'negotiate' => CURLAUTH_NEGOTIATE,
+                    'curlany' => CURLAUTH_ANY,
                 ];
             } else {
                 self::$schemeToCurlOpt = [];
@@ -122,6 +123,13 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         try {
             $response = $this->client->request($method, $uri, $guzzleOptions);
 
+            // Workaround for Sabre/DAV vs. Curl incompatibility
+            if ($doAuth && $this->checkSabreCurlIncompatibility($method, $response)) {
+                Config::$logger->debug("Attempting workaround for Sabre/Dav / curl incompatibility");
+                $guzzleOptions = $this->prepareGuzzleOptions($options, $doAuth);
+                $response = $this->client->request($method, $uri, $guzzleOptions);
+            }
+
             if ($doAuth && $response->getStatusCode() == 401) {
                 foreach ($this->getSupportedAuthSchemes($response) as $scheme) {
                     $this->authScheme = $scheme;
@@ -155,6 +163,70 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
     }
 
     /********* PRIVATE FUNCTIONS *********/
+
+    /**
+     * Checks if a request was rejected because of an incompatibility between curl and sabre/dav.
+     *
+     * Background: When using DIGEST authentication, it is required to first send a request to the server to determine
+     * the parameters for the DIGEST authentication. This request is supposed to fail with 401 and the client can
+     * determine the parameters from the WWW-Authenticate header and try again with the proper Authentication header.
+     * Curl optimizes the first request by omitting the request body as it expects the request to fail anyway.
+     *
+     * Now sabre/dav has a feature that allows to reply to certain REPORT requests without the need for authentication.
+     * This is specifically useful for Caldav, which may want to make available certain information from a calendar to
+     * anonymous users (e.g. free/busy time). Therefore, the authentication is done at a later time than the first
+     * attempt to evaluate the REPORT. A REPORT request requires a body, and thus sabre/dav will bail out with an
+     * internal server error instead of a 401, normally causing the client library to fail. The problem specifically
+     * only occurs for REPORT requests, for other requests such as PROPFIND the problem is not triggered in sabre and an
+     * expected 401 response is returned.
+     *
+     * Read all about it here: https://github.com/sabre-io/dav/issues/932
+     *
+     * As a sidenote, nextcloud is not affected even though it uses sabre/dav, because the feature causing the server
+     * errors can be disabled and is in nextcloud. But there are other servers (Baïkal) using sabre/dav that are
+     * affected.
+     *
+     * As a workaround, it is possible to ask curl to do negotiation of the authentication scheme to use, but providing
+     * the authentication scheme CURLAUTH_ANY. With this, curl will not assume that the initial request might fail (as
+     * not authentication may be needed), and thus the initial request will include the request body. The downside of
+     * this is that even when we know the authentication scheme supported by a server (e.g. basic), this setting will
+     * cause twice the number of requests being sent to the server.
+     *
+     * Because it doesn't seem that this issue will get fixed, and the widespread usage of sabre/dav, I decided to
+     * include this workaround in the carddavclient library that specifically detects the situation and applies the
+     * above workaround without affecting the efficiency of communication when talking to other servers.
+     *
+     * We detect the situation by the following indicators:
+     *  - We have the curl extension loaded
+     *  - REPORT request was sent
+     *  - Result status code is 500
+     *  - The server is a sabre/dav server (X-Sabre-Version header is set)
+     *  - The response includes the known error message:
+     *    <?xml version="1.0" encoding="utf-8"?>
+     *    <d:error xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns">
+     *      <s:sabredav-version>4.1.2</s:sabredav-version>
+     *      <s:exception>Sabre\Xml\ParseException</s:exception>
+     *      <s:message>The input element to parse is empty. Do not attempt to parse</s:message>
+     *    </d:error>
+     */
+    private function checkSabreCurlIncompatibility(string $method, Psr7Response $response): bool
+    {
+        if (
+            extension_loaded("curl")
+            && $response->getStatusCode() == 500
+            && strcasecmp($method, "REPORT") == 0
+            && $response->hasHeader("X-Sabre-Version")
+        ) {
+            $body = (string) $response->getBody();
+            if (strpos($body, "The input element to parse is empty. Do not attempt to parse") !== false) {
+                $this->authScheme = "curlany";
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function prepareGuzzleOptions(array $options = [], bool $doAuth = false): array
     {
         $guzzleOptions = [];

@@ -149,7 +149,7 @@ final class SyncTestHandler implements SyncHandler
         $numChgMax = $this->allowAdditionalChanges ? "" : $numChgMin;
         $numChg = '{' . $numChgMin . ',' . $numChgMax . '}';
 
-        Assert::assertRegExp(
+        Assert::assertMatchesRegularExpression(
             "/^D${numDel}C${numChg}F$/",
             $this->opSequence,
             "Delete must be reported before changes"

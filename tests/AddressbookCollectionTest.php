@@ -106,7 +106,7 @@ final class AddressbookCollectionTest extends TestCase
             $abook->getCard($cardUri);
             $this->assertFalse(true, "Deleted card could be retrieved without expected exception: $cardUri");
         } catch (\Exception $e) {
-            $this->assertRegExp("/HTTP.*404/", $e->getMessage());
+            $this->assertMatchesRegularExpression("/HTTP.*404/", $e->getMessage());
         }
     }
 }

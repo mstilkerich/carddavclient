@@ -5,7 +5,6 @@
 /*.log
 /tags
 /composer.lock
-/composer.phar
 /vendor
 /testreports
 /tests/AccountData.php

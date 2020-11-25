@@ -61,6 +61,7 @@ class ElementNames
 
     public const SUPPORTED_ADDRDATA = "{" . self::NSCARDDAV . "}supported-address-data";
     public const ADDRDATA = "{" . self::NSCARDDAV . "}address-data";
+    public const ADDRDATATYPE = "{" . self::NSCARDDAV . "}address-data-type";
     public const VCFPROP = "{" . self::NSCARDDAV . "}prop";
     public const ABOOK_DESC = "{" . self::NSCARDDAV . "}addressbook-description";
     public const MAX_RESSIZE = "{" . self::NSCARDDAV . "}max-resource-size";

@@ -44,6 +44,10 @@ class AddressbookCollection extends WebDavCollection
         XmlEN::MAX_RESSIZE
     ];
 
+    private const DETAIL_STRINGIFIERS = [
+        XmlEN::SUPPORTED_ADDRDATA => "getDetailsSupportedAddressData",
+    ];
+
     /**
      * Returns a displayname for the addressbook.
      *
@@ -58,12 +62,24 @@ class AddressbookCollection extends WebDavCollection
         return $props[XmlEN::DISPNAME] ?? basename($this->uri);
     }
 
+    /**
+     * Provides a stringified representation of this addressbook (name and URI).
+     *
+     * Note that the result of this function is meant for display, not parsing. Thus the content and formatting of the
+     * text may change without considering backwards compatibility.
+     */
     public function __toString(): string
     {
         $desc  = $this->getName() . " (" . $this->uri . ")";
         return $desc;
     }
 
+    /**
+     * Provides the details for this addressbook as printable text.
+     *
+     * Note that the result of this function is meant for display, not parsing. Thus the content and formatting of the
+     * text may change without considering backwards compatibility.
+     */
     public function getDetails(): string
     {
         $desc  = "Addressbook " . $this->getName() . "\n";
@@ -71,9 +87,11 @@ class AddressbookCollection extends WebDavCollection
 
         $props = $this->getProperties();
         foreach ($props as $propName => $propVal) {
-            $desc .= "    $propName: ";
+            $desc .= "    " . $this->shortenXmlNamespacesForPrinting($propName) . ": ";
 
-            if (is_array($propVal)) {
+            if (isset(self::DETAIL_STRINGIFIERS[$propName])) {
+                $desc .= call_user_func([$this, self::DETAIL_STRINGIFIERS[$propName]], $propVal);
+            } elseif (is_array($propVal)) {
                 if (isset($propVal[0]) && is_array($propVal[0])) {
                     $propVal = array_map(
                         function (array $subarray): string {
@@ -82,9 +100,9 @@ class AddressbookCollection extends WebDavCollection
                         $propVal
                     );
                 }
-                $desc .= implode(", ", $propVal);
+                $desc .= $this->shortenXmlNamespacesForPrinting(implode(", ", $propVal));
             } else {
-                $desc .= $propVal;
+                $desc .= $this->shortenXmlNamespacesForPrinting($propVal);
             }
 
             $desc .= "\n";
@@ -205,6 +223,44 @@ class AddressbookCollection extends WebDavCollection
         return $etag;
     }
 
+    /**
+     * Provides the {urn:ietf:params:xml:ns:carddav}supported-address-data element in readable form.
+     */
+    protected function getDetailsSupportedAddressData(array $prop): string
+    {
+        /*
+            Array (
+                [0] => Array (
+                    [name] => {urn:ietf:params:xml:ns:carddav}address-data-type
+                    [value] =>
+                    [attributes] => Array (
+                        [content-type] => text/vcard
+                        [version] => 3.0
+                    )
+                )
+            )
+         */
+        $desc = [];
+        foreach ($prop as $addrDataType) {
+            if ($addrDataType["name"] === XmlEN::ADDRDATATYPE) {
+                $desc[] = $addrDataType["attributes"]["content-type"] . ": " . $addrDataType["attributes"]["version"];
+            }
+        }
+
+        return implode(", ", $desc);
+    }
+
+    /**
+     * This function replaces some well-known XML namespaces with a long name with shorter names for printing.
+     */
+    protected function shortenXmlNamespacesForPrinting(string $s): string
+    {
+        return str_replace(
+            [ "{" . XmlEN::NSCARDDAV . "}", "{" . XmlEN::NSCS . "}" ],
+            [ "{CARDDAV}", "{CS}" ],
+            $s
+        );
+    }
 
     /**
      * Validates a VCard before sending it to a CardDAV server.

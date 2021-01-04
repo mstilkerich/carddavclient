@@ -43,7 +43,7 @@ To add the library as a dependency to your project via composer:
 
 2. Add this library as a dependency to your project
 ```sh
-php composer.phar require mstilkerich/carddavclient:dev-master
+php composer.phar require mstilkerich/carddavclient
 ```
 
 3. To use the library in your application with composer, simply load composer's autoloader in your main php file:

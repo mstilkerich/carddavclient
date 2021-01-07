@@ -43,10 +43,10 @@
         "wa72/simplelogger": "^1.1",
         "phpstan/phpstan": "^0.12.32"
     },
-	"extra": {
-		"branch-alias": {
-			"dev-master": "1.0.x-dev"
-		}
-	},
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
     "prefer-stable" : true
 }

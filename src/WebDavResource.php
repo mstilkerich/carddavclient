@@ -144,6 +144,9 @@ class WebDavResource implements \JsonSerializable
         return $basename;
     }
 
+    /**
+     * @return array{body: string}
+     */
     public function downloadResource(string $uri): array
     {
         $client = $this->getClient();

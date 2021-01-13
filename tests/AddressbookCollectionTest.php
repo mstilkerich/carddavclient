@@ -97,7 +97,7 @@ final class AddressbookCollectionTest extends TestCase
         $abook = AccountData::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
-        [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
+        [ 'uri' => $cardUri ] = self::$insertedCards[$abookname];
         unset(self::$insertedCards[$abookname]);
 
         $abook->deleteCard($cardUri);

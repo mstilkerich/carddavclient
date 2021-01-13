@@ -1,21 +1,28 @@
 <phpunit colors="true" testdox="true" bootstrap="tests/autoload.php" verbose="true">
-	<testsuites>
-		<testsuite name="interoperability">
-			<directory>tests</directory>
+    <php>
+        <!-- make sure all PHP errors are reported and raise PHPunit exceptions -->
+        <ini name="error_reporting" value="-1"/>
+    </php>
+    <testsuites>
+        <testsuite name="interoperability">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
 
-		</testsuite>
-	</testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+    <coverage processUncoveredFiles="true" pathCoverage="true">
+        <include>
             <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+        </include>
+
+        <report>
+            <php outputFile="testreports/coverage.cov"/>
+            <clover outputFile="testreports/clover.xml"/>
+            <html outputDirectory="testreports/coverage" lowUpperBound="50" highLowerBound="90"/>
+        </report>
+    </coverage>
 
     <logging>
-        <log type="coverage-html" target="testreports/coverage" lowUpperBound="35" highLowerBound="70"/>
-        <!-- <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/> -->
-        <log type="testdox-html" target="testreports/testdox.html"/>
+        <testdoxHtml outputFile="testreports/results.html"/>
     </logging>
 </phpunit>
 

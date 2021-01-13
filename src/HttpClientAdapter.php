@@ -78,7 +78,6 @@ abstract class HttpClientAdapter
      */
     protected function checkSameDomainAsBase(string $uri): bool
     {
-        $result = false;
         $compUri = \Sabre\Uri\parse($uri);
 
         // if the URI is relative, the domain is the same

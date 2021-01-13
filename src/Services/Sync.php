@@ -56,6 +56,7 @@ class Sync
         $batchLimit = 10;
 
         do {
+            --$batchLimit;
             $syncResult = $this->synchronizeOneBatch($abook, $handler, $requestedVCardProps, $prevSyncToken);
 
             if ($syncResult->syncAgain) {
@@ -69,7 +70,7 @@ class Sync
                     $prevSyncToken = $syncResult->syncToken;
                 }
             }
-        } while ($syncResult->syncAgain && (--$batchLimit > 0));
+        } while ($syncResult->syncAgain && ($batchLimit > 0));
 
         return $syncResult->syncToken;
     }
@@ -303,7 +304,7 @@ class Sync
 
             if (!empty($response->propstat)) {
                 foreach ($response->propstat as $propstat) {
-                    if (isset($propstat->status) && stripos($propstat->status, " 200 ") !== false) {
+                    if (stripos($propstat->status, " 200 ") !== false) {
                         Config::$logger->debug("VCF for $respUri received via multiget");
                         $results[$respUri] = [
                             "etag" => $propstat->prop->props[XmlEN::GETETAG],

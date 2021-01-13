@@ -191,7 +191,6 @@ class CardDavClient
     {
         $uri = $suggestedUri;
         $attempt = 0;
-        $etag = null;
 
         $headers = [ "Content-Type" => "text/vcard" ];
         if ($post) {
@@ -205,6 +204,7 @@ class CardDavClient
         }
 
         do {
+            ++$attempt;
             $response = $this->httpClient->sendRequest(
                 $reqtype,
                 $uri,
@@ -221,7 +221,7 @@ class CardDavClient
                 $randint = rand();
                 $uri = preg_replace("/(\.[^.]*)?$/", "-$randint$0", $suggestedUri, 1);
             }
-        } while (($status == 412) && (++$attempt < $retryLimit));
+        } while (($status == 412) && ($attempt < $retryLimit));
 
         self::assertHttpStatus($response, 201, 201, "$reqtype $suggestedUri");
 
@@ -326,12 +326,8 @@ class CardDavClient
 
             if (!empty($response->propstat)) {
                 foreach ($response->propstat as $propstat) {
-                    if (isset($propstat->status) && stripos($propstat->status, " 200 ") !== false) {
-                        if (isset($propstat->prop)) {
-                            $resultProperties[] = [ 'uri' => $respUri, 'props' => $propstat->prop->props ];
-                        } else {
-                            throw new \Exception("Server provided propstat without prop element");
-                        }
+                    if (stripos($propstat->status, " 200 ") !== false) {
+                        $resultProperties[] = [ 'uri' => $respUri, 'props' => $propstat->prop->props ];
                     }
                 }
             }

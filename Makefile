@@ -14,7 +14,7 @@ phpcompatcheck:
 	vendor/bin/phpcs --colors --standard=PHPCompatibility --runtime-set testVersion 7.1 src/ tests/
 
 psalmanalysis:
-	vendor/bin/psalm --no-cache
+	vendor/bin/psalm --no-cache --shepherd --report=testreports/psalm.txt --report-show-info=true --no-progress
 
 doc:
 	rm -rf $(DOCDIR)

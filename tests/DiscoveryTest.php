@@ -15,6 +15,18 @@ final class DiscoveryTest extends TestCase
         AccountData::init();
     }
 
+    protected function setUp(): void
+    {
+    }
+
+    protected function tearDown(): void
+    {
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+    }
+
     public function accountProvider(): array
     {
         return AccountData::accountProvider();

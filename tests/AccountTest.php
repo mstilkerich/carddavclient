@@ -7,11 +7,23 @@ namespace MStilkerich\Tests\CardDavClient;
 use PHPUnit\Framework\TestCase;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};
 
-/**
- * @psalm-suppress RedundantConditionGivenDocblockType
- */
 final class AccountTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+    }
+
+    protected function setUp(): void
+    {
+    }
+
+    protected function tearDown(): void
+    {
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+    }
     public function testCanBeCreatedFromValidData(): void
     {
         $account = new Account("example.com", "theUser", "thePassword");

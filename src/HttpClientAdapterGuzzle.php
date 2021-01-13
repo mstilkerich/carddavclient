@@ -230,7 +230,6 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
     private function prepareGuzzleOptions(array $options = [], bool $doAuth = false): array
     {
         $guzzleOptions = [];
-        $curlLoaded = extension_loaded("curl");
 
         foreach ([ "headers", "body" ] as $copyopt) {
             if (key_exists($copyopt, $options)) {
@@ -271,6 +270,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         // On occasion, we get CURL error 16 Error in the HTTP2 framing layer
         // Until the source of this is clear, disable HTTP2 for now
         /*
+        $curlLoaded = extension_loaded("curl");
         if ($curlLoaded && (curl_version()["features"] & CURL_VERSION_HTTP2 !== 0)) {
             $guzzleOptions["version"] = 2.0; // HTTP2
         }

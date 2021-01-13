@@ -41,7 +41,8 @@
         "dealerdirect/phpcodesniffer-composer-installer": ">= 0.7.0",
         "phpunit/phpunit": "~9",
         "wa72/simplelogger": "^1.1",
-        "phpstan/phpstan": "^0.12.32"
+        "psalm/plugin-phpunit": "^0.15.0",
+        "alexeyshockov/guzzle-psalm-plugin": "^0.3.1"
     },
     "extra": {
         "branch-alias": {

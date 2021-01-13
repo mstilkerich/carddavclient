@@ -5,7 +5,7 @@ all: staticanalyses doc
 
 verification: staticanalyses tests
 
-staticanalyses: stylecheck phpcompatcheck psalmanalysis phpstan
+staticanalyses: stylecheck phpcompatcheck psalmanalysis
 
 stylecheck:
 	vendor/bin/phpcs --colors --standard=PSR12 src/ tests/
@@ -15,9 +15,6 @@ phpcompatcheck:
 
 psalmanalysis:
 	vendor/bin/psalm --no-cache
-
-phpstan:
-	vendor/bin/phpstan analyse
 
 doc:
 	rm -rf $(DOCDIR)

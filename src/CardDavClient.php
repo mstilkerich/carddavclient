@@ -242,20 +242,11 @@ class CardDavClient
     ): Multistatus {
         $srv = self::getParserService();
 
-        $reqprops = [ XmlEN::GETETAG => null, XmlEN::ADDRDATA => null ];
-        if (!empty($requestedVCardProps)) {
-            $requestedVCardProps = self::addRequiredVCardProperties($requestedVCardProps);
-
-            $reqprops[XmlEN::ADDRDATA] = array_map(
-                function (string $prop): array {
-                    return [
-                        'name' => XmlEN::VCFPROP,
-                        'attributes' => [ 'name' => $prop ]
-                    ];
-                },
-                $requestedVCardProps
-            );
-        }
+        // Determine the prop element for the report
+        $reqprops = [
+            XmlEN::GETETAG => null,
+            XmlEN::ADDRDATA => $this->determineReqCardProps($requestedVCardProps)
+        ];
 
         $body = $srv->write(
             XmlEN::REPORT_MULTIGET,
@@ -281,6 +272,88 @@ class CardDavClient
         ]);
 
         return self::checkAndParseXMLMultistatus($response, XmlElements\ResponsePropstat::class);
+    }
+
+    /**
+     * Issues an addressbook-query report.
+     *
+     * @param string $addressbookUri The URI of the addressbook collection to query
+     * @param QueryConditions $conditions The query filter conditions
+     * @param list<string> $requestedVCardProps A list of the requested VCard properties. If empty array, the full
+     *                                          VCards are requested from the server.
+     * @param bool $allConditionsMustMatch Whether all or any of the conditions needs to match.
+     * @psalm-return Multistatus
+     */
+    public function query(
+        string $addressbookUri,
+        QueryConditions $conditions,
+        array $requestedVCardProps,
+        int $limit
+    ): Multistatus {
+        $srv = self::getParserService();
+
+        // Determine the prop element for the report
+        $reqprops = [
+            XmlEN::GETETAG => null,
+            XmlEN::ADDRDATA => $this->determineReqCardProps($requestedVCardProps)
+        ];
+
+        $body = $srv->write(
+            XmlEN::REPORT_QUERY,
+            [
+                [ 'name' => XmlEN::PROP, 'value' => $reqprops ],
+                [
+                    'name' => XmlEN::FILTER,
+                    'attributes' => $conditions->toFilterAttributes(),
+                    'value' => $conditions->toFilterElements()
+                ],
+                // FIXME [ 'name' => XmlEN::LIMIT, 'value' => [ name => XmlEN::NRESULTS, value => "5" ] ],
+            ]
+        );
+
+        $response = $this->httpClient->sendRequest('REPORT', $addressbookUri, [
+            "headers" =>
+            [
+                // RFC6352: Depth: 1 header sets query scope to the addressbook collection
+                "Depth" => 1,
+                "Content-Type" => "application/xml; charset=UTF-8"
+            ],
+            "body" => $body
+        ]);
+
+        return self::checkAndParseXMLMultistatus($response, XmlElements\ResponsePropstat::class);
+    }
+
+    /**
+     * Builds a CARDDAV::address-data element with the requested properties.
+     *
+     * If no properties are requested, returns null - an empty address-data element means that the full VCards shall be
+     * returned.
+     *
+     * Some properties that are mandatory are added to the list.
+     *
+     * @param list<string> $requestedVCardProps as list of the VCard properties requested by the user.
+     * @return null|list<array{name: string, attributes: array{name: string}}>
+     */
+    private function determineReqCardProps(array $requestedVCardProps): ?array
+    {
+        if (empty($requestedVCardProps)) {
+            return null;
+        }
+
+        $requestedVCardProps = self::addRequiredVCardProperties($requestedVCardProps);
+
+        $reqprops = array_map(
+            function (string $prop): array {
+                return [
+                    'name' => XmlEN::VCFPROP,
+                    'attributes' => [ 'name' => $prop ]
+                ];
+            },
+            $requestedVCardProps
+        );
+
+        return $reqprops;
     }
 
     // $props is either a single property or an array of properties

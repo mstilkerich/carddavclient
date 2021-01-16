@@ -55,6 +55,7 @@ class ElementNames
     public const REPORT = "{" . self::NSDAV . "}report";
     public const REPORT_SYNCCOLL = "{" . self::NSDAV . "}sync-collection";
     public const REPORT_MULTIGET = "{" . self::NSCARDDAV . "}addressbook-multiget";
+    public const REPORT_QUERY = "{" . self::NSCARDDAV . "}addressbook-query";
 
     public const SYNCTOKEN = "{" . self::NSDAV . "}sync-token";
     public const SYNCLEVEL = "{" . self::NSDAV . "}sync-level";
@@ -73,6 +74,13 @@ class ElementNames
     public const PROPSTAT = "{" . self::NSDAV . "}propstat";
     public const PROP = "{" . self::NSDAV . "}prop";
     public const HREF = "{" . self::NSDAV . "}href";
+    public const LIMIT = "{" . self::NSCARDDAV . "}limit";
+    public const NRESULTS = "{" . self::NSCARDDAV . "}nresults";
+    public const FILTER = "{" . self::NSCARDDAV . "}filter";
+    public const PROPFILTER = "{" . self::NSCARDDAV . "}prop-filter";
+    public const PARAMFILTER = "{" . self::NSCARDDAV . "}param-filter";
+    public const TEXTMATCH = "{" . self::NSCARDDAV . "}text-match";
+    public const ISNOTDEFINED = "{" . self::NSCARDDAV . "}is-not-defined";
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

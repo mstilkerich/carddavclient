@@ -9,6 +9,7 @@ use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config};
 final class AccountData
 {
     public const ACCOUNTS = [
+        /*
         "iCloud" => [
             "username" => "icloudid@example.com",
             "password" => "foobar",
@@ -49,21 +50,25 @@ final class AccountData
             "discoveryUri" => "http://localhost/owncloud/remote.php/dav/addressbooks/users/owncloudUser/contacts/",
             "syncAllowExtraChanges" => false,
         ],
+         */
         "Radicale" => [
             "username" => "radicaleUser",
             "password" => "foobar",
             "discoveryUri" => "http://localhost:5232/",
             "syncAllowExtraChanges" => false,
         ],
+        /*
         "Davical" => [
             "username" => "davicalUser",
             "password" => "foobar",
             "discoveryUri" => "http://localhost/davical",
             "syncAllowExtraChanges" => false,
         ],
+         */
     ];
 
     public const ADDRESSBOOKS = [
+        /*
         "iCloud" => [
             "account" => "iCloud",
             "url" => "https://pXX-contacts.icloud.com:443/1234567/carddavhome/card/",
@@ -120,6 +125,7 @@ final class AccountData
             "supports_multiget" => true,
             "supports_ctag" => true,
         ],
+         */
         "Radicale" => [
             "account" => "Radicale",
             "url" => "http://localhost:5232/radicaleUser/abcdef/",
@@ -128,6 +134,7 @@ final class AccountData
             "supports_multiget" => true,
             "supports_ctag" => true,
         ],
+        /*
         "Davical_0" => [
             "account" => "Davical",
             "url" => "http://localhost/davical/caldav.php/davicalUser/addresses/",
@@ -136,6 +143,7 @@ final class AccountData
             "supports_multiget" => true,
             "supports_ctag" => true,
         ],
+         */
     ];
 
     /** @var Account[] Caches the Account objects for all accounts from ACCOUNTS*/

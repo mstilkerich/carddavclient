@@ -17,6 +17,7 @@ jobs:
       nextcloud:
         image: nextcloud
         env:
+          SQLITE_DATABASE: /tmp/nextcloud.db
           NEXTCLOUD_ADMIN_USER: ncadm
           NEXTCLOUD_ADMIN_PASSWORD: ncadmPassw0rd
         ports:

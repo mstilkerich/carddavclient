@@ -94,14 +94,6 @@ final class AccountData
             "supports_multiget" => true,
             "supports_ctag" => true,
         ],
-        "Nextcloud_Recents" => [
-            "account" => "Nextcloud",
-            "url" => "http://localhost:8080/remote.php/dav/addressbooks/users/ncadm/z-app-generated--contactsinteraction--recent/",
-            "displayname" => "Recently contacted",
-            "supports_synccoll" => true,
-            "supports_multiget" => true,
-            "supports_ctag" => true,
-        ],
         /*
         "Owncloud" => [
             "account" => "Owncloud",

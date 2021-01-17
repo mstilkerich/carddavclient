@@ -88,7 +88,7 @@ final class AccountData
          */
         "Nextcloud" => [
             "account" => "Nextcloud",
-            "url" => "https://localhost:8080/remote.php/dav/addressbooks/users/nextcloudUser/contacts/",
+            "url" => "http://localhost:8080/remote.php/dav/addressbooks/users/nextcloudUser/contacts/",
             "displayname" => "Contacts",
             "supports_synccoll" => true,
             "supports_multiget" => true,

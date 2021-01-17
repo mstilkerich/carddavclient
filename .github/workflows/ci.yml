@@ -13,6 +13,15 @@ jobs:
     env:
       XDEBUG_MODE: coverage
 
+    services:
+      nextcloud:
+        image: nextcloud
+        env:
+          NEXTCLOUD_ADMIN_USER: ncadm
+          NEXTCLOUD_ADMIN_PASSWORD: ncadmPassw0rd
+        ports:
+          - 8080:80
+
     steps:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -31,3 +40,5 @@ jobs:
         run: make phpcompatcheck
       - name: Run psalm static analysis
         run: make psalmanalysis
+      - name: Run tests
+        run: make tests

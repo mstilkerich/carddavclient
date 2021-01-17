@@ -13,16 +13,13 @@ jobs:
     env:
       XDEBUG_MODE: coverage
 
-#   services:
-#     nextcloud:
-#       image: nextcloud
-#       env:
-#         SQLITE_DATABASE: /tmp/nextcloud.db
-#         NEXTCLOUD_ADMIN_USER: ncadm
-#         NEXTCLOUD_ADMIN_PASSWORD: ncadmPassw0rd
-#         NEXTCLOUD_UPDATE: 1
-#       ports:
-#         - 8080:80
+    services:
+      nextcloud:
+        image: nextcloud
+        options: >-
+          --name nextcloud
+        ports:
+          - 8080:80
 
     steps:
       - name: Set up PHP
@@ -36,11 +33,15 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependencies
         run: composer update --no-interaction --no-progress
+      - name: Setup Nextcloud
+        run: |
+          sudo docker exec --user www-data nextcloud php occ maintenance:install --admin-user=ncadm --admin-pass=ncadmPassw0rd
+          sudo docker exec --user www-data nextcloud php occ app:install contacts
       - name: Check code style compliance with PSR12
         run: make stylecheck
       - name: Check code compatibility with minimum supported PHP version
         run: make phpcompatcheck
       - name: Run psalm static analysis
         run: make psalmanalysis
-#     - name: Run tests
-#       run: make tests
+      - name: Run tests
+        run: make tests

@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace MStilkerich\CardDavClient;
 
 use Psr\Http\Message\ResponseInterface as Psr7Response;
+use MStilkerich\CardDavClient\XmlElements\Filter;
 use MStilkerich\CardDavClient\XmlElements\Multistatus;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\XmlElements\Deserializers;
@@ -182,7 +183,7 @@ class CardDavClient
      *
      * @param bool $post If true
      *
-     * @return string[]
+     * @return array{uri: string, etag: string}
      *  Associative array with keys
      *   - uri (string): URI of the new resource if the request was successful
      *   - etag (string): Entity tag of the created resource if returned by server, otherwise empty string.
@@ -278,38 +279,43 @@ class CardDavClient
      * Issues an addressbook-query report.
      *
      * @param string $addressbookUri The URI of the addressbook collection to query
-     * @param QueryConditions $conditions The query filter conditions
+     * @param Filter $filter The query filter conditions
      * @param list<string> $requestedVCardProps A list of the requested VCard properties. If empty array, the full
      *                                          VCards are requested from the server.
-     * @param bool $allConditionsMustMatch Whether all or any of the conditions needs to match.
+     * @param int $limit Tell the server to return at most $limit results. 0 means no limit.
      * @psalm-return Multistatus
      */
     public function query(
         string $addressbookUri,
-        QueryConditions $conditions,
+        Filter $filter,
         array $requestedVCardProps,
         int $limit
     ): Multistatus {
         $srv = self::getParserService();
 
-        // Determine the prop element for the report
-        $reqprops = [
-            XmlEN::GETETAG => null,
-            XmlEN::ADDRDATA => $this->determineReqCardProps($requestedVCardProps)
+        $reportOptions = [
+            // requested properties (both WebDAV and VCard properties)
+            [
+                'name' => XmlEN::PROP,
+                'value' => [
+                    XmlEN::GETETAG => null,
+                    XmlEN::ADDRDATA => $this->determineReqCardProps($requestedVCardProps)
+                ]
+            ],
+            // filter element with the conditions that cards need to match
+            [
+                'name' => XmlEN::FILTER,
+                'attributes' => $filter->xmlAttributes(),
+                'value' => $filter
+            ]
         ];
 
-        $body = $srv->write(
-            XmlEN::REPORT_QUERY,
-            [
-                [ 'name' => XmlEN::PROP, 'value' => $reqprops ],
-                [
-                    'name' => XmlEN::FILTER,
-                    'attributes' => $conditions->toFilterAttributes(),
-                    'value' => $conditions->toFilterElements()
-                ],
-                // FIXME [ 'name' => XmlEN::LIMIT, 'value' => [ name => XmlEN::NRESULTS, value => "5" ] ],
-            ]
-        );
+        // Limit element if needed
+        if ($limit > 0) {
+            $reportOptions[] = [ 'name' => XmlEN::LIMIT, 'value' => [ 'name' => XmlEN::NRESULTS, 'value' => $limit ] ];
+        }
+
+        $body = $srv->write(XmlEN::REPORT_QUERY, $reportOptions);
 
         $response = $this->httpClient->sendRequest('REPORT', $addressbookUri, [
             "headers" =>

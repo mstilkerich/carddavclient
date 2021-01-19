@@ -21,11 +21,6 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Objects of this class represent an addressbook collection on a WebDAV
- * server.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
@@ -33,8 +28,14 @@ namespace MStilkerich\CardDavClient;
 use Sabre\VObject\UUIDUtil;
 use Sabre\VObject\Component\VCard;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
-use MStilkerich\CardDavClient\XmlElements\ResponsePropstat;
+use MStilkerich\CardDavClient\XmlElements\{Filter,ResponsePropstat};
 
+/**
+ * Objects of this class represent an addressbook collection on a WebDAV server.
+ *
+ * @psalm-import-type SimpleConditions from Filter
+ * @psalm-import-type ComplexConditions from Filter
+ */
 class AddressbookCollection extends WebDavCollection
 {
     private const PROPNAMES = [
@@ -161,7 +162,7 @@ class AddressbookCollection extends WebDavCollection
      * last path component (filename) is derived from the UID of the VCard.
      *
      * @param VCard $vcard The VCard to be stored.
-     * @return string[]
+     * @return array{uri: string, etag: string}
      *  Associative array with keys
      *   - uri (string): URI of the new resource if the request was successful
      *   - etag (string): Entity tag of the created resource if returned by server, otherwise empty string.
@@ -227,19 +228,23 @@ class AddressbookCollection extends WebDavCollection
     /**
      * Issues an addressbook-query report.
      *
-     * @param array $conditions The query filter conditions, see QueryConditions constructor for format.
+     * @param SimpleConditions|ComplexConditions $conditions The query filter conditions, see Filter class for format.
      * @param list<string> $requestedVCardProps A list of the requested VCard properties. If empty array, the full
      *                                          VCards are requested from the server.
-     * @param bool $allConditionsMustMatch Whether all or any of the conditions needs to match.
+     * @param bool $matchAll Whether all or any of the conditions needs to match.
+     * @param int $limit Tell the server to return at most $limit results. 0 means no limit.
+     *
      * @return array<string, array{vcard: VCard, etag: string}>
+     *
+     * @see Filter
      */
     public function query(
         array $conditions,
         array $requestedVCardProps = [],
-        bool $allConditionsMustMatch = false,
+        bool $matchAll = false,
         int $limit = 0
     ) {
-        $conditions = new QueryConditions($conditions, $allConditionsMustMatch);
+        $conditions = new Filter($conditions, $matchAll);
         $client = $this->getClient();
         $multistatus = $client->query($this->uri, $conditions, $requestedVCardProps, $limit);
 

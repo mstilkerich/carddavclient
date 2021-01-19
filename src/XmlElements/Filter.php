@@ -1,0 +1,161 @@
+<?php
+
+/*
+ * CardDAV client library for PHP ("PHP-CardDavClient").
+ *
+ * Copyright (C) 2020 Michael Stilkerich <ms@mike2k.de>
+ *
+ * This file is part of PHP-CardDavClient.
+ *
+ * PHP-CardDavClient is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * PHP-CardDavClient is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+declare(strict_types=1);
+
+namespace MStilkerich\CardDavClient\XmlElements;
+
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+use MStilkerich\CardDavClient\Exception\XmlParseException;
+
+/**
+ * Class to represent XML urn:ietf:params:xml:ns:carddav:filter elements as PHP objects. (RFC 6352)
+ *
+ * From RFC 6352
+ *
+ * The "filter" element specifies the search filter used to match address objects that should be returned by a report.
+ * The "test" attribute specifies whether any (logical OR) or all (logical AND) of the prop-filter tests need to match
+ * in order for the overall filter to match.
+ *
+ * <!ELEMENT filter (prop-filter*)>
+ * <!ATTLIST filter test (anyof | allof) "anyof">
+ *   <!-- test value:
+ *     anyof logical OR for prop-filter matches
+ *     allof logical AND for prop-filter matches -->
+ *
+ * @psalm-type PropName = string
+ * @psalm-type NotDefined = null
+ * @psalm-type TextMatchSpec = string
+ * @psalm-type ParamFilterSpec = array{string, NotDefined | TextMatchSpec}
+ *
+ * @psalm-type SimpleCondition = NotDefined|TextMatchSpec|ParamFilterSpec
+ * @psalm-type SimpleConditions = array<PropName, SimpleCondition>
+ * @psalm-type ComplexCondition = array{matchAll?: bool} & array<int,SimpleCondition>
+ * @psalm-type ComplexConditions = list<array{PropName,ComplexCondition}>
+ */
+class Filter implements \Sabre\Xml\XmlSerializable
+{
+    /**
+     * @var 'anyof'|'allof' Semantics of match for multiple conditions (AND or OR).
+     * @psalm-readonly
+     */
+    public $testType;
+
+    /**
+     * @var list<PropFilter>
+     * @psalm-readonly
+     */
+    public $propFilters = [];
+
+    /**
+     * Constructs a Filter consisting of zero or more PropFilter elements.
+     *
+     * For ease of use, the $conditions parameter can take a simple form, which allows exactly one match criterion per
+     * VCard property. Or it can take a more elaborate form where for each property, _several_ lists of match criteria
+     * can be defined.
+     *
+     * Note that property names can be prefixed with a group name like "GROUP.EMAIL" to only match properties that
+     * belong to the given group. If no group prefix is given, the match applies to all properties of the type,
+     * independent of whether they belong to a group or not.
+     *
+     * The simple form is an associative array mapping property names to null or a filter condition.
+     *
+     * A filter condition can either be a string with a text match specification (see TextMatch constructor for format)
+     * or a two-element array{string,?string} where the first element is the name of a parameter and the second is a
+     * string for TextMatch or null with a meaning as for a property filter.
+     *
+     * Examples for the simple form:
+     *   [ 'EMAIL' => null ] - matches all VCards that do NOT have an EMAIL property
+     *   [ 'EMAIL' => "//" ] - matches all VCards that DO have an EMAIL property (with any value)
+     *   [ 'EMAIL' => '/@example.com$/' ] - matches all VCards that have an EMAIL property with an email address of the
+     *                                      example.com domain
+     *   [ 'EMAIL' => '/@example.com$/', 'N' => '/^Mustermann;/' ] - like before, but additionally/alternatively the
+     *                                                               surname must be Mustermann (depending on $matchAll)
+     *   [ 'EMAIL' => [ 'TYPE' => '/^home$/' ] ] - matches all VCards with an EMAIL property that has a TYPE parameter
+     *                                             with value home
+     *
+     * The more elaborate form is an array of two-element arrays where the first element is a property name and
+     * the second element is any of the values possible in the simple form, or an array object with a list of
+     * conditions of which all/any need to apply, plus an optional key "matchAll" that can be set to true to indicate
+     * that all conditions need to match (AND semantics).
+     *
+     * Examples for the elaborate form:
+     *   [ [ 'EMAIL', ['/@example.com$/', ['TYPE', '/^home$/'], 'matchAll' => true] ], [ 'N', '/^Mustermann;/' ] ] -
+     *     Matches all VCards, that have an EMAIL property with an address in the domain example.com and at the
+     *     same time a TYPE parameter with value home, and/or an N property with a surname of Mustermann.
+     *
+     * It is also possible to mix both forms, where string keys are used for the simple form and numeric indexes are
+     * used for the elaborate form filters.
+     *
+     * @param SimpleConditions|ComplexConditions $conditions The match conditions for the query, or for one property
+     *                                                       filter. An empty array will cause all VCards to match.
+     * @param bool $matchAll Whether all or any of the conditions needs to match.
+     */
+    public function __construct(array $conditions, bool $matchAll)
+    {
+        $this->testType = $matchAll ? 'allof' : 'anyof';
+
+        foreach ($conditions as $idx => $condition) {
+            if (is_string($idx)) {
+                // simple form - single condition only
+                $this->propFilters[] = new PropFilter($idx, [$condition]);
+            } elseif (is_array($condition)) {
+                // elaborate form [ property name, list of simple conditions ]
+                [ $propname, $simpleConditions ] = $condition;
+                /** @psalm-var ComplexCondition $simpleConditions */
+                $this->propFilters[] = new PropFilter($propname, $simpleConditions);
+            } else {
+                throw new \InvalidArgumentException("Condition must be either string or two-element array");
+            }
+        }
+    }
+
+    /**
+     * This function encodes the elements value (not the element itself!) to the given XML writer.
+     */
+    public function xmlSerialize(\Sabre\Xml\Writer $writer): void
+    {
+        foreach ($this->propFilters as $propFilter) {
+            $writer->write([
+                'name' => XmlEN::PROPFILTER,
+                'attributes' => $propFilter->xmlAttributes(),
+                'value' => $propFilter
+            ]);
+        }
+    }
+
+    /**
+     * Produces a list of attributes for this filter suitable to pass to a Sabre XML Writer.
+     *
+     * The attributes produced are: test="allof/anyof"
+     *                              name="$propname" - only if $propname is not null
+     *
+     * @return array<string, string> A list of attributes (attrname => attrvalue)
+     */
+    public function xmlAttributes(): array
+    {
+        return [ 'test' => $this->testType ];
+    }
+}
+
+// vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

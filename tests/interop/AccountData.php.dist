@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MStilkerich\Tests\CardDavClient;
+namespace MStilkerich\Tests\CardDavClient\Interop;
 
 use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config};
 
@@ -147,16 +147,17 @@ final class AccountData
     public static function init(): void
     {
         if (empty(self::$accounts)) {
-            if (file_exists('testreports/tests.log')) {
-                unlink('testreports/tests.log');
-            }
-            if (file_exists('testreports/tests_http.log')) {
-                unlink('testreports/tests_http.log');
+            $logfile = 'testreports/interop/tests.log';
+            $logfileHttp = 'testreports/interop/tests_http.log';
+            foreach ([$logfile, $logfileHttp] as $l) {
+                if (file_exists($l)) {
+                    unlink($l);
+                }
             }
 
             Config::init(
-                $logger = new \Wa72\SimpleLogger\FileLogger('testreports/tests.log', \Psr\Log\LogLevel::DEBUG),
-                $logger = new \Wa72\SimpleLogger\FileLogger('testreports/tests_http.log', \Psr\Log\LogLevel::DEBUG)
+                $logger = new \Wa72\SimpleLogger\FileLogger($logfile, \Psr\Log\LogLevel::DEBUG),
+                $logger = new \Wa72\SimpleLogger\FileLogger($logfileHttp, \Psr\Log\LogLevel::DEBUG)
             );
         }
 

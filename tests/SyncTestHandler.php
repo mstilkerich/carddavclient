@@ -107,7 +107,7 @@ final class SyncTestHandler implements SyncHandler
                 );
             }
 
-            TestUtils::compareVCard($this->expectedChangedCards[$uri]["vcard"], $card);
+            TestUtils::compareVCards($this->expectedChangedCards[$uri]["vcard"], $card, true);
         }
     }
 

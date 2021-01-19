@@ -11,9 +11,8 @@ use Sabre\VObject\Component\VCard;
 final class AddressbookCollectionTest extends TestCase
 {
     /**
-     * @var array $insertedCards Cards inserted to addressbooks by tests in this class
-     *    Maps addressbook name to an associative array. Each associative array contains
-     *    the keys etag (may be null), uri and vcard with the corresponding values.
+     * @var array<string, array{vcard: VCard, uri: string, etag: string}>
+     *    Cards inserted to addressbooks by tests in this class. Maps addressbook name to an associative array.
      */
     private static $insertedCards;
 
@@ -45,10 +44,10 @@ final class AddressbookCollectionTest extends TestCase
         $abook = AccountData::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
-        $this->assertEquals($cfg["displayname"], $abook->getName(), "Displayname");
-        $this->assertEquals($cfg["supports_synccoll"], $abook->supportsSyncCollection(), "SyncCollection support");
-        $this->assertEquals($cfg["supports_multiget"], $abook->supportsMultiGet(), "MultiGet report");
-        //$this->assertEquals($cfg["supports_ctag"], $abook->getCTag(), "CTag");
+        $this->assertSame($cfg["displayname"], $abook->getName(), "Displayname");
+        $this->assertSame($cfg["supports_synccoll"], $abook->supportsSyncCollection(), "SyncCollection support");
+        $this->assertSame($cfg["supports_multiget"], $abook->supportsMultiGet(), "MultiGet report");
+        //$this->assertSame($cfg["supports_ctag"], $abook->getCTag(), "CTag");
     }
 
     /** @dataProvider addressbookProvider */
@@ -60,10 +59,6 @@ final class AddressbookCollectionTest extends TestCase
         $vcard = TestUtils::createVCard();
         $createResult = $abook->createCard($vcard);
         $createResult["vcard"] = $vcard;
-
-        if (!isset(self::$insertedCards[$abookname])) {
-            self::$insertedCards[$abookname] = [];
-        }
         self::$insertedCards[$abookname] = $createResult;
     }
 
@@ -82,10 +77,10 @@ final class AddressbookCollectionTest extends TestCase
 
         // insertCards etag return is optional
         if (!empty($cardETag)) {
-            $this->assertEquals($cardETag, $etagGet);
+            $this->assertSame($cardETag, $etagGet);
         }
 
-        TestUtils::compareVCard($vcard, $vcardGet);
+        TestUtils::compareVCards($vcard, $vcardGet, true);
     }
 
     /**

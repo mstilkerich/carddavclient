@@ -19,7 +19,7 @@ final class AddressbookCollectionTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        AccountData::init();
+        TestInfrastructureSrv::init();
     }
 
     protected function setUp(): void
@@ -36,13 +36,13 @@ final class AddressbookCollectionTest extends TestCase
 
     public function addressbookProvider(): array
     {
-        return AccountData::addressbookProvider();
+        return TestInfrastructureSrv::addressbookProvider();
     }
 
     /** @dataProvider addressbookProvider */
     public function testPropertiesCorrectlyReported(string $abookname, array $cfg): void
     {
-        $abook = AccountData::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $this->assertSame($cfg["displayname"], $abook->getName(), "Displayname");
@@ -54,7 +54,7 @@ final class AddressbookCollectionTest extends TestCase
     /** @dataProvider addressbookProvider */
     public function testCanInsertValidCard(string $abookname, array $cfg): void
     {
-        $abook = AccountData::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $vcard = TestUtils::createVCard();
@@ -69,7 +69,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testCanRetrieveCreatedCard(string $abookname, array $cfg): void
     {
-        $abook = AccountData::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
@@ -90,7 +90,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testCanDeleteExistingCard(string $abookname, array $cfg): void
     {
-        $abook = AccountData::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         [ 'uri' => $cardUri ] = self::$insertedCards[$abookname];

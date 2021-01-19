@@ -12,7 +12,7 @@ final class DiscoveryTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        AccountData::init();
+        TestInfrastructureSrv::init();
     }
 
     protected function setUp(): void
@@ -29,17 +29,17 @@ final class DiscoveryTest extends TestCase
 
     public function accountProvider(): array
     {
-        return AccountData::accountProvider();
+        return TestInfrastructureSrv::accountProvider();
     }
 
     /** @dataProvider accountProvider */
     public function testAllAddressbooksCanBeDiscovered(string $accountname, array $cfg): void
     {
-        $account = AccountData::$accounts[$accountname];
+        $account = TestInfrastructureSrv::$accounts[$accountname];
         $this->assertInstanceOf(Account::class, $account);
 
         $abookUris = [];
-        foreach (AccountData::$addressbooks as $abook) {
+        foreach (TestInfrastructureSrv::$addressbooks as $abook) {
             if ($abook->getAccount() === $account) {
                 $abookUris[] = $abook->getUri();
             }

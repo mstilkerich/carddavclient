@@ -19,7 +19,7 @@ final class AddressbookQueryTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        AccountData::init();
+        TestInfrastructureSrv::init();
         self::$insertedCards = [];
     }
 
@@ -35,7 +35,7 @@ final class AddressbookQueryTest extends TestCase
     {
         // delete cards
         foreach (self::$insertedCards as $abookname => $cards) {
-            $abook = AccountData::$addressbooks[$abookname];
+            $abook = TestInfrastructureSrv::$addressbooks[$abookname];
             TestCase::assertInstanceOf(AddressbookCollection::class, $abook);
 
             foreach ($cards as $card) {
@@ -46,13 +46,13 @@ final class AddressbookQueryTest extends TestCase
 
     public function addressbookProvider(): array
     {
-        return AccountData::addressbookProvider();
+        return TestInfrastructureSrv::addressbookProvider();
     }
 
     /** @dataProvider addressbookProvider */
     public function testQueryByExactEmailAddress(string $abookname, array $cfg): void
     {
-        $abook = AccountData::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->createSamples($abookname, $abook);
 
@@ -89,7 +89,7 @@ final class AddressbookQueryTest extends TestCase
         self::$insertedCards[$abookname] = [];
 
         $domains = [ "example.com", "sub.example.com", "smth.else" ];
-        $types = [ "home", "work", "work2", "other" ];
+        $types = [ "home", "work", "internet", "other" ];
 
         // create cards
         for ($i = 0; $i < 10; ++$i) {

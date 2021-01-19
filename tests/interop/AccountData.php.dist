@@ -111,6 +111,7 @@ final class AccountData
             "supports_synccoll" => true,
             "supports_multiget" => true,
             "supports_ctag" => true,
+            "readonly" => true
         ],
         "BaikalKrb_First" => [
             "account" => "BaikalKrb",
@@ -137,56 +138,6 @@ final class AccountData
             "supports_ctag" => true,
         ],
     ];
-
-    /** @var Account[] Caches the Account objects for all accounts from ACCOUNTS*/
-    public static $accounts = [];
-
-    /** @var AddressbookCollection[] Caches the AddressbookCollection objects for all addressbooks from ADDRESSBOOKS */
-    public static $addressbooks = [];
-
-    public static function init(): void
-    {
-        if (empty(self::$accounts)) {
-            $logfile = 'testreports/interop/tests.log';
-            $logfileHttp = 'testreports/interop/tests_http.log';
-            foreach ([$logfile, $logfileHttp] as $l) {
-                if (file_exists($l)) {
-                    unlink($l);
-                }
-            }
-
-            Config::init(
-                $logger = new \Wa72\SimpleLogger\FileLogger($logfile, \Psr\Log\LogLevel::DEBUG),
-                $logger = new \Wa72\SimpleLogger\FileLogger($logfileHttp, \Psr\Log\LogLevel::DEBUG)
-            );
-        }
-
-        foreach (self::ACCOUNTS as $name => $cfg) {
-            self::$accounts[$name] = new Account($cfg["discoveryUri"], $cfg["username"], $cfg["password"]);
-        }
-
-        foreach (self::ADDRESSBOOKS as $name => $cfg) {
-            self::$addressbooks[$name] = new AddressbookCollection($cfg["url"], self::$accounts[$cfg["account"]]);
-        }
-    }
-
-    public static function accountProvider(): array
-    {
-        $ret = [];
-        foreach (self::ACCOUNTS as $name => $cfg) {
-            $ret[$name] = [ $name, $cfg ];
-        }
-        return $ret;
-    }
-
-    public static function addressbookProvider(): array
-    {
-        $ret = [];
-        foreach (self::ADDRESSBOOKS as $name => $cfg) {
-            $ret[$name] = [ $name, $cfg ];
-        }
-        return $ret;
-    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120:ft=php

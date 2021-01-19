@@ -76,6 +76,7 @@ class ElementNames
     public const HREF = "{" . self::NSDAV . "}href";
     public const LIMIT = "{" . self::NSCARDDAV . "}limit";
     public const NRESULTS = "{" . self::NSCARDDAV . "}nresults";
+    public const SUPPORTED_FILTER = "{" . self::NSCARDDAV . "}supported-filter";
     public const FILTER = "{" . self::NSCARDDAV . "}filter";
     public const PROPFILTER = "{" . self::NSCARDDAV . "}prop-filter";
     public const PARAMFILTER = "{" . self::NSCARDDAV . "}param-filter";

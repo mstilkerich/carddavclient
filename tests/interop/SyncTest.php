@@ -27,7 +27,7 @@ final class SyncTest extends TestCase
     {
         self::$insertedUris = [];
         self::$cacheState = [];
-        AccountData::init();
+        TestInfrastructureSrv::init();
     }
 
     protected function setUp(): void
@@ -42,7 +42,7 @@ final class SyncTest extends TestCase
     {
         // try to clean up leftovers
         foreach (self::$insertedUris as $abookname => $uris) {
-            $abook = AccountData::$addressbooks[$abookname];
+            $abook = TestInfrastructureSrv::$addressbooks[$abookname];
             foreach ($uris as $uri) {
                 $abook->deleteCard($uri);
             }
@@ -51,13 +51,13 @@ final class SyncTest extends TestCase
 
     public function addressbookProvider(): array
     {
-        return AccountData::addressbookProvider();
+        return TestInfrastructureSrv::addressbookProvider();
     }
 
     /** @dataProvider addressbookProvider */
     public function testInitialSyncWorks(string $abookname, array $cfg): void
     {
-        $abook = AccountData::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         // insert two cards we can expect to be reported by the initial sync
@@ -88,7 +88,7 @@ final class SyncTest extends TestCase
         $accountcfg = AccountData::ACCOUNTS[$accountname];
         $this->assertArrayHasKey("syncAllowExtraChanges", $accountcfg);
 
-        $abook = AccountData::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$cacheState);
 
@@ -123,7 +123,7 @@ final class SyncTest extends TestCase
         $accountcfg = AccountData::ACCOUNTS[$accountname];
         $this->assertArrayHasKey("syncAllowExtraChanges", $accountcfg);
 
-        $abook = AccountData::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$cacheState);
 

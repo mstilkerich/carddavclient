@@ -40,6 +40,7 @@
         "phpcompatibility/php-compatibility": "*",
         "dealerdirect/phpcodesniffer-composer-installer": ">= 0.7.0",
         "phpunit/phpunit": "~9",
+        "phpunit/phpcov": "*",
         "wa72/simplelogger": "^1.1",
         "psalm/plugin-phpunit": "^0.15.0",
         "alexeyshockov/guzzle-psalm-plugin": "^0.3.1"

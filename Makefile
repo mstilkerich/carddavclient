@@ -16,11 +16,28 @@ phpcompatcheck:
 psalmanalysis:
 	vendor/bin/psalm --no-cache --shepherd --report=testreports/psalm.txt --report-show-info=true --no-progress
 
+tests: tests-interop unittests
+	vendor/bin/phpcov merge --html testreports/coverage testreports
+
+.PHONY: unittests
+unittests: tests/unit/phpunit.xml
+	@echo
+	@echo  ==========================================================
+	@echo "                   EXECUTING UNIT TESTS"
+	@echo  ==========================================================
+	@echo
+	vendor/bin/phpunit -c tests/unit/phpunit.xml
+
+.PHONY: tests-interop
+tests-interop: tests/interop/phpunit.xml
+	@echo
+	@echo  ==========================================================
+	@echo "       EXECUTING CARDDAV INTEROPERABILITY TESTS"
+	@echo  ==========================================================
+	@echo
+	vendor/bin/phpunit -c tests/interop/phpunit.xml
+
 doc:
 	rm -rf $(DOCDIR)
 	phpDocumentor.phar -d src/ -t $(DOCDIR) --title="CardDAV Client Library"
-
-tests:
-	@[ -f tests/AccountData.php ] || (echo "Create tests/AccountData.php from template tests/AccountData.php.dist to execute tests"; exit 1)
-	vendor/bin/phpunit
 

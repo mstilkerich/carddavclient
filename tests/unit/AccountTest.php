@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MStilkerich\Tests\CardDavClient;
+namespace MStilkerich\Tests\CardDavClient\Unit;
 
 use PHPUnit\Framework\TestCase;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};

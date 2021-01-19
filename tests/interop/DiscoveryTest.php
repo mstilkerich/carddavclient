@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MStilkerich\Tests\CardDavClient;
+namespace MStilkerich\Tests\CardDavClient\Interop;
 
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};
 use MStilkerich\CardDavClient\Services\Discovery;

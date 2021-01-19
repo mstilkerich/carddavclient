@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MStilkerich\Tests\CardDavClient;
+namespace MStilkerich\Tests\CardDavClient\Interop;
 
+use MStilkerich\Tests\CardDavClient\TestUtils;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection,QueryConditions};
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCard;

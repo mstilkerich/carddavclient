@@ -1,28 +1,27 @@
-<phpunit colors="true" testdox="true" bootstrap="tests/autoload.php" verbose="true">
+<phpunit colors="true" testdox="true" bootstrap="autoload.php" verbose="true">
     <php>
         <!-- make sure all PHP errors are reported and raise PHPunit exceptions -->
         <ini name="error_reporting" value="-1"/>
     </php>
     <testsuites>
         <testsuite name="interoperability">
-            <directory>tests</directory>
+            <directory>.</directory>
         </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true" pathCoverage="true">
         <include>
-            <directory suffix=".php">src</directory>
+            <directory suffix=".php">../../src</directory>
         </include>
 
         <report>
-            <php outputFile="testreports/coverage.cov"/>
-            <clover outputFile="testreports/clover.xml"/>
-            <html outputDirectory="testreports/coverage" lowUpperBound="50" highLowerBound="90"/>
+            <php outputFile="../../testreports/interop/coverage.cov"/>
+            <clover outputFile="../../testreports/interop/clover.xml"/>
         </report>
     </coverage>
 
     <logging>
-        <testdoxHtml outputFile="testreports/results.html"/>
+        <testdoxHtml outputFile="../../testreports/interop/results.html"/>
     </logging>
 </phpunit>
 

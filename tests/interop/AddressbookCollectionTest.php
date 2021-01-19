@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient\Interop;
 
-use MStilkerich\Tests\CardDavClient\TestUtils;
+use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCard;
@@ -57,7 +57,7 @@ final class AddressbookCollectionTest extends TestCase
         $abook = TestInfrastructureSrv::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
-        $vcard = TestUtils::createVCard();
+        $vcard = TestInfrastructure::createVCard();
         $createResult = $abook->createCard($vcard);
         $createResult["vcard"] = $vcard;
         self::$insertedCards[$abookname] = $createResult;
@@ -81,7 +81,7 @@ final class AddressbookCollectionTest extends TestCase
             $this->assertSame($cardETag, $etagGet);
         }
 
-        TestUtils::compareVCards($vcard, $vcardGet, true);
+        TestInfrastructure::compareVCards($vcard, $vcardGet, true);
     }
 
     /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient\Interop;
 
-use MStilkerich\Tests\CardDavClient\TestUtils;
+use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};
 use MStilkerich\CardDavClient\Services\Sync;
 use PHPUnit\Framework\TestCase;
@@ -160,9 +160,9 @@ final class SyncTest extends TestCase
     {
         $createdCards = [];
         for ($i = 0; $i < $num; ++$i) {
-            $vcard = TestUtils::createVCard();
+            $vcard = TestInfrastructure::createVCard();
             [ 'uri' => $cardUri, 'etag' => $cardETag ] = $abook->createCard($vcard);
-            $cardUri = TestUtils::normalizeUri($abook, $cardUri);
+            $cardUri = TestInfrastructure::normalizeUri($abook, $cardUri);
             $createdCards[$cardUri] = [ "vcard" => $vcard, "etag" => $cardETag ];
             if (!isset(self::$insertedUris[$abookname])) {
                 self::$insertedUris[$abookname] = [];

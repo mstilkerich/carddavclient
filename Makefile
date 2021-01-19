@@ -26,6 +26,7 @@ unittests: tests/unit/phpunit.xml
 	@echo "                   EXECUTING UNIT TESTS"
 	@echo  ==========================================================
 	@echo
+	@mkdir -p testreports/unit
 	vendor/bin/phpunit -c tests/unit/phpunit.xml
 
 .PHONY: tests-interop
@@ -35,6 +36,7 @@ tests-interop: tests/interop/phpunit.xml
 	@echo "       EXECUTING CARDDAV INTEROPERABILITY TESTS"
 	@echo  ==========================================================
 	@echo
+	@mkdir -p testreports/interop
 	vendor/bin/phpunit -c tests/interop/phpunit.xml
 
 doc:

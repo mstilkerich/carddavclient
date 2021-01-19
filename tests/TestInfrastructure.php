@@ -4,13 +4,33 @@ declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient;
 
+use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\TestCase;
-use MStilkerich\CardDavClient\WebDavCollection;
 use Sabre\VObject;
 use Sabre\VObject\Component\VCard;
+use MStilkerich\CardDavClient\{Config,WebDavCollection};
 
-final class TestUtils
+final class TestInfrastructure
 {
+    /** @var ?TestLogger Logger object used to store log messages produced during the tests */
+    private static $logger;
+
+    public static function init(LoggerInterface $httpLogger = null): void
+    {
+        if (!isset(self::$logger)) {
+            self::$logger = new TestLogger();
+        }
+
+        Config::init(self::$logger, $httpLogger);
+    }
+
+    public static function logger(): TestLogger
+    {
+        $logger = self::$logger;
+        TestCase::assertNotNull($logger, "Call init() before asking for logger");
+        return $logger;
+    }
+
     /**
      * Create a minimal VCard for test purposes.
      */

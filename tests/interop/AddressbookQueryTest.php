@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient\Interop;
 
-use MStilkerich\Tests\CardDavClient\TestUtils;
+use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection,QueryConditions};
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCard;
@@ -63,7 +63,7 @@ final class AddressbookQueryTest extends TestCase
         $this->assertArrayHasKey($expCard["uri"], $result);
 
         $rcvCard = $result[$expCard["uri"]];
-        TestUtils::compareVCards($expCard["vcard"], $rcvCard["vcard"], true);
+        TestInfrastructure::compareVCards($expCard["vcard"], $rcvCard["vcard"], true);
     }
 
     /*
@@ -96,7 +96,7 @@ final class AddressbookQueryTest extends TestCase
             $domain = $domains[$i % count($domains)];
             $type = $types[$i % count($types)];
 
-            $vcard = TestUtils::createVCard();
+            $vcard = TestInfrastructure::createVCard();
             $vcard->NICKNAME = "john{$i}doe";
             $vcard->add('EMAIL', "john{$i}doe@$domain", ['type' => $type]);
 
@@ -110,7 +110,7 @@ final class AddressbookQueryTest extends TestCase
 
             $createResult = $abook->createCard($vcard);
             $createResult["vcard"] = $vcard;
-            $createResult["uri"] = TestUtils::getUriPath($createResult["uri"]);
+            $createResult["uri"] = TestInfrastructure::getUriPath($createResult["uri"]);
             self::$insertedCards[$abookname][] = $createResult;
         }
     }

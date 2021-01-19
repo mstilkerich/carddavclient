@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient\Interop;
 
-use MStilkerich\Tests\CardDavClient\TestUtils;
+use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};
 use MStilkerich\CardDavClient\Services\{SyncHandler};
 use PHPUnit\Framework\Assert;
@@ -84,7 +84,7 @@ final class SyncTestHandler implements SyncHandler
 
         Assert::assertNotNull($card, "VCard data for $uri could not be retrieved/parsed");
 
-        $uri = TestUtils::normalizeUri($this->abook, $uri);
+        $uri = TestInfrastructure::normalizeUri($this->abook, $uri);
 
         if ($this->allowAdditionalChanges === false) {
             Assert::assertArrayHasKey($uri, $this->expectedChangedCards, "Unexpected change reported: $uri");
@@ -108,7 +108,7 @@ final class SyncTestHandler implements SyncHandler
                 );
             }
 
-            TestUtils::compareVCards($this->expectedChangedCards[$uri]["vcard"], $card, true);
+            TestInfrastructure::compareVCards($this->expectedChangedCards[$uri]["vcard"], $card, true);
         }
     }
 
@@ -121,7 +121,7 @@ final class SyncTestHandler implements SyncHandler
         }
         unset($this->cacheState[$uri]);
 
-        $uri = TestUtils::normalizeUri($this->abook, $uri);
+        $uri = TestInfrastructure::normalizeUri($this->abook, $uri);
 
         if (! $this->allowAdditionalChanges) {
             Assert::assertArrayHasKey($uri, $this->expectedDeletedUris, "Unexpected delete reported: $uri");

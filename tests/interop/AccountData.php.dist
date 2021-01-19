@@ -6,8 +6,13 @@ namespace MStilkerich\Tests\CardDavClient\Interop;
 
 use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config};
 
+/**
+ * @psalm-import-type TestAccount from TestInfrastructureSrv
+ * @psalm-import-type TestAddressbook from TestInfrastructureSrv
+ */
 final class AccountData
 {
+    /** @var array<string, TestAccount> */
     public const ACCOUNTS = [
         "iCloud" => [
             "username" => "icloudid@example.com",
@@ -63,6 +68,7 @@ final class AccountData
         ],
     ];
 
+    /** @var array<string, TestAddressbook> */
     public const ADDRESSBOOKS = [
         "iCloud" => [
             "account" => "iCloud",

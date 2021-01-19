@@ -6,11 +6,13 @@ namespace MStilkerich\Tests\CardDavClient\Unit;
 
 use PHPUnit\Framework\TestCase;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};
+use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 
 final class AccountTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
+        TestInfrastructure::init();
     }
 
     protected function setUp(): void

@@ -92,14 +92,21 @@ class PropFilter implements \Sabre\Xml\XmlSerializable
      */
     public function __construct(string $propname, array $conditions)
     {
-        $this->property = $propname;
+        if (strlen($propname) > 0) {
+            $this->property = $propname;
+        } else {
+            throw new \InvalidArgumentException("Property name must be a non-empty string");
+        }
 
         if ($conditions["matchAll"] ?? false) {
-            unset($conditions["matchAll"]);
             $this->testType = 'allof';
         }
 
-        foreach ($conditions as $condition) {
+        foreach ($conditions as $idx => $condition) {
+            if (is_string($idx)) { // matchAll
+                continue;
+            }
+
             if (isset($condition)) {
                 if (is_array($condition)) {
                     // param filter
@@ -109,19 +116,23 @@ class PropFilter implements \Sabre\Xml\XmlSerializable
                     } else {
                         throw new \InvalidArgumentException(
                             "Param filter on property $propname must be an element of two entries" .
-                            print_r($condition, true)
+                            var_export($condition, true)
                         );
                     }
                 } elseif (is_string($condition)) {
                     // text match filter
                     $this->conditions[] = new TextMatch($condition);
+                } else {
+                    throw new \InvalidArgumentException(
+                        "Invalid condition for property $propname: " . var_export($condition, true)
+                    );
                 }
             } else {
                 // is-not-defined filter
                 if (count($conditions) > 1) {
                     throw new \InvalidArgumentException(
                         "PropFilter on $propname can have ONE not-defined (null) OR several match conditions: " .
-                        print_r($conditions, true)
+                        var_export($conditions, true)
                     );
                 }
                 $this->conditions = null;

@@ -119,13 +119,13 @@ class Filter implements \Sabre\Xml\XmlSerializable
             if (is_string($idx)) {
                 // simple form - single condition only
                 $this->propFilters[] = new PropFilter($idx, [$condition]);
-            } elseif (is_array($condition)) {
+            } elseif (is_array($condition) && count($condition) == 2) {
                 // elaborate form [ property name, list of simple conditions ]
                 [ $propname, $simpleConditions ] = $condition;
                 /** @psalm-var ComplexCondition $simpleConditions */
                 $this->propFilters[] = new PropFilter($propname, $simpleConditions);
             } else {
-                throw new \InvalidArgumentException("Condition must be either string or two-element array");
+                throw new \InvalidArgumentException("Invalid complex condition: " . var_export($condition, true));
             }
         }
     }

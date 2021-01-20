@@ -9,6 +9,9 @@ use MStilkerich\CardDavClient\{Account,AddressbookCollection,QueryConditions};
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCard;
 
+/**
+ * @psalm-import-type TestAddressbook from TestInfrastructureSrv
+ */
 final class AddressbookQueryTest extends TestCase
 {
     /**
@@ -44,12 +47,16 @@ final class AddressbookQueryTest extends TestCase
         }
     }
 
+    /** @return array<string, array{string, TestAddressbook}> */
     public function addressbookProvider(): array
     {
         return TestInfrastructureSrv::addressbookProvider();
     }
 
-    /** @dataProvider addressbookProvider */
+    /**
+     * @param TestAddressbook $cfg
+     * @dataProvider addressbookProvider
+     */
     public function testQueryByExactEmailAddress(string $abookname, array $cfg): void
     {
         $abook = TestInfrastructureSrv::$addressbooks[$abookname];

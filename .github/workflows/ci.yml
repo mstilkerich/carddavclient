@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - issue*
 
 jobs:
   buildtest:
@@ -44,12 +45,21 @@ jobs:
         run: make phpcompatcheck
       - name: Run psalm static analysis
         run: make psalmanalysis
-      - name: Run tests
-        run: make tests
-      - name: Upload test coverage reports to codecov.io
+      - name: Run interop tests
+        run: make tests-interop
+      - name: Run unit tests
+        run: make unittests
+      - name: Upload unit test coverage reports to codecov.io
         uses: codecov/codecov-action@v1
         with:
-          file: testreports/clover.xml
+          file: testreports/unit/clover.xml
+          flags: unittests
+          name: Carddavclient unit test coverage
+          fail_ci_if_error: false
+      - name: Upload interop test coverage reports to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          file: testreports/interop/clover.xml
           flags: interop
-          name: RCMCardDAV interoperability test coverage
+          name: Carddavclient interoperability test coverage
           fail_ci_if_error: false

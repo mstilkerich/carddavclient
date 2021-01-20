@@ -102,9 +102,11 @@ final class FilterTest extends TestCase
     {
 
         foreach ([true, false] as $matchAll) {
+            $testType = $matchAll ? 'allof' : 'anyof';
             $filter = new Filter($conditions, $matchAll);
-            $this->assertSame($matchAll ? 'allof' : 'anyof', $filter->testType);
+            $this->assertSame($testType, $filter->testType);
             $this->assertCount(count($expStruct), $filter->propFilters, "Number of prop filters wrong");
+            $this->assertEquals(['test' => $testType], $filter->xmlAttributes());
 
             $struct = $expStruct;
             foreach ($filter->propFilters as $pf) {
@@ -176,8 +178,10 @@ final class FilterTest extends TestCase
     public function testElaborateFilterConditionsParsedCorrectly(array $conditions, array $expStruct): void
     {
         foreach ([true, false] as $matchAll) {
+            $testType = $matchAll ? 'allof' : 'anyof';
             $filter = new Filter($conditions, $matchAll);
-            $this->assertSame($matchAll ? 'allof' : 'anyof', $filter->testType);
+            $this->assertSame($testType, $filter->testType);
+            $this->assertEquals(['test' => $testType], $filter->xmlAttributes());
 
             $this->assertCount(count($expStruct), $conditions, "Expected results do not filter filter input");
             $this->assertCount(count($expStruct), $filter->propFilters, "Number of prop filters wrong");
@@ -323,7 +327,10 @@ final class FilterTest extends TestCase
     private function validatePropFilter(PropFilter $pf, string $expStruct): void
     {
         $this->assertMatchesRegularExpression('/^[pP]./', $expStruct, "prop-filter match type expected");
-        $this->assertSame(($expStruct[0] == "p") ? "anyof" : "allof", $pf->testType);
+
+        $testType = ($expStruct[0] == "p") ? "anyof" : "allof";
+        $this->assertSame($testType, $pf->testType);
+        $this->assertEquals(['test' => $testType, 'name' => $pf->property], $pf->xmlAttributes());
 
         if ($expStruct[1] == "0") {
             $this->assertNull($pf->conditions, "Conditions expected to be null");
@@ -341,28 +348,25 @@ final class FilterTest extends TestCase
                     $this->assertInstanceOf(TextMatch::class, $c, "text match expected");
                     $this->checkTextMatch($c, $s);
                     $i += 2;
-                } elseif (strtolower($s[0]) == "[") {
+                } else {
+                    $this->assertSame("[", strtolower($s[0]));
+
                     // param-filter
                     $this->assertInstanceOf(ParamFilter::class, $c, "param filter expected");
-                    $paramEnd = strpos($s, "]");
 
+                    $paramEnd = strpos($s, "]");
                     $this->assertIsInt($paramEnd);
-                    $i += $paramEnd + 1;
                     $this->assertGreaterThan(1, $paramEnd);
-                    $param = substr($s, 1, $paramEnd - 1);
-                    $this->assertSame($param, $c->param);
                     $this->assertGreaterThan($paramEnd + 1, strlen($s));
+
+                    // remove [param] from $s
+                    $i += $paramEnd + 1;
+                    $param = substr($s, 1, $paramEnd - 1);
                     $s = substr($s, $paramEnd + 1);
 
-                    $this->assertMatchesRegularExpression('/^[0tT]/', $s, "param-filter condition char unknown $s");
-                    if ($s[0] == "0") {
-                        ++$i;
-                        $this->assertNull($c->filter);
-                    } else {
-                        $this->assertInstanceOf(TextMatch::class, $c->filter, "param filter cond must be textmatch");
-                        $this->checkTextMatch($c->filter, $s);
-                        $i += 2;
-                    }
+                    // perform checks on the filter
+                    $this->assertSame($param, $c->param);
+                    $i += $this->checkParamFilter($c, $s);
                 }
             }
         }
@@ -374,6 +378,32 @@ final class FilterTest extends TestCase
         $this->assertSame($exp[0] == "T", $tm->invertMatch);
         $this->assertArrayHasKey($exp[1], self::MATCHTYPES, "unexpected matchtype character {$exp[1]}");
         $this->assertSame(self::MATCHTYPES[$exp[1]], $tm->matchType, "unexpected matchtype");
+
+        $this->assertEquals(
+            [
+                'collation' => 'i;unicode-casemap',
+                'negate-condition' => $tm->invertMatch ? 'yes' : 'no', // $tm->invertMatch already verified
+                'match-type' => $tm->matchType // $tm->matchType already verified
+            ],
+            $tm->xmlAttributes()
+        );
+    }
+
+    private function checkParamFilter(ParamFilter $pf, string $exp): int
+    {
+        $this->assertEquals(['name' => $pf->param], $pf->xmlAttributes());
+
+        $this->assertMatchesRegularExpression('/^[0tT]/', $exp, "param-filter condition char unknown $exp");
+        if ($exp[0] == "0") {
+            $skipChars = 1;
+            $this->assertNull($pf->filter);
+        } else {
+            $this->assertInstanceOf(TextMatch::class, $pf->filter, "param filter cond must be textmatch");
+            $this->checkTextMatch($pf->filter, $exp);
+            $skipChars = 2;
+        }
+
+        return $skipChars;
     }
 }
 

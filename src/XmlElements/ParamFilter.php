@@ -105,7 +105,7 @@ class ParamFilter implements \Sabre\Xml\XmlSerializable
      */
     public function xmlAttributes(): array
     {
-        return [];
+        return [ 'name' => $this->param ];
     }
 }
 

@@ -108,7 +108,7 @@ class TextMatch implements \Sabre\Xml\XmlSerializable
      */
     public function __construct(string $matchSpec)
     {
-        if (preg_match('/^(!?)\/(.*)\/([$=^]?)/', $matchSpec, $matches)) {
+        if (preg_match('/^(!?)\/(.*)\/([$=^]?)$/', $matchSpec, $matches)) {
             if (count($matches) === 4) {
                 [ , $inv, $needle, $matchType ] = $matches;
 

@@ -254,6 +254,53 @@ final class FilterTest extends TestCase
         new Filter($conditions, true);
     }
 
+    /**
+     * Provides a list of invalid filter conditions in the simple or elaborate format, plus a substring of the expected
+     * exception message.
+     *
+     * @return list<array{string, ?bool, string, string}>
+     */
+    public function textmatchProvider(): array
+    {
+        return [
+            [ '/foo/', false, 'contains', 'foo' ],
+            [ '!/$$$/', true, 'contains', '$$$' ],
+            [ '!/^$/^', true, 'starts-with', '^$' ],
+            [ '/foo/$', false, 'ends-with', 'foo' ],
+            [ '/foo/=', false, 'equals', 'foo' ],
+            [ '///=', false, 'equals', '/' ],
+            [ '//', false, 'contains', '' ],
+            [ '', null, '', 'Not a valid match specifier for TextMatch' ],
+            [ '//+', null, '', 'Not a valid match specifier for TextMatch' ],
+            [ 'x//', null, '', 'Not a valid match specifier for TextMatch' ],
+        ];
+    }
+    /**
+     * @dataProvider textmatchProvider
+     *
+     * @param string $pattern
+     * @param ?bool  $expInv Whether inverted match is expected. Null if the pattern is erroneous and should trigger an
+     *                       InvalidArgumentException. $expNeedle should contain a partial expected exception message.
+     * @param string $expType The expected match type
+     * @param string $expNeedle Expected search string.
+     */
+    public function testTextmatchPatternParsedCorrectly(
+        string $pattern,
+        ?bool $expInv,
+        string $expType,
+        string $expNeedle
+    ): void {
+        if (!isset($expInv)) {
+            $this->expectException(\InvalidArgumentException::class);
+            $this->expectExceptionMessage($expNeedle);
+        }
+
+        $tm = new TextMatch($pattern);
+        $this->assertSame($expInv, $tm->invertMatch);
+        $this->assertSame($expType, $tm->matchType);
+        $this->assertSame($expNeedle, $tm->needle);
+    }
+
     /** @var array<string,string> Maps the match types characters of the expected structure string to attribute value */
     private const MATCHTYPES = [
         '~' => 'contains',

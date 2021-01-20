@@ -65,7 +65,7 @@ final class AddressbookQueryTest extends TestCase
 
         $expCard = self::$insertedCards[$abookname][6];
 
-        $result = $abook->query(['EMAIL' => '/^doe6@example.com$/']);
+        $result = $abook->query(['EMAIL' => '/doe6@example.com/=']);
         $this->assertCount(1, $result, "Unexpected number of results");
         $this->assertArrayHasKey($expCard["uri"], $result);
 

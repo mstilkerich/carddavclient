@@ -59,15 +59,15 @@ final class FilterTest extends TestCase
                 [ 'EMAIL' => 'pt~' ],
             ],
             'SinglePropertyNotStartsWith' => [
-                [ 'FN' => '!/^Mustermann/' ],
+                [ 'FN' => '!/Mustermann/^' ],
                 [ 'FN' => 'pT^' ],
             ],
             'SinglePropertyEndsWith' => [
-                [ 'FN' => '/Mustermann$/' ],
+                [ 'FN' => '/Mustermann/$' ],
                 [ 'FN' => 'pt$' ],
             ],
             'SinglePropertyNotEquals' => [
-                [ 'FN' => '!/^Mustermann$/' ],
+                [ 'FN' => '!/Mustermann/=' ],
                 [ 'FN' => 'pT=' ],
             ],
             'SinglePropertyParamNotDefined' => [
@@ -83,7 +83,7 @@ final class FilterTest extends TestCase
                 [ 'EMAIL' => 'p[TYPE]T~' ],
             ],
             'SinglePropertyParamStartsWith' => [
-                [ 'ADR' => [ 'TYPE', '/^work/' ] ],
+                [ 'ADR' => [ 'TYPE', '/work/^' ] ],
                 [ 'ADR' => 'p[TYPE]t^' ],
             ],
             'TwoProperties' => [
@@ -150,17 +150,17 @@ final class FilterTest extends TestCase
                 [ 'pt~' ],
             ],
             'SinglePropertyMultipleConditionsOR' => [
-                [ ['EMAIL', ['!/^foo/', '/bar/', 'matchAll' => false]] ],
+                [ ['EMAIL', ['!/foo/^', '/bar/', 'matchAll' => false]] ],
                 [ 'pT^t~' ],
             ],
             'SinglePropertyMultipleConditionsAND' => [
-                [ ['EMAIL', ['!/^foo/', '/bar/', 'matchAll' => true]] ],
+                [ ['EMAIL', ['!/foo/^', '/bar/', 'matchAll' => true]] ],
                 [ 'PT^t~' ],
             ],
             'MultiplePropertiesMultipleConditions' => [
                 [
-                    ['FN', ['/^Muster/', '/Max/', 'matchAll' => true]],
-                    ['EMAIL', [['TYPE', '/^work/'], ['TYPE', null]]],
+                    ['FN', ['/Muster/^', '/Max/', 'matchAll' => true]],
+                    ['EMAIL', [['TYPE', '/work/^'], ['TYPE', null]]],
                     ['NICKNAME', [null]],
                 ],
                 [ 'Pt^t~', 'p[TYPE]t^[TYPE]0', 'p0' ],

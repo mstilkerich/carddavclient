@@ -97,10 +97,10 @@ class TextMatch implements \Sabre\Xml\XmlSerializable
      *     needed if / appears as part of the match string (e.g. /http:/// matches for http://).
      *   - To invert the match, insert ! before the initial / (e.g. !/foo/)
      *   - The default match type is "contains" semantics. If you want to match the start or end of the property value,
-     *     use the ^/$ anchors as the first/last character of the search pattern. Examples:
-     *       - /^abc$/ - The property/parameter must match the value "abc" exactly
-     *       - /^abc/  - The property/parameter must start with "abc"
-     *       - /abc$/  - The property/parameter must end with "abc"
+     *     or perform an exact match, use the ^/$/= modifiers after the final slash. Examples:
+     *       - /abc/= - The property/parameter must match the value "abc" exactly
+     *       - /abc/^  - The property/parameter must start with "abc"
+     *       - /abc/$  - The property/parameter must end with "abc"
      *       - /abc/   - The property/parameter must contain "abc"
      *   - The matching is performed case insensitive with UTF8 character set (this is currently not changeable).
      *
@@ -108,17 +108,22 @@ class TextMatch implements \Sabre\Xml\XmlSerializable
      */
     public function __construct(string $matchSpec)
     {
-        if (preg_match('/^(!?)\/(\^?)(.*?)(\$?)\//', $matchSpec, $matches)) {
-            if (count($matches) === 5) {
-                [ , $inv, $startAnc, $needle, $endAnc ] = $matches;
+        if (preg_match('/^(!?)\/(.*)\/([$=^]?)/', $matchSpec, $matches)) {
+            if (count($matches) === 4) {
+                [ , $inv, $needle, $matchType ] = $matches;
 
                 $this->invertMatch = ($inv == "!");
                 $this->needle = $needle;
 
-                $matchType  = ($startAnc == "^" ? 2 : 0);
-                $matchType += ($endAnc == "$" ? 1 : 0);
-                $matchTypes = ['contains', 'ends-with', 'starts-with', 'equals'];
-                $this->matchType = $matchTypes[$matchType];
+                if ($matchType == '^') {
+                    $this->matchType = 'starts-with';
+                } elseif ($matchType == '$') {
+                    $this->matchType = 'ends-with';
+                } elseif ($matchType == '=') {
+                    $this->matchType = 'equals';
+                } else {
+                    $this->matchType = 'contains';
+                }
 
                 return;
             }

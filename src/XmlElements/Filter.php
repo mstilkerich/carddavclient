@@ -87,11 +87,11 @@ class Filter implements \Sabre\Xml\XmlSerializable
      * Examples for the simple form:
      *   [ 'EMAIL' => null ] - matches all VCards that do NOT have an EMAIL property
      *   [ 'EMAIL' => "//" ] - matches all VCards that DO have an EMAIL property (with any value)
-     *   [ 'EMAIL' => '/@example.com$/' ] - matches all VCards that have an EMAIL property with an email address of the
+     *   [ 'EMAIL' => '/@example.com/$' ] - matches all VCards that have an EMAIL property with an email address of the
      *                                      example.com domain
-     *   [ 'EMAIL' => '/@example.com$/', 'N' => '/^Mustermann;/' ] - like before, but additionally/alternatively the
+     *   [ 'EMAIL' => '/@example.com/$', 'N' => '/Mustermann;/^' ] - like before, but additionally/alternatively the
      *                                                               surname must be Mustermann (depending on $matchAll)
-     *   [ 'EMAIL' => [ 'TYPE' => '/^home$/' ] ] - matches all VCards with an EMAIL property that has a TYPE parameter
+     *   [ 'EMAIL' => [ 'TYPE' => '/home/=' ] ] - matches all VCards with an EMAIL property that has a TYPE parameter
      *                                             with value home
      *
      * The more elaborate form is an array of two-element arrays where the first element is a property name and
@@ -100,7 +100,7 @@ class Filter implements \Sabre\Xml\XmlSerializable
      * that all conditions need to match (AND semantics).
      *
      * Examples for the elaborate form:
-     *   [ [ 'EMAIL', ['/@example.com$/', ['TYPE', '/^home$/'], 'matchAll' => true] ], [ 'N', '/^Mustermann;/' ] ] -
+     *   [ [ 'EMAIL', ['/@example.com/$', ['TYPE', '/home/='], 'matchAll' => true] ], [ 'N', '/Mustermann;/^' ] ] -
      *     Matches all VCards, that have an EMAIL property with an address in the domain example.com and at the
      *     same time a TYPE parameter with value home, and/or an N property with a surname of Mustermann.
      *

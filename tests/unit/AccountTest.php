@@ -26,6 +26,7 @@ final class AccountTest extends TestCase
     public static function tearDownAfterClass(): void
     {
     }
+
     public function testCanBeCreatedFromValidData(): void
     {
         $account = new Account("example.com", "theUser", "thePassword");

@@ -37,7 +37,6 @@ final class AccountData
             "password" => "ncadmPassw0rd",
             "discoveryUri" => "http://localhost:8080/remote.php/dav/",
             "syncAllowExtraChanges" => false,
-            "readonly" => false,
         ],
         /*
         "Baikal" => [
@@ -100,6 +99,7 @@ final class AccountData
             "supports_synccoll" => true,
             "supports_multiget" => true,
             "supports_ctag" => true,
+            "readonly" => false,
         ],
         /*
         "Owncloud" => [

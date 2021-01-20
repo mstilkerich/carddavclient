@@ -1,4 +1,7 @@
 # CardDAV client library for PHP ("PHP-CardDavClient")
+![CI Build](https://github.com/mstilkerich/carddavclient/workflows/CI%20Build/badge.svg)
+[![codecov](https://codecov.io/gh/mstilkerich/carddavclient/graph/badge.svg)](https://codecov.io/gh/mstilkerich/carddavclient)
+[![Type Coverage](https://shepherd.dev/github/mstilkerich/carddavclient/coverage.svg)](https://shepherd.dev/github/mstilkerich/carddavclient)
 
 This is a library for PHP applications to interact with addressbooks stored on CardDAV servers.
 
@@ -20,7 +23,7 @@ This is a library for PHP applications to interact with addressbooks stored on C
 
 Currently, this library has been tested to interoperate with:
 
-* Nextcloud 18 (Basic Auth and GSSAPI/Kerberos 5)
+* Nextcloud 18 and later (Basic Auth and GSSAPI/Kerberos 5)
 * iCloud
 * Google Contacts via CardDAV API (using HTTP Basic Authentication, which is deprecated and will be disabled by Google in the future for OAuth2)
 * Radicale 3

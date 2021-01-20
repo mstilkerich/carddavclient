@@ -13,7 +13,7 @@ stylecheck:
 phpcompatcheck:
 	vendor/bin/phpcs --colors --standard=PHPCompatibility --runtime-set testVersion 7.1 src/ tests/
 
-psalmanalysis:
+psalmanalysis: tests/interop/AccountData.php
 	vendor/bin/psalm --no-cache --shepherd --report=testreports/psalm.txt --report-show-info=true --no-progress
 
 tests: tests-interop unittests
@@ -43,3 +43,6 @@ doc:
 	rm -rf $(DOCDIR)
 	phpDocumentor.phar -d src/ -t $(DOCDIR) --title="CardDAV Client Library"
 
+# For github CI system - if AccountData.php is not available, create from AccountData.php.dist
+tests/interop/AccountData.php: | tests/interop/AccountData.php.dist
+	cp $| $@

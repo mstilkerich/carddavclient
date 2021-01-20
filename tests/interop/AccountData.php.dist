@@ -14,6 +14,7 @@ final class AccountData
 {
     /** @var array<string, TestAccount> */
     public const ACCOUNTS = [
+        /*
         "iCloud" => [
             "username" => "icloudid@example.com",
             "password" => "foobar",
@@ -30,12 +31,14 @@ final class AccountData
             "discoveryUri" => "gmail.com",
             "syncAllowExtraChanges" => true,
         ],
+         */
         "Nextcloud" => [
-            "username" => "nextcloudUser",
-            "password" => "foobar",
-            "discoveryUri" => "example.com",
+            "username" => "ncadm",
+            "password" => "ncadmPassw0rd",
+            "discoveryUri" => "http://localhost:8080/remote.php/dav/",
             "syncAllowExtraChanges" => false,
         ],
+        /*
         "Baikal" => [
             "username" => "baikalUser",
             "password" => "foobar",
@@ -66,10 +69,12 @@ final class AccountData
             "discoveryUri" => "http://localhost/davical",
             "syncAllowExtraChanges" => false,
         ],
+         */
     ];
 
     /** @var array<string, TestAddressbook> */
     public const ADDRESSBOOKS = [
+        /*
         "iCloud" => [
             "account" => "iCloud",
             "url" => "https://pXX-contacts.icloud.com:443/1234567/carddavhome/card/",
@@ -86,14 +91,16 @@ final class AccountData
             "supports_multiget" => true,
             "supports_ctag" => true,
         ],
+         */
         "Nextcloud" => [
             "account" => "Nextcloud",
-            "url" => "https://www.example.com:443/nextcloud/remote.php/dav/addressbooks/users/nextcloudUser/contacts/",
+            "url" => "http://localhost:8080/remote.php/dav/addressbooks/users/ncadm/contacts/",
             "displayname" => "Contacts",
             "supports_synccoll" => true,
             "supports_multiget" => true,
             "supports_ctag" => true,
         ],
+        /*
         "Owncloud" => [
             "account" => "Owncloud",
             "url" => "http://localhost:80/owncloud/remote.php/dav/addressbooks/users/owncloudUser/contacts/",
@@ -143,6 +150,7 @@ final class AccountData
             "supports_multiget" => true,
             "supports_ctag" => true,
         ],
+         */
     ];
 }
 

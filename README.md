@@ -25,7 +25,7 @@ Currently, this library has been tested to interoperate with:
 
 * Nextcloud 18 and later (Basic Auth and GSSAPI/Kerberos 5)
 * iCloud
-* Google Contacts via CardDAV API (using HTTP Basic Authentication, which is deprecated and will be disabled by Google in the future for OAuth2)
+* Google Contacts via CardDAV API (only HTTP Basic Authentication)
 * Radicale 3 (also used by Synology as DSM CardDAV server)
 * Owncloud 10
 * Baïkal 0.7 (Digest Auth and GSSAPI/Kerberos 5)

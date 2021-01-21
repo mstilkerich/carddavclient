@@ -74,6 +74,26 @@ final class AddressbookQueryTest extends TestCase
         TestInfrastructure::compareVCards($expCard["vcard"], $rcvCard["vcard"], true);
     }
 
+    /**
+     * @param TestAddressbook $cfg
+     * @dataProvider addressbookProvider
+     */
+    public function testQueryByContainsEmailAddress(string $abookname, array $cfg): void
+    {
+        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+        $this->createSamples($abookname, $abook);
+
+        $expCard = self::$insertedCards[$abookname][6];
+
+        $result = $abook->query(['EMAIL' => '/doe6/']);
+        $this->assertCount(1, $result, "Unexpected number of results");
+        $this->assertArrayHasKey($expCard["uri"], $result);
+
+        $rcvCard = $result[$expCard["uri"]];
+        TestInfrastructure::compareVCards($expCard["vcard"], $rcvCard["vcard"], true);
+    }
+
     /*
      * Test data set:
      * NICK john0doe, EMAIL john0doe@example.com doe0@example.com
@@ -97,7 +117,12 @@ final class AddressbookQueryTest extends TestCase
         self::$insertedCards[$abookname] = [];
 
         $domains = [ "example.com", "sub.example.com", "smth.else" ];
-        $types = [ "home", "work", "internet", "other" ];
+        // Google only supports home and work for type, everything else must be in X-ABLabel
+        // Otherwise it will simply strip the type. This is though even RFC 2426 explicitly allows non-standard values
+        // for the EMAIL TYPE.
+        // Furthermore, it will convert home and work to uppercase spelling, so for our comparisons to work, we need to
+        // use uppercase here.
+        $types = [ "HOME", "WORK" ];
 
         // create cards
         for ($i = 0; $i < 10; ++$i) {
@@ -110,7 +135,8 @@ final class AddressbookQueryTest extends TestCase
 
             //$email2 = "";
             if (($i % 3) == 0) {
-                $vcard->add('EMAIL', "doe{$i}@$domain", ['type' => 'work2']);
+                $vcard->add('EMAIL', "doe{$i}@$domain", ['type' => 'WORK']);
+                $vcard->add('IMPP', "xmpp:jab{$i}@$domain", ['X-SERVICE-TYPE' => 'Jabber', 'TYPE' => 'HOME']);
                 //$email2 = "doe{$i}@$domain";
             }
 

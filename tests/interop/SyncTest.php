@@ -36,6 +36,7 @@ final class SyncTest extends TestCase
 
     protected function tearDown(): void
     {
+        TestInfrastructure::logger()->reset();
     }
 
     public static function tearDownAfterClass(): void
@@ -75,6 +76,10 @@ final class SyncTest extends TestCase
             'cache' => $cacheState,
             'synctoken' => $synctoken
         ];
+
+        if (TestInfrastructureSrv::hasFeature($abookname, TestInfrastructureSrv::BUG_REJ_EMPTY_SYNCTOKEN)) {
+            TestInfrastructure::logger()->expectMessage('error', 'sync-collection REPORT produced exception');
+        }
     }
 
     /**

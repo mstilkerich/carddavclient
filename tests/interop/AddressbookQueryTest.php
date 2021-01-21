@@ -32,6 +32,7 @@ final class AddressbookQueryTest extends TestCase
 
     protected function tearDown(): void
     {
+        TestInfrastructure::logger()->reset();
     }
 
     public static function tearDownAfterClass(): void

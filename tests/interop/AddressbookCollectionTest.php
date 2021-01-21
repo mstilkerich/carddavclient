@@ -28,6 +28,7 @@ final class AddressbookCollectionTest extends TestCase
 
     protected function tearDown(): void
     {
+        TestInfrastructure::logger()->reset();
     }
 
     public static function tearDownAfterClass(): void
@@ -46,9 +47,23 @@ final class AddressbookCollectionTest extends TestCase
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $this->assertSame($cfg["displayname"], $abook->getName(), "Displayname");
-        $this->assertSame($cfg["supports_synccoll"], $abook->supportsSyncCollection(), "SyncCollection support");
-        $this->assertSame($cfg["supports_multiget"], $abook->supportsMultiGet(), "MultiGet report");
-        //$this->assertSame($cfg["supports_ctag"], $abook->getCTag(), "CTag");
+        $this->assertSame(
+            TestInfrastructureSrv::hasFeature($abookname, TestInfrastructureSrv::FEAT_SYNCCOLL),
+            $abook->supportsSyncCollection(),
+            "SyncCollection support"
+        );
+        $this->assertSame(
+            TestInfrastructureSrv::hasFeature($abookname, TestInfrastructureSrv::FEAT_MULTIGET),
+            $abook->supportsMultiGet(),
+            "MultiGet report"
+        );
+
+        $ctag = $abook->getCTag();
+        if (TestInfrastructureSrv::hasFeature($abookname, TestInfrastructureSrv::FEAT_CTAG)) {
+            $this->assertIsString($ctag);
+        } else {
+            $this->assertNull($ctag);
+        }
     }
 
     /** @dataProvider addressbookProvider */

@@ -14,22 +14,39 @@ use PHPUnit\Framework\TestCase;
  *   username: string,
  *   password: string,
  *   discoveryUri: string,
- *   syncAllowExtraChanges: bool
+ *   syncAllowExtraChanges: bool,
+ *   featureSet: int
  * }
  *
  * @psalm-type TestAddressbook = array{
  *   account: string,
  *   url: string,
  *   displayname: string,
- *   supports_synccoll: bool,
- *   supports_multiget: bool,
- *   supports_ctag: bool,
  *   readonly?: bool
  * }
  */
 
 final class TestInfrastructureSrv
 {
+    // KNOWN FEATURES AND QUIRKS OF DIFFERENT SERVICES THAT NEED TO BE CONSIDERED IN THE TESTS
+    public const FEAT_SYNCCOLL = 1;
+    public const FEAT_MULTIGET = 2;
+    public const FEAT_CTAG     = 4;
+
+    // Server bug: sync-collection report with empty sync-token is rejected with 400 bad request
+    public const BUG_REJ_EMPTY_SYNCTOKEN = 8;
+
+    public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
+    public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG |
+                                   self::BUG_REJ_EMPTY_SYNCTOKEN;
+    public const SRVFEATS_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
+    public const SRVFEATS_NEXTCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
+    public const SRVFEATS_OWNCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
+    public const SRVFEATS_RADICALE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
+    public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
+    public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
+    public const SRVFEATS_CALDAVSERVER = self::FEAT_MULTIGET;
+
     /** @var array<string, Account> Objects for all accounts from AccountData::ACCOUNTS */
     public static $accounts = [];
 
@@ -88,6 +105,22 @@ final class TestInfrastructureSrv
             $ret[$name] = [ $name, $cfg ];
         }
         return $ret;
+    }
+
+    /**
+     * Checks if the given addressbook has the feature $reqFeature.
+     */
+    public static function hasFeature(string $abookname, int $reqFeature): bool
+    {
+        TestCase::assertArrayHasKey($abookname, AccountData::ADDRESSBOOKS);
+        $abookcfg = AccountData::ADDRESSBOOKS[$abookname];
+
+        $accountname = $abookcfg["account"];
+        TestCase::assertArrayHasKey($accountname, AccountData::ACCOUNTS);
+        $accountcfg = AccountData::ACCOUNTS[$accountname];
+
+        $featureSet = $accountcfg["featureSet"];
+        return (($featureSet & $reqFeature) == $reqFeature);
     }
 }
 

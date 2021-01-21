@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient\Interop;
 
-use MStilkerich\CardDavClient\{Account,AddressbookCollection};
+use MStilkerich\Tests\CardDavClient\TestInfrastructure;
+use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\Services\Discovery;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +22,7 @@ final class DiscoveryTest extends TestCase
 
     protected function tearDown(): void
     {
+        TestInfrastructure::logger()->reset();
     }
 
     public static function tearDownAfterClass(): void

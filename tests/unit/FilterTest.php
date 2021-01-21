@@ -14,6 +14,14 @@ use MStilkerich\Tests\CardDavClient\TestInfrastructure;
  */
 final class FilterTest extends TestCase
 {
+    /** @var array<string,string> Maps the match types characters of the expected structure string to attribute value */
+    private const MATCHTYPES = [
+        '~' => 'contains',
+        '^' => 'starts-with',
+        '$' => 'ends-with',
+        '=' => 'equals',
+    ];
+
     public static function setUpBeforeClass(): void
     {
         TestInfrastructure::init();
@@ -119,6 +127,9 @@ final class FilterTest extends TestCase
                 $this->validatePropFilter($pf, $expStructPf);
             }
             $this->assertEmpty($struct, "Not all expected properties found: " . print_r($struct, true));
+
+            // validate XML
+            $this->validateFilterXml($filter);
         }
     }
 
@@ -193,6 +204,9 @@ final class FilterTest extends TestCase
                 $this->assertSame($conditions[$i][0], $pf->property);
                 $this->validatePropFilter($pf, $expStructPf);
             }
+
+            // validate XML
+            $this->validateFilterXml($filter);
         }
     }
 
@@ -305,14 +319,6 @@ final class FilterTest extends TestCase
         $this->assertSame($expNeedle, $tm->needle);
     }
 
-    /** @var array<string,string> Maps the match types characters of the expected structure string to attribute value */
-    private const MATCHTYPES = [
-        '~' => 'contains',
-        '^' => 'starts-with',
-        '$' => 'ends-with',
-        '=' => 'equals',
-    ];
-
     /**
      * Validates the structure and basic properties of a prop-filter element.
      *
@@ -372,6 +378,10 @@ final class FilterTest extends TestCase
         }
     }
 
+    /**
+     * Checks a TextMatch object against the expectations described by $exp.
+     * @see validatePropFilter()
+     */
     private function checkTextMatch(TextMatch $tm, string $exp): void
     {
         $this->assertMatchesRegularExpression('/^[tT][$^~=]/', $exp, "text match structure desc expected");
@@ -389,6 +399,10 @@ final class FilterTest extends TestCase
         );
     }
 
+    /**
+     * Checks a ParamFilter object against the expectations described by $exp.
+     * @see validatePropFilter()
+     */
     private function checkParamFilter(ParamFilter $pf, string $exp): int
     {
         $this->assertEquals(['name' => $pf->param], $pf->xmlAttributes());
@@ -404,6 +418,123 @@ final class FilterTest extends TestCase
         }
 
         return $skipChars;
+    }
+
+    /**
+     * Tests the XML generated for a Filter and its children against an expected XML file.
+     *
+     * This function assumes that the properties and xmlAttributes() function of the filter and its children have
+     * already been verified. They are used as input for the expected XML.
+     */
+    private function validateFilterXml(Filter $filter): void
+    {
+        // validate XML
+        $service = new \Sabre\Xml\Service();
+        $service->namespaceMap = [
+            'DAV:' => 'd',
+            'urn:ietf:params:xml:ns:carddav' => ''
+        ];
+        $xmlWriter = $service->getWriter();
+        $xmlWriter->openMemory();
+        $xmlWriter->startDocument();
+        $xmlWriter->write([
+            "name" => "filter",
+            "value" => $filter,
+            "attributes" => $filter->xmlAttributes()
+        ]);
+
+        $this->assertXmlStringEqualsXmlString($this->xmlFilter($filter), $xmlWriter->outputMemory());
+    }
+
+    /**
+     * Creates the XML string for a filter element.
+     */
+    private function xmlFilter(Filter $f): string
+    {
+        // this is the root element for the comparison, therefore we must include the namespace definitions
+        $nsdef = 'xmlns:d="DAV:" xmlns="urn:ietf:params:xml:ns:carddav"';
+
+        $str = $this->xmlAttributesString("filter $nsdef", $f);
+        foreach ($f->propFilters as $pf) {
+            $str .= $this->xmlPropFilter($pf);
+        }
+        $str .= '</filter>';
+        return $str;
+    }
+
+    /**
+     * Creates the XML string for a prop-filter element.
+     */
+    private function xmlPropFilter(PropFilter $pf): string
+    {
+        $str = $this->xmlAttributesString('prop-filter', $pf);
+
+        if (isset($pf->conditions)) {
+            foreach ($pf->conditions as $c) {
+                if ($c instanceof TextMatch) {
+                    $str .= $this->xmlTextMatch($c);
+                } else {
+                    $str .= $this->xmlParamFilter($c);
+                }
+            }
+        } else {
+            $str .= $this->xmlIsNotDefined();
+        }
+        $str .= '</prop-filter>';
+
+        return $str;
+    }
+
+    /**
+     * Creates the XML string for a param-filter element.
+     */
+    private function xmlParamFilter(ParamFilter $pf): string
+    {
+        $str = $this->xmlAttributesString('param-filter', $pf);
+        if (isset($pf->filter)) {
+            $str .= $this->xmlTextMatch($pf->filter);
+        } else {
+            $str .= $this->xmlIsNotDefined();
+        }
+        $str .= "</param-filter>";
+        return $str;
+    }
+
+    /**
+     * Creates the XML string for a text-match element.
+     */
+    private function xmlTextMatch(TextMatch $tm): string
+    {
+        $str = $this->xmlAttributesString('text-match', $tm);
+        $str .= "{$tm->needle}</text-match>";
+
+        return $str;
+    }
+
+    /**
+     * Creates the XML string for an is-not-defined element.
+     */
+    private function xmlIsNotDefined(): string
+    {
+        return '<is-not-defined />';
+    }
+
+    /**
+     * Creates the attribute string for an XML element.
+     *
+     * @param Filter|TextMatch|PropFilter|ParamFilter $o
+     */
+    private function xmlAttributesString(string $elem, $o): string
+    {
+        $attr = $o->xmlAttributes(); // tested separately
+
+        $str = "<$elem";
+        foreach ($attr as $name => $value) {
+            $str .= " $name=\"$value\"";
+        }
+
+        $str .= '>';
+        return $str;
     }
 }
 

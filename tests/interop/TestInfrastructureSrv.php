@@ -32,20 +32,30 @@ final class TestInfrastructureSrv
     public const FEAT_SYNCCOLL = 1;
     public const FEAT_MULTIGET = 2;
     public const FEAT_CTAG     = 4;
+    // iCloud does not support param-filter, it simply returns all cards
+    public const FEAT_PARAMFILTER = 8;
 
     // Server bug: sync-collection report with empty sync-token is rejected with 400 bad request
-    public const BUG_REJ_EMPTY_SYNCTOKEN = 8;
+    public const BUG_REJ_EMPTY_SYNCTOKEN = 16;
+    // Server bug in sabre/dav: if a param-filter match is done on a VCard that has the asked for property without the
+    // parameter, a null value will be dereferenced, resulting in an internal server error
+    public const BUG_PARAMFILTER_ON_NONEXISTENT_PARAM = 32;
 
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG |
+                                   self::FEAT_PARAMFILTER |
                                    self::BUG_REJ_EMPTY_SYNCTOKEN;
-    public const SRVFEATS_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
+    public const SRVFEATS_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG |
+                                   self::FEAT_PARAMFILTER |
+                                   self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM;
     public const SRVFEATS_NEXTCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
     public const SRVFEATS_OWNCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
-    public const SRVFEATS_RADICALE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
-    public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
+    public const SRVFEATS_RADICALE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG |
+                                     self::FEAT_PARAMFILTER;
+    public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG |
+                                    self::FEAT_PARAMFILTER;
     public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
-    public const SRVFEATS_CALDAVSERVER = self::FEAT_MULTIGET;
+    public const SRVFEATS_CALDAVSERVER = self::FEAT_MULTIGET | self::FEAT_PARAMFILTER;
 
     /** @var array<string, Account> Objects for all accounts from AccountData::ACCOUNTS */
     public static $accounts = [];

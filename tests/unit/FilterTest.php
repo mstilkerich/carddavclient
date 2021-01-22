@@ -505,9 +505,11 @@ final class FilterTest extends TestCase
      */
     private function xmlTextMatch(TextMatch $tm): string
     {
-        $str = $this->xmlAttributesString('text-match', $tm);
-        $str .= "{$tm->needle}</text-match>";
-
+        $str = '';
+        if (strlen($tm->needle) > 0) {
+            $str = $this->xmlAttributesString('text-match', $tm);
+            $str .= "{$tm->needle}</text-match>";
+        }
         return $str;
     }
 

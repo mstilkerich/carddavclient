@@ -59,12 +59,6 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
 class TextMatch implements \Sabre\Xml\XmlSerializable
 {
     /**
-     * @var string XML element name
-     * @psalm-readonly
-     */
-    public $xmlElement = XmlEN::TEXTMATCH;
-
-    /**
      * @var string Collation to use for comparison (currently constant)
      * @psalm-readonly
      */
@@ -138,6 +132,20 @@ class TextMatch implements \Sabre\Xml\XmlSerializable
     public function xmlSerialize(\Sabre\Xml\Writer $writer): void
     {
         $writer->write($this->needle);
+    }
+
+    /**
+     * This function serializes the full element to the given XML writer.
+     */
+    public function xmlSerializeElement(\Sabre\Xml\Writer $writer): void
+    {
+        if (strlen($this->needle) > 0) {
+            $writer->write([
+                'name' => XmlEN::TEXTMATCH,
+                'attributes' => $this->xmlAttributes(),
+                'value' => $this
+            ]);
+        }
     }
 
     /**

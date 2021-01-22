@@ -48,12 +48,6 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
 class ParamFilter implements \Sabre\Xml\XmlSerializable
 {
     /**
-     * @var string XML element name
-     * @psalm-readonly
-     */
-    public $xmlElement = XmlEN::PARAMFILTER;
-
-    /**
      * @var string Parameter this filter matches on (e.g. TYPE).
      * @psalm-readonly
      */
@@ -96,6 +90,18 @@ class ParamFilter implements \Sabre\Xml\XmlSerializable
         } else {
             $writer->write([XmlEN::ISNOTDEFINED => null]);
         }
+    }
+
+    /**
+     * This function serializes the full element to the given XML writer.
+     */
+    public function xmlSerializeElement(\Sabre\Xml\Writer $writer): void
+    {
+        $writer->write([
+            'name' => XmlEN::PARAMFILTER,
+            'attributes' => $this->xmlAttributes(),
+            'value' => $this
+        ]);
     }
 
     /**

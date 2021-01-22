@@ -149,11 +149,7 @@ class PropFilter implements \Sabre\Xml\XmlSerializable
         if (isset($this->conditions)) {
             foreach ($this->conditions as $condition) {
                 // either ParamFilter or TextMatch
-                $writer->write([
-                    'name' => $condition->xmlElement,
-                    'attributes' => $condition->xmlAttributes(),
-                    'value' => $condition
-                ]);
+                $condition->xmlSerializeElement($writer);
             }
         } else {
             $writer->write([XmlEN::ISNOTDEFINED => null]);

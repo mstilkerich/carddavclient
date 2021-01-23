@@ -58,32 +58,48 @@ final class AddressbookQueryTest extends TestCase
         return TIS::addressbookProvider();
     }
 
+    /*
+     * phpcs:disable Generic.Files.LineLength -- Better readability
+     * Test data set:
+     * NICK john0doe, EMAIL HOME:john0doe@example.com WORK:doe0@w.example.com TEL HOME:0 IMPP Jabber xmpp:jab0@example.com
+     * NICK john1doe, EMAIL WORK:john1doe@sub.example.com
+     * NICK john2doe, EMAIL HOME:john2doe@smth.else
+     * NICK john3doe, EMAIL WORK:john3doe@example.com WORK:doe3@w.example.com TEL HOME:3 IMPP Skype skype:jab3@example.com
+     * NICK john4doe, EMAIL HOME:john4doe@sub.example.com
+     * NICK john5doe, EMAIL WORK:john5doe@smth.else
+     * NICK john6doe, EMAIL HOME:john6doe@example.com WORK:doe6@w.example.com TEL HOME:6 IMPP Jabber xmpp:jab6@example.com
+     * NICK john7doe, EMAIL WORK:john7doe@sub.example.com
+     * NICK john8doe, EMAIL HOME:john8doe@smth.else
+     * NICK john9doe, EMAIL WORK:john9doe@example.com WORK:doe9@w.example.com TEL HOME:9 IMPP Skype skype:jab9@example.com
+     * phpcs:enable
+     */
     /** @return array<string, array{string, SimpleConditions, list<int>}> */
     public function simpleQueriesProvider(): array
     {
-        /*
-         * Test data set:
-         * NICK john0doe, EMAIL john0doe@example.com doe0@example.com, IMPP Jabber
-         * NICK john1doe, EMAIL john1doe@sub.example.com
-         * NICK john2doe, EMAIL john2doe@smth.else
-         * NICK john3doe, EMAIL john3doe@example.com doe3@example.com, IMPP Skype
-         * NICK john4doe, EMAIL john4doe@sub.example.com
-         * NICK john5doe, EMAIL john5doe@smth.else
-         * NICK john6doe, EMAIL john6doe@example.com doe6@example.com, IMPP Jabber
-         * NICK john7doe, EMAIL john7doe@sub.example.com
-         * NICK john8doe, EMAIL john8doe@smth.else
-         * NICK john9doe, EMAIL john9doe@example.com doe9@example.com, IMPP Skype
-         */
         $datasets = [
-            'EmailEquals' => [ ['EMAIL' => '/doe6@example.com/='], [ 6 ] ],
-            'EmailContains' => [ ['EMAIL' => '/6doe@exa/'], [ 6 ] ],
+            // simple text matches against property values
+            'EmailEquals' => [ ['EMAIL' => '/doe6@w.example.com/='], [ 6 ] ],
+            'EmailContains' => [ ['EMAIL' => '/doe6@w.exa/'], [ 6 ] ],
             'EmailStartsWith' => [ ['EMAIL' => '/doe6/^'], [ 6 ] ],
             'EmailEndsWith' => [ ['EMAIL' => '/@smth.else/$'], [ 2, 5, 8 ] ],
-            'EmailContainsNot' => [ ['EMAIL' => '!/@example.com/'], [ 1, 2, 4, 5, 7, 8 ] ],
+
+            // simple text matches with negated match behavior
+            // Case 1: Either all or no EMAIL properties match the negated filter
+            'EmailContainsNot' => [ ['EMAIL' => '!/example.com/$'], [ 2, 5, 8 ] ],
+            // Case 2: Some, but not all or no EMAIL properties match the negated filter
+            'EmailContainsNotSome' => [ ['EMAIL' => '!/@w.example.com/'], [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ] ],
+
+            // Test whether a property is defined / not defined
             'HasNoIMPP' => [ ['IMPP' => null], [ 1, 2, 4, 5, 7, 8 ] ],
             'HasIMPP' => [ ['IMPP' => '//'], [ 0, 3, 6, 9 ] ],
-//            'ParamMatchExactly' => [ ['EMAIL' => ['TYPE', '/HOME/=']], [ 0, 2, 4, 6, 8 ] ],
-//            'ParamNotDefined' => [ ['EMAIL' => ['TYPE', null]], [ 0, 3, 6, 9 ] ],
+
+            // param filters moved to separate tests because not all servers support them, and many that do have bugs
+          //'ParamMatchExactly' => [ ['EMAIL' => ['TYPE', '/HOME/=']], [ 0, 2, 4, 6, 8 ] ],
+          //'ParamNotDefined' => [ ['TEL' => ['TYPE', null]], [ 1, 2, 4, 5, 7, 8 ] ],
+            // Cards with a TEL;HOME property match !/WORK/; TEL without TYPE param does not match
+         //   'ParamInvertedMatchUnsetParam' => [['TEL' => ['TYPE', '!/WORK/']], [ 0, 3, 6, 9 ] ],
+            // Cards with a EMAIL;TYPE=HOME property match !/WORK/, even if there also is en EMAIL;TYPE=WORK property
+         //   'ParamInvertedMatchDiffParam' => [['EMAIL' => ['TYPE', '!/WORK/']], [ 0, 2, 4, 6, 8 ] ],
         ];
 
         $abooks = TIS::addressbookProvider();
@@ -112,6 +128,11 @@ final class AddressbookQueryTest extends TestCase
     }
 
     /**
+     * Tests that a match on properties that have a matching parameter works.
+     *
+     * This is a separate test so we can skip it, as some servers do not implement param-filter, or have a buggy
+     * implementation.
+     *
      * @param string $abookname Name of the addressbook to test with
      * @param TestAddressbook $cfg
      * @dataProvider addressbookProvider
@@ -124,6 +145,7 @@ final class AddressbookQueryTest extends TestCase
             $this->markTestSkipped("$abookname has a bug concerning handling of param-filter");
         } else {
             $abook = $this->createSamples($abookname);
+            // all cards that include an EMAIL;TYPE=HOME property match
             $result = $abook->query(['EMAIL' => ['TYPE', '/HOME/=']]);
             $this->checkExpectedCards($abookname, $result, [ 0, 2, 4, 6, 8 ]);
         }
@@ -182,17 +204,19 @@ final class AddressbookQueryTest extends TestCase
 
             $vcard = TestInfrastructure::createVCard();
             $vcard->NICKNAME = "john{$i}doe";
-            $vcard->add('EMAIL', "john{$i}doe@$domain", ['type' => $type]);
+            $vcard->add('EMAIL', "john{$i}doe@$domain", ['TYPE' => $type]);
+            $vcard->add('TEL', "$i-01");
 
-            //$email2 = "";
+//            $extra = "";
             if (($i % 3) == 0) {
                 [ $imppType, $imppProto ] = $impptypes[$i % count($impptypes)];
-                $vcard->add('EMAIL', "doe{$i}@$domain"); // no TYPE param
+                $vcard->add('EMAIL', "doe{$i}@w.$domain", ["TYPE" => "WORK"]);
                 $vcard->add('IMPP', "$imppProto:jab{$i}@$domain", ['X-SERVICE-TYPE' => $imppType, 'TYPE' => 'HOME']);
-                //$email2 = "doe{$i}@$domain";
+                $vcard->add('TEL', "$i-02", ['TYPE' => 'HOME']);
+              //  $extra = "WORK:doe{$i}@$domain TEL HOME:$i IMPP $imppType $imppProto:jab{$i}@$domain";
             }
 
-            //echo "NICK john{$i}doe, EMAIL john{$i}doe@$domain $email2\n";
+            //echo "NICK john{$i}doe, EMAIL $type:john{$i}doe@$domain $extra\n";
 
             $createResult = $abook->createCard($vcard);
             $createResult["vcard"] = $vcard;

@@ -58,6 +58,11 @@ final class TestInfrastructureSrv
     // no property of the asked for type
     public const BUG_PARAMNOTDEF_SOMEMATCH = 512;
 
+    // Server bug in Davical: A text-match for a param-filter is performed on the property value, not the parameter
+    // value. Furthermore collation and match-type are ignored, not that it really matters considering the wrong value
+    // is compared :-)
+    public const BUG_PARAMTEXTMATCH_BROKEN = 1024;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
                                    | self::FEAT_PARAMFILTER
@@ -78,6 +83,7 @@ final class TestInfrastructureSrv
                                     | self::FEAT_PARAMFILTER
                                     // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
                                     // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
+                                    // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN
                                     ;
     public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
     public const SRVFEATS_CALDAVSERVER = self::FEAT_MULTIGET | self::FEAT_PARAMFILTER;

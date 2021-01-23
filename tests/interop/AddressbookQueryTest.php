@@ -74,6 +74,11 @@ final class AddressbookQueryTest extends TestCase
             'EmailContains' => [ ['EMAIL' => '/mu@ab/'], [ 1 ], 0, 0 ],
             'EmailStartsWith' => [ ['EMAIL' => '/max/^'], [ 1 ], 0, 0 ],
             'EmailEndsWith' => [ ['EMAIL' => '/@example.com/$'], [ 0 ], 0, 0 ],
+            // check matching is case insensitive
+            'EmailEqualsDiffCase' => [ ['EMAIL' => '/johNDOE@EXAmple.com/='], [ 0 ], 0, 0 ],
+            'EmailContainsDiffCase' => [ ['EMAIL' => '/MU@ab/'], [ 1 ], 0, 0 ],
+            'EmailStartsWithDiffCase' => [ ['EMAIL' => '/MAX/^'], [ 1 ], 0, 0 ],
+            'EmailEndsWithDiffCase' => [ ['EMAIL' => '/@EXAmple.com/$'], [ 0 ], 0, 0 ],
 
             // simple text matches with negated match behavior
             // Case 1: Either all or no EMAIL properties match the negated filter
@@ -102,7 +107,55 @@ final class AddressbookQueryTest extends TestCase
             ],
 
             // simple text matches against parameter values
-            'ParamMatchExactly' => [ ['EMAIL' => ['TYPE', '/HOME/=']], [ 0 ], 0, TIS::FEAT_PARAMFILTER ],
+            'ParamEquals' => [
+                ['EMAIL' => ['TYPE', '/HOME/=']],
+                [ 0 ],
+                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamContains' => [
+                ['EMAIL' => ['TYPE', '/ORK/']],
+                [ 0 ],
+                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamStartsWith' => [
+                ['EMAIL' => ['TYPE', '/WOR/^']],
+                [ 0 ],
+                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamEndsWith' => [
+                ['EMAIL' => ['TYPE', '/ORK/$']],
+                [ 0 ],
+                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::FEAT_PARAMFILTER
+            ],
+            // check matching is case insensitive
+            'ParamEqualsDiffCase' => [
+                ['EMAIL' => ['TYPE', '/hoME/=']],
+                [ 0 ],
+                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamContainsDiffCase' => [
+                ['EMAIL' => ['TYPE', '/orK/']],
+                [ 0 ],
+                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamStartsWithDiffCase' => [
+                ['EMAIL' => ['TYPE', '/woR/^']],
+                [ 0 ],
+                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamEndsWithDiffCase' => [
+                ['EMAIL' => ['TYPE', '/orK/$']],
+                [ 0 ],
+                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::FEAT_PARAMFILTER
+            ],
             // Cards with a TEL;HOME property match !/WORK/; TEL without TYPE param does not match
          //   'ParamInvertedMatchUnsetParam' => [['TEL' => ['TYPE', '!/WORK/']], [ 0, 3, 6, 9 ] ],
             // Cards with a EMAIL;TYPE=HOME property match !/WORK/, even if there also is en EMAIL;TYPE=WORK property

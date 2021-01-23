@@ -56,6 +56,7 @@ supported CardDAV server features.
   parameter value; furthermore, param-filter in davical performs case-sensitive contains matching, i.e. the collation
   and match-type are ignored.
   - https://gitlab.com/davical-project/awl/-/issues/21
+  - https://gitlab.com/davical-project/awl/-/merge_requests/17
 - `BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS` addressbook-query with prop-filter containing a negated text-match: Davical
   also returns cards that do not have the asked for property. Example: If you filter for an EMAIL that does not match
   /foo/, Davical will return cards that do not have an EMAIL property at all.

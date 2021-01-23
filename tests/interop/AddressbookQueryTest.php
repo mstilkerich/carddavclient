@@ -58,40 +58,32 @@ final class AddressbookQueryTest extends TestCase
         return TIS::addressbookProvider();
     }
 
-    /*
-     * phpcs:disable Generic.Files.LineLength -- Better readability
-     * Test data set:
-     * NICK john0doe, EMAIL HOME:john0doe@example.com WORK:doe0@w.example.com TEL HOME:0 IMPP Jabber xmpp:jab0@example.com
-     * NICK john1doe, EMAIL WORK:john1doe@sub.example.com
-     * NICK john2doe, EMAIL HOME:john2doe@smth.else
-     * NICK john3doe, EMAIL WORK:john3doe@example.com WORK:doe3@w.example.com TEL HOME:3 IMPP Skype skype:jab3@example.com
-     * NICK john4doe, EMAIL HOME:john4doe@sub.example.com
-     * NICK john5doe, EMAIL WORK:john5doe@smth.else
-     * NICK john6doe, EMAIL HOME:john6doe@example.com WORK:doe6@w.example.com TEL HOME:6 IMPP Jabber xmpp:jab6@example.com
-     * NICK john7doe, EMAIL WORK:john7doe@sub.example.com
-     * NICK john8doe, EMAIL HOME:john8doe@smth.else
-     * NICK john9doe, EMAIL WORK:john9doe@example.com WORK:doe9@w.example.com TEL HOME:9 IMPP Skype skype:jab9@example.com
-     * phpcs:enable
-     */
-    /** @return array<string, array{string, SimpleConditions, list<int>}> */
+    /** @return array<string, array{string, SimpleConditions, list<int>, int}> */
     public function simpleQueriesProvider(): array
     {
+        // Try to have at least one matching and one non-matching card in the result for each filter
+        // Some service return an empty result or the entire addressbook without error if they do not support a filter,
+        // so we will notice if we stick to that rule.
         $datasets = [
+            // test whether a property is defined / not defined
+            'HasNoEmail' => [ ['EMAIL' => null], [ 2 ], 0 ],
+            'HasEmail' => [ ['EMAIL' => '//'], [ 0, 1 ], 0 ],
+
             // simple text matches against property values
-            'EmailEquals' => [ ['EMAIL' => '/doe6@w.example.com/='], [ 6 ] ],
-            'EmailContains' => [ ['EMAIL' => '/doe6@w.exa/'], [ 6 ] ],
-            'EmailStartsWith' => [ ['EMAIL' => '/doe6/^'], [ 6 ] ],
-            'EmailEndsWith' => [ ['EMAIL' => '/@smth.else/$'], [ 2, 5, 8 ] ],
+            'EmailEquals' => [ ['EMAIL' => '/johndoe@example.com/='], [ 0 ], 0 ],
+            'EmailContains' => [ ['EMAIL' => '/mu@ab/'], [ 1 ], 0 ],
+            'EmailStartsWith' => [ ['EMAIL' => '/max/^'], [ 1 ], 0 ],
+            'EmailEndsWith' => [ ['EMAIL' => '/@example.com/$'], [ 0 ], 0 ],
 
             // simple text matches with negated match behavior
             // Case 1: Either all or no EMAIL properties match the negated filter
-            'EmailContainsNot' => [ ['EMAIL' => '!/example.com/$'], [ 2, 5, 8 ] ],
-            // Case 2: Some, but not all or no EMAIL properties match the negated filter
-            'EmailContainsNotSome' => [ ['EMAIL' => '!/@w.example.com/'], [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ] ],
-
-            // Test whether a property is defined / not defined
-            'HasNoIMPP' => [ ['IMPP' => null], [ 1, 2, 4, 5, 7, 8 ] ],
-            'HasIMPP' => [ ['IMPP' => '//'], [ 0, 3, 6, 9 ] ],
+            'EmailEndsNotWith' => [ ['EMAIL' => '!/@abcd.com/$'], [ 0 ], TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS ],
+            // Case 2: Some, but not all EMAIL properties match the negated filter
+            'EmailContainsNotSome' => [
+                ['EMAIL' => '!/@example.com/'],
+                [ 0, 1 ],
+                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS | TIS::BUG_INVTEXTMATCH_SOMEMATCH
+            ],
 
             // param filters moved to separate tests because not all servers support them, and many that do have bugs
           //'ParamMatchExactly' => [ ['EMAIL' => ['TYPE', '/HOME/=']], [ 0, 2, 4, 6, 8 ] ],
@@ -118,13 +110,18 @@ final class AddressbookQueryTest extends TestCase
      * @param string $abookname Name of the addressbook to test with
      * @param SimpleConditions $conditions The conditions to pass to the query operation
      * @param list<int> $expCards A list of expected cards, given by their index in self::$insertedCards[$abookname]
+     * @param int $bugs A mask with bug flags where this test should be skipped
      * @dataProvider simpleQueriesProvider
      */
-    public function testQueryBySimpleConditions(string $abookname, array $conditions, array $expCards): void
+    public function testQueryBySimpleConditions(string $abookname, array $conditions, array $expCards, int $bugs): void
     {
-        $abook = $this->createSamples($abookname);
-        $result = $abook->query($conditions);
-        $this->checkExpectedCards($abookname, $result, $expCards);
+        if ($bugs != 0 && TIS::hasFeature($abookname, $bugs)) {
+            $this->markTestSkipped("$abookname has a bug that prevents execution of this test vector");
+        } else {
+            $abook = $this->createSamples($abookname);
+            $result = $abook->query($conditions);
+            $this->checkExpectedCards($abookname, $result, $expCards);
+        }
     }
 
     /**
@@ -136,7 +133,6 @@ final class AddressbookQueryTest extends TestCase
      * @param string $abookname Name of the addressbook to test with
      * @param TestAddressbook $cfg
      * @dataProvider addressbookProvider
-     */
     public function testQueryForParameterValue(string $abookname, array $cfg): void
     {
         if (!TIS::hasFeature($abookname, TIS::FEAT_PARAMFILTER)) {
@@ -150,6 +146,7 @@ final class AddressbookQueryTest extends TestCase
             $this->checkExpectedCards($abookname, $result, [ 0, 2, 4, 6, 8 ]);
         }
     }
+     */
 
     /**
      * Checks that a result returned by the query matches the expected cards.
@@ -168,14 +165,44 @@ final class AddressbookQueryTest extends TestCase
             }
         }
 
-        $this->assertCount(count($expCardIdxs), $result, "Unexpected number of results");
+        $expUris = [];
         foreach ($expCardIdxs as $idx) {
             $expCard = self::$insertedCards[$abookname][$idx];
             $this->assertArrayHasKey($expCard["uri"], $result);
+            $expUris[] = $expCard["uri"];
             $rcvCard = $result[$expCard["uri"]];
             TestInfrastructure::compareVCards($expCard["vcard"], $rcvCard["vcard"], true);
         }
+
+        foreach ($result as $uri => $res) {
+            $this->assertContains($uri, $expUris, "Unexpected card in result: " . ($res["vcard"]->NICKNAME ?? ""));
+        }
     }
+
+    /**
+     * The sample cards.
+     *
+     * For TYPE attributes, we should only use HOME and WORK in that spelling, because Google drops everything it does
+     * not know and changes the spelling of these two to uppercase.
+     *
+     * For IMPP, we can use X-SERVICE-TYPE=Jabber/Skype with schemes xmpp/skype, again in that spelling.
+     *
+     * @var list<list<array{string, string, array<string,string>}>>
+     */
+    private const SAMPLES = [
+        // properties are added to prepared cards from TestInfrastructure::createVCard()
+        // We add a NICKNAME Jonny$i to each card to easy map log entries back to this array
+        [ // card 0
+            [ 'EMAIL', 'doe@big.corp', ['TYPE' => 'WORK'] ],
+            [ 'EMAIL', 'johndoe@example.com', ['TYPE' => 'HOME'] ],
+        ],
+        [ // card 1
+            [ 'EMAIL', 'maxmu@abcd.com', [] ],
+        ],
+        [ // card 2 - no EMAIL property
+            [ 'TEL', '12345', ['TYPE' => 'HOME'] ],
+        ],
+    ];
 
     private function createSamples(string $abookname): AddressbookCollection
     {
@@ -188,35 +215,13 @@ final class AddressbookQueryTest extends TestCase
 
         self::$insertedCards[$abookname] = [];
 
-        $domains = [ "example.com", "sub.example.com", "smth.else" ];
-        // Google only supports home and work for type, everything else must be in X-ABLabel
-        // Otherwise it will simply strip the type. This is though even RFC 2426 explicitly allows non-standard values
-        // for the EMAIL TYPE.
-        // Furthermore, it will convert home and work to uppercase spelling, so for our comparisons to work, we need to
-        // use uppercase here.
-        $types = [ "HOME", "WORK" ];
-        $impptypes = [ ["Jabber", "xmpp"], ["Skype", "skype"] ];
-
-        // create cards
-        for ($i = 0; $i < 10; ++$i) {
-            $domain = $domains[$i % count($domains)];
-            $type = $types[$i % count($types)];
-
+        foreach (self::SAMPLES as $i => $card) {
             $vcard = TestInfrastructure::createVCard();
-            $vcard->NICKNAME = "john{$i}doe";
-            $vcard->add('EMAIL', "john{$i}doe@$domain", ['TYPE' => $type]);
-            $vcard->add('TEL', "$i-01");
+            $vcard->NICKNAME = "Jonny$i";
 
-//            $extra = "";
-            if (($i % 3) == 0) {
-                [ $imppType, $imppProto ] = $impptypes[$i % count($impptypes)];
-                $vcard->add('EMAIL', "doe{$i}@w.$domain", ["TYPE" => "WORK"]);
-                $vcard->add('IMPP', "$imppProto:jab{$i}@$domain", ['X-SERVICE-TYPE' => $imppType, 'TYPE' => 'HOME']);
-                $vcard->add('TEL', "$i-02", ['TYPE' => 'HOME']);
-              //  $extra = "WORK:doe{$i}@$domain TEL HOME:$i IMPP $imppType $imppProto:jab{$i}@$domain";
+            foreach ($card as $property) {
+                $vcard->add($property[0], $property[1], $property[2]);
             }
-
-            //echo "NICK john{$i}doe, EMAIL $type:john{$i}doe@$domain $extra\n";
 
             $createResult = $abook->createCard($vcard);
             $createResult["vcard"] = $vcard;

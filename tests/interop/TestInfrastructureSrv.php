@@ -41,19 +41,33 @@ final class TestInfrastructureSrv
     // parameter, a null value will be dereferenced, resulting in an internal server error
     public const BUG_PARAMFILTER_ON_NONEXISTENT_PARAM = 32;
 
+    // Server bug in Google + Davical: A prop-filter with a negated text-match filter will match VCards where the
+    // property in question does not exist
+    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS = 64;
+
+    // Server bug in Google + Sabre/DAV: A prop-filter with a negated text-match filter will not match if there is
+    // another instance of the property in question that matches the non-negated filter
+    public const BUG_INVTEXTMATCH_SOMEMATCH = 128;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
-    public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG |
-                                   self::FEAT_PARAMFILTER |
-                                   self::BUG_REJ_EMPTY_SYNCTOKEN;
-    public const SRVFEATS_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG |
-                                   self::FEAT_PARAMFILTER |
-                                   self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM;
+    public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
+                                   | self::FEAT_PARAMFILTER
+                                   | self::BUG_REJ_EMPTY_SYNCTOKEN
+                                   | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
+                                   | self::BUG_INVTEXTMATCH_SOMEMATCH;
+    public const SRVFEATS_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
+                                   | self::FEAT_PARAMFILTER
+                                   | self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM
+                                   | self::BUG_INVTEXTMATCH_SOMEMATCH;
     public const SRVFEATS_NEXTCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
     public const SRVFEATS_OWNCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
-    public const SRVFEATS_RADICALE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG |
-                                     self::FEAT_PARAMFILTER;
-    public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG |
-                                    self::FEAT_PARAMFILTER;
+    public const SRVFEATS_RADICALE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
+                                     | self::FEAT_PARAMFILTER
+                                     | self::BUG_INVTEXTMATCH_SOMEMATCH;
+    public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
+                                    | self::FEAT_PARAMFILTER
+                                    // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
+                                    ;
     public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
     public const SRVFEATS_CALDAVSERVER = self::FEAT_MULTIGET | self::FEAT_PARAMFILTER;
 
@@ -119,6 +133,8 @@ final class TestInfrastructureSrv
 
     /**
      * Checks if the given addressbook has the feature $reqFeature.
+     *
+     * If multiple bits are set in $reqFeature, returns true if any feature is set.
      */
     public static function hasFeature(string $abookname, int $reqFeature): bool
     {
@@ -130,7 +146,7 @@ final class TestInfrastructureSrv
         $accountcfg = AccountData::ACCOUNTS[$accountname];
 
         $featureSet = $accountcfg["featureSet"];
-        return (($featureSet & $reqFeature) == $reqFeature);
+        return (($featureSet & $reqFeature) != 0);
     }
 }
 

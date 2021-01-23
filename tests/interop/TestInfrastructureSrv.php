@@ -49,12 +49,22 @@ final class TestInfrastructureSrv
     // another instance of the property in question that matches the non-negated filter
     public const BUG_INVTEXTMATCH_SOMEMATCH = 128;
 
+    // Server bug in Google: A prop-filter with a param-filter subfilter that matches on a not-defined parameter will
+    // match vCards where the property does not exist.
+    public const BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS = 256;
+
+    // Server bug in Davical: A prop-filter with a param-filter/is-not-defined filter will match if there is at least
+    // one property of the asked for type that lacks the parameter, but it must only match if the parameter occurs with
+    // no property of the asked for type
+    public const BUG_PARAMNOTDEF_SOMEMATCH = 512;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
                                    | self::FEAT_PARAMFILTER
                                    | self::BUG_REJ_EMPTY_SYNCTOKEN
                                    | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
-                                   | self::BUG_INVTEXTMATCH_SOMEMATCH;
+                                   | self::BUG_INVTEXTMATCH_SOMEMATCH
+                                   | self::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS;
     public const SRVFEATS_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
                                    | self::FEAT_PARAMFILTER
                                    | self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM
@@ -67,6 +77,7 @@ final class TestInfrastructureSrv
     public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
                                     | self::FEAT_PARAMFILTER
                                     // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
+                                    // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
                                     ;
     public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
     public const SRVFEATS_CALDAVSERVER = self::FEAT_MULTIGET | self::FEAT_PARAMFILTER;
@@ -134,9 +145,10 @@ final class TestInfrastructureSrv
     /**
      * Checks if the given addressbook has the feature $reqFeature.
      *
-     * If multiple bits are set in $reqFeature, returns true if any feature is set.
+     * If multiple bits are set in $reqFeature, if $any is true, it is sufficient if any of the features / bugs is
+     * present. If $any is false, all features/bugs must be present.
      */
-    public static function hasFeature(string $abookname, int $reqFeature): bool
+    public static function hasFeature(string $abookname, int $reqFeature, bool $any = true): bool
     {
         TestCase::assertArrayHasKey($abookname, AccountData::ADDRESSBOOKS);
         $abookcfg = AccountData::ADDRESSBOOKS[$abookname];
@@ -146,7 +158,11 @@ final class TestInfrastructureSrv
         $accountcfg = AccountData::ACCOUNTS[$accountname];
 
         $featureSet = $accountcfg["featureSet"];
-        return (($featureSet & $reqFeature) != 0);
+        if ($any) {
+            return (($featureSet & $reqFeature) != 0);
+        } else {
+            return (($featureSet & $reqFeature) == $reqFeature);
+        }
     }
 }
 

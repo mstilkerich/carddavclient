@@ -11,6 +11,9 @@ supported CardDAV server features.
 
 ## Feature Matrix
 
+- iCloud apparently does not support param-filter. It simply ignores the filter and returns all cards that match the
+  remaining conditions, i.e. at least that the property that contains the param-filter is defined is used as filter.
+
 ## Known Quirks
 
 ### Google Contacts (CardDAV interface)
@@ -24,6 +27,9 @@ supported CardDAV server features.
 - `BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS` see Davical
   - https://issuetracker.google.com/issues/178251714
 - `BUG_INVTEXTMATCH_SOMEMATCH`: see Sabre/DAV
+- param-filter with is-not-defined subfilter matches cards that don't have the property defined. However, for the
+  enclosing prop-filter to match, presence of the property is mandatory.
+  - https://issuetracker.google.com/issues/178243204
 
 ### Sabre/DAV (used by Owncloud, Nextcloud, Baïkal)
 
@@ -54,6 +60,9 @@ supported CardDAV server features.
   also returns cards that do not have the asked for property. Example: If you filter for an EMAIL that does not match
   /foo/, Davical will return cards that do not have an EMAIL property at all.
   - https://gitlab.com/davical-project/awl/-/merge\_requests/15
+- `BUG_PARAMNOTDEF_SOMEMATCH` addressbook-query with a param-filter for a not-defined parameter yields wrong results for
+  cards where the parameter is present for some properties, but not all (it must not be present at all for a match)
+  - https://gitlab.com/davical-project/awl/-/merge\_requests/16
 
 
 ### Radicale (used by Synology Contacts App)

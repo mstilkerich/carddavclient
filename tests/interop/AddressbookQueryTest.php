@@ -58,7 +58,7 @@ final class AddressbookQueryTest extends TestCase
         return TIS::addressbookProvider();
     }
 
-    /** @return array<string, array{string, SimpleConditions, list<int>, int}> */
+    /** @return array<string, array{string, SimpleConditions, list<int>, int, int}> */
     public function simpleQueriesProvider(): array
     {
         // Try to have at least one matching and one non-matching card in the result for each filter
@@ -66,28 +66,43 @@ final class AddressbookQueryTest extends TestCase
         // so we will notice if we stick to that rule.
         $datasets = [
             // test whether a property is defined / not defined
-            'HasNoEmail' => [ ['EMAIL' => null], [ 2 ], 0 ],
-            'HasEmail' => [ ['EMAIL' => '//'], [ 0, 1 ], 0 ],
+            'HasNoEmail' => [ ['EMAIL' => null], [ 2 ], 0, 0 ],
+            'HasEmail' => [ ['EMAIL' => '//'], [ 0, 1 ], 0, 0 ],
 
             // simple text matches against property values
-            'EmailEquals' => [ ['EMAIL' => '/johndoe@example.com/='], [ 0 ], 0 ],
-            'EmailContains' => [ ['EMAIL' => '/mu@ab/'], [ 1 ], 0 ],
-            'EmailStartsWith' => [ ['EMAIL' => '/max/^'], [ 1 ], 0 ],
-            'EmailEndsWith' => [ ['EMAIL' => '/@example.com/$'], [ 0 ], 0 ],
+            'EmailEquals' => [ ['EMAIL' => '/johndoe@example.com/='], [ 0 ], 0, 0 ],
+            'EmailContains' => [ ['EMAIL' => '/mu@ab/'], [ 1 ], 0, 0 ],
+            'EmailStartsWith' => [ ['EMAIL' => '/max/^'], [ 1 ], 0, 0 ],
+            'EmailEndsWith' => [ ['EMAIL' => '/@example.com/$'], [ 0 ], 0, 0 ],
 
             // simple text matches with negated match behavior
             // Case 1: Either all or no EMAIL properties match the negated filter
-            'EmailEndsNotWith' => [ ['EMAIL' => '!/@abcd.com/$'], [ 0 ], TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS ],
+            'EmailEndsNotWith' => [ ['EMAIL' => '!/@abcd.com/$'], [ 0 ], TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS, 0 ],
             // Case 2: Some, but not all EMAIL properties match the negated filter
             'EmailContainsNotSome' => [
                 ['EMAIL' => '!/@example.com/'],
                 [ 0, 1 ],
-                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS | TIS::BUG_INVTEXTMATCH_SOMEMATCH
+                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS | TIS::BUG_INVTEXTMATCH_SOMEMATCH,
+                0
             ],
 
-            // param filters moved to separate tests because not all servers support them, and many that do have bugs
-          //'ParamMatchExactly' => [ ['EMAIL' => ['TYPE', '/HOME/=']], [ 0, 2, 4, 6, 8 ] ],
-          //'ParamNotDefined' => [ ['TEL' => ['TYPE', null]], [ 1, 2, 4, 5, 7, 8 ] ],
+            // test whether property with parameter defined or not defined exists
+            'ParamNotDefined' => [
+                ['EMAIL' => ['TYPE', null]],
+                [ 1 ],
+                TIS::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS,
+                TIS::FEAT_PARAMFILTER
+            ],
+            // property with multiple values, where one has the parameter defined, the other has not -> must not match
+            'ParamNotDefinedSome' => [
+                ['TEL' => ['TYPE', null]],
+                [ ],
+                TIS::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS | TIS::BUG_PARAMNOTDEF_SOMEMATCH,
+                TIS::FEAT_PARAMFILTER
+            ],
+
+            // simple text matches against parameter values
+            'ParamMatchExactly' => [ ['EMAIL' => ['TYPE', '/HOME/=']], [ 0 ], 0, TIS::FEAT_PARAMFILTER ],
             // Cards with a TEL;HOME property match !/WORK/; TEL without TYPE param does not match
          //   'ParamInvertedMatchUnsetParam' => [['TEL' => ['TYPE', '!/WORK/']], [ 0, 3, 6, 9 ] ],
             // Cards with a EMAIL;TYPE=HOME property match !/WORK/, even if there also is en EMAIL;TYPE=WORK property
@@ -110,43 +125,27 @@ final class AddressbookQueryTest extends TestCase
      * @param string $abookname Name of the addressbook to test with
      * @param SimpleConditions $conditions The conditions to pass to the query operation
      * @param list<int> $expCards A list of expected cards, given by their index in self::$insertedCards[$abookname]
-     * @param int $bugs A mask with bug flags where this test should be skipped
+     * @param int $inhibitingBugs A mask with bug flags where this test should be skipped
+     * @param int $featuresNeeded A mask with server features required for the test.
      * @dataProvider simpleQueriesProvider
      */
-    public function testQueryBySimpleConditions(string $abookname, array $conditions, array $expCards, int $bugs): void
-    {
-        if ($bugs != 0 && TIS::hasFeature($abookname, $bugs)) {
-            $this->markTestSkipped("$abookname has a bug that prevents execution of this test vector");
+    public function testQueryBySimpleConditions(
+        string $abookname,
+        array $conditions,
+        array $expCards,
+        int $inhibitingBugs,
+        int $featuresNeeded
+    ): void {
+        if ($inhibitingBugs != 0 && TIS::hasFeature($abookname, $inhibitingBugs)) {
+            $this->markTestSkipped("$abookname has a bug that prevents successful execution of this test vector");
+        } elseif ($featuresNeeded != 0 && !TIS::hasFeature($abookname, $featuresNeeded, false)) {
+            $this->markTestSkipped("$abookname lacks a feature required for successful execution of this test vector");
         } else {
             $abook = $this->createSamples($abookname);
             $result = $abook->query($conditions);
             $this->checkExpectedCards($abookname, $result, $expCards);
         }
     }
-
-    /**
-     * Tests that a match on properties that have a matching parameter works.
-     *
-     * This is a separate test so we can skip it, as some servers do not implement param-filter, or have a buggy
-     * implementation.
-     *
-     * @param string $abookname Name of the addressbook to test with
-     * @param TestAddressbook $cfg
-     * @dataProvider addressbookProvider
-    public function testQueryForParameterValue(string $abookname, array $cfg): void
-    {
-        if (!TIS::hasFeature($abookname, TIS::FEAT_PARAMFILTER)) {
-            $this->markTestSkipped("$abookname does not support param-filter");
-        } elseif (TIS::hasFeature($abookname, TIS::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM)) {
-            $this->markTestSkipped("$abookname has a bug concerning handling of param-filter");
-        } else {
-            $abook = $this->createSamples($abookname);
-            // all cards that include an EMAIL;TYPE=HOME property match
-            $result = $abook->query(['EMAIL' => ['TYPE', '/HOME/=']]);
-            $this->checkExpectedCards($abookname, $result, [ 0, 2, 4, 6, 8 ]);
-        }
-    }
-     */
 
     /**
      * Checks that a result returned by the query matches the expected cards.
@@ -201,6 +200,7 @@ final class AddressbookQueryTest extends TestCase
         ],
         [ // card 2 - no EMAIL property
             [ 'TEL', '12345', ['TYPE' => 'HOME'] ],
+            [ 'TEL', '555', [] ],
         ],
     ];
 

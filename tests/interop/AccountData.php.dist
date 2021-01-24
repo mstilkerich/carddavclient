@@ -86,13 +86,6 @@ final class AccountData
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SYNOLOGY_CONTACTS,
         ],
-        "Caldavserver" => [
-            "username" => "xxx",
-            "password" => "yyy",
-            "discoveryUri" => "https://www.caldavserver.com/",
-            "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_CALDAVSERVER,
-        ],
          */
     ];
 

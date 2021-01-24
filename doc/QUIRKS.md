@@ -26,6 +26,9 @@ supported CardDAV server features.
 - X-SERVICE-TYPE parameter lower/uppercase spelling is also adapted to Google's preference (e.g. jabber -> Jabber)
 - `BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS` see Davical
   - https://issuetracker.google.com/issues/178251714
+- `BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS` A prop-filter that filters on a parameter that does not match a text will
+  also match cards that a) don't have the property, or b) have the property, but without the parameter.
+  - https://issuetracker.google.com/issues/178251714
 - `BUG_INVTEXTMATCH_SOMEMATCH`: see Sabre/DAV
 - param-filter with is-not-defined subfilter matches cards that don't have the property defined. However, for the
   enclosing prop-filter to match, presence of the property is mandatory.
@@ -42,10 +45,12 @@ supported CardDAV server features.
 - inverted text-match of a param-filter yields wrong results if there is a property matching the text-match and another
   that does not. This is because sabre will simply invert the result of checking all properties, when it should check if
   there is any property NOT matching the text-filter (!= NO property matching the text filter)
+  - https://github.com/sabre-io/dav/pull/1322
 - `BUG_INVTEXTMATCH_SOMEMATCH` inverted text-match of a prop-filter yields wrong results if there is a property instance
   matching the text-match and another that does not. This is because sabre will simply invert the result of checking all
   properties, when it should check if there is any property NOT matching the text-filter (!= NO property matching the
   text filter)
+  - https://github.com/sabre-io/dav/pull/1322
 
 ### Davical
 
@@ -59,8 +64,10 @@ supported CardDAV server features.
   - https://gitlab.com/davical-project/awl/-/merge_requests/17
 - `BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS` addressbook-query with prop-filter containing a negated text-match: Davical
   also returns cards that do not have the asked for property. Example: If you filter for an EMAIL that does not match
-  /foo/, Davical will return cards that do not have an EMAIL property at all.
+  /foo/, Davical will return cards that do not have an EMAIL property at all. Same for param-filter: If the parameter
+  does not exist, the param-filter should fail, the text-match does not matter.
   - https://gitlab.com/davical-project/awl/-/merge\_requests/15
+  - https://gitlab.com/davical-project/awl/-/merge\_requests/18
 - `BUG_PARAMNOTDEF_SOMEMATCH` addressbook-query with a param-filter for a not-defined parameter yields wrong results for
   cards where the parameter is present for some properties, but not all (it must not be present at all for a match)
   - https://gitlab.com/davical-project/awl/-/merge\_requests/16

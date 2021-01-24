@@ -63,17 +63,23 @@ final class TestInfrastructureSrv
     // is compared :-)
     public const BUG_PARAMTEXTMATCH_BROKEN = 1024;
 
+    // Server bug in Google: A negated text-match on a parameter matches if the parameter is not defined. It also
+    // matches if the property is not defined.
+    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS = 2048;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
                                    | self::FEAT_PARAMFILTER
                                    | self::BUG_REJ_EMPTY_SYNCTOKEN
                                    | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
                                    | self::BUG_INVTEXTMATCH_SOMEMATCH
-                                   | self::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS;
-    public const SRVFEATS_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-                                   | self::FEAT_PARAMFILTER
-                                   | self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM
+                                   | self::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS
+                                   | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS;
+    public const SRVFEATSONLY_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
+                                   | self::FEAT_PARAMFILTER;
+    public const SRVBUGS_BAIKAL = self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM
                                    | self::BUG_INVTEXTMATCH_SOMEMATCH;
+    public const SRVFEATS_BAIKAL = self::SRVFEATSONLY_BAIKAL | self::SRVBUGS_BAIKAL;
     public const SRVFEATS_NEXTCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
     public const SRVFEATS_OWNCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
     public const SRVFEATS_RADICALE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG

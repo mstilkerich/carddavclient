@@ -66,7 +66,7 @@ final class AddressbookQueryTest extends TestCase
         // so we will notice if we stick to that rule.
         $datasets = [
             // test whether a property is defined / not defined
-            'HasNoEmail' => [ ['EMAIL' => null], [ 2 ], 0, 0 ],
+            'HasNoEmail' => [ ['EMAIL' => null], [ 2, 3 ], 0, 0 ],
             'HasEmail' => [ ['EMAIL' => '//'], [ 0, 1 ], 0, 0 ],
 
             // simple text matches against property values
@@ -156,10 +156,33 @@ final class AddressbookQueryTest extends TestCase
                 TIS::BUG_PARAMTEXTMATCH_BROKEN,
                 TIS::FEAT_PARAMFILTER
             ],
-            // Cards with a TEL;HOME property match !/WORK/; TEL without TYPE param does not match
-         //   'ParamInvertedMatchUnsetParam' => [['TEL' => ['TYPE', '!/WORK/']], [ 0, 3, 6, 9 ] ],
-            // Cards with a EMAIL;TYPE=HOME property match !/WORK/, even if there also is en EMAIL;TYPE=WORK property
-         //   'ParamInvertedMatchDiffParam' => [['EMAIL' => ['TYPE', '!/WORK/']], [ 0, 2, 4, 6, 8 ] ],
+
+            // simple negated text matches against parameter values
+            // Note: param-filter does not match if the parameter does not exist
+            'ParamContainsNotT' => [ // simple case: only one property instance that matches inverted filter
+                ['IMPP' => ['X-SERVICE-TYPE', '!/Skype/']],
+                [ 3 ],
+                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamContainsNotF' => [ // simple case: no property instance that matches inverted filter
+                ['IMPP' => ['X-SERVICE-TYPE', '!/Jabber/']],
+                [ ],
+                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamContainsNotSomeDiff' => [ // some properties, but not all match the inverted filter
+                ['EMAIL' => ['TYPE', '!/WORK/']],
+                [ 0 ],
+                TIS::BUG_INVTEXTMATCH_SOMEMATCH | TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamContainsNotSomeUndef' => [ // no param matches the inverted filter, but there is one without the param
+                ['TEL' => ['TYPE', '!/HOME/']],
+                [ ],
+                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS,
+                TIS::FEAT_PARAMFILTER
+            ],
         ];
 
         $abooks = TIS::addressbookProvider();
@@ -254,6 +277,9 @@ final class AddressbookQueryTest extends TestCase
         [ // card 2 - no EMAIL property
             [ 'TEL', '12345', ['TYPE' => 'HOME'] ],
             [ 'TEL', '555', [] ],
+        ],
+        [ // card 3
+            [ 'IMPP', 'xmpp:foo@example.com', ['X-SERVICE-TYPE' => 'Jabber', 'TYPE' => 'HOME'] ],
         ],
     ];
 

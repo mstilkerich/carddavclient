@@ -52,12 +52,6 @@ final class AddressbookQueryTest extends TestCase
         }
     }
 
-    /** @return array<string, array{string, TestAddressbook}> */
-    public function addressbookProvider(): array
-    {
-        return TIS::addressbookProvider();
-    }
-
     /** @return array<string, array{string, SimpleConditions, list<int>, int, int}> */
     public function simpleQueriesProvider(): array
     {
@@ -66,8 +60,8 @@ final class AddressbookQueryTest extends TestCase
         // so we will notice if we stick to that rule.
         $datasets = [
             // test whether a property is defined / not defined
-            'HasNoEmail' => [ ['EMAIL' => null], [ 2, 3 ], 0, 0 ],
-            'HasEmail' => [ ['EMAIL' => '//'], [ 0, 1 ], 0, 0 ],
+            'HasNoEmail' => [ ['EMAIL' => null], [ 2 ], 0, 0 ],
+            'HasEmail' => [ ['EMAIL' => '//'], [ 0, 1, 3 ], 0, 0 ],
 
             // simple text matches against property values
             'EmailEquals' => [ ['EMAIL' => '/johndoe@example.com/='], [ 0 ], 0, 0 ],
@@ -82,11 +76,16 @@ final class AddressbookQueryTest extends TestCase
 
             // simple text matches with negated match behavior
             // Case 1: Either all or no EMAIL properties match the negated filter
-            'EmailEndsNotWith' => [ ['EMAIL' => '!/@abcd.com/$'], [ 0 ], TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS, 0 ],
+            'EmailEndsNotWith' => [
+                ['EMAIL' => '!/@abcd.com/$'],
+                [ 0, 3 ],
+                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS,
+                0
+            ],
             // Case 2: Some, but not all EMAIL properties match the negated filter
             'EmailContainsNotSome' => [
                 ['EMAIL' => '!/@example.com/'],
-                [ 0, 1 ],
+                [ 0, 1, 3 ],
                 TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS | TIS::BUG_INVTEXTMATCH_SOMEMATCH,
                 0
             ],
@@ -94,7 +93,7 @@ final class AddressbookQueryTest extends TestCase
             // test whether property with parameter defined or not defined exists
             'ParamNotDefined' => [
                 ['EMAIL' => ['TYPE', null]],
-                [ 1 ],
+                [ 1, 3 ],
                 TIS::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS,
                 TIS::FEAT_PARAMFILTER
             ],
@@ -223,6 +222,62 @@ final class AddressbookQueryTest extends TestCase
         }
     }
 
+    /** @return array<string, array{string, bool, SimpleConditions | ComplexConditions, list<int>, int, int}> */
+    public function multiConditionQueriesProvider(): array
+    {
+        // Try to have at least one matching and one non-matching card in the result for each filter
+        // Some service return an empty result or the entire addressbook without error if they do not support a filter,
+        // so we will notice if we stick to that rule.
+        $datasets = [
+            // test whether a property is defined / not defined
+            'HasTelOrIMPP' => [ false, ['TEL' => '//', 'IMPP' => '//' ], [ 2, 3 ], 0, 0 ],
+            'HasEmailAndIMPP' => [ true, ['EMAIL' => '//', 'IMPP' => '//' ], [ 3 ], 0, TIS::FEAT_FILTER_ALLOF ],
+
+            // multiple conditions in the same prop-filter
+            'TwoEmailConditionsAnd' => [ false, [ ['EMAIL', ['/doe/', '/.com/$', 'matchAll' => true]] ], [ 0 ], 0, 0 ],
+ //           'TwoEmailConditionsOr' => [ false, [ ['EMAIL', ['/doe/^', '/abcd.com/$']] ], [ 0, 1 ], 0, 0 ],
+        ];
+
+        $abooks = TIS::addressbookProvider();
+        $ret = [];
+
+        foreach (array_keys($abooks) as $abookname) {
+            foreach ($datasets as $dsname => $ds) {
+                $ret["$dsname ($abookname)"] = array_merge([$abookname], $ds);
+            }
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @param string $abookname Name of the addressbook to test with
+     * @param bool $matchAll Whether all or any condition needs to match
+     * @param SimpleConditions|ComplexConditions $conditions The conditions to pass to the query operation
+     * @param list<int> $expCards A list of expected cards, given by their index in self::$insertedCards[$abookname]
+     * @param int $inhibitingBugs A mask with bug flags where this test should be skipped
+     * @param int $featuresNeeded A mask with server features required for the test.
+     * @dataProvider multiConditionQueriesProvider
+     */
+    public function testQueryByMultipleConditions(
+        string $abookname,
+        bool $matchAll,
+        array $conditions,
+        array $expCards,
+        int $inhibitingBugs,
+        int $featuresNeeded
+    ): void {
+        if ($inhibitingBugs != 0 && TIS::hasFeature($abookname, $inhibitingBugs)) {
+            $this->markTestSkipped("$abookname has a bug that prevents successful execution of this test vector");
+        } elseif ($featuresNeeded != 0 && !TIS::hasFeature($abookname, $featuresNeeded, false)) {
+            $this->markTestSkipped("$abookname lacks a feature required for successful execution of this test vector");
+        } else {
+            $abook = $this->createSamples($abookname);
+            $result = $abook->query($conditions, [], $matchAll);
+            $this->checkExpectedCards($abookname, $result, $expCards);
+        }
+    }
+
     /**
      * Checks that a result returned by the query matches the expected cards.
      *
@@ -279,6 +334,7 @@ final class AddressbookQueryTest extends TestCase
             [ 'TEL', '555', [] ],
         ],
         [ // card 3
+            [ 'EMAIL', 'foo@ex.com', [] ],
             [ 'IMPP', 'xmpp:foo@example.com', ['X-SERVICE-TYPE' => 'Jabber', 'TYPE' => 'HOME'] ],
         ],
     ];

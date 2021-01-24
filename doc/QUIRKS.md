@@ -71,6 +71,7 @@ supported CardDAV server features.
 - `BUG_PARAMNOTDEF_SOMEMATCH` addressbook-query with a param-filter for a not-defined parameter yields wrong results for
   cards where the parameter is present for some properties, but not all (it must not be present at all for a match)
   - https://gitlab.com/davical-project/awl/-/merge\_requests/16
+- Davical does not support multiple prop-filter subfilters, it ignores all but the first one
 
 
 ### Radicale (used by Synology Contacts App)
@@ -79,3 +80,9 @@ supported CardDAV server features.
   - https://github.com/Kozea/Radicale/pull/1139
 - `BUG_INVTEXTMATCH_SOMEMATCH`: see Sabre/DAV
   - https://github.com/Kozea/Radicale/issues/1140
+- Radicale ignores the test attribute on a prop-filter and applies "allof" semantics (even though the default would be
+  anyof)
+
+### iCloud
+
+- Does not support allof test of multiple prop filters

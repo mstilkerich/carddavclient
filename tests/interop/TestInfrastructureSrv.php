@@ -34,65 +34,67 @@ final class TestInfrastructureSrv
     public const FEAT_CTAG     = 4;
     // iCloud does not support param-filter, it simply returns all cards
     public const FEAT_PARAMFILTER = 8;
+    // iCloud does not support "allof" matching at filter level (i.e. AND of multiple prop-filters)
+    public const FEAT_FILTER_ALLOF = 16;
 
     // Server bug: sync-collection report with empty sync-token is rejected with 400 bad request
-    public const BUG_REJ_EMPTY_SYNCTOKEN = 16;
+    public const BUG_REJ_EMPTY_SYNCTOKEN = 1024;
     // Server bug in sabre/dav: if a param-filter match is done on a VCard that has the asked for property without the
     // parameter, a null value will be dereferenced, resulting in an internal server error
-    public const BUG_PARAMFILTER_ON_NONEXISTENT_PARAM = 32;
+    public const BUG_PARAMFILTER_ON_NONEXISTENT_PARAM = 2048;
 
     // Server bug in Google + Davical: A prop-filter with a negated text-match filter will match VCards where the
     // property in question does not exist
-    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS = 64;
+    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS = 4096;
 
     // Server bug in Google + Sabre/DAV: A prop-filter with a negated text-match filter will not match if there is
     // another instance of the property in question that matches the non-negated filter
-    public const BUG_INVTEXTMATCH_SOMEMATCH = 128;
+    public const BUG_INVTEXTMATCH_SOMEMATCH = 8192;
 
     // Server bug in Google: A prop-filter with a param-filter subfilter that matches on a not-defined parameter will
     // match vCards where the property does not exist.
-    public const BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS = 256;
+    public const BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS = 16384;
 
     // Server bug in Davical: A prop-filter with a param-filter/is-not-defined filter will match if there is at least
     // one property of the asked for type that lacks the parameter, but it must only match if the parameter occurs with
     // no property of the asked for type
-    public const BUG_PARAMNOTDEF_SOMEMATCH = 512;
+    public const BUG_PARAMNOTDEF_SOMEMATCH = 32768;
 
     // Server bug in Davical: A text-match for a param-filter is performed on the property value, not the parameter
     // value. Furthermore collation and match-type are ignored, not that it really matters considering the wrong value
     // is compared :-)
-    public const BUG_PARAMTEXTMATCH_BROKEN = 1024;
+    public const BUG_PARAMTEXTMATCH_BROKEN = 65536;
 
     // Server bug in Google: A negated text-match on a parameter matches if the parameter is not defined. It also
     // matches if the property is not defined.
-    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS = 2048;
+    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS = 131072;
 
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
                                    | self::FEAT_PARAMFILTER
+                                   | self::FEAT_FILTER_ALLOF
                                    | self::BUG_REJ_EMPTY_SYNCTOKEN
                                    | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
                                    | self::BUG_INVTEXTMATCH_SOMEMATCH
                                    | self::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS
                                    | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS;
     public const SRVFEATSONLY_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-                                   | self::FEAT_PARAMFILTER;
+                                   | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF;
     public const SRVBUGS_BAIKAL = self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM
                                    | self::BUG_INVTEXTMATCH_SOMEMATCH;
     public const SRVFEATS_BAIKAL = self::SRVFEATSONLY_BAIKAL | self::SRVBUGS_BAIKAL;
     public const SRVFEATS_NEXTCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
     public const SRVFEATS_OWNCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
     public const SRVFEATS_RADICALE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-                                     | self::FEAT_PARAMFILTER
+                                     | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF
                                      | self::BUG_INVTEXTMATCH_SOMEMATCH;
     public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-                                    | self::FEAT_PARAMFILTER
+                                    | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF
                                     // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
                                     // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
                                     // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN
                                     ;
     public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
-    public const SRVFEATS_CALDAVSERVER = self::FEAT_MULTIGET | self::FEAT_PARAMFILTER;
 
     /** @var array<string, Account> Objects for all accounts from AccountData::ACCOUNTS */
     public static $accounts = [];

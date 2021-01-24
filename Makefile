@@ -46,3 +46,14 @@ doc:
 # For github CI system - if AccountData.php is not available, create from AccountData.php.dist
 tests/interop/AccountData.php: | tests/interop/AccountData.php.dist
 	cp $| $@
+
+.PHONY: codecov-upload
+codecov-upload:
+	if [ -n "$$CODECOV_TOKEN" ]; then \
+		bash <(curl -s https://codecov.io/bash) -F unittests -f testreports/unit/clover.xml -n 'Local testrun'; \
+		bash <(curl -s https://codecov.io/bash) -F interop -f testreports/interop/clover.xml -n 'Local testrun'; \
+	else \
+		echo "Error: Set CODECOV_TOKEN environment variable first"; \
+		exit 1; \
+	fi
+

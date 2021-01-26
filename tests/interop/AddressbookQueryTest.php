@@ -249,6 +249,20 @@ final class AddressbookQueryTest extends TestCase
                 TIS::BUG_PROPFILTER_ALLOF,
                 0
             ],
+            'TwoPropFiltersConditionsOr' => [
+                false,
+                [ ['EMAIL', ['/doe/^']], ['EMAIL', ['/abcd.com/$']] ],
+                [ 0, 1 ],
+                0,
+                0,
+            ],
+            'TwoPropFiltersConditionsAnd' => [
+                true,
+                [ ['EMAIL', ['/doe/^']], ['EMAIL', ['/.com/$']] ],
+                [ 0 ],
+                0,
+                TIS::FEAT_FILTER_ALLOF,
+            ],
         ];
 
         $abooks = TIS::addressbookProvider();

@@ -52,6 +52,12 @@ final class AddressbookQueryTest extends TestCase
         }
     }
 
+    /** @return array<string, array{string, TestAddressbook}> */
+    public function addressbookProvider(): array
+    {
+        return TIS::addressbookProvider();
+    }
+
     /** @return array<string, array{string, SimpleConditions, list<int>, int, int}> */
     public function simpleQueriesProvider(): array
     {
@@ -234,8 +240,15 @@ final class AddressbookQueryTest extends TestCase
             'HasEmailAndIMPP' => [ true, ['EMAIL' => '//', 'IMPP' => '//' ], [ 3 ], 0, TIS::FEAT_FILTER_ALLOF ],
 
             // multiple conditions in the same prop-filter
+            // this one matches on the same property instance johndoe@example.com
             'TwoEmailConditionsAnd' => [ false, [ ['EMAIL', ['/doe/', '/.com/$', 'matchAll' => true]] ], [ 0 ], 0, 0 ],
- //           'TwoEmailConditionsOr' => [ false, [ ['EMAIL', ['/doe/^', '/abcd.com/$']] ], [ 0, 1 ], 0, 0 ],
+            'TwoEmailConditionsOr' => [
+                false,
+                [ ['EMAIL', ['/doe/^', '/abcd.com/$']] ],
+                [ 0, 1 ],
+                TIS::BUG_PROPFILTER_ALLOF,
+                0
+            ],
         ];
 
         $abooks = TIS::addressbookProvider();
@@ -276,6 +289,31 @@ final class AddressbookQueryTest extends TestCase
             $result = $abook->query($conditions, [], $matchAll);
             $this->checkExpectedCards($abookname, $result, $expCards);
         }
+    }
+
+    /**
+     * Tests the behavior of evaluation of multiple conditions inside one prop-filter with allof (AND) behavior.
+     * There is two behaviors found in the wild if there are multiple values for the property that prop-filter matches
+     * on:
+     * 1) Each of the conditions can be satisfied by any value of the property
+     * 2) All of the conditions must be satisfied by one value of the property
+     *
+     * RFC 6352 is not really clear on what is correct here, although I cannot think of an example where 1) would be
+     * desired.
+     *
+     * @param TestAddressbook $cfg
+     * @dataProvider addressbookProvider
+     */
+    public function testAllOfPropFilterAppliesToSamePropertyValue(string $abookname, array $cfg): void
+    {
+        if (TIS::hasFeature($abookname, TIS::FEAT_ALLOF_SINGLEPROP)) {
+            $expCards = [];
+        } else {
+            $expCards = [ 0 ];
+        }
+        $abook = $this->createSamples($abookname);
+        $result = $abook->query([['EMAIL', ['/doe/^', '/.com/$', 'matchAll' => true]]], [], false);
+        $this->checkExpectedCards($abookname, $result, $expCards);
     }
 
     /**

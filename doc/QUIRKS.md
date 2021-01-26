@@ -82,7 +82,9 @@ supported CardDAV server features.
   - https://github.com/Kozea/Radicale/issues/1140
 - Radicale ignores the test attribute on a prop-filter and applies "allof" semantics (even though the default would be
   anyof)
+  - https://github.com/Kozea/Radicale/issues/1143
 
 ### iCloud
 
-- Does not support allof test of multiple prop filters
+- Does not support allof test of multiple prop-filters (i.e. test="allof" at the filter level). It does support allof
+  matching at the prop-filter level.

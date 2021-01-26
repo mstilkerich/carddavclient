@@ -31,11 +31,15 @@ final class TestInfrastructureSrv
     // KNOWN FEATURES AND QUIRKS OF DIFFERENT SERVICES THAT NEED TO BE CONSIDERED IN THE TESTS
     public const FEAT_SYNCCOLL = 1;
     public const FEAT_MULTIGET = 2;
-    public const FEAT_CTAG     = 4;
+    public const FEAT_CTAG = 4;
     // iCloud does not support param-filter, it simply returns all cards
     public const FEAT_PARAMFILTER = 8;
     // iCloud does not support "allof" matching at filter level (i.e. AND of multiple prop-filters)
     public const FEAT_FILTER_ALLOF = 16;
+
+    // This feature is set for servers that have an allof matching behavior at the prop-filter level such that all
+    // conditions of the prop-filter need to be satisfied by the same prop-filter value
+    public const FEAT_ALLOF_SINGLEPROP = 32;
 
     // Server bug: sync-collection report with empty sync-token is rejected with 400 bad request
     public const BUG_REJ_EMPTY_SYNCTOKEN = 1024;
@@ -69,31 +73,35 @@ final class TestInfrastructureSrv
     // matches if the property is not defined.
     public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS = 131072;
 
-    public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG;
+    // Server bug in Radicale: Multiple conditions in a prop-filter are always evaluated as if test=allof was given.
+    public const BUG_PROPFILTER_ALLOF = 262144;
+
+    public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
+        | self::FEAT_ALLOF_SINGLEPROP;
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-                                   | self::FEAT_PARAMFILTER
-                                   | self::FEAT_FILTER_ALLOF
-                                   | self::BUG_REJ_EMPTY_SYNCTOKEN
-                                   | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
-                                   | self::BUG_INVTEXTMATCH_SOMEMATCH
-                                   | self::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS
-                                   | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS;
+        | self::FEAT_PARAMFILTER
+        | self::FEAT_FILTER_ALLOF
+        | self::BUG_REJ_EMPTY_SYNCTOKEN
+        | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
+        | self::BUG_INVTEXTMATCH_SOMEMATCH
+        | self::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS
+        | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS;
     public const SRVFEATSONLY_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-                                   | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF;
+        | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF;
     public const SRVBUGS_BAIKAL = self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM
-                                   | self::BUG_INVTEXTMATCH_SOMEMATCH;
+        | self::BUG_INVTEXTMATCH_SOMEMATCH;
     public const SRVFEATS_BAIKAL = self::SRVFEATSONLY_BAIKAL | self::SRVBUGS_BAIKAL;
     public const SRVFEATS_NEXTCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
     public const SRVFEATS_OWNCLOUD = self::SRVFEATS_BAIKAL; // uses Sabre DAV
     public const SRVFEATS_RADICALE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-                                     | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF
-                                     | self::BUG_INVTEXTMATCH_SOMEMATCH;
+        | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF
+        | self::BUG_INVTEXTMATCH_SOMEMATCH | self::BUG_PROPFILTER_ALLOF;
     public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-                                    | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF
-                                    // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
-                                    // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
-                                    // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN
-                                    ;
+        | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP
+        // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
+        // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
+        // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN
+        ;
     public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
 
     /** @var array<string, Account> Objects for all accounts from AccountData::ACCOUNTS */

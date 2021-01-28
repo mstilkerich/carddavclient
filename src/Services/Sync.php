@@ -220,8 +220,6 @@ class Sync
                         ];
                     }
                 }
-            } else {
-                Config::$logger->warning("Unexpected response element in sync-collection result\n");
             }
         }
 

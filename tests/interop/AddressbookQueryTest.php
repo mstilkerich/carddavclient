@@ -19,6 +19,36 @@ use MStilkerich\Tests\CardDavClient\Interop\TestInfrastructureSrv as TIS;
 final class AddressbookQueryTest extends TestCase
 {
     /**
+     * The sample cards.
+     *
+     * For TYPE attributes, we should only use HOME and WORK in that spelling, because Google drops everything it does
+     * not know and changes the spelling of these two to uppercase.
+     *
+     * For IMPP, we can use X-SERVICE-TYPE=Jabber/Skype with schemes xmpp/skype, again in that spelling.
+     *
+     * @var list<list<array{string, string, array<string,string>}>>
+     */
+    private const SAMPLES = [
+        // properties are added to prepared cards from TestInfrastructure::createVCard()
+        // We add a NICKNAME Jonny$i to each card to easy map log entries back to this array
+        [ // card 0
+            [ 'EMAIL', 'doe@big.corp', ['TYPE' => 'WORK'] ],
+            [ 'EMAIL', 'johndoe@example.com', ['TYPE' => 'HOME'] ],
+        ],
+        [ // card 1
+            [ 'EMAIL', 'maxmu@abcd.com', [] ],
+        ],
+        [ // card 2 - no EMAIL property
+            [ 'TEL', '12345', ['TYPE' => 'HOME'] ],
+            [ 'TEL', '555', [] ],
+        ],
+        [ // card 3
+            [ 'EMAIL', 'foo@ex.com', [] ],
+            [ 'IMPP', 'xmpp:foo@example.com', ['X-SERVICE-TYPE' => 'Jabber', 'TYPE' => 'HOME'] ],
+        ],
+    ];
+
+    /**
      * @var array<string, list<array{vcard: VCard, uri: string, etag: string}>>
      *    Cards inserted to addressbooks by tests in this class. Maps addressbook name to list of associative arrays.
      */
@@ -331,6 +361,54 @@ final class AddressbookQueryTest extends TestCase
     }
 
     /**
+     * Tests limiting the amount of results returned for an addressbook-query report.
+     *
+     * @param TestAddressbook $cfg
+     * @dataProvider addressbookProvider
+     */
+    public function testQueryWithLimitedResultsIfSupported(string $abookname, array $cfg): void
+    {
+        $abook = $this->createSamples($abookname);
+        $numTestCards = count(self::$insertedCards[$abookname]);
+
+        for ($i = 1; $i < 4; ++$i) {
+            $result = $abook->query(['NICKNAME' => '/Jonny/^'], [], false, $i);
+            // Limiting results is an optional feature not supported by all servers; if not supported,
+            // we will get all cards of the test set
+            $expCount = TIS::hasFeature($abookname, TIS::FEAT_RESULTLIMIT) ? $i : $numTestCards;
+            $this->assertCount($expCount, $result, "Expected $expCount cards in result");
+        }
+    }
+
+    /**
+     * Tests partial retrieval of VCards.
+     *
+     * Not all servers supports this, this test verifies our assumptions. For servers where we know support is missing,
+     * the test checks that the full vcards are returned (i.e. if the feature becomes supported at some time, the test
+     * will fail and we will know about the new feature).
+     *
+     * @param TestAddressbook $cfg
+     * @dataProvider addressbookProvider
+     */
+    public function testQueryWithPartialAddressDataIfSupported(string $abookname, array $cfg): void
+    {
+        $abook = $this->createSamples($abookname);
+        $numTestCards = count(self::$insertedCards[$abookname]);
+
+        $result = $abook->query(['NICKNAME' => '/Jonny/^'], ['EMAIL', 'TEL']);
+        $this->assertCount($numTestCards, $result, "Expected $numTestCards cards in result");
+
+        if (TIS::hasFeature($abookname, TIS::FEAT_ABOOKQUERY_PARTIALCARDS)) {
+            foreach ($result as $r) {
+                $this->assertNull($r['vcard']->NICKNAME, "Result card contains unrequested NICKNAME property");
+            }
+        } else {
+            // if server does not support partial address data, check that we received the full cards
+            $this->checkExpectedCards($abookname, $result, [0, 1, 2, 3]);
+        }
+    }
+
+    /**
      * Checks that a result returned by the query matches the expected cards.
      *
      * @param array<string, array{vcard: VCard, etag: string}> $result
@@ -360,36 +438,6 @@ final class AddressbookQueryTest extends TestCase
             $this->assertContains($uri, $expUris, "Unexpected card in result: " . ($res["vcard"]->NICKNAME ?? ""));
         }
     }
-
-    /**
-     * The sample cards.
-     *
-     * For TYPE attributes, we should only use HOME and WORK in that spelling, because Google drops everything it does
-     * not know and changes the spelling of these two to uppercase.
-     *
-     * For IMPP, we can use X-SERVICE-TYPE=Jabber/Skype with schemes xmpp/skype, again in that spelling.
-     *
-     * @var list<list<array{string, string, array<string,string>}>>
-     */
-    private const SAMPLES = [
-        // properties are added to prepared cards from TestInfrastructure::createVCard()
-        // We add a NICKNAME Jonny$i to each card to easy map log entries back to this array
-        [ // card 0
-            [ 'EMAIL', 'doe@big.corp', ['TYPE' => 'WORK'] ],
-            [ 'EMAIL', 'johndoe@example.com', ['TYPE' => 'HOME'] ],
-        ],
-        [ // card 1
-            [ 'EMAIL', 'maxmu@abcd.com', [] ],
-        ],
-        [ // card 2 - no EMAIL property
-            [ 'TEL', '12345', ['TYPE' => 'HOME'] ],
-            [ 'TEL', '555', [] ],
-        ],
-        [ // card 3
-            [ 'EMAIL', 'foo@ex.com', [] ],
-            [ 'IMPP', 'xmpp:foo@example.com', ['X-SERVICE-TYPE' => 'Jabber', 'TYPE' => 'HOME'] ],
-        ],
-    ];
 
     private function createSamples(string $abookname): AddressbookCollection
     {

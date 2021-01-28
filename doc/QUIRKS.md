@@ -13,6 +13,8 @@ supported CardDAV server features.
 
 - iCloud apparently does not support param-filter. It simply ignores the filter and returns all cards that match the
   remaining conditions, i.e. at least that the property that contains the param-filter is defined is used as filter.
+- Radicale and iCloud do not support client-side requested limit of results in addressbook-query report. According to
+  RFC 6352, this is ok as the server may disregard a client-side requested limit.
 
 ## Known Quirks
 

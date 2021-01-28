@@ -41,8 +41,16 @@ final class TestInfrastructureSrv
     // conditions of the prop-filter need to be satisfied by the same prop-filter value
     public const FEAT_ALLOF_SINGLEPROP = 32;
 
+
+    // Feature is set if the server supports result limiting requested by the client. Affects addressbook query report.
+    public const FEAT_RESULTLIMIT = 64;
+
+    // Feature is set if the server supports partial retrieval of addressdata for addressbook-query report.
+    public const FEAT_ABOOKQUERY_PARTIALCARDS = 128;
+
     // Server bug: sync-collection report with empty sync-token is rejected with 400 bad request
     public const BUG_REJ_EMPTY_SYNCTOKEN = 1024;
+
     // Server bug in sabre/dav: if a param-filter match is done on a VCard that has the asked for property without the
     // parameter, a null value will be dereferenced, resulting in an internal server error
     public const BUG_PARAMFILTER_ON_NONEXISTENT_PARAM = 2048;
@@ -79,15 +87,15 @@ final class TestInfrastructureSrv
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_ALLOF_SINGLEPROP;
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-        | self::FEAT_PARAMFILTER
-        | self::FEAT_FILTER_ALLOF
+        | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT | self::FEAT_ABOOKQUERY_PARTIALCARDS
         | self::BUG_REJ_EMPTY_SYNCTOKEN
         | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
         | self::BUG_INVTEXTMATCH_SOMEMATCH
         | self::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS
         | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS;
     public const SRVFEATSONLY_BAIKAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-        | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF;
+        | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT
+        | self::FEAT_ABOOKQUERY_PARTIALCARDS;
     public const SRVBUGS_BAIKAL = self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM
         | self::BUG_INVTEXTMATCH_SOMEMATCH;
     public const SRVFEATS_BAIKAL = self::SRVFEATSONLY_BAIKAL | self::SRVBUGS_BAIKAL;
@@ -97,7 +105,8 @@ final class TestInfrastructureSrv
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF
         | self::BUG_INVTEXTMATCH_SOMEMATCH | self::BUG_PROPFILTER_ALLOF;
     public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-        | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP
+        | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP | self::FEAT_RESULTLIMIT
+        | self::FEAT_ABOOKQUERY_PARTIALCARDS
         // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
         // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
         // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN

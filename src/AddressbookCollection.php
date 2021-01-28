@@ -28,7 +28,7 @@ namespace MStilkerich\CardDavClient;
 use Sabre\VObject\UUIDUtil;
 use Sabre\VObject\Component\VCard;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
-use MStilkerich\CardDavClient\XmlElements\{Filter,ResponsePropstat};
+use MStilkerich\CardDavClient\XmlElements\{Filter,ResponsePropstat,ResponseStatus};
 
 /**
  * Objects of this class represent an addressbook collection on a WebDAV server.
@@ -253,27 +253,33 @@ class AddressbookCollection extends WebDavCollection
             if ($response instanceof ResponsePropstat) {
                 $respUri = $response->href;
 
-                if (!empty($response->propstat)) {
-                    foreach ($response->propstat as $propstat) {
-                        if (stripos($propstat->status, " 200 ") !== false) {
-                            Config::$logger->debug("VCF for $respUri received via query");
-                            $vcf = (string) $propstat->prop->props[XmlEN::ADDRDATA];
-                            $vcard = \Sabre\VObject\Reader::read($vcf);
-                            if ($vcard instanceof VCard) {
-                                $results[$respUri] = [
-                                    "etag" => (string) $propstat->prop->props[XmlEN::GETETAG],
-                                    "vcard" => $vcard
-                                ];
-                            } else {
-                                Config::$logger->error("sabre reader did not return a VCard object for $vcf\n");
-                            }
+                foreach ($response->propstat as $propstat) {
+                    if (stripos($propstat->status, " 200 ") !== false) {
+                        Config::$logger->debug("VCF for $respUri received via query");
+                        $vcf = (string) $propstat->prop->props[XmlEN::ADDRDATA];
+                        $vcard = \Sabre\VObject\Reader::read($vcf);
+                        if ($vcard instanceof VCard) {
+                            $results[$respUri] = [
+                                "etag" => (string) $propstat->prop->props[XmlEN::GETETAG],
+                                "vcard" => $vcard
+                            ];
+                        } else {
+                            Config::$logger->error("sabre reader did not return a VCard object for $vcf\n");
                         }
                     }
-                } else {
-                    Config::$logger->warning("Unexpected response element in query result\n");
                 }
-            } else {
-                // TODO ResponseStatus
+            } elseif ($response instanceof ResponseStatus) {
+                foreach ($response->hrefs as $respUri) {
+                    if (CardDavClient::compareUrlPaths($respUri, $this->uri)) {
+                        if (stripos($response->status, " 507 ") !== false) {
+                            // results truncated by server
+                        } else {
+                            Config::$logger->debug(__METHOD__ . " Ignoring response on addressbook itself");
+                        }
+                    } else {
+                        Config::$logger->warning(__METHOD__ . " Unexpected respstatus element {$response->status}");
+                    }
+                }
             }
         }
 

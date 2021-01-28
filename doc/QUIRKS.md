@@ -35,6 +35,7 @@ supported CardDAV server features.
 - param-filter with is-not-defined subfilter matches cards that don't have the property defined. However, for the
   enclosing prop-filter to match, presence of the property is mandatory.
   - https://issuetracker.google.com/issues/178243204
+- `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: see Sabre/DAV
 
 ### Sabre/DAV (used by Owncloud, Nextcloud, Baïkal)
 
@@ -53,6 +54,9 @@ supported CardDAV server features.
   properties, when it should check if there is any property NOT matching the text-filter (!= NO property matching the
   text filter)
   - https://github.com/sabre-io/dav/pull/1322
+- `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: A param-filter text-match for a parameter with multiple values (e.g.
+  `TYPE=HOME,WORK`) will not match against the individual parameter values, but as the parameter string as a whole. For
+  example an equals text-match for HOME would not match the example given before.
 
 ### Davical
 
@@ -74,7 +78,8 @@ supported CardDAV server features.
   cards where the parameter is present for some properties, but not all (it must not be present at all for a match)
   - https://gitlab.com/davical-project/awl/-/merge\_requests/16
 - Davical does not support multiple prop-filter subfilters, it ignores all but the first one
-
+  - https://gitlab.com/davical-project/awl/-/merge\_requests/19
+- `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: see Sabre/DAV
 
 ### Radicale (used by Synology Contacts App)
 

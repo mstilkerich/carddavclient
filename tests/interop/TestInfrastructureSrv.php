@@ -29,73 +29,80 @@ use PHPUnit\Framework\TestCase;
 final class TestInfrastructureSrv
 {
     // KNOWN FEATURES AND QUIRKS OF DIFFERENT SERVICES THAT NEED TO BE CONSIDERED IN THE TESTS
-    public const FEAT_SYNCCOLL = 1;
-    public const FEAT_MULTIGET = 2;
-    public const FEAT_CTAG = 4;
+    public const FEAT_SYNCCOLL = 2 ** 0;
+    public const FEAT_MULTIGET = 2 ** 1;
+    public const FEAT_CTAG = 2 ** 2;
     // iCloud does not support param-filter, it simply returns all cards
-    public const FEAT_PARAMFILTER = 8;
+    public const FEAT_PARAMFILTER = 2 ** 3;
     // iCloud does not support "allof" matching at filter level (i.e. AND of multiple prop-filters)
-    public const FEAT_FILTER_ALLOF = 16;
+    public const FEAT_FILTER_ALLOF = 2 ** 4;
 
     // This feature is set for servers that have an allof matching behavior at the prop-filter level such that all
     // conditions of the prop-filter need to be satisfied by the same prop-filter value
-    public const FEAT_ALLOF_SINGLEPROP = 32;
-
+    public const FEAT_ALLOF_SINGLEPROP = 2 ** 5;
 
     // Feature is set if the server supports result limiting requested by the client. Affects addressbook query report.
-    public const FEAT_RESULTLIMIT = 64;
+    public const FEAT_RESULTLIMIT = 2 ** 6;
 
     // Feature is set if the server supports partial retrieval of addressdata for addressbook-query report.
-    public const FEAT_ABOOKQUERY_PARTIALCARDS = 128;
+    public const FEAT_ABOOKQUERY_PARTIALCARDS = 2 ** 7;
 
     // Server bug: sync-collection report with empty sync-token is rejected with 400 bad request
-    public const BUG_REJ_EMPTY_SYNCTOKEN = 1024;
+    public const BUG_REJ_EMPTY_SYNCTOKEN = 2 ** 10;
 
     // Server bug in sabre/dav: if a param-filter match is done on a VCard that has the asked for property without the
     // parameter, a null value will be dereferenced, resulting in an internal server error
-    public const BUG_PARAMFILTER_ON_NONEXISTENT_PARAM = 2048;
+    public const BUG_PARAMFILTER_ON_NONEXISTENT_PARAM = 2 ** 11;
 
     // Server bug in Google + Davical: A prop-filter with a negated text-match filter will match VCards where the
     // property in question does not exist
-    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS = 4096;
+    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS = 2 ** 12;
 
     // Server bug in Google + Sabre/DAV: A prop-filter with a negated text-match filter will not match if there is
     // another instance of the property in question that matches the non-negated filter
-    public const BUG_INVTEXTMATCH_SOMEMATCH = 8192;
+    public const BUG_INVTEXTMATCH_SOMEMATCH = 2 ** 13;
 
     // Server bug in Google: A prop-filter with a param-filter subfilter that matches on a not-defined parameter will
     // match vCards where the property does not exist.
-    public const BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS = 16384;
+    public const BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS = 2 ** 14;
 
     // Server bug in Davical: A prop-filter with a param-filter/is-not-defined filter will match if there is at least
     // one property of the asked for type that lacks the parameter, but it must only match if the parameter occurs with
     // no property of the asked for type
-    public const BUG_PARAMNOTDEF_SOMEMATCH = 32768;
+    public const BUG_PARAMNOTDEF_SOMEMATCH = 2 ** 15;
 
     // Server bug in Davical: A text-match for a param-filter is performed on the property value, not the parameter
     // value. Furthermore collation and match-type are ignored, not that it really matters considering the wrong value
     // is compared :-)
-    public const BUG_PARAMTEXTMATCH_BROKEN = 65536;
+    public const BUG_PARAMTEXTMATCH_BROKEN = 2 ** 16;
 
     // Server bug in Google: A negated text-match on a parameter matches if the parameter is not defined. It also
     // matches if the property is not defined.
-    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS = 131072;
+    public const BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS = 2 ** 17;
 
     // Server bug in Radicale: Multiple conditions in a prop-filter are always evaluated as if test=allof was given.
-    public const BUG_PROPFILTER_ALLOF = 262144;
+    public const BUG_PROPFILTER_ALLOF = 2 ** 18;
+
+    // Server bug: param-filter on multi-value parameter is matched against a string of all parameter values, not
+    // against the individual values. Example: param-filter with equals text-match on HOME woud not match TYPE=HOME,WORK
+    public const BUG_MULTIPARAM_NOINDIVIDUAL_MATCH = 2 ** 19;
 
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_ALLOF_SINGLEPROP;
+
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT | self::FEAT_ABOOKQUERY_PARTIALCARDS
         | self::BUG_REJ_EMPTY_SYNCTOKEN
         | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
         | self::BUG_INVTEXTMATCH_SOMEMATCH
         | self::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS
-        | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS;
+        | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS
+        | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH;
+
     public const SRVFEATSONLY_SABRE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT
-        | self::FEAT_ABOOKQUERY_PARTIALCARDS;
+        | self::FEAT_ABOOKQUERY_PARTIALCARDS
+        | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH;
     public const SRVBUGS_SABRE = self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM
         | self::BUG_INVTEXTMATCH_SOMEMATCH;
     public const SRVFEATS_SABRE = self::SRVFEATSONLY_SABRE | self::SRVBUGS_SABRE;
@@ -105,6 +112,7 @@ final class TestInfrastructureSrv
     public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP | self::FEAT_RESULTLIMIT
         | self::FEAT_ABOOKQUERY_PARTIALCARDS
+        | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
         // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
         // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
         // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN

@@ -25,7 +25,6 @@ final class AddressbookQueryTest extends TestCase
      * not know and changes the spelling of these two to uppercase.
      *
      * For IMPP, we can use X-SERVICE-TYPE=Jabber/Skype with schemes xmpp/skype, again in that spelling.
-     *
      * @var list<list<array{string, string, array<string,string>}>>
      */
     private const SAMPLES = [
@@ -34,9 +33,11 @@ final class AddressbookQueryTest extends TestCase
         [ // card 0
             [ 'EMAIL', 'doe@big.corp', ['TYPE' => 'WORK'] ],
             [ 'EMAIL', 'johndoe@example.com', ['TYPE' => 'HOME'] ],
+            [ 'X-CUSTOMPROP', 'foobar', ['X-CUSTOMPARAM' => 'WORK'] ],
         ],
-        [ // card 1
+        [ // card 1 - custom property with a custom parameter (to avoid Google messing with its content)
             [ 'EMAIL', 'maxmu@abcd.com', [] ],
+            [ 'X-CUSTOMPROP', 'foobar', [ 'X-CUSTOMPARAM' => ['HOME', 'WORK'] ] ],
         ],
         [ // card 2 - no EMAIL property
             [ 'TEL', '12345', ['TYPE' => 'HOME'] ],
@@ -216,6 +217,26 @@ final class AddressbookQueryTest extends TestCase
                 ['TEL' => ['TYPE', '!/HOME/']],
                 [ ],
                 TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS,
+                TIS::FEAT_PARAMFILTER
+            ],
+
+            // tests on parameter with multiple values
+            'MultivalueParamContains1' => [
+                ['X-CUSTOMPROP' => ['X-CUSTOMPARAM', '/HOME/']],
+                [ 1 ],
+                0,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'MultivalueParamContains2' => [
+                ['X-CUSTOMPROP' => ['X-CUSTOMPARAM', '/WORK/']],
+                [ 0, 1 ],
+                0,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'MultivalueParamEquals' => [
+                ['X-CUSTOMPROP' => ['X-CUSTOMPARAM', '/HOME/=']],
+                [ 1 ],
+                TIS::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH,
                 TIS::FEAT_PARAMFILTER
             ],
         ];

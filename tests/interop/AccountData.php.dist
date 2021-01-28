@@ -41,7 +41,7 @@ final class AccountData
             "password" => "ncadmPassw0rd",
             "discoveryUri" => "http://localhost:8080/remote.php/dav/",
             "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_NEXTCLOUD,
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
         /*
         "Baikal" => [
@@ -49,21 +49,21 @@ final class AccountData
             "password" => "foobar",
             "discoveryUri" => "http://baikal.localhost",
             "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_BAIKAL,
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
         "BaikalKrb" => [
             "username" => "",
             "password" => "",
             "discoveryUri" => "http://baikal.example.com",
             "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_BAIKAL,
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
         "Owncloud" => [
             "username" => "owncloudUser",
             "password" => "foobar",
             "discoveryUri" => "http://localhost/owncloud/remote.php/dav/addressbooks/users/owncloudUser/contacts/",
             "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_OWNCLOUD,
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
         "Radicale" => [
             "username" => "radicaleUser",

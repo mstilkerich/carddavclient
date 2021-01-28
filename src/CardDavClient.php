@@ -327,7 +327,7 @@ class CardDavClient
             "body" => $body
         ]);
 
-        return self::checkAndParseXMLMultistatus($response, XmlElements\ResponsePropstat::class);
+        return self::checkAndParseXMLMultistatus($response);
     }
 
     /**

@@ -519,8 +519,8 @@ class CardDavClient
     {
         $comp1 = \Sabre\Uri\parse($url1);
         $comp2 = \Sabre\Uri\parse($url2);
-        $p1 = rtrim($comp1["path"], "/");
-        $p2 = rtrim($comp2["path"], "/");
+        $p1 = trim(rtrim($comp1["path"], "/"), "/");
+        $p2 = trim(rtrim($comp2["path"], "/"), "/");
         return $p1 === $p2;
     }
 

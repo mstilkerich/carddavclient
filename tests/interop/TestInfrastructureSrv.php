@@ -87,8 +87,11 @@ final class TestInfrastructureSrv
     // against the individual values. Example: param-filter with equals text-match on HOME woud not match TYPE=HOME,WORK
     public const BUG_MULTIPARAM_NOINDIVIDUAL_MATCH = 2 ** 19;
 
+    // Server bug: In addressbook-query, the server treates property names and group names case sensitive.
+    public const BUG_CASESENSITIVE_NAMES = 2 ** 20;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-        | self::FEAT_ALLOF_SINGLEPROP;
+        | self::FEAT_ALLOF_SINGLEPROP | self::BUG_CASESENSITIVE_NAMES;
 
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT | self::FEAT_ABOOKQUERY_PARTIALCARDS
@@ -97,7 +100,8 @@ final class TestInfrastructureSrv
         | self::BUG_INVTEXTMATCH_SOMEMATCH
         | self::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS
         | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS
-        | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH;
+        | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
+        | self::BUG_CASESENSITIVE_NAMES;
 
     public const SRVFEATSONLY_SABRE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT
@@ -113,6 +117,7 @@ final class TestInfrastructureSrv
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP | self::FEAT_RESULTLIMIT
         | self::FEAT_ABOOKQUERY_PARTIALCARDS
         | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
+        | self::BUG_CASESENSITIVE_NAMES
         // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
         // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
         // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN

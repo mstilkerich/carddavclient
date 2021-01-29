@@ -36,6 +36,7 @@ supported CardDAV server features.
   enclosing prop-filter to match, presence of the property is mandatory.
   - https://issuetracker.google.com/issues/178243204
 - `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: see Sabre/DAV
+- `BUG_CASESENSITIVE_NAMES`: See Davical; Google also treats names of parameters case sensitive
 
 ### Sabre/DAV (used by Owncloud, Nextcloud, Baïkal)
 
@@ -80,6 +81,10 @@ supported CardDAV server features.
 - Davical does not support multiple prop-filter subfilters, it ignores all but the first one
   - https://gitlab.com/davical-project/awl/-/merge\_requests/19
 - `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: see Sabre/DAV
+- `BUG_CASESENSITIVE_NAMES`: In addressbook-query, Davical treats property and group names case sensitive, i.e. when
+  search for a property `email` it will not match an `EMAIL` property in a VCard. However, according to RFC 6350,
+  names of properties and groups are case insensitive. Parameter names in param-filter appear to be correctly treated
+  as case insensitive.
 
 ### Radicale (used by Synology Contacts App)
 
@@ -95,3 +100,4 @@ supported CardDAV server features.
 
 - Does not support allof test of multiple prop-filters (i.e. test="allof" at the filter level). It does support allof
   matching at the prop-filter level.
+- `BUG_CASESENSITIVE_NAMES`: See Davical

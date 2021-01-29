@@ -44,7 +44,8 @@ final class AddressbookQueryTest extends TestCase
             [ 'TEL', '555', [] ],
         ],
         [ // card 3
-            [ 'EMAIL', 'foo@ex.com', [] ],
+            [ 'item1.EMAIL', 'foo@ex.com', [] ],
+            [ 'item1.X-ABLABEL', 'CustomLabel', [] ],
             [ 'IMPP', 'xmpp:foo@example.com', ['X-SERVICE-TYPE' => 'Jabber', 'TYPE' => 'HOME'] ],
         ],
     ];
@@ -99,6 +100,9 @@ final class AddressbookQueryTest extends TestCase
             // test whether a property is defined / not defined
             'HasNoEmail' => [ ['EMAIL' => null], [ 2 ], 0, 0 ],
             'HasEmail' => [ ['EMAIL' => '//'], [ 0, 1, 3 ], 0, 0 ],
+            // check that property names are treated case insensitive
+            'HasNoEmailDiffCase' => [ ['email' => null], [ 2 ], TIS::BUG_CASESENSITIVE_NAMES, 0 ],
+            'HasEmailDiffCase' => [ ['email' => '//'], [ 0, 1, 3 ], TIS::BUG_CASESENSITIVE_NAMES, 0 ],
 
             // simple text matches against property values
             'EmailEquals' => [ ['EMAIL' => '/johndoe@example.com/='], [ 0 ], 0, 0 ],
@@ -239,6 +243,12 @@ final class AddressbookQueryTest extends TestCase
                 TIS::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH,
                 TIS::FEAT_PARAMFILTER
             ],
+
+            // tests on properties with group
+          //'HasNoGrpEmail' => [ ['item1.EMAIL' => null], [ 0, 1, 2 ], 0, 0 ],
+          //'HasGrpEmail' => [ ['item1.EMAIL' => '//'], [ 3 ], 0, 0 ],
+          //'GrpEmailEquals' => [ ['item1.EMAIL' => '/foo@ex.com/='], [ 3 ], 0, 0 ],
+          //'GrpEmailContains' => [ ['item1.EMAIL' => '/@ex/'], [ 3 ], 0, 0 ], // must not match card 0
         ];
 
         $abooks = TIS::addressbookProvider();

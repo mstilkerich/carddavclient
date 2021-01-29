@@ -82,7 +82,11 @@ final class TestInfrastructure
             self::compareNodeList("Property $name", $props, $propsRC[$name]);
 
             for ($i = 0; $i < count($props); ++$i) {
-                TestCase::assertSame($props[$i]->group, $propsRC[$name][$i]->group, "Property group name differs");
+                TestCase::assertEqualsIgnoringCase(
+                    $props[$i]->group,
+                    $propsRC[$name][$i]->group,
+                    "Property group name differs"
+                );
                 /** @psalm-var VObject\Parameter[] */
                 $paramExp = $props[$i]->parameters();
                 $paramExp = self::groupNodesByName($paramExp);

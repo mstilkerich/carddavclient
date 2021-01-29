@@ -125,7 +125,7 @@ Because there are so many issues concerning the handling of the addressbook-quer
 </details>
 
 #### Text matches against multi-value parameters are not matched against the individual values (BUG_MULTIPARAM_NOINDIVIDUAL_MATCH)
-**Affected servers / services**: Google Contacts, Sabre/DAV
+**Affected servers / services**: Google Contacts, Sabre/DAV, [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/19)
 <details>
   <summary>Details</summary>
 
@@ -167,7 +167,6 @@ Because there are so many issues concerning the handling of the addressbook-quer
   - https://gitlab.com/davical-project/awl/-/merge\_requests/16
 - Davical does not support multiple prop-filter subfilters, it ignores all but the first one
   - https://gitlab.com/davical-project/awl/-/merge\_requests/19
-- `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: see Sabre/DAV
 - `BUG_CASESENSITIVE_NAMES`: In addressbook-query, Davical treats property and group names case sensitive, i.e. when
   search for a property `email` it will not match an `EMAIL` property in a VCard. However, according to RFC 6350,
   names of properties and groups are case insensitive. Parameter names in param-filter appear to be correctly treated

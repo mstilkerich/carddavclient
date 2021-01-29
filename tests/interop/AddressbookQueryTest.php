@@ -245,10 +245,11 @@ final class AddressbookQueryTest extends TestCase
             ],
 
             // tests on properties with group
-          //'HasNoGrpEmail' => [ ['item1.EMAIL' => null], [ 0, 1, 2 ], 0, 0 ],
-          //'HasGrpEmail' => [ ['item1.EMAIL' => '//'], [ 3 ], 0, 0 ],
-          //'GrpEmailEquals' => [ ['item1.EMAIL' => '/foo@ex.com/='], [ 3 ], 0, 0 ],
-          //'GrpEmailContains' => [ ['item1.EMAIL' => '/@ex/'], [ 3 ], 0, 0 ], // must not match card 0
+            'HasNoGrpEmail' => [ ['item1.EMAIL' => null], [ 0, 1, 2 ], TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY, 0 ],
+            'HasGrpEmail' => [ ['item1.EMAIL' => '//'], [ 3 ], TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY, 0 ],
+            'GrpEmailEquals' => [ ['item1.EMAIL' => '/foo@ex.com/='], [ 3 ], TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY, 0 ],
+            // must not match card 0
+            'GrpEmailContains' => [ ['item1.EMAIL' => '/@ex/'], [ 3 ], TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY, 0 ],
         ];
 
         $abooks = TIS::addressbookProvider();

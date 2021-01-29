@@ -85,6 +85,7 @@ supported CardDAV server features.
   search for a property `email` it will not match an `EMAIL` property in a VCard. However, according to RFC 6350,
   names of properties and groups are case insensitive. Parameter names in param-filter appear to be correctly treated
   as case insensitive.
+- `BUG_HANDLE_PROPGROUPS_IN_QUERY`: See radicale
 
 ### Radicale (used by Synology Contacts App)
 
@@ -95,6 +96,8 @@ supported CardDAV server features.
 - Radicale ignores the test attribute on a prop-filter and applies "allof" semantics (even though the default would be
   anyof)
   - https://github.com/Kozea/Radicale/issues/1143
+- `BUG_HANDLE_PROPGROUPS_IN_QUERY`: Property groups (e.g. G1.EMAIL) are not properly handled in prop-filters. A
+  prop-filter where the name attribute includes a group prefix must only match properties with that group prefix.
 
 ### iCloud
 

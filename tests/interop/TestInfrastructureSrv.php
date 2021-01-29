@@ -90,6 +90,9 @@ final class TestInfrastructureSrv
     // Server bug: In addressbook-query, the server treates property names and group names case sensitive.
     public const BUG_CASESENSITIVE_NAMES = 2 ** 20;
 
+    // Server bug: Group prefixes in prop-filter are not properly handled
+    public const BUG_HANDLE_PROPGROUPS_IN_QUERY = 2 ** 21;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_ALLOF_SINGLEPROP | self::BUG_CASESENSITIVE_NAMES;
 
@@ -112,12 +115,13 @@ final class TestInfrastructureSrv
     public const SRVFEATS_SABRE = self::SRVFEATSONLY_SABRE | self::SRVBUGS_SABRE;
     public const SRVFEATS_RADICALE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF
-        | self::BUG_INVTEXTMATCH_SOMEMATCH | self::BUG_PROPFILTER_ALLOF;
+        | self::BUG_INVTEXTMATCH_SOMEMATCH | self::BUG_PROPFILTER_ALLOF | self::BUG_HANDLE_PROPGROUPS_IN_QUERY;
     public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP | self::FEAT_RESULTLIMIT
         | self::FEAT_ABOOKQUERY_PARTIALCARDS
         | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
         | self::BUG_CASESENSITIVE_NAMES
+        | self::BUG_HANDLE_PROPGROUPS_IN_QUERY
         // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
         // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
         // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN

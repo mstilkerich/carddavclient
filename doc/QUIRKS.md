@@ -18,7 +18,7 @@ supported CardDAV server features.
 
 ## Known issues and quirks of CardDAV server implementations
 
-### Empty synctoken not accepted for initial sync-collection report (BUG_REJ_EMPTY_SYNCTOKEN)
+#### Empty synctoken not accepted for initial sync-collection report (BUG_REJ_EMPTY_SYNCTOKEN)
 **Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/160190530)
 <details>
   <summary>Details</summary>
@@ -30,7 +30,7 @@ supported CardDAV server features.
 **User-visibile impact and possible workaround**: Carddavclient will transparently fall back to a slower synchronization method based on `PROPFIND`. Carddavclient will ask the server for a synctoken that can be used for future incremental syncs using the sync-collection report. A log message with loglevel *error* will be logged.
 </details>
 
-### Depth: 0 header rejected for sync-collection report
+#### Depth: 0 header rejected for sync-collection report
 **Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/160190530)
 <details>
   <summary>Details</summary>
@@ -42,7 +42,7 @@ supported CardDAV server features.
 **User-visibile impact and possible workaround**: Carddavclient transparently works around the problem by specifically sending a `Depth: 1` header for addressbooks under the `www.googleapis.com` domain. For all other domains, the library will send a `Depth: 0` header in compliance with RFC 6578.
 </details>
 
-### UID of created VCard reassigned by server
+#### UID of created VCard reassigned by server
 **Affected servers / services**: Google Contacts
 <details>
   <summary>Details</summary>
@@ -54,7 +54,7 @@ supported CardDAV server features.
 **User-visibile impact and possible workaround**: The user must not assume that a newly created card will retain the UID assigned by the client application. If the UID is stored locally, for example to map locally cached cards against those retrieved from the server, the user should download the card after creation and use the UID property from the retrieved vcard.
 </details>
 
-### Stored VCard modified by server
+#### Stored VCard modified by server
 **Affected servers / services**: Google Contacts
 <details>
   <summary>Details</summary>
@@ -69,23 +69,34 @@ supported CardDAV server features.
 **User-visibile impact and possible workaround**: The user should not expect a VCard stored to the server to be identical with the VCard read back from the server. To preserve custom labels on the server, the `X-ABLabel` extension can be used, however, support by CardDAV client applications is not as good as for the `TYPE` parameter.
 </details>
 
-### Negated text matches yield results the lack the matched property/parameter (BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS)
+#### Negated text matches yield results the lack the matched property/parameter (BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS)
 **Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/178251714), [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/15)
 <details>
   <summary>Details</summary>
 
-**Description**: When issuing an addressbook-query with a prop-filter containing a negated text-match, the server also returns cards that lack the asked for property. Example: If you filter for an `EMAIL` that with a `!/foo/` filter, the server will return cards that do not have an `EMAIL` property at all. Same for param-filter: If the parameter does not exist, the param-filter should fail without even considering the text-match, but the server returns the card.
+**Description**: When issuing an addressbook-query with a prop-filter containing a negated text-match, the server also returns cards that lack the asked for property. Example: If you filter for an `EMAIL` with a `!/foo/` text filter, the server will return cards that do not have an `EMAIL` property at all.
 
-**Affected operations**: `AddressbookCollection::query()` when using inverted text matches inside the `$conditions`.
+**Affected operations**: `AddressbookCollection::query()` when using negated text matches inside the `$conditions` for a property.
+
+**User-visibile impact and possible workaround**: The `query()` result may contain results that do not actually match the conditions specified by the user. As a workaround, the user could post-filter the received cards. Carddavclient does not currently perform any filtering on the query results itself but forwards what the server returned.
+</details>
+
+#### Negated text matches on parameter yield results the lack the matched property/parameter (BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS)
+**Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/178251714), [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/18)
+<details>
+  <summary>Details</summary>
+
+**Description**: When issuing an addressbook-query with a param-filter containing a negated text-match, the server also returns cards that lack the asked for property or parameter. Example: If you filter for an `EMAIL;TYPE` with a `!/foo/` text filter, the server will return cards that
+  * do not have an `EMAIL` property at all, or
+  * have an `EMAIL` property that lacks the `TYPE` parameter
+
+**Affected operations**: `AddressbookCollection::query()` when using negated text matches inside the `$conditions` for a parameter.
 
 **User-visibile impact and possible workaround**: The `query()` result may contain results that do not actually match the conditions specified by the user. As a workaround, the user could post-filter the received cards. Carddavclient does not currently perform any filtering on the query results itself but forwards what the server returned.
 </details>
 
 ### Google Contacts (CardDAV interface)
 
-- `BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS` A prop-filter that filters on a parameter that does not match a text will
-  also match cards that a) don't have the property, or b) have the property, but without the parameter.
-  - https://issuetracker.google.com/issues/178251714
 - `BUG_INVTEXTMATCH_SOMEMATCH`: see Sabre/DAV
 - param-filter with is-not-defined subfilter matches cards that don't have the property defined. However, for the
   enclosing prop-filter to match, presence of the property is mandatory.

@@ -71,7 +71,7 @@ supported CardDAV server features.
 
 ### Issues/quirks specific to addressbook query
 
-Because there are so many issues concerning the handling of the addressbook-query report, these are grouped in this section.
+Because there are so many issues concerning the handling of the addressbook-query report, these are grouped in this section. Most problems concern the use of negated text matches or parameter filters, and thus can be avoided by not using such filters.
 
 #### Negated text matches yield results the lack the matched property/parameter (BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS)
 **Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/178251714), [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/15)
@@ -99,12 +99,32 @@ Because there are so many issues concerning the handling of the addressbook-quer
 **User-visibile impact and possible workaround**: The `query()` result may contain results that do not actually match the conditions specified by the user. As a workaround, the user could post-filter the received cards. Carddavclient does not currently perform any filtering on the query results itself but forwards what the server returned.
 </details>
 
+#### Negated text match misses cards that also have property instances matching the non-negated filter (BUG_INVTEXTMATCH_SOMEMATCH)
+**Affected servers / services**: Google Contacts, [Sabre/DAV](https://github.com/sabre-io/dav/pull/1322)
+<details>
+  <summary>Details</summary>
+
+**Description**: A negated text-match on a property yields wrong results if there is a property instance matching the text-match and another that does not. This is because the server will simply invert the result of checking all properties, when it should check if there is any property NOT matching the text-filter (!= NO property matching the text filter).
+
+**Affected operations**: `AddressbookCollection::query()` when using negated text matches inside the `$conditions` for a property.
+
+**User-visibile impact and possible workaround**: The `query()` result may lack cards that match the filter when using negated text matches on properties.
+</details>
+
+#### Filtering for not-defined parameters yields cards that lack the enclosing property
+**Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/178243204)
+<details>
+  <summary>Details</summary>
+
+**Description**: When filtering for a not-defined parameter (e.g. `'EMAIL' => '['TYPE' => null]`), the server returns cards that do not have the enclosing property. However, in such cases, the param-filter should have no relevance. So in the example, the server would return cards that do not have an `EMAIL` property.
+
+**Affected operations**: `AddressbookCollection::query()` when using filters for not-defined parameters.
+
+**User-visibile impact and possible workaround**: The `query()` result may contain results that do not actually match the conditions specified by the user. As a workaround, the user could post-filter the received cards. Carddavclient does not currently perform any filtering on the query results itself but forwards what the server returned.
+</details>
+
 ### Google Contacts (CardDAV interface)
 
-- `BUG_INVTEXTMATCH_SOMEMATCH`: see Sabre/DAV
-- param-filter with is-not-defined subfilter matches cards that don't have the property defined. However, for the
-  enclosing prop-filter to match, presence of the property is mandatory.
-  - https://issuetracker.google.com/issues/178243204
 - `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: see Sabre/DAV
 - `BUG_CASESENSITIVE_NAMES`: See Davical; Google also treats names of parameters case sensitive
 
@@ -120,11 +140,7 @@ Because there are so many issues concerning the handling of the addressbook-quer
   that does not. This is because sabre will simply invert the result of checking all properties, when it should check if
   there is any property NOT matching the text-filter (!= NO property matching the text filter)
   - https://github.com/sabre-io/dav/pull/1322
-- `BUG_INVTEXTMATCH_SOMEMATCH` inverted text-match of a prop-filter yields wrong results if there is a property instance
-  matching the text-match and another that does not. This is because sabre will simply invert the result of checking all
-  properties, when it should check if there is any property NOT matching the text-filter (!= NO property matching the
-  text filter)
-  - https://github.com/sabre-io/dav/pull/1322
+
 - `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: A param-filter text-match for a parameter with multiple values (e.g.
   `TYPE=HOME,WORK`) will not match against the individual parameter values, but as the parameter string as a whole. For
   example an equals text-match for HOME would not match the example given before.

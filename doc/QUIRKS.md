@@ -57,8 +57,7 @@ supported CardDAV server features.
 
 **User-visibile impact and possible workaround**: The user should not expect a VCard stored to the server to be identical with the VCard read back from the server. To preserve custom labels on the server, the `X-ABLabel` extension can be used, however, support by CardDAV client applications is not as good as for the `TYPE` parameter.
 
-### Empty synctoken not accepted for initial sync-collection report (BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS)
-
+### Negated text matches yield results the lack the matched property/parameter (BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS)
 **Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/178251714), [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/15)
 
 **Description**: When issuing an addressbook-query with a prop-filter containing a negated text-match, the server also returns cards that lack the asked for property. Example: If you filter for an `EMAIL` that with a `!/foo/` filter, the server will return cards that do not have an `EMAIL` property at all. Same for param-filter: If the parameter does not exist, the param-filter should fail without even considering the text-match, but the server returns the card.

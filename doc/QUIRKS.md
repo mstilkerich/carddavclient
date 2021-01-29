@@ -16,16 +16,53 @@ supported CardDAV server features.
 - Radicale and iCloud do not support client-side requested limit of results in addressbook-query report. According to
   RFC 6352, this is ok as the server may disregard a client-side requested limit.
 
-## Known Quirks
+## Known issues and quirks of CardDAV server implementations
+
+### Empty synctoken not accepted for initial sync-collection report (BUG_REJ_EMPTY_SYNCTOKEN)
+
+**Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/160190530)
+
+**Description**: For the initial sync, the server must accept an empty sync-token and consequently report all address objects within the addressbook collection in its result, plus a sync-token to be used for follow-up syncs. The server rejects a sync-collection report request carrying an empty sync-token with `400 Bad Request`.
+
+**Affected operations**: `Sync::synchronize()` when called with an empty `$prevSyncToken` parameter.
+
+**User-visibile impact and possible workaround**: Carddavclient will transparently fall back to a slower synchronization method based on `PROPFIND`. Carddavclient will ask the server for a synctoken that can be used for future incremental syncs using the sync-collection report. A log message with loglevel *error* will be logged.
+
+### Depth: 0 header rejected for sync-collection report
+
+**Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/160190530)
+
+**Description**: According to RFC 6578, a `Depth: 0` header MUST be used with a sync-collection REPORT request, otherwise the server must reject it as `400 Bad Request`. The Google Contacts API seems to interpret this header for the depth of the request (which is per RFC 6578 given in the `DAV:sync-level` element). As a consequence, the response from Google Contacts will always appear as if there had been no changes. Using a `Depth: 1` header returns the expected result, but a CardDAV client cannot use this as this must be expected to fail with RFC compliant server implementations.
+
+**Affected operations**: `Sync::synchronize()`
+
+**User-visibile impact and possible workaround**: Carddavclient transparently works around the problem by specifically sending a `Depth: 1` header for addressbooks under the `www.googleapis.com` domain. For all other domains, the library will send a `Depth: 0` header in compliance with RFC 6578.
+
+### UID of created VCard reassigned by server
+
+**Affected servers / services**: Google Contacts
+
+**Description**: This is not a bug, but something the user should be aware of. Every VCard stored to a CardDAV server requires a `UID` property. When a new card is stored to Google Contacts, the server will replace the `UID` that is stored in the card with one assigned by the server.
+
+**Affected operations**: `AddressbookCollection::createCard()`
+
+**User-visibile impact and possible workaround**: The user must not assume that a newly created card will retain the UID assigned by the client application. If the UID is stored locally, for example to map locally cached cards against those retrieved from the server, the user should download the card after creation and use the UID property from the retrieved vcard.
+
+### Stored VCard modified by server
+
+**Affected servers / services**: Google Contacts
+
+**Description**: This is probably within what the server is allowed to do, but something the user should be aware of. Google Contacts will modify VCards stored to the server, probably "lost in translation" to an internal data model and back. Currently, so following have been observed:
+
+- The `TYPE` parameter that can be used with properties such as `EMAIL` is constrained to a single value. Values not known to Google Contacts are discarded. This includes values explicitly allowed by RFC2426, e.g. *internet* as an `EMAIL` type.
+- For `IMPP` properties, the protocol scheme and `X-SERVICE-TYPE` parameter spelling (e.g. *jabber* becomes *Jabber*) is adapted by the server.
+
+**Affected operations**: `AddressbookCollection::createCard()`, `AddressbookCollection::updateCard()`
+
+**User-visibile impact and possible workaround**: The user should not expect a VCard stored to the server to be identical with the VCard read back from the server. To preserve custom labels on the server, the `X-ABLabel` extension can be used, however, support by CardDAV client applications is not as good as for the `TYPE` parameter.
 
 ### Google Contacts (CardDAV interface)
 
-- `BUG_REJ_EMPTY_SYNCTOKEN` sync-collection REPORT requires sync-token
-  - https://issuetracker.google.com/issues/160190530
-- UID property of new VCards is overwritten
-- TYPE attribute is converted to uppercase for known types (HOME, WORK), discarded for unknown types; other type labels
-  are possible but require use of X-ABLabel extension
-- X-SERVICE-TYPE parameter lower/uppercase spelling is also adapted to Google's preference (e.g. jabber -> Jabber)
 - `BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS` see Davical
   - https://issuetracker.google.com/issues/178251714
 - `BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS` A prop-filter that filters on a parameter that does not match a text will

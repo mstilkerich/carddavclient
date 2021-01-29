@@ -69,6 +69,10 @@ supported CardDAV server features.
 **User-visibile impact and possible workaround**: The user should not expect a VCard stored to the server to be identical with the VCard read back from the server. To preserve custom labels on the server, the `X-ABLabel` extension can be used, however, support by CardDAV client applications is not as good as for the `TYPE` parameter.
 </details>
 
+### Issues/quirks specific to addressbook query
+
+Because there are so many issues concerning the handling of the addressbook-query report, these are grouped in this section.
+
 #### Negated text matches yield results the lack the matched property/parameter (BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS)
 **Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/178251714), [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/15)
 <details>

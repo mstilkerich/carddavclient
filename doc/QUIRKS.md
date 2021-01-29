@@ -15,6 +15,7 @@ supported CardDAV server features.
   remaining conditions, i.e. at least that the property that contains the param-filter is defined is used as filter.
 - Radicale and iCloud do not support client-side requested limit of results in addressbook-query report. According to
   RFC 6352, this is ok as the server may disregard a client-side requested limit.
+- Sabre/DAV does not support addressdata filter in multiget REPORT ([PR](https://github.com/sabre-io/dav/pull/1310))
 
 ## Known issues and quirks of CardDAV server implementations
 
@@ -123,16 +124,26 @@ Because there are so many issues concerning the handling of the addressbook-quer
 **User-visibile impact and possible workaround**: The `query()` result may contain results that do not actually match the conditions specified by the user. As a workaround, the user could post-filter the received cards. Carddavclient does not currently perform any filtering on the query results itself but forwards what the server returned.
 </details>
 
-### Google Contacts (CardDAV interface)
+#### Text matches against multi-value parameters are not matched against the individual values (BUG_MULTIPARAM_NOINDIVIDUAL_MATCH)
+**Affected servers / services**: Google Contacts, Sabre/DAV
+<details>
+  <summary>Details</summary>
 
-- `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: see Sabre/DAV
+**Description**: A param-filter text-match for a parameter with multiple values (e.g. `TYPE=HOME,WORK`) will not match against the individual parameter values, but as the parameter string as a whole. For example an equals text-match for `/HOME/=` would not match the example given before.
+
+**Affected operations**: `AddressbookCollection::query()` when querying parameters that may have multiple values.
+
+**User-visibile impact and possible workaround**: The `query()` result may lack cards that would have matched the filter. By using contains text matches (e.g. `/HOME/`), the effect can be avoided (of course the results might differ in that case).
+</details>
+
+
+### Google Contacts (CardDAV interface)
 - `BUG_CASESENSITIVE_NAMES`: See Davical; Google also treats names of parameters case sensitive
 
 ### Sabre/DAV (used by Owncloud, Nextcloud, Baïkal)
 
 - Internal server error on REPORTs with digest authentication
-- Does not support addressdata filter in multiget REPORT
-  - https://github.com/sabre-io/dav/pull/1310
+
 - `BUG_PARAMFILTER_ON_NONEXISTENT_PARAM` Internal server error on param-filter when the server encounters a property of
   the filtered for type that does not have the asked for parameter at all
   - https://github.com/sabre-io/dav/pull/1322
@@ -140,10 +151,6 @@ Because there are so many issues concerning the handling of the addressbook-quer
   that does not. This is because sabre will simply invert the result of checking all properties, when it should check if
   there is any property NOT matching the text-filter (!= NO property matching the text filter)
   - https://github.com/sabre-io/dav/pull/1322
-
-- `BUG_MULTIPARAM_NOINDIVIDUAL_MATCH`: A param-filter text-match for a parameter with multiple values (e.g.
-  `TYPE=HOME,WORK`) will not match against the individual parameter values, but as the parameter string as a whole. For
-  example an equals text-match for HOME would not match the example given before.
 
 ### Davical
 

@@ -19,7 +19,6 @@ supported CardDAV server features.
 ## Known issues and quirks of CardDAV server implementations
 
 ### Empty synctoken not accepted for initial sync-collection report (BUG_REJ_EMPTY_SYNCTOKEN)
-
 **Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/160190530)
 
 **Description**: For the initial sync, the server must accept an empty sync-token and consequently report all address objects within the addressbook collection in its result, plus a sync-token to be used for follow-up syncs. The server rejects a sync-collection report request carrying an empty sync-token with `400 Bad Request`.
@@ -29,7 +28,6 @@ supported CardDAV server features.
 **User-visibile impact and possible workaround**: Carddavclient will transparently fall back to a slower synchronization method based on `PROPFIND`. Carddavclient will ask the server for a synctoken that can be used for future incremental syncs using the sync-collection report. A log message with loglevel *error* will be logged.
 
 ### Depth: 0 header rejected for sync-collection report
-
 **Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/160190530)
 
 **Description**: According to RFC 6578, a `Depth: 0` header MUST be used with a sync-collection REPORT request, otherwise the server must reject it as `400 Bad Request`. The Google Contacts API seems to interpret this header for the depth of the request (which is per RFC 6578 given in the `DAV:sync-level` element). As a consequence, the response from Google Contacts will always appear as if there had been no changes. Using a `Depth: 1` header returns the expected result, but a CardDAV client cannot use this as this must be expected to fail with RFC compliant server implementations.
@@ -39,7 +37,6 @@ supported CardDAV server features.
 **User-visibile impact and possible workaround**: Carddavclient transparently works around the problem by specifically sending a `Depth: 1` header for addressbooks under the `www.googleapis.com` domain. For all other domains, the library will send a `Depth: 0` header in compliance with RFC 6578.
 
 ### UID of created VCard reassigned by server
-
 **Affected servers / services**: Google Contacts
 
 **Description**: This is not a bug, but something the user should be aware of. Every VCard stored to a CardDAV server requires a `UID` property. When a new card is stored to Google Contacts, the server will replace the `UID` that is stored in the card with one assigned by the server.
@@ -49,7 +46,6 @@ supported CardDAV server features.
 **User-visibile impact and possible workaround**: The user must not assume that a newly created card will retain the UID assigned by the client application. If the UID is stored locally, for example to map locally cached cards against those retrieved from the server, the user should download the card after creation and use the UID property from the retrieved vcard.
 
 ### Stored VCard modified by server
-
 **Affected servers / services**: Google Contacts
 
 **Description**: This is probably within what the server is allowed to do, but something the user should be aware of. Google Contacts will modify VCards stored to the server, probably "lost in translation" to an internal data model and back. Currently, so following have been observed:
@@ -61,10 +57,18 @@ supported CardDAV server features.
 
 **User-visibile impact and possible workaround**: The user should not expect a VCard stored to the server to be identical with the VCard read back from the server. To preserve custom labels on the server, the `X-ABLabel` extension can be used, however, support by CardDAV client applications is not as good as for the `TYPE` parameter.
 
+### Empty synctoken not accepted for initial sync-collection report (BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS)
+
+**Affected servers / services**: [Google Contacts](https://issuetracker.google.com/issues/178251714), [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/15)
+
+**Description**: When issuing an addressbook-query with a prop-filter containing a negated text-match, the server also returns cards that lack the asked for property. Example: If you filter for an `EMAIL` that with a `!/foo/` filter, the server will return cards that do not have an `EMAIL` property at all. Same for param-filter: If the parameter does not exist, the param-filter should fail without even considering the text-match, but the server returns the card.
+
+**Affected operations**: `AddressbookCollection::query()` when using inverted text matches inside the `$conditions`.
+
+**User-visibile impact and possible workaround**: The `query()` result may contain results that do not actually match the conditions specified by the user. As a workaround, the user could post-filter the received cards. Carddavclient does not currently perform any filtering on the query results itself but forwards what the server returned.
+
 ### Google Contacts (CardDAV interface)
 
-- `BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS` see Davical
-  - https://issuetracker.google.com/issues/178251714
 - `BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS` A prop-filter that filters on a parameter that does not match a text will
   also match cards that a) don't have the property, or b) have the property, but without the parameter.
   - https://issuetracker.google.com/issues/178251714
@@ -106,12 +110,6 @@ supported CardDAV server features.
   and match-type are ignored.
   - https://gitlab.com/davical-project/awl/-/issues/21
   - https://gitlab.com/davical-project/awl/-/merge_requests/17
-- `BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS` addressbook-query with prop-filter containing a negated text-match: Davical
-  also returns cards that do not have the asked for property. Example: If you filter for an EMAIL that does not match
-  /foo/, Davical will return cards that do not have an EMAIL property at all. Same for param-filter: If the parameter
-  does not exist, the param-filter should fail, the text-match does not matter.
-  - https://gitlab.com/davical-project/awl/-/merge\_requests/15
-  - https://gitlab.com/davical-project/awl/-/merge\_requests/18
 - `BUG_PARAMNOTDEF_SOMEMATCH` addressbook-query with a param-filter for a not-defined parameter yields wrong results for
   cards where the parameter is present for some properties, but not all (it must not be present at all for a match)
   - https://gitlab.com/davical-project/awl/-/merge\_requests/16

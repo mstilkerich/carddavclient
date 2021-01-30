@@ -1,6 +1,6 @@
 # CardDAV client library for PHP ("PHP-CardDavClient")
 ![CI Build](https://github.com/mstilkerich/carddavclient/workflows/CI%20Build/badge.svg)
-[![codecov](https://codecov.io/gh/mstilkerich/carddavclient/branch/issue2_addressbook_query/graph/badge.svg)](https://codecov.io/gh/mstilkerich/carddavclient/branch/issue2_addressbook_query)
+[![codecov](https://codecov.io/gh/mstilkerich/carddavclient/branch/master/graph/badge.svg)](https://codecov.io/gh/mstilkerich/carddavclient/branch/master)
 [![Type Coverage](https://shepherd.dev/github/mstilkerich/carddavclient/coverage.svg)](https://shepherd.dev/github/mstilkerich/carddavclient)
 
 This is a library for PHP applications to interact with addressbooks stored on CardDAV servers.

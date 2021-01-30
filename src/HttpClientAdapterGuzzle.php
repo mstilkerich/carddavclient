@@ -238,7 +238,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             }
         }
 
-        if ( ($options["allow_redirects"] ?? true) === false) {
+        if (($options["allow_redirects"] ?? true) === false) {
             $guzzleOptions["allow_redirects"] = false;
         } else {
             $guzzleOptions["allow_redirects"] = [

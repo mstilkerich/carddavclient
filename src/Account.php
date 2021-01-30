@@ -154,19 +154,20 @@ class Account implements \JsonSerializable
      */
     public function findCurrentUserPrincipal(string $contextPathUri): ?string
     {
+        $princUrl = null;
+
         try {
             $client = $this->getClient();
             $result = $client->findProperties($contextPathUri, [XmlEN::CURUSRPRINC]);
 
-            $princUrl = $result[0]["props"][XmlEN::CURUSRPRINC] ?? null;
-
-            if (isset($princUrl)) {
+            if (isset($result[0]["props"][XmlEN::CURUSRPRINC])) {
+                /** @var string Ensured by deserializer function */
+                $princUrl = $result[0]["props"][XmlEN::CURUSRPRINC];
                 $princUrl = CardDavClient::concatUrl($result[0]["uri"], $princUrl);
                 Config::$logger->info("principal URL: $princUrl");
             }
         } catch (\Exception $e) {
             Config::$logger->info("Exception while querying current-user-principal: " . $e->getMessage());
-            $princUrl = null;
         }
 
         return $princUrl;
@@ -191,21 +192,25 @@ class Account implements \JsonSerializable
      */
     public function findAddressbookHome(string $principalUri): ?string
     {
+        $addressbookHomeUri = null;
+
         try {
             $client = $this->getClient();
             $result = $client->findProperties($principalUri, [XmlEN::ABOOK_HOME]);
 
             // FIXME per RFC several home locations could be returned, but we currently only use one. However, it is
             // rather unlikely that there would be several addressbook home locations.
-            $addressbookHomeUri = $result[0]["props"][XmlEN::ABOOK_HOME][0] ?? null;
-
-            if (isset($addressbookHomeUri)) {
-                $addressbookHomeUri = CardDavClient::concatUrl($result[0]["uri"], $addressbookHomeUri);
-                Config::$logger->info("addressbook home: $addressbookHomeUri");
+            if (isset($result[0]["props"][XmlEN::ABOOK_HOME])) {
+                /** @var list<string> $hrefs */
+                $hrefs = $result[0]["props"][XmlEN::ABOOK_HOME];
+                if (!empty($hrefs)) {
+                    $addressbookHomeUri = $hrefs[0];
+                    $addressbookHomeUri = CardDavClient::concatUrl($result[0]["uri"], $addressbookHomeUri);
+                    Config::$logger->info("addressbook home: $addressbookHomeUri");
+                }
             }
         } catch (\Exception $e) {
             Config::$logger->info("Exception while querying addressbook-home-set: " . $e->getMessage());
-            $addressbookHomeUri = null;
         }
 
         return $addressbookHomeUri;

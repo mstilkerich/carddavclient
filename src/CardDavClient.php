@@ -41,6 +41,10 @@ Other needed features:
   - Setting extra headers (Depth, Content-Type, charset, If-Match, If-None-Match)
   - Debug output HTTP traffic to logfile
  */
+
+/**
+ * @psalm-import-type RequestOptions from HttpClientAdapter
+ */
 class CardDavClient
 {
     /********* CONSTANTS *********/
@@ -234,6 +238,12 @@ class CardDavClient
     }
 
     /**
+     * Issues an addressbook-multiget request to the server.
+     *
+     * @param string $addressbookUri URI of the addressbook to fetch the objects from
+     * @param list<string> $requestedUris List of URIs of the objects to fetch
+     * @param list<string> $requestedVCardProps List of VCard properties to request, empty to request the full cards.
+     *
      * @psalm-return Multistatus<XmlElements\ResponsePropstat>
      */
     public function multiGet(
@@ -338,7 +348,7 @@ class CardDavClient
      *
      * Some properties that are mandatory are added to the list.
      *
-     * @param list<string> $requestedVCardProps as list of the VCard properties requested by the user.
+     * @param list<string> $requestedVCardProps List of the VCard properties requested by the user
      * @return null|list<array{name: string, attributes: array{name: string}}>
      */
     private function determineReqCardProps(array $requestedVCardProps): ?array
@@ -362,9 +372,15 @@ class CardDavClient
         return $reqprops;
     }
 
-    // $props is either a single property or an array of properties
-    // Namespace shortcuts: DAV for DAV, CARDDAV for the CardDAV namespace
-    // RFC4918: There is always only a single value for a property, which is an XML fragment
+    /**
+     * Retrieves a set of WebDAV properties for a resource.
+     *
+     * @param string $uri The URI of the resource to retrieve properties for.
+     * @param list<string> $props List of properties to retrieve, given as XML element names
+     * @param "0"|"1"|"infinity" $depth Value for the Depth header
+     *
+     * @return list<array{uri: string, props: array<string,mixed>}>
+     */
     public function findProperties(
         string $uri,
         array $props,
@@ -417,6 +433,14 @@ class CardDavClient
 
     /********* PRIVATE FUNCTIONS *********/
 
+    /**
+     * Adds required VCard properties to a set specified by the user.
+     *
+     * This is needed to ensure retrieval of a valid VCard, as some properties are mandatory.
+     *
+     * @param list<string> $requestedVCardProps List of properties requested by the user
+     * @return list<string> List of properties requested by the user, completed with mandatory properties.
+     */
     private static function addRequiredVCardProperties(array $requestedVCardProps): array
     {
         $minimumProps = [ 'BEGIN', 'END', 'FN', 'VERSION', 'UID' ];
@@ -468,9 +492,19 @@ class CardDavClient
             }
         }
 
+        /** @var MultiStatus<RT> */
         return $multistatus;
     }
 
+    /**
+     * Performs a WebDAV request, automatically following redirections and providing the final target with the result.
+     *
+     * @param string $method The WebDAV method of the request (PROPFIND, REPORT, etc.)
+     * @param string $uri The target of the request
+     * @param RequestOptions $options Additional options for the request
+     *
+     * @return array{redirected: bool, location: string, response: Psr7Response}
+     */
     private function requestWithRedirectionTarget(string $method, string $uri, array $options = []): array
     {
         $options['allow_redirects'] = false;

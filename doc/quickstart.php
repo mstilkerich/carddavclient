@@ -48,7 +48,8 @@ class EchoSyncHandler implements SyncHandler
     public function addressObjectChanged(string $uri, string $etag, ?VCard $card): void
     {
         if (isset($card)) {
-            echo "   +++ Changed or new card $uri (ETag $etag): " . $card->FN . "\n";
+            $fn = $card->FN ?? "<no name>";
+            echo "   +++ Changed or new card $uri (ETag $etag): $fn\n";
         } else {
             echo "   +++ Changed or new card $uri (ETag $etag): Error: failed to retrieve/parse card's address data\n";
         }

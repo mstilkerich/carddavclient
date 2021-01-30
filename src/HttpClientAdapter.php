@@ -40,6 +40,12 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
  *
  * So for now, this is not compliant with PSR-18 for simplicity, but we aim at staying close to the definition
  * considering a potential later refactoring.
+ *
+ * @psalm-type RequestOptions = array {
+ *   allow_redirects?: bool,
+ *   body?: string,
+ *   headers?: array<string, string | list<string>>
+ * }
  */
 abstract class HttpClientAdapter
 {
@@ -51,7 +57,7 @@ abstract class HttpClientAdapter
      *
      * @param string $method The request method (GET, PROPFIND, etc.)
      * @param string $uri The target URI. If relative, taken relative to the internal base URI of the HTTP client
-     * @param array $options Request-specific options, merged with/override the default options of the HTTP client.
+     * @param RequestOptions $options Request-specific options, merged with/override the default options of the client.
      *        Supported options are:
      *          'allow_redirects' => boolean: True, if redirect responses should be resolved by the client.
      *          'body' => Request body as string: Optional body to send with the HTTP request

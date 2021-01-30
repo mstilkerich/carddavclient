@@ -266,7 +266,7 @@ class CardDavClient
             "headers" =>
             [
                 // RFC6352: Depth: 0 header is required for addressbook-multiget report.
-                "Depth" => 0,
+                "Depth" => "0",
                 "Content-Type" => "application/xml; charset=UTF-8"
             ],
             "body" => $body
@@ -321,7 +321,7 @@ class CardDavClient
             "headers" =>
             [
                 // RFC6352: Depth: 1 header sets query scope to the addressbook collection
-                "Depth" => 1,
+                "Depth" => "1",
                 "Content-Type" => "application/xml; charset=UTF-8"
             ],
             "body" => $body

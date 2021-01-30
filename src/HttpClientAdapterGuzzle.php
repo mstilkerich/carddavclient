@@ -21,10 +21,6 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Adapter for the Guzzle HTTP client library.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
@@ -36,6 +32,8 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
 
 /**
  * Adapter for the Guzzle HTTP client library.
+ *
+ * @psalm-import-type RequestOptions from HttpClientAdapter
  */
 class HttpClientAdapterGuzzle extends HttpClientAdapter
 {
@@ -112,8 +110,8 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      * Authentication is only attempted in case the domain name of the request URI matches that of the base URI
      * (subdomains may differ).
      *
-     * @param array  $options  Options for the HTTP client, and default request options. May include any of the options
-     *               accepted by {@see HttpClientAdapter::sendRequest()}.
+     * @param RequestOptions $options Options for the HTTP client, and default request options.
+     *        May include any of the options accepted by {@see HttpClientAdapter::sendRequest()}.
      */
     public function sendRequest(string $method, string $uri, array $options = []): Psr7Response
     {
@@ -227,17 +225,20 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         return false;
     }
 
+    /**
+     * @param RequestOptions $options
+     */
     private function prepareGuzzleOptions(array $options = [], bool $doAuth = false): array
     {
         $guzzleOptions = [];
 
         foreach ([ "headers", "body" ] as $copyopt) {
-            if (key_exists($copyopt, $options)) {
+            if (isset($options[$copyopt])) {
                 $guzzleOptions[$copyopt] = $options[$copyopt];
             }
         }
 
-        if (key_exists("allow_redirects", $options) && $options["allow_redirects"] === false) {
+        if ( ($options["allow_redirects"] ?? true) === false) {
             $guzzleOptions["allow_redirects"] = false;
         } else {
             $guzzleOptions["allow_redirects"] = [
@@ -249,14 +250,14 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             ];
         }
 
-        if ($doAuth && isset($this->authScheme)) {
-            $authScheme = $this->authScheme;
+        $authScheme = $this->authScheme;
+        if ($doAuth && isset($authScheme)) {
             Config::$logger->debug("Using auth scheme $authScheme");
 
             if (in_array($authScheme, self::GUZZLE_KNOWN_AUTHSCHEMES)) {
                 $guzzleOptions['auth'] = [$this->username, $this->password, $this->authScheme];
             } elseif (isset(self::$schemeToCurlOpt[$authScheme])) { // will always be true
-                if (isset($_SERVER['KRB5CCNAME'])) {
+                if (isset($_SERVER['KRB5CCNAME']) && is_string($_SERVER['KRB5CCNAME'])) {
                     putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
                 }
                 $guzzleOptions["curl"] = [
@@ -287,7 +288,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      *
      * @param Psr7Response $response A status 401 response returned by the server.
      *
-     * @return string[] An array of authentication schemes that can be tried.
+     * @return list<string> An array of authentication schemes that can be tried.
      */
     private function getSupportedAuthSchemes(Psr7Response $response): array
     {

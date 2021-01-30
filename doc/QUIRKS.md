@@ -115,7 +115,7 @@ Affected operations | `AddressbookCollection::query()` when using property filte
 User-visibile impact and possible workaround | The `query()` result may lack expected results.
 
 
-[]() | Allof/AND filtering at the filter level not supported
+FEAT_FILTER_ALLOF | Allof/AND filtering at the filter level not supported
 --------|----------------------------------------------------------
 Affected servers / services | iCloud
 Description | The server does not support allof test of multiple prop-filters (i.e. test="allof" at the filter level). It does support allof matching at the prop-filter level.

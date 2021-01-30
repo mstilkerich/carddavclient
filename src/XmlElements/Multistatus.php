@@ -41,6 +41,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  *
  * @psalm-immutable
  * @template RT of Response
+ *
+ * @psalm-import-type DeserializedElem from Deserializers
  */
 class Multistatus implements \Sabre\Xml\XmlDeserializable
 {
@@ -67,11 +69,14 @@ class Multistatus implements \Sabre\Xml\XmlDeserializable
 
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
+            /** @var DeserializedElem $child */
             foreach ($children as $child) {
                 if ($child["value"] instanceof Response) {
                     $responses[] = $child["value"];
                 } elseif ($child["name"] === XmlEN::SYNCTOKEN) {
-                    $synctoken = $child["value"];
+                    if (is_string($child["value"])) {
+                        $synctoken = $child["value"];
+                    }
                 }
             }
         }

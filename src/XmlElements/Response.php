@@ -57,6 +57,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * <!ELEMENT response (href, ((href*, status)|(propstat+)), error?, responsedescription? , location?) >
  *
  * @psalm-immutable
+ *
+ * @psalm-import-type DeserializedElem from Deserializers
  */
 abstract class Response implements \Sabre\Xml\XmlDeserializable
 {
@@ -68,16 +70,22 @@ abstract class Response implements \Sabre\Xml\XmlDeserializable
 
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
+            /** @var DeserializedElem $child */
             foreach ($children as $child) {
                 if ($child["value"] instanceof Propstat) {
                     $propstat[] = $child["value"];
                 } elseif (strcasecmp($child["name"], XmlEN::HREF) == 0) {
-                    $hrefs[] = $child["value"];
+                    if (is_string($child["value"])) {
+                        $hrefs[] = $child["value"];
+                    }
                 } elseif (strcasecmp($child["name"], XmlEN::STATUS) == 0) {
                     if (isset($status)) {
                         throw new XmlParseException("DAV:response contains multiple DAV:status children");
                     }
-                    $status = $child["value"];
+
+                    if (is_string($child["value"])) {
+                        $status = $child["value"];
+                    }
                 }
             }
         }

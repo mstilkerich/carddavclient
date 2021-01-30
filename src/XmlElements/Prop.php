@@ -30,10 +30,12 @@ namespace MStilkerich\CardDavClient\XmlElements;
  * Class to represent XML DAV:prop elements as PHP objects.
  *
  * @psalm-immutable
+ *
+ * @psalm-import-type DeserializedElem from Deserializers
  */
 class Prop implements \Sabre\Xml\XmlDeserializable
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     public $props = [];
 
     public static function xmlDeserialize(\Sabre\Xml\Reader $reader)
@@ -41,6 +43,7 @@ class Prop implements \Sabre\Xml\XmlDeserializable
         $prop = new self();
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
+            /** @var DeserializedElem $child */
             foreach ($children as $child) {
                 $prop->props[$child["name"]] = $child["value"];
             }

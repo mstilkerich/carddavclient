@@ -32,6 +32,14 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  * Class Deserializers.
  *
  * This class contains static deserializer functions to be used with Sabre/XML.
+ *
+ * @psalm-type AtomicElemVal = ?string
+ *
+ * @psalm-type DeserializedElem = array {
+ *   name: string,
+ *   attributes: array<string, string>,
+ *   value: AtomicElemVal | array
+ * }
  */
 class Deserializers
 {
@@ -41,14 +49,18 @@ class Deserializers
         return $hrefs[0] ?? null;
     }
 
+    /** @return list<string> */
     public static function deserializeHrefMulti(Reader $reader): array
     {
         $hrefs = [];
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
+            /** @var DeserializedElem $child */
             foreach ($children as $child) {
                 if (strcasecmp($child["name"], XmlEN::HREF) == 0) {
-                    $hrefs[] = $child["value"];
+                    if (is_string($child["value"])) {
+                        $hrefs[] = $child["value"];
+                    }
                 }
             }
         }
@@ -74,25 +86,28 @@ class Deserializers
      *    </supported-report>
      *  </supported-report-set>
      *
-     *  @return array
-     *   Array with the element names of the supported reports.
+     *  @return list<string> Array with the element names of the supported reports.
      */
     public static function deserializeSupportedReportSet(Reader $reader): array
     {
         $srs = [];
+
         $supportedReports = $reader->parseInnerTree();
 
         // First run over all the supported-report elements (there is one for each supported report)
         if (is_array($supportedReports)) {
+            /** @var DeserializedElem $supportedReport */
             foreach ($supportedReports as $supportedReport) {
                 if (strcasecmp($supportedReport['name'], XmlEN::SUPPORTED_REPORT) === 0) {
                     if (is_array($supportedReport['value'])) {
                         // Second run over all the report elements (there should be exactly one per RFC3253)
+                        /** @var DeserializedElem $report */
                         foreach ($supportedReport['value'] as $report) {
                             if (strcasecmp($report['name'], XmlEN::REPORT) === 0) {
                                 if (is_array($report['value'])) {
                                     // Finally, get the actual element specific for the supported report
                                     // (there should be exactly one per RFC3253)
+                                    /** @var DeserializedElem $reportelem */
                                     foreach ($report['value'] as $reportelem) {
                                         $srs[] = $reportelem["name"];
                                     }

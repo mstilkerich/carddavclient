@@ -33,12 +33,10 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *
  * This class contains static deserializer functions to be used with Sabre/XML.
  *
- * @psalm-type AtomicElemVal = ?string
- *
  * @psalm-type DeserializedElem = array {
  *   name: string,
  *   attributes: array<string, string>,
- *   value: AtomicElemVal | array
+ *   value: mixed
  * }
  */
 class Deserializers

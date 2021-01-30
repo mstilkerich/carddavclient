@@ -40,6 +40,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * <!ELEMENT propstat (prop, status, error?, responsedescription?) >
  *
  * @psalm-immutable
+ *
+ * @psalm-import-type DeserializedElem from Deserializers
  */
 class Propstat implements \Sabre\Xml\XmlDeserializable
 {
@@ -62,6 +64,7 @@ class Propstat implements \Sabre\Xml\XmlDeserializable
 
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
+            /** @var DeserializedElem $child */
             foreach ($children as $child) {
                 if ($child["value"] instanceof Prop) {
                     if (isset($prop)) {
@@ -72,7 +75,10 @@ class Propstat implements \Sabre\Xml\XmlDeserializable
                     if (isset($status)) {
                         throw new XmlParseException("DAV:propstat element contains multiple DAV:status children");
                     }
-                    $status = $child["value"];
+
+                    if (is_string($child["value"])) {
+                        $status = $child["value"];
+                    }
                 }
             }
         }

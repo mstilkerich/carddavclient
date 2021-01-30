@@ -17,6 +17,13 @@ supported CardDAV server features.
   RFC 6352, this is ok as the server may disregard a client-side requested limit.
 - Sabre/DAV does not support addressdata filter in multiget REPORT ([PR](https://github.com/sabre-io/dav/pull/1310))
 
+FEAT_FILTER_ALLOF | Allof/AND filtering at the filter level not supported
+--------|----------------------------------------------------------
+Affected servers / services | iCloud
+Description | The server does not support allof test of multiple prop-filters (i.e. test="allof" at the filter level). It does support allof matching at the prop-filter level.
+Affected operations | `AddressbookCollection::query()` when called with `$matchAll = true` parameter and multiple top-level filter conditions.
+User-visibile impact and possible workaround | The `query()` result may contain unexpected results.
+
 ## Known issues and quirks of CardDAV server implementations
 
 BUG_REJ_EMPTY_SYNCTOKEN | Empty synctoken not accepted for initial sync-collection report
@@ -114,13 +121,6 @@ Description | The server ignores the test attribute on a prop-filter and applies
 Affected operations | `AddressbookCollection::query()` when using property filters with multiple filter conditions and "anyof" semantics
 User-visibile impact and possible workaround | The `query()` result may lack expected results.
 
-
-FEAT_FILTER_ALLOF | Allof/AND filtering at the filter level not supported
---------|----------------------------------------------------------
-Affected servers / services | iCloud
-Description | The server does not support allof test of multiple prop-filters (i.e. test="allof" at the filter level). It does support allof matching at the prop-filter level.
-Affected operations | `AddressbookCollection::query()` when called with `$matchAll = true` parameter and multiple top-level filter conditions.
-User-visibile impact and possible workaround | The `query()` result may contain unexpected results.
 
 #### Related to the use of negated text matches
 

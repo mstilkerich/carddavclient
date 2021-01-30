@@ -120,8 +120,8 @@ final class TestInfrastructureSrv
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP | self::FEAT_RESULTLIMIT
         | self::FEAT_ABOOKQUERY_PARTIALCARDS
         | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
-        | self::BUG_CASESENSITIVE_NAMES
-        | self::BUG_HANDLE_PROPGROUPS_IN_QUERY
+        //| self::BUG_CASESENSITIVE_NAMES
+        //| self::BUG_HANDLE_PROPGROUPS_IN_QUERY
         // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
         // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
         // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN

@@ -118,6 +118,29 @@ class Deserializers
         }
         return $srs;
     }
+
+    /**
+     * Deserializes an XML element to an array of its attributes, discarding its contents.
+     *
+     *  @return array<string, string> Mapping attribute names to values.
+     */
+    public static function deserializeToAttributes(Reader $reader): array
+    {
+        /** @var array<string,string> */
+        $attributes = $reader->parseAttributes();
+        $reader->next();
+        return $attributes;
+    }
+
+    /**
+     * Deserializes a CARDDAV:supported-address-data element (RFC 6352).
+     *
+     * It contains one or more CARDDAV:address-data-type elements.
+     */
+    public static function deserializeSupportedAddrData(Reader $reader): array
+    {
+        return \Sabre\Xml\Deserializer\repeatingElements($reader, XmlEN::ADDRDATATYPE);
+    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

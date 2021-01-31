@@ -43,6 +43,12 @@ class Sync
     /**
      * Performs a synchronization of the given addressbook.
      *
+     * @param AddressbookCollection $abook The addressbook to synchronize
+     * @param SyncHandler $handler A SyncHandler object that will be informed about new/changed and deleted cards.
+     * @param list<string> $requestedVCardProps List of VCard properties to request for retrieved VCards. If empty the
+     *                                          full VCards are retrieved.
+     * @param string $prevSyncToken Sync-token of a previous sync when performing an incremental sync. Empty string to
+     *                              perform a full sync (all cards of the addressbook will be reported as changed).
      * @return string
      *  The sync token corresponding to the just synchronized (or slightly earlier) state of the collection.
      */
@@ -80,6 +86,7 @@ class Sync
     /**
      * Performs a synchronization of the given addressbook for one synchronization chunk as dicated by the server.
      *
+     * @param list<string> $requestedVCardProps
      * @return SyncResult The synchronization result object.
      */
     private function synchronizeOneBatch(
@@ -161,7 +168,7 @@ class Sync
             }
 
             foreach ($syncResult->changedObjects as $obj) {
-                $handler->addressObjectChanged($obj["uri"], $obj["etag"], $obj["vcard"]);
+                $handler->addressObjectChanged($obj["uri"], $obj["etag"], $obj["vcard"] ?? null);
             }
         }
 
@@ -216,7 +223,7 @@ class Sync
                     } elseif (stripos($propstat->status, " 200 ") !== false) {
                         $syncResult->changedObjects[] = [
                             'uri' => $respUri,
-                            'etag' => $propstat->prop->props[XmlEN::GETETAG]
+                            'etag' => $propstat->prop->props[XmlEN::GETETAG] ?? ""
                         ];
                     }
                 }
@@ -281,6 +288,9 @@ class Sync
         return $syncResult;
     }
 
+    /**
+     * @param list<string> $requestedVCardProps
+     */
     private function multiGetChanges(
         CardDavClient $client,
         AddressbookCollection $abook,
@@ -305,8 +315,8 @@ class Sync
                     if (stripos($propstat->status, " 200 ") !== false) {
                         Config::$logger->debug("VCF for $respUri received via multiget");
                         $results[$respUri] = [
-                            "etag" => $propstat->prop->props[XmlEN::GETETAG],
-                            "vcf" => $propstat->prop->props[XmlEN::ADDRDATA]
+                            "etag" => $propstat->prop->props[XmlEN::GETETAG] ?? "",
+                            "vcf" => $propstat->prop->props[XmlEN::ADDRDATA] ?? ""
                         ];
                     }
                 }

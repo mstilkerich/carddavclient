@@ -21,22 +21,25 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Objects of this class represent a resource on a WebDAV server.
- */
 
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+use MStilkerich\CardDavClient\XmlElements\Prop;
 
+/**
+ * Objects of this class represent a resource on a WebDAV server.
+ *
+ * @psalm-import-type PropTypes from Prop
+ */
 class WebDavResource implements \JsonSerializable
 {
     /** @var string URI of the Collection */
     protected $uri;
 
-    /** @var array WebDAV properties of the Resource */
+    /** @var PropTypes WebDAV properties of the Resource */
     private $props = [];
 
     /** @var Account The CardDAV account this WebDAV resource is associated/accessible with. */
@@ -45,6 +48,7 @@ class WebDavResource implements \JsonSerializable
     /** @var CardDavClient A CardDavClient object for the account's base URI */
     private $client;
 
+    /** @var list<string> */
     private const PROPNAMES = [
         XmlEN::RESTYPE,
     ];
@@ -71,7 +75,7 @@ class WebDavResource implements \JsonSerializable
         if (!isset($restype)) {
             $res = new self($uri, $account);
             $props = $res->getProperties();
-            $restype = $props[XmlEN::RESTYPE];
+            $restype = $props[XmlEN::RESTYPE] ?? [];
         }
 
         if (in_array(XmlEN::RESTYPE_ABOOK, $restype)) {
@@ -91,6 +95,14 @@ class WebDavResource implements \JsonSerializable
         $this->client = $account->getClient($uri);
     }
 
+    /**
+     * Returns the standard WebDAV properties for this resource.
+     *
+     * Retrieved from the server on first request, cached afterwards. Use refreshProperties() to force update of cached
+     * properties.
+     *
+     * @return PropTypes
+     */
     protected function getProperties(): array
     {
         if (empty($this->props)) {
@@ -140,8 +152,9 @@ class WebDavResource implements \JsonSerializable
     public function getBasename(): string
     {
         $path = $this->getUriPath();
+        /** @var ?string $basename */
         [ , $basename ] = \Sabre\Uri\split($path);
-        return $basename;
+        return $basename ?? "";
     }
 
     /**
@@ -158,7 +171,7 @@ class WebDavResource implements \JsonSerializable
     /**
      * Provides the list of property names that should be requested upon call of refreshProperties().
      *
-     * @return string[] A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
+     * @return list<string> A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
      *
      * @see self::getProperties()
      * @see self::refreshProperties()

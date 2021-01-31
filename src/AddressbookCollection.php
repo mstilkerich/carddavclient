@@ -35,19 +35,22 @@ use MStilkerich\CardDavClient\XmlElements\{Filter,ResponsePropstat,ResponseStatu
  *
  * @psalm-import-type SimpleConditions from Filter
  * @psalm-import-type ComplexConditions from Filter
+ *
+ * @psalm-type VcardValidateResult = array {
+ *   level: int,
+ *   message: string,
+ *   node: \Sabre\VObject\Component | \Sabre\VObject\Property
+ * }
  */
 class AddressbookCollection extends WebDavCollection
 {
+    /** @var list<string> */
     private const PROPNAMES = [
         XmlEN::DISPNAME,
         XmlEN::GETCTAG,
         XmlEN::SUPPORTED_ADDRDATA,
         XmlEN::ABOOK_DESC,
         XmlEN::MAX_RESSIZE
-    ];
-
-    private const DETAIL_STRINGIFIERS = [
-        XmlEN::SUPPORTED_ADDRDATA => "getDetailsSupportedAddressData",
     ];
 
     /**
@@ -91,20 +94,32 @@ class AddressbookCollection extends WebDavCollection
         foreach ($props as $propName => $propVal) {
             $desc .= "    " . $this->shortenXmlNamespacesForPrinting($propName) . ": ";
 
-            if (isset(self::DETAIL_STRINGIFIERS[$propName])) {
-                $desc .= call_user_func([$this, self::DETAIL_STRINGIFIERS[$propName]], $propVal);
-            } elseif (is_array($propVal)) {
-                if (isset($propVal[0]) && is_array($propVal[0])) {
-                    $propVal = array_map(
-                        function (array $subarray): string {
-                            return implode(" ", $subarray);
-                        },
-                        $propVal
-                    );
-                }
-                $desc .= $this->shortenXmlNamespacesForPrinting(implode(", ", $propVal));
-            } else {
-                $desc .= $this->shortenXmlNamespacesForPrinting($propVal);
+            switch (gettype($propVal)) {
+                case 'integer':
+                case 'string':
+                    $desc .= $this->shortenXmlNamespacesForPrinting((string) $propVal);
+                    break;
+
+                case 'array':
+                    // can be list of strings or list of array<string,string>
+                    foreach ($propVal as $v) {
+                        if (is_string($v)) {
+                            $desc .= $this->shortenXmlNamespacesForPrinting($v);
+                        } else {
+                            $strings = [];
+                            $fields = array_keys($v);
+                            sort($fields);
+                            foreach ($fields as $f) {
+                                $strings[] = "$f: $v[$f]";
+                            }
+                            $desc .= '[' . implode(',', $strings) . ']';
+                        }
+                    }
+                    break;
+
+                default:
+                    $desc .= print_r($propVal, true);
+                    break;
             }
 
             $desc .= "\n";
@@ -129,7 +144,7 @@ class AddressbookCollection extends WebDavCollection
      *
      * @param string $uri
      *  URI of the address object to fetch
-     * @return array
+     * @return array{vcard: VCard, etag: string, vcf: string}
      *  Associative array with keys
      *   - etag(string): Entity tag of the returned card
      *   - vcf(string): VCard as string
@@ -139,7 +154,11 @@ class AddressbookCollection extends WebDavCollection
     {
         $client = $this->getClient();
         $response = $client->getAddressObject($uri);
-        $response["vcard"] = \Sabre\VObject\Reader::read($response["vcf"]);
+        $vcard = \Sabre\VObject\Reader::read($response["vcf"]);
+        if (!($vcard instanceof VCard)) {
+            throw new \Exception("Parsing of string did not result in a VCard object: {$response["vcf"]}");
+        }
+        $response["vcard"] = $vcard;
         return $response;
     }
 
@@ -173,9 +192,13 @@ class AddressbookCollection extends WebDavCollection
 
         // Add UID if not present
         if (empty($vcard->select("UID"))) {
-            $uuid = UUIDUtil::getUUID();
-            Config::$logger->notice("Adding missing UID property to new VCard ($uuid)");
-            $vcard->UID = $uuid;
+            $uid = UUIDUtil::getUUID();
+            Config::$logger->notice("Adding missing UID property to new VCard ($uid)");
+            $vcard->UID = $uid;
+        } else {
+            $uid = (string) $vcard->UID;
+            // common case for v4 vcards where UID must be a URI
+            $uid = str_replace("urn:uuid:", "", $uid);
         }
 
         // Assert validity of the Card for CardDAV, including valid UID property
@@ -192,9 +215,11 @@ class AddressbookCollection extends WebDavCollection
                 true
             );
         } else {
+            // restrict to allowed characters
+            $name = preg_replace('/[^A-Za-z0-9._-]/', '-', $uid);
             $newResInfo = $client->createResource(
                 $vcard->serialize(),
-                $client->absoluteUrl($vcard->UID . ".vcf")
+                $client->absoluteUrl("$name.vcf")
             );
         }
 
@@ -256,11 +281,11 @@ class AddressbookCollection extends WebDavCollection
                 foreach ($response->propstat as $propstat) {
                     if (stripos($propstat->status, " 200 ") !== false) {
                         Config::$logger->debug("VCF for $respUri received via query");
-                        $vcf = (string) $propstat->prop->props[XmlEN::ADDRDATA];
+                        $vcf = $propstat->prop->props[XmlEN::ADDRDATA] ?? "";
                         $vcard = \Sabre\VObject\Reader::read($vcf);
                         if ($vcard instanceof VCard) {
                             $results[$respUri] = [
-                                "etag" => (string) $propstat->prop->props[XmlEN::GETETAG],
+                                "etag" => $propstat->prop->props[XmlEN::GETETAG] ?? "",
                                 "vcard" => $vcard
                             ];
                         } else {
@@ -287,33 +312,6 @@ class AddressbookCollection extends WebDavCollection
     }
 
     /**
-     * Provides the {urn:ietf:params:xml:ns:carddav}supported-address-data element in readable form.
-     */
-    protected function getDetailsSupportedAddressData(array $prop): string
-    {
-        /*
-            Array (
-                [0] => Array (
-                    [name] => {urn:ietf:params:xml:ns:carddav}address-data-type
-                    [value] =>
-                    [attributes] => Array (
-                        [content-type] => text/vcard
-                        [version] => 3.0
-                    )
-                )
-            )
-         */
-        $desc = [];
-        foreach ($prop as $addrDataType) {
-            if ($addrDataType["name"] === XmlEN::ADDRDATATYPE) {
-                $desc[] = $addrDataType["attributes"]["content-type"] . ": " . $addrDataType["attributes"]["version"];
-            }
-        }
-
-        return implode(", ", $desc);
-    }
-
-    /**
      * This function replaces some well-known XML namespaces with a long name with shorter names for printing.
      */
     protected function shortenXmlNamespacesForPrinting(string $s): string
@@ -336,6 +334,7 @@ class AddressbookCollection extends WebDavCollection
         $errors = "";
 
         // Assert validity of the Card for CardDAV, including valid UID property
+        /** @var list<VcardValidateResult> */
         $validityIssues = $vcard->validate(\Sabre\VObject\Node::PROFILE_CARDDAV | \Sabre\VObject\Node::REPAIR);
         foreach ($validityIssues as $issue) {
             $name = $issue["node"]->name;
@@ -359,7 +358,7 @@ class AddressbookCollection extends WebDavCollection
     /**
      * Provides the list of property names that should be requested upon call of refreshProperties().
      *
-     * @return string[] A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
+     * @return list<string> A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
      *
      * @see parent::getProperties()
      * @see parent::refreshProperties()
@@ -368,7 +367,7 @@ class AddressbookCollection extends WebDavCollection
     {
         $parentPropNames = parent::getNeededCollectionPropertyNames();
         $propNames = array_merge($parentPropNames, self::PROPNAMES);
-        return array_unique($propNames);
+        return array_values(array_unique($propNames));
     }
 }
 

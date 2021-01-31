@@ -29,12 +29,23 @@ use MStilkerich\CardDavClient\{Account, AddressbookCollection, CardDavClient, Co
 
 /**
  * Class Discovery - Provides a service to discovery the addressbooks for a CardDAV account.
+ *
+ * @psalm-type Server = array{
+ *   host: string,
+ *   port: string,
+ *   scheme: 'http' | 'https',
+ *   dnsrr?: string,
+ *   userinput?: bool
+ * }
+ *
+ * @psalm-type SrvRecord = array{pri: int, weight: int, target: string, port: int}
+ * @psalm-type TxtRecord = array{txt: string}
  */
 class Discovery
 {
     /********* PROPERTIES *********/
 
-    /** @var array Some builtins for public providers that don't have discovery properly set up. */
+    /** @var array<string,string> Some builtins for public providers that don't have discovery properly set up. */
     private const KNOWN_SERVERS = [
         "gmail.com" => "www.googleapis.com",
         "googlemail.com" => "www.googleapis.com",
@@ -47,7 +58,7 @@ class Discovery
      *
      * @param Account $account The CardDAV account providing credentials and initial discovery URI.
      *
-     * @return AddressbookCollection[] An array of the discovered addressbooks.
+     * @return list<AddressbookCollection> An array of the discovered addressbooks.
      *
      * @throws \Exception In case of error, sub-classes of \Exception are thrown, with an error message contained within
      *         the \Exception object.
@@ -73,7 +84,7 @@ class Discovery
             $protocol = $force_ssl ? 'https' : 'http';
         }
         if (strlen($port) == 0) {
-            $port = $force_ssl ? 443 : 80;
+            $port = $force_ssl ? '443' : '80';
         }
 
         // (1) Discover the hostname and port (may be multiple results for failover setups)
@@ -147,8 +158,8 @@ class Discovery
      * @param bool   $force_ssl If true, only services with transport encryption (carddavs) will be discovered,
      *                          otherwise the function will try to discover unencrypted (carddav) services after failing
      *                          to discover encrypted ones.
-     * @return array Returns an array of associative arrays of services discovered via DNS. If nothing was found, the
-     *               returned array is empty.
+     * @return list<Server> Returns an array of associative arrays of services discovered via DNS. If nothing was found,
+     *                      the returned array is empty.
      */
     private function discoverServers(string $host, bool $force_ssl): array
     {
@@ -163,6 +174,7 @@ class Discovery
             list($rrname, $scheme) = $rrnameAndScheme;
 
             // query SRV records
+            /** @var list<SrvRecord> | false */
             $dnsresults = dns_get_record($rrname, DNS_SRV);
 
             if (is_array($dnsresults)) {
@@ -171,34 +183,41 @@ class Discovery
         }
 
         if (is_array($dnsresults)) {
-            // order according to priority and weight
-            // TODO weight is not quite correctly handled atm, see RFC2782,
-            // but this is not crucial to functionality
-            $sortPrioWeight = function (array $a, array $b): int {
-                if ($a['pri'] != $b['pri']) {
-                    return $b['pri'] - $a['pri'];
-                }
-
-                return $a['weight'] - $b['weight'];
-            };
-
-            usort($dnsresults, $sortPrioWeight);
+            usort($dnsresults, [self::class, 'orderDnsRecords']);
 
             // build results
             foreach ($dnsresults as $dnsres) {
-                $servers[] =
-                    [
-                        "host"   => $dnsres['target'],
-                        "port"   => $dnsres['port'],
-                        "scheme" => $scheme,
-                        "dnsrr"  => $rrname
-                    ];
-
-                Config::$logger->info("Found server per DNS SRV $rrname: " . $dnsres['target'] . ":" . $dnsres['port']);
+                if (isset($dnsres['target']) && isset($dnsres['port'])) {
+                    $servers[] =
+                        [
+                            "host"   => $dnsres['target'],
+                            "port"   => (string) $dnsres['port'],
+                            "scheme" => $scheme,
+                            "dnsrr"  => $rrname
+                        ];
+                    Config::$logger->info("Found server per DNS SRV $rrname: {$dnsres['target']}: {$dnsres['port']}");
+                }
             }
         }
 
         return $servers;
+    }
+
+    /**
+     * Orders DNS records by their prio and weight.
+     *
+     * TODO weight is not quite correctly handled atm, see RFC2782, but this is not crucial to functionality
+     *
+     * @param SrvRecord $a
+     * @param SrvRecord $b
+     */
+    private static function orderDnsRecords(array $a, array $b): int
+    {
+        if ($a['pri'] != $b['pri']) {
+            return $b['pri'] - $a['pri'];
+        }
+
+        return $a['weight'] - $b['weight'];
     }
 
     /**
@@ -208,19 +227,20 @@ class Discovery
      * lookup is only performed for servers that have themselves been discovery using DNS SRV lookups, using the same
      * service resource record.
      *
-     * @param array $server An server record (associative array) as returned by discoverServers()
-     * @return string[] Returns an array of context paths that should be tried for discovery in the provided order.
+     * @param Server $server An server record (associative array) as returned by discoverServers()
+     * @return list<string> Returns an array of context paths that should be tried for discovery in the provided order.
      * @see Discovery::discoverServers()
      */
     private function discoverContextPath(array $server): array
     {
         $contextpaths = [];
 
-        if (key_exists("dnsrr", $server)) {
+        if (isset($server["dnsrr"])) {
+            /** @var list<TxtRecord> | false */
             $dnsresults = dns_get_record($server["dnsrr"], DNS_TXT);
             if (is_array($dnsresults)) {
                 foreach ($dnsresults as $dnsresult) {
-                    if (key_exists('txt', $dnsresult) && preg_match('/^path=(.+)/', $dnsresult['txt'], $match)) {
+                    if (preg_match('/^path=(.+)/', $dnsresult['txt'] ?? "", $match)) {
                         $contextpaths[] = $match[1];
                         Config::$logger->info("Discovered context path $match[1] per DNS TXT record\n");
                     }

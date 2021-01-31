@@ -9,6 +9,9 @@ use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\Services\Discovery;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @psalm-import-type TestAccount from TestInfrastructureSrv
+ */
 final class DiscoveryTest extends TestCase
 {
     public static function setUpBeforeClass(): void
@@ -29,12 +32,19 @@ final class DiscoveryTest extends TestCase
     {
     }
 
+
+    /**
+     * @return array<string, array{string, TestAccount}>
+     */
     public function accountProvider(): array
     {
         return TestInfrastructureSrv::accountProvider();
     }
 
-    /** @dataProvider accountProvider */
+    /**
+     * @param TestAccount $cfg
+     * @dataProvider accountProvider
+     */
     public function testAllAddressbooksCanBeDiscovered(string $accountname, array $cfg): void
     {
         $account = TestInfrastructureSrv::$accounts[$accountname];

@@ -33,12 +33,13 @@ final class SyncTestHandler implements SyncHandler
 
     /**
      * Maps URI to [ 'vcard' => VCard object, 'etag' => string expected etag ]
-     * @var array $expectedChangedCards The new/changed cards that are expected to be reported by the sync
+     * @var array<string, array{vcard: VCard, etag: string, seen?: bool}>
+     *      The new/changed cards that are expected to be reported by the sync
      */
     private $expectedChangedCards;
 
     /**
-     * @var bool[] $expectedDeletedUris An array of URIs => bool expected to be reported as deleted by the Sync.
+     * @var array<string,bool> An array of URIs => bool expected to be reported as deleted by the Sync.
      *    The values are used to record which cards have been reported as deleted during the sync.
      */
     private $expectedDeletedUris;
@@ -56,13 +57,19 @@ final class SyncTestHandler implements SyncHandler
     private $opSequence = "";
 
     /**
-     * @var array $cacheState The state of the (simulated) local cache. This is an associative array mapping URIs of
+     * @var array<string, string>
+     *     The state of the (simulated) local cache. This is an associative array mapping URIs of
      *     cards that are assumed to be locally present to the ETags of their local version. Is provided during sync to
      *     the sync service upon request. Is updated during the sync according to the changes reported by the sync
      *     handler.
      */
     private $cacheState;
 
+    /**
+     * @param array<string, array{vcard: VCard, etag: string}> $expectedChangedCards
+     * @param list<string> $expectedDeletedUris
+     * @param array<string, string> $cacheState
+     */
     public function __construct(
         AddressBookCollection $abook,
         bool $allowAdditionalChanges,
@@ -133,6 +140,7 @@ final class SyncTestHandler implements SyncHandler
         $this->expectedDeletedUris[$uri] = true;
     }
 
+    /** @return array<string,string> */
     public function getExistingVCardETags(): array
     {
         return $this->cacheState;
@@ -143,6 +151,7 @@ final class SyncTestHandler implements SyncHandler
         $this->opSequence .= "F";
     }
 
+    /** @return array<string,string> */
     public function testVerify(): array
     {
         $numDel =  '{' . count($this->expectedDeletedUris) . '}';
@@ -162,7 +171,7 @@ final class SyncTestHandler implements SyncHandler
 
         foreach ($this->expectedChangedCards as $uri => $attr) {
             Assert::assertArrayHasKey("seen", $attr, "Changed card NOT reported as changed: $uri");
-            Assert::assertTrue($attr["seen"], "Changed card NOT reported as changed: $uri");
+            Assert::assertTrue($attr["seen"] ?? false, "Changed card NOT reported as changed: $uri");
         }
 
         return $this->cacheState;

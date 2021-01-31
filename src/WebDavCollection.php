@@ -33,6 +33,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
 class WebDavCollection extends WebDavResource
 {
+    /** @var list<string> */
     private const PROPNAMES = [
         XmlEN::SYNCTOKEN,
         XmlEN::SUPPORTED_REPORT_SET,
@@ -67,7 +68,7 @@ class WebDavCollection extends WebDavResource
             $path = $this->getUriPath();
 
             foreach ($children as $child) {
-                $obj = parent::createInstance($child["uri"], $this->account, $child["props"][XmlEN::RESTYPE]);
+                $obj = parent::createInstance($child["uri"], $this->account, $child["props"][XmlEN::RESTYPE] ?? null);
                 if ($obj->getUriPath() != $path) {
                     $childObjs[] = $obj;
                 }
@@ -82,7 +83,7 @@ class WebDavCollection extends WebDavResource
     /**
      * Provides the list of property names that should be requested upon call of refreshProperties().
      *
-     * @return string[] A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
+     * @return list<string> A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
      *
      * @see self::getProperties()
      * @see self::refreshProperties()
@@ -91,13 +92,13 @@ class WebDavCollection extends WebDavResource
     {
         $parentPropNames = parent::getNeededCollectionPropertyNames();
         $propNames = array_merge($parentPropNames, self::PROPNAMES);
-        return array_unique($propNames);
+        return array_values(array_unique($propNames));
     }
 
     protected function supportsReport(string $reportElement): bool
     {
         $props = $this->getProperties();
-        return in_array($reportElement, $props[XmlEN::SUPPORTED_REPORT_SET], true);
+        return in_array($reportElement, $props[XmlEN::SUPPORTED_REPORT_SET] ?? [], true);
     }
 }
 

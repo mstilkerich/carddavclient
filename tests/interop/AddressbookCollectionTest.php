@@ -8,7 +8,11 @@ use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCard;
+use MStilkerich\Tests\CardDavClient\Interop\TestInfrastructureSrv as TIS;
 
+/**
+ * @psalm-import-type TestAddressbook from TestInfrastructureSrv
+ */
 final class AddressbookCollectionTest extends TestCase
 {
     /**
@@ -19,7 +23,7 @@ final class AddressbookCollectionTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        TestInfrastructureSrv::init();
+        TIS::init();
     }
 
     protected function setUp(): void
@@ -35,41 +39,48 @@ final class AddressbookCollectionTest extends TestCase
     {
     }
 
+    /** @return array<string, array{string, TestAddressbook}> */
     public function addressbookProvider(): array
     {
-        return TestInfrastructureSrv::addressbookProvider();
+        return TIS::addressbookProvider();
     }
 
-    /** @dataProvider addressbookProvider */
+    /**
+     * @param TestAddressbook $cfg
+     * @dataProvider addressbookProvider
+     */
     public function testPropertiesCorrectlyReported(string $abookname, array $cfg): void
     {
-        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
+        $abook = TIS::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $this->assertSame($cfg["displayname"], $abook->getName(), "Displayname");
         $this->assertSame(
-            TestInfrastructureSrv::hasFeature($abookname, TestInfrastructureSrv::FEAT_SYNCCOLL),
+            TIS::hasFeature($abookname, TIS::FEAT_SYNCCOLL),
             $abook->supportsSyncCollection(),
             "SyncCollection support"
         );
         $this->assertSame(
-            TestInfrastructureSrv::hasFeature($abookname, TestInfrastructureSrv::FEAT_MULTIGET),
+            TIS::hasFeature($abookname, TIS::FEAT_MULTIGET),
             $abook->supportsMultiGet(),
             "MultiGet report"
         );
 
         $ctag = $abook->getCTag();
-        if (TestInfrastructureSrv::hasFeature($abookname, TestInfrastructureSrv::FEAT_CTAG)) {
+        if (TIS::hasFeature($abookname, TIS::FEAT_CTAG)) {
             $this->assertIsString($ctag);
         } else {
             $this->assertNull($ctag);
         }
     }
 
-    /** @dataProvider addressbookProvider */
+    /**
+     * @param TestAddressbook $cfg
+     * @dataProvider addressbookProvider
+     */
     public function testCanInsertValidCard(string $abookname, array $cfg): void
     {
-        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
+        $abook = TIS::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $vcard = TestInfrastructure::createVCard();
@@ -79,12 +90,13 @@ final class AddressbookCollectionTest extends TestCase
     }
 
     /**
+     * @param TestAddressbook $cfg
      * @depends testCanInsertValidCard
      * @dataProvider addressbookProvider
      */
     public function testCanRetrieveCreatedCard(string $abookname, array $cfg): void
     {
-        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
+        $abook = TIS::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
@@ -100,12 +112,13 @@ final class AddressbookCollectionTest extends TestCase
     }
 
     /**
+     * @param TestAddressbook $cfg
      * @depends testCanRetrieveCreatedCard
      * @dataProvider addressbookProvider
      */
     public function testCanDeleteExistingCard(string $abookname, array $cfg): void
     {
-        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
+        $abook = TIS::$addressbooks[$abookname];
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         [ 'uri' => $cardUri ] = self::$insertedCards[$abookname];

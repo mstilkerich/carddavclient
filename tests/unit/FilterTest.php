@@ -269,6 +269,7 @@ final class FilterTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expErrMsg);
+        /** @psalm-suppress MixedArgumentTypeCoercion Intentionally broken filters in this test */
         new Filter($conditions, true);
     }
 

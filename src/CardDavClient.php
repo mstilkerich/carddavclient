@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace MStilkerich\CardDavClient;
 
 use Psr\Http\Message\ResponseInterface as Psr7Response;
+use MStilkerich\CardDavClient\XmlElements\Prop;
 use MStilkerich\CardDavClient\XmlElements\Filter;
 use MStilkerich\CardDavClient\XmlElements\Multistatus;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
@@ -44,6 +45,7 @@ Other needed features:
 
 /**
  * @psalm-import-type RequestOptions from HttpClientAdapter
+ * @psalm-import-type PropTypes from Prop
  */
 class CardDavClient
 {
@@ -118,6 +120,12 @@ class CardDavClient
         return $response;
     }
 
+    /**
+     * Fetches an address object.
+     *
+     * @param string $uri URI of the address object to fetch
+     * @return array{etag: string, vcf: string}
+     */
     public function getAddressObject(string $uri): array
     {
         $response = $this->getResource($uri);
@@ -379,7 +387,7 @@ class CardDavClient
      * @param list<string> $props List of properties to retrieve, given as XML element names
      * @param "0"|"1"|"infinity" $depth Value for the Depth header
      *
-     * @return list<array{uri: string, props: array<string,mixed>}>
+     * @return list<array{uri: string, props: PropTypes}>
      */
     public function findProperties(
         string $uri,
@@ -563,17 +571,15 @@ class CardDavClient
 
         $service = new \Sabre\Xml\Service();
         $service->namespaceMap = self::MAP_NS2PREFIX;
-        $service->elementMap = [
-            XmlEN::MULTISTATUS => XmlElements\Multistatus::class,
-            XmlEN::RESPONSE => XmlElements\Response::class,
-            XmlEN::PROPSTAT => XmlElements\Propstat::class,
-            XmlEN::PROP => XmlElements\Prop::class,
-            XmlEN::ABOOK_HOME => [ Deserializers::class, 'deserializeHrefMulti' ],
-            XmlEN::RESTYPE => '\Sabre\Xml\Deserializer\enum',
-            XmlEN::SUPPORTED_REPORT_SET => [ Deserializers::class, 'deserializeSupportedReportSet' ],
-            XmlEN::ADD_MEMBER => [ Deserializers::class, 'deserializeHrefSingle' ],
-            XmlEN::CURUSRPRINC => [ Deserializers::class, 'deserializeHrefSingle' ]
-        ];
+        $service->elementMap = array_merge(
+            Prop::PROP_DESERIALIZERS,
+            [
+                XmlEN::MULTISTATUS => XmlElements\Multistatus::class,
+                XmlEN::RESPONSE => XmlElements\Response::class,
+                XmlEN::PROPSTAT => XmlElements\Propstat::class,
+                XmlEN::PROP => XmlElements\Prop::class,
+            ]
+        );
 
         return $service;
     }

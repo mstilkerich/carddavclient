@@ -73,7 +73,7 @@ interface SyncHandler
      * not support the sync-collection report, or if the sync-token has expired on the server and thus the server is not
      * able to report the changes against the local state.
      *
-     * @return array
+     * @return array<string,string>
      *  Associative array with URIs (URL path component without server) as keys, ETags as values.
      */
     public function getExistingVCardETags(): array;

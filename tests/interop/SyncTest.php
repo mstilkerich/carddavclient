@@ -10,16 +10,20 @@ use MStilkerich\CardDavClient\Services\Sync;
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCard;
 
+/**
+ * @psalm-import-type TestAddressbook from TestInfrastructureSrv
+ */
 final class SyncTest extends TestCase
 {
     /**
-     * @var array $insertedUris Uris inserted to addressbooks by tests in this class
+     * @var array<string,list<string>> $insertedUris Uris inserted to addressbooks by tests in this class
      *    Maps addressbook name to a string[] of the URIs.
      */
     private static $insertedUris;
 
     /**
-     * @var array $cacheState Simulate a local VCard cache for the sync.
+     * @var array<string, array{cache: array<string,string>, synctoken: string}>
+     *      Simulate a local VCard cache for the sync.
      */
     private static $cacheState;
 
@@ -50,12 +54,16 @@ final class SyncTest extends TestCase
         }
     }
 
+    /** @return array<string, array{string, TestAddressbook}> */
     public function addressbookProvider(): array
     {
         return TestInfrastructureSrv::addressbookProvider();
     }
 
-    /** @dataProvider addressbookProvider */
+    /**
+     * @param TestAddressbook $cfg
+     * @dataProvider addressbookProvider
+     */
     public function testInitialSyncWorks(string $abookname, array $cfg): void
     {
         $abook = TestInfrastructureSrv::$addressbooks[$abookname];
@@ -83,6 +91,7 @@ final class SyncTest extends TestCase
     }
 
     /**
+     * @param TestAddressbook $cfg
      * @depends testInitialSyncWorks
      * @dataProvider addressbookProvider
      */
@@ -118,6 +127,7 @@ final class SyncTest extends TestCase
     }
 
     /**
+     * @param TestAddressbook $cfg
      * @depends testInitialSyncWorks
      * @dataProvider addressbookProvider
      */
@@ -161,6 +171,9 @@ final class SyncTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<string, array{vcard: VCard, etag: string}>
+     */
     private function createCards(AddressbookCollection $abook, string $abookname, int $num): array
     {
         $createdCards = [];

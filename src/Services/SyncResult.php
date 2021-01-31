@@ -29,17 +29,23 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Services;
 
+use Sabre\VObject\Component\VCard;
 use MStilkerich\CardDavClient\{CardDavClient, Config};
 
 class SyncResult
 {
     /** @var string */
     public $syncToken;
+
     /** @var bool */
     public $syncAgain = false;
-    /** @var array */
+
+    /** @var list<string> URIs of deleted objects */
     public $deletedObjects = [];
-    /** @var array */
+
+    /** @var list<array{uri: string, etag: string, vcf?: string, vcard?: VCard}>
+     *       URIs and ETags of new or changed address objects.
+     */
     public $changedObjects = [];
 
     public function __construct(string $syncToken)

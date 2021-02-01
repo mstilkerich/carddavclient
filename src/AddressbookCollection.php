@@ -102,7 +102,11 @@ class AddressbookCollection extends WebDavCollection
 
                 case 'array':
                     // can be list of strings or list of array<string,string>
+                    $sep = "";
                     foreach ($propVal as $v) {
+                        $desc .= $sep;
+                        $sep = ", ";
+
                         if (is_string($v)) {
                             $desc .= $this->shortenXmlNamespacesForPrinting($v);
                         } else {
@@ -112,7 +116,7 @@ class AddressbookCollection extends WebDavCollection
                             foreach ($fields as $f) {
                                 $strings[] = "$f: $v[$f]";
                             }
-                            $desc .= '[' . implode(',', $strings) . ']';
+                            $desc .= '[' . implode(', ', $strings) . ']';
                         }
                     }
                     break;
@@ -144,8 +148,8 @@ class AddressbookCollection extends WebDavCollection
      *
      * @param string $uri
      *  URI of the address object to fetch
-     * @return array{vcard: VCard, etag: string, vcf: string}
-     *  Associative array with keys
+     * @psalm-return array{vcard: VCard, etag: string, vcf: string}
+     * @return array<string,mixed> Associative array with keys
      *   - etag(string): Entity tag of the returned card
      *   - vcf(string): VCard as string
      *   - vcard(VCard): VCard as Sabre/VObject VCard

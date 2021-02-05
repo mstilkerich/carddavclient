@@ -144,6 +144,18 @@ final class AddressbookQueryTest extends TestCase
                 TIS::BUG_PARAMDEF,
                 TIS::FEAT_PARAMFILTER
             ],
+            'ParamNotDefinedDiffCase' => [
+                ['EMAIL' => ['type', null]],
+                [ 1, 3 ],
+                TIS::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS | TIS::BUG_CASESENSITIVE_NAMES,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamDefinedDiffCase' => [
+                ['EMAIL' => ['type', '//']],
+                [ 0 ],
+                TIS::BUG_PARAMDEF | TIS::BUG_CASESENSITIVE_NAMES,
+                TIS::FEAT_PARAMFILTER
+            ],
             // property with multiple values, where one has the parameter defined, the other has not -> must not match
             'ParamNotDefinedSome' => [
                 ['TEL' => ['TYPE', null]],
@@ -178,6 +190,12 @@ final class AddressbookQueryTest extends TestCase
                 TIS::FEAT_PARAMFILTER
             ],
             // check matching is case insensitive
+            'ParamEqualsParamNameDiffCase' => [
+                ['EMAIL' => ['type', '/HOME/=']],
+                [ 0 ],
+                TIS::BUG_PARAMTEXTMATCH_BROKEN | TIS::BUG_CASESENSITIVE_NAMES,
+                TIS::FEAT_PARAMFILTER
+            ],
             'ParamEqualsDiffCase' => [
                 ['EMAIL' => ['TYPE', '/hoME/=']],
                 [ 0 ],

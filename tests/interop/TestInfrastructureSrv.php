@@ -93,6 +93,9 @@ final class TestInfrastructureSrv
     // Server bug: Group prefixes in prop-filter are not properly handled
     public const BUG_HANDLE_PROPGROUPS_IN_QUERY = 2 ** 21;
 
+    // Server bug: param-filter without subfilter matches also properties that do not have the parameter
+    public const BUG_PARAMDEF = 2 ** 22;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_ALLOF_SINGLEPROP | self::BUG_CASESENSITIVE_NAMES;
 
@@ -119,12 +122,13 @@ final class TestInfrastructureSrv
     public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP | self::FEAT_RESULTLIMIT
         | self::FEAT_ABOOKQUERY_PARTIALCARDS
-        | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
+        //| self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
         //| self::BUG_CASESENSITIVE_NAMES
         //| self::BUG_HANDLE_PROPGROUPS_IN_QUERY
         // fixed locally | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS
         // fixed locally | self::BUG_PARAMNOTDEF_SOMEMATCH
         // fixed locally | self::BUG_PARAMTEXTMATCH_BROKEN
+        // fixed locally | self::BUG_PARAMDEF
         ;
     public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
 

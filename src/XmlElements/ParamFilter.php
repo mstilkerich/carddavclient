@@ -82,11 +82,7 @@ class ParamFilter implements \Sabre\Xml\XmlSerializable
     public function xmlSerialize(\Sabre\Xml\Writer $writer): void
     {
         if (isset($this->filter)) {
-            $writer->write([
-                'name' => XmlEN::TEXTMATCH,
-                'attributes' => $this->filter->xmlAttributes(),
-                'value' => $this->filter
-            ]);
+            $this->filter->xmlSerializeElement($writer);
         } else {
             $writer->write([XmlEN::ISNOTDEFINED => null]);
         }

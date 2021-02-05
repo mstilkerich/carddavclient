@@ -82,6 +82,10 @@ final class FilterTest extends TestCase
                 [ 'EMAIL' => [ 'VALUE', null ] ],
                 [ 'EMAIL' => 'p[VALUE]0' ],
             ],
+            'SinglePropertyParamDefined' => [
+                [ 'EMAIL' => [ 'VALUE', '//' ] ],
+                [ 'EMAIL' => 'p[VALUE]t~' ],
+            ],
             'SinglePropertyParamContains' => [
                 [ 'EMAIL' => [ 'TYPE', '/home/' ] ],
                 [ 'EMAIL' => 'p[TYPE]t~' ],

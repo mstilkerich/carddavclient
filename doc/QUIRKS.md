@@ -204,3 +204,11 @@ Description | addressbook-query with a param-filter for a not-defined parameter 
 Affected operations | `AddressbookCollection::query()` when using parameter filters matching for non-defined parameters.
 User-visibile impact and possible workaround | The `query()` result may contain unexpected results.
 
+BUG_PARAMDEF | Wrong result when matching for existence of parameter
+--------|----------------------------------------------------------
+Affected servers / services | Davical
+Description | addressbook-query with a param-filter for a defined parameter (i.e. no subfilter) matches cards that have the property, even if they lack the parameter.
+Affected operations | `AddressbookCollection::query()` when using parameter filters matching for defined parameters.
+User-visibile impact and possible workaround | The `query()` result may contain unexpected results.
+
+<!-- vim: set ts=4 sw=4 expandtab fenc=utf8 ff=unix: -->

@@ -138,6 +138,12 @@ final class AddressbookQueryTest extends TestCase
                 TIS::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS,
                 TIS::FEAT_PARAMFILTER
             ],
+            'ParamDefined' => [
+                ['EMAIL' => ['TYPE', '//']],
+                [ 0 ],
+                TIS::BUG_PARAMDEF,
+                TIS::FEAT_PARAMFILTER
+            ],
             // property with multiple values, where one has the parameter defined, the other has not -> must not match
             'ParamNotDefinedSome' => [
                 ['TEL' => ['TYPE', null]],

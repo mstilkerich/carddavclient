@@ -77,7 +77,7 @@ Because there are so many issues concerning the handling of the addressbook-quer
 
 BUG_CASESENSITIVE_NAMES | Names treated case sensitive in addressbook query
 --------|----------------------------------------------------------
-Affected servers / services | Google Contacts, Davical, iCloud
+Affected servers / services | Google Contacts, [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/20), iCloud
 Description | In addressbook-query, the server treats property and group names case sensitive, i.e. when searching for a property `email` it will not match an `EMAIL` property. However, according to RFC 6350, names of properties and groups are case insensitive. For Google, the issue additionally applies to parameter names.
 Affected operations | `AddressbookCollection::query()`
 User-visibile impact and possible workaround | The `query()` result may lack cards that would have matched the filter. Use uppercase spelling in your conditions for maximunm interoperability, as this is the recommended spelling and some servers automatically convert names to uppercase when a card is stored. This will not completely mitigate the issue though.
@@ -101,7 +101,7 @@ User-visibile impact and possible workaround | The `query()` result may contain 
 
 BUG_HANDLE_PROPGROUPS_IN_QUERY | Property groups are not properly handled
 --------|----------------------------------------------------------
-Affected servers / services | Davical, Radicale
+Affected servers / services | [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/20), Radicale
 Description | Property groups (e.g. `G1.EMAIL`) are not properly handled in prop-filters. A prop-filter where the name attribute includes a group prefix must only match properties with that group prefix.
 Affected operations | `AddressbookCollection::query()` when using property names with group prefix
 User-visibile impact and possible workaround | The `query()` result may contain unexpected results.
@@ -206,7 +206,7 @@ User-visibile impact and possible workaround | The `query()` result may contain 
 
 BUG_PARAMDEF | Wrong result when matching for existence of parameter
 --------|----------------------------------------------------------
-Affected servers / services | Davical
+Affected servers / services | [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/20)
 Description | addressbook-query with a param-filter for a defined parameter (i.e. no subfilter) matches cards that have the property, even if they lack the parameter.
 Affected operations | `AddressbookCollection::query()` when using parameter filters matching for defined parameters.
 User-visibile impact and possible workaround | The `query()` result may contain unexpected results.

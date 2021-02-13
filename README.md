@@ -91,7 +91,7 @@ operations.
 For a simple demo application that makes use of this library, see [davshell](https://github.com/mstilkerich/davshell/).
 It shows how to use the library for the discovery and synchronization of addressbooks.
 
-You can also take a look at the [Roundcube CardDAV](https://github.com/blind-coder/rcmcarddav) plugin, which
+You can also take a look at the [Roundcube CardDAV](https://github.com/mstilkerich/rcmcarddav) plugin, which
 also uses this library for the interaction with the CardDAV server.
 
 ### API documentation

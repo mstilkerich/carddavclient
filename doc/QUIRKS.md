@@ -211,4 +211,11 @@ Description | addressbook-query with a param-filter for a defined parameter (i.e
 Affected operations | `AddressbookCollection::query()` when using parameter filters matching for defined parameters.
 User-visibile impact and possible workaround | The `query()` result may contain unexpected results.
 
+BUG_PARAMCOMMAVALUE | Comma not properly handled in parameter values
+--------|----------------------------------------------------------
+Affected servers / services | Davical
+Description | addressbook-query with a param-filter for a parameter value that includes a comma may returned wrong results. This is because Davical splits the parameter value on the comma without considering quoting, and treats the parts left and right of the comma as multiple values of the parameter.
+Affected operations | `AddressbookCollection::query()` when using parameter filters matching for parameter values when one value includes a comma.
+User-visibile impact and possible workaround | The `query()` result may contain unexpected results, or lack expected results.
+
 <!-- vim: set ts=4 sw=4 expandtab fenc=utf8 ff=unix: -->

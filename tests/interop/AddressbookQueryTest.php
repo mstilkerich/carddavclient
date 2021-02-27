@@ -37,7 +37,7 @@ final class AddressbookQueryTest extends TestCase
         ],
         [ // card 1 - custom property with a custom parameter (to avoid Google messing with its content)
             [ 'EMAIL', 'maxmu@abcd.com', [] ],
-            [ 'X-CUSTOMPROP', 'foobar', [ 'X-CUSTOMPARAM' => ['HOME', 'WORK'] ] ],
+            [ 'X-CUSTOMPROP', 'foobar', [ 'X-CUSTOMPARAM' => ['HOME', 'WORK'], 'X-SPACEPARAM' => "HELLO, WORLD" ] ],
         ],
         [ // card 2 - no EMAIL property
             [ 'TEL', '12345', ['TYPE' => 'HOME'] ],
@@ -265,6 +265,12 @@ final class AddressbookQueryTest extends TestCase
                 ['X-CUSTOMPROP' => ['X-CUSTOMPARAM', '/HOME/=']],
                 [ 1 ],
                 TIS::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH,
+                TIS::FEAT_PARAMFILTER
+            ],
+            'ParamWithSpaceAndComma' => [
+                ['X-CUSTOMPROP' => ['X-SPACEPARAM', '/lo, W/']],
+                [ 1 ],
+                TIS::BUG_PARAMCOMMAVALUE,
                 TIS::FEAT_PARAMFILTER
             ],
 

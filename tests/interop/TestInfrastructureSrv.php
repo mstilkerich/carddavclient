@@ -96,6 +96,9 @@ final class TestInfrastructureSrv
     // Server bug: param-filter without subfilter matches also properties that do not have the parameter
     public const BUG_PARAMDEF = 2 ** 22;
 
+    // Server bug: parameter values with a quoted comma are considered as multiple values by the server
+    public const BUG_PARAMCOMMAVALUE = 2 ** 23;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_ALLOF_SINGLEPROP | self::BUG_CASESENSITIVE_NAMES;
 
@@ -122,6 +125,7 @@ final class TestInfrastructureSrv
     public const SRVFEATS_DAVICAL = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP | self::FEAT_RESULTLIMIT
         | self::FEAT_ABOOKQUERY_PARTIALCARDS
+        | self::BUG_PARAMCOMMAVALUE
         //| self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
         //| self::BUG_CASESENSITIVE_NAMES
         //| self::BUG_HANDLE_PROPGROUPS_IN_QUERY

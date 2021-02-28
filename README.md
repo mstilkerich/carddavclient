@@ -19,6 +19,8 @@ This is a library for PHP applications to interact with addressbooks stored on C
   for the HTTP traffic, which tends to be verbose and therefore logging for HTTP could be done to a separate location or
   disabled independent of the library's own log messages.
 
+See the [feature matrix](doc/QUIRKS.md) for which services to my observations support which features; the file also contains a list of the known issues I am aware of with the different servers.
+
 ## Tested Servers
 
 Currently, this library has been tested to interoperate with:

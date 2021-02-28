@@ -11,18 +11,130 @@ supported CardDAV server features.
 
 ## Feature Matrix
 
-- iCloud apparently does not support param-filter. It simply ignores the filter and returns all cards that match the
-  remaining conditions, i.e. at least that the property that contains the param-filter is defined is used as filter.
-- Radicale and iCloud do not support client-side requested limit of results in addressbook-query report. According to
-  RFC 6352, this is ok as the server may disregard a client-side requested limit.
-- Sabre/DAV does not support addressdata filter in multiget REPORT ([PR](https://github.com/sabre-io/dav/pull/1310))
+The following matrix lists which features are supported by which CardDAV service/server implementation, in the
+latest released version at the time of this writing (see commit log for when this was updated). Following the
+table, you find a short description of each feature. This list does not consider how well or buggy the feature
+is implemented. For known server issues, see the Known issues section below.
 
-FEAT_FILTER_ALLOF | Allof/AND filtering at the filter level not supported
---------|----------------------------------------------------------
-Affected servers / services | iCloud
-Description | The server does not support allof test of multiple prop-filters (i.e. test="allof" at the filter level). It does support allof matching at the prop-filter level.
-Affected operations | `AddressbookCollection::query()` when called with `$matchAll = true` parameter and multiple top-level filter conditions.
-User-visibile impact and possible workaround | The `query()` result may contain unexpected results.
+- Sabre/DAV is the CardDAV implementation used by Nextcloud, Owncloud, Baïkal, and grammm (and possibly more).
+- Radicale is the CardDAV implementation used by Synology DSM contacts app (again, there may be more I am not aware of).
+
+Feature                     | iCloud | Google | Sabre | Davical | Radicale
+----------------------------|--------|--------|-------|---------|---------
+sync-collection             |   ✓    |   ✓    |   ✓   |   ✓     |   ✓
+addressbook-multiget        |   ✓    |   ✓    |   ✓   |   ✓     |   ✓
+Partial cards with multiget |   ✗    |   ✗    |   ✗   |   ✗     |   ✗
+addressbook-query           |   ✓    |   ✓    |   ✓   |   ✓     |   ✓
+Partial cards with query    |   ✗    |   ✓    |   ✓   |   ✓     |   ✗
+Result limitation with query|   ✗    |   ✓    |   ✓   |   ✓     |   ✗
+FEAT_FILTER_ALLOF           |   ✗    |   ✓    |   ✓   |   ✓     |   ✓
+FEAT_PARAMFILTER            |   ✗    |   ✓    |   ✓   |   ✓     |   ✓
+FEAT_ALLOF_SINGLEPROP       |   ✓    |   ✗    |   ✗   |   ✓     |   ✗
+
+
+### Feature descriptions
+
+#### sync-collection
+
+The sync-collection REPORT (RFC 6578) allows efficient incremental synchronization with a server. With each
+synchronization, the server provides a so-called sync-token that represents the state of the addressbook at the server
+side at the time of synchronization. The client remembers this sync-token and provides it to the server with the next
+sync request. The server will then only report the cards that have been added/changed/removed since the last
+synchronization.
+
+If a server does not support this report, carddavclient falls back to determining the changed cards itself by requesting
+the getetag properties of all cards in the addressbook (getetag identifies the state of the card on the server, i.e. if
+a card is modified its getetag property changes). This is less efficient than the sync-collection report.
+
+The carddavclient library will automatically determine if the server supports sync-collection and transparently fall
+back to the slower synchronization mechanism if it does not.  (See `Sync::synchronize()`).
+
+#### addressbook-multiget
+
+The addressbook-multiget report (RFC 6352) allows to fetch multiple cards from a server in a single request. It is thus
+more efficient than the alternative of fetching each needed card in a separate request. It is used by
+`Sync::synchronize()` automatically if supported by the server, otherwise it transparently falls back to fetching the
+cards in separate requests.
+
+##### Partial cards with multiget
+
+A feature specified for the multiget report by RFC 6352 is the partial retrieval of cards. It allows the client to
+request only specific VCard properties (e.g., `FN`, `EMAIL`) from the server. This specifically can greatly speed up the
+retrieval of cards by omitting large properties such as `PHOTO` in case they are not required. This feature is exposed
+by carddavclient as the `$requestedVCardProps` parameter of `Sync::synchronize()`. Unfortunately, to date I have not
+found a server actually supporting this feature. For Sabre/DAV, see [PR](https://github.com/sabre-io/dav/pull/1310).
+
+#### addressbook-query
+
+The addressbook-query report (RFC 6352) allows to query cards from an addressbook that match certain filter criteria.
+This is an alternative to synchronization for efficiently using a CardDAV addressbook without keeping a local copy. This
+functionality is exposed by carddavclient via the `AddressbookCollection::query()` interface.
+
+The filter for an addressbook-query report consists of one or more property filters (`prop-filter`), that match on a
+VCard property (e.g., `FN`, `EMAIL`). If multiple property filters are given, one can choose whether all of the filters
+need to match (`allof` / `AND`) or are single match is sufficient (`anyof` / `OR`) for a card to be returned.
+
+Each property filter can match on whether a property is defined with an arbitrary value, is not defined, has a value
+matching or not matching a text filter, or matching a parameter filter (`param-filter`). It is possible to combine a
+textual match and a parameter filter, with the same `allof` vs. `anyof` matching behavior as for multiple property
+filters.
+
+A parameter filter can match on whether a defined property has the given parameter (e.g. `TYPE`) defined with an
+arbitrary value, has the parameter not defined, or has the parameter defined with a value that matches (or does not
+match) a text filter.
+
+##### Partial cards with query
+
+Allows partial retrieval of cards in the same way as for [multiget](#partial-cards-with-multiget). With
+addressbook-query, however, this feature is supported by more servers and also of increased importance as the use cases
+of addressbook-query tend to incur more interaction with the CardDAV server, and thus avoidance of unneeded traffic
+weighs-higher. This feature is available through carddavclient as the `$requestedVCardProps` parameter of the
+`AddressbookCollection::query()` API.
+
+##### Result limitation with query
+
+Allows to limit the results returned by addressbook query to a maximum number of cards. This helps in use cases such as
+autocompletion where it makes no sense to present a large amount of records to the user. This feature is available
+through carddavclient as the `$limit` parameter of the `AddressbookCollection::query()` API.
+
+##### Allof/AND filtering at the filter level with query (`FEAT_FILTER_ALLOF`)
+
+Allows to use AND filtering for multiple property filters, i.e. all the filters need to match a card to be returned in
+the result of an addressbook-query. This feature corresponds to the `matchAll=true` setting available in the elaborate
+form of the `$conditions` parameter to the `AddressbookCollection::query()` API.
+
+Normally als CardDAV servers should support this, but iCloud does not. Instead, it appears to apply `anyof` semantics,
+resulting in extra cards in the result that do not match the filter.
+
+##### Support for parameter filter with query (`FEAT_PARAMFILTER`)
+
+Allows to specify parameter filters inside a property filter. These can match a property only when it has a specific
+parameter (not) defined, or defined (not) matching a specific value.
+
+iCloud apparently does not support param-filter. It simply ignores the filter and returns all cards that match the
+remaining conditions, i.e. at least that the property that contains the param-filter is defined is used as filter.
+
+##### Same value of a multi-value property needs to match all filters of a prop-filter (`FEAT_ALLOF_SINGLEPROP`)
+
+I am actually not sure whether this really is a feature or differing behavior can be considered a bug, because RFC 6352
+is not entirely clear on the behavior. It is best explained by an example: Say we have a vcard with a multiple values
+for a property, such as `EMAIL` (for brevity I omit the other parts of the vcard):
+
+```
+EMAIL:doe@big.corp
+EMAIL:johndoe@example.com
+```
+
+If we use a property filter containing several text match sub-filters, it is not clear whether the same value of the
+property needs to match all the sub-filters, or whether each of the sub-filters must be matched by any property. For
+example, in the complex filter syntax of `AddressbookCollection::query()`: `['/doe/^', '/.com/$', 'matchAll' => true]]`.
+
+From my perspective, this filter searches for cards that have an `EMAIL` starting with `doe` and ending in `.com`. So I
+would not want the above card to be returned. However, the first email address matches the first sub-filter (starts with
+`doe`), but not the second sub-filter (ends with `.com`). The second email address matches the second sub-filter, but
+not the first. Now for servers supporting this feature, a single value of the multi-value property (here a single email
+address) must match all filters, and consequently the above example card will not match the example filter. Some servers
+that are marked to not have this feature work differently though and will return the card.
 
 ## Known issues and quirks of CardDAV server implementations
 

@@ -21,41 +21,58 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Objects of this class represent a collection on a WebDAV server.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
+/**
+ * Represents a collection on a WebDAV server.
+ */
 class WebDavCollection extends WebDavResource
 {
-    /** @var list<string> */
+    /**
+     * List of properties to query in refreshProperties() and returned by getProperties().
+     * @psalm-var list<string>
+     * @see WebDavResource::getProperties()
+     * @see WebDavResource::refreshProperties()
+     */
     private const PROPNAMES = [
         XmlEN::SYNCTOKEN,
         XmlEN::SUPPORTED_REPORT_SET,
         XmlEN::ADD_MEMBER
     ];
 
+    /**
+     * Returns the sync token of this collection.
+     *
+     * Note that the value may be cached. If this resource was just created, this is not an issue, but if a property
+     * cache may exist for a longer time call {@see WebDavResource::refreshProperties()} first to ensure an up to date
+     * sync token is provided.
+     *
+     * @return ?string The sync token, or null if the server does not provide a sync-token for this collection.
+     */
     public function getSyncToken(): ?string
     {
         $props = $this->getProperties();
         return $props[XmlEN::SYNCTOKEN] ?? null;
     }
 
+    /**
+     * Queries whether the server supports the sync-collection REPORT on this collection.
+     * @return bool True if sync-collection is supported for this collection.
+     */
     public function supportsSyncCollection(): bool
     {
         return $this->supportsReport(XmlEN::REPORT_SYNCCOLL);
     }
 
-
     /**
      * Returns the child resources of this collection.
      *
-     * @return WebDavResource[] The children of this collection.
+     * @psalm-return list<WebDavResource>
+     * @return array<int,WebDavResource> The children of this collection.
      */
     public function getChildren(): array
     {
@@ -81,12 +98,7 @@ class WebDavCollection extends WebDavResource
     }
 
     /**
-     * Provides the list of property names that should be requested upon call of refreshProperties().
-     *
-     * @return list<string> A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
-     *
-     * @see self::getProperties()
-     * @see self::refreshProperties()
+     * {@inheritdoc}
      */
     protected function getNeededCollectionPropertyNames(): array
     {
@@ -95,6 +107,13 @@ class WebDavCollection extends WebDavResource
         return array_values(array_unique($propNames));
     }
 
+    /**
+     * Checks if the server supports the given REPORT on this collection.
+     *
+     * @param string $reportElement
+     *  The XML element name of the REPORT of interest, including namespace (e.g. {DAV:}sync-collection).
+     * @return bool True if the report is supported on this collection.
+     */
     protected function supportsReport(string $reportElement): bool
     {
         $props = $this->getProperties();

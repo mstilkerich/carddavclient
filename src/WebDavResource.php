@@ -30,25 +30,41 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\XmlElements\Prop;
 
 /**
- * Objects of this class represent a resource on a WebDAV server.
+ * Represents a resource on a WebDAV server.
  *
  * @psalm-import-type PropTypes from Prop
  */
 class WebDavResource implements \JsonSerializable
 {
-    /** @var string URI of the Collection */
+    /**
+     * URI of the resource
+     * @var string
+     */
     protected $uri;
 
-    /** @var PropTypes WebDAV properties of the Resource */
+    /**
+     * Cached WebDAV properties of the resource
+     * @psalm-var PropTypes
+     * @var array<string, mixed>
+     */
     private $props = [];
 
-    /** @var Account The CardDAV account this WebDAV resource is associated/accessible with. */
+    /**
+     * The CardDAV account this resource is associated/accessible with
+     * @var Account
+     */
     protected $account;
 
-    /** @var CardDavClient A CardDavClient object for the account's base URI */
+    /**
+     * CardDavClient object for the account's base URI
+     * @var CardDavClient
+     */
     private $client;
 
-    /** @var list<string> */
+    /**
+     * List of properties to query in refreshProperties() and returned by getProperties().
+     * @psalm-var list<string>
+     */
     private const PROPNAMES = [
         XmlEN::RESTYPE,
     ];
@@ -64,10 +80,13 @@ class WebDavResource implements \JsonSerializable
      * the URI with the server, so this is a checked form of instantiation whereas no server communication occurs when
      * using the constructor.
      *
-     * @param string $uri The target URI of the resource.
-     * @param Account $account The account by which the URI shall be accessed.
-     * @param ?string[] $restype Array with the DAV:resourcetype properties of the URI (if already available saves the
-     *                           query)
+     * @param string $uri
+     *  The target URI of the resource.
+     * @param Account $account
+     *  The account by which the URI shall be accessed.
+     * @psalm-param null|list<string> $restype
+     * @param null|array<int,string> $restype
+     *  Array with the DAV:resourcetype properties of the URI (if already available saves the query)
      * @return WebDavResource An object that is an instance of the most suited subclass of WebDavResource.
      */
     public static function createInstance(string $uri, Account $account, ?array $restype = null): WebDavResource
@@ -87,6 +106,14 @@ class WebDavResource implements \JsonSerializable
         }
     }
 
+    /**
+     * Constructs a WebDavResource object.
+     *
+     * @param string $uri
+     *  The target URI of the resource.
+     * @param Account $account
+     *  The account by which the URI shall be accessed.
+     */
     public function __construct(string $uri, Account $account)
     {
         $this->uri = $uri;
@@ -98,10 +125,12 @@ class WebDavResource implements \JsonSerializable
     /**
      * Returns the standard WebDAV properties for this resource.
      *
-     * Retrieved from the server on first request, cached afterwards. Use refreshProperties() to force update of cached
-     * properties.
+     * Retrieved from the server on first request, cached afterwards. Use {@see WebDavResource::refreshProperties()} to
+     * force update of cached properties.
      *
-     * @return PropTypes
+     * @psalm-return PropTypes
+     * @return array<string, mixed>
+     *  Array mapping property name to corresponding value(s). The value type depends on the property.
      */
     protected function getProperties(): array
     {
@@ -111,6 +140,11 @@ class WebDavResource implements \JsonSerializable
         return $this->props;
     }
 
+    /**
+     * Forces a refresh of the cached standard WebDAV properties for this resource.
+     *
+     * @see WebDavResource::getProperties()
+     */
     public function refreshProperties(): void
     {
         $propNames = $this->getNeededCollectionPropertyNames();
@@ -123,32 +157,57 @@ class WebDavResource implements \JsonSerializable
         }
     }
 
+    /**
+     * Allows to serialize WebDavResource object to JSON.
+     *
+     * @return array<string, string> Associative array of attributes to serialize.
+     */
     public function jsonSerialize(): array
     {
         return [ "uri" => $this->uri ];
     }
 
+    /**
+     * Returns the Account this resource belongs to.
+     */
     public function getAccount(): Account
     {
         return $this->account;
     }
 
+    /**
+     * Provides a CardDavClient object to interact with the server for this resource.
+     *
+     * The base URL used by the returned client is the URL of this resource.
+     *
+     * @return CardDavClient
+     *  A CardDavClient object to interact with the server for this resource.
+     */
     public function getClient(): CardDavClient
     {
         return $this->client;
     }
 
+    /**
+     * Returns the URI of this resource.
+     */
     public function getUri(): string
     {
         return $this->uri;
     }
 
+    /**
+     * Returns the path component of the URI of this resource.
+     */
     public function getUriPath(): string
     {
         $uricomp = \Sabre\Uri\parse($this->getUri());
         return $uricomp["path"] ?? "/";
     }
 
+    /**
+     * Returns the basename (last path component) of the URI of this resource.
+     */
     public function getBasename(): string
     {
         $path = $this->getUriPath();
@@ -158,7 +217,14 @@ class WebDavResource implements \JsonSerializable
     }
 
     /**
-     * @return array{body: string}
+     * Downloads the content of a given resource.
+     *
+     * @param string $uri
+     *  URI of the requested resource. May be relative to the URI of this resource.
+     *
+     * @psalm-return array{body: string}
+     * @return array<string,string>
+     *  An associative array where the key 'body' maps to the content of the requested resource.
      */
     public function downloadResource(string $uri): array
     {
@@ -171,10 +237,11 @@ class WebDavResource implements \JsonSerializable
     /**
      * Provides the list of property names that should be requested upon call of refreshProperties().
      *
-     * @return list<string> A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
+     * @psalm-return list<string>
+     * @return array<int,string> A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
      *
-     * @see self::getProperties()
-     * @see self::refreshProperties()
+     * @see WebDavResource::getProperties()
+     * @see WebDavResource::refreshProperties()
      */
     protected function getNeededCollectionPropertyNames(): array
     {

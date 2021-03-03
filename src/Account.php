@@ -21,16 +21,15 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * This is a simple class to represent an account on a CardDAV Server.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
+/**
+ * Represents an account on a CardDAV Server.
+ */
 class Account implements \JsonSerializable
 {
     /********* PROPERTIES *********/
@@ -40,13 +39,35 @@ class Account implements \JsonSerializable
     /** @var string */
     private $password;
 
-    /** @var string URI originally used to discover the account. */
+    /**
+     * URI originally used to discover the account.
+     * @var string
+     */
     private $discoveryUri;
 
-    /** @var ?string URL of the discovered CardDAV server, with empty path. May be null if not discovered yet. */
+    /**
+     * URL of the discovered CardDAV server, with empty path. May be null if not discovered yet.
+     * @var ?string
+     */
     private $baseUrl;
 
-    /********* PUBLIC FUNCTIONS *********/
+    /**
+     * Construct a new Account object.
+     * @param string $discoveryUri
+     *  The URI to use for service discovery. This can be a partial URI, in the simplest case just a domain name. Note
+     *  that if no protocol is given, https will be used. Unencrypted HTTP will only be done if explicitly given (e.g.
+     *  http://example.com).
+     * @param string $username
+     *  The username to use for authentication.
+     * @param string $password
+     *  The password to use for authentication. If no password is needed (e.g. GSSAPI/Kerberos), this may be an empty
+     *  string.
+     * @param string $baseUrl
+     *  The full URL of the CardDAV service. This URL is used as base URL for the underlying {@see CardDavClient} that
+     *  can be retrieved using {@see Account::getClient()}. When relative URIs are passed to the client, they will be
+     *  relative to this base URL. If this account is used for discovery with the {@see Services\Discovery} service,
+     *  this parameter can be omitted.
+     */
     public function __construct(string $discoveryUri, string $username, string $password, string $baseUrl = null)
     {
         $this->discoveryUri = $discoveryUri;
@@ -58,26 +79,31 @@ class Account implements \JsonSerializable
     /**
      * Constructs an Account object from an array representation.
      *
-     * @param string[] $a An associative array containing the Account attributes.
-     *                    Keys: discoveryUri, username, password, baseUrl with the corresponding meaning from the
-     *                    regular constructor.
+     * This can be used to reconstruct/deserialize an Account from a stored (JSON) representation.
+     *
+     * @param array<string,?string> $props An associative array containing the Account attributes.
+     *  Keys: discoveryUri, username, password, baseUrl with the meaning from {@see Account::__construct()}
+     * @see Account::jsonSerialize()
      */
-    public static function constructFromArray(array $a): Account
+    public static function constructFromArray(array $props): Account
     {
         $requiredProps = [ 'discoveryUri', 'username', 'password' ];
         foreach ($requiredProps as $prop) {
-            if (!isset($a[$prop])) {
+            if (!isset($props[$prop])) {
                 throw new \Exception("Array used to reconstruct account does not contain required property $prop");
             }
         }
 
-        return new Account($a["discoveryUri"], $a["username"], $a["password"], $a["baseUrl"] ?? null);
+        /** @var array{discoveryUri: string, username: string, password: string} & array<string,string> $props */
+
+        return new Account($props["discoveryUri"], $props["username"], $props["password"], $props["baseUrl"] ?? null);
     }
 
     /**
      * Allows to serialize an Account object to JSON.
      *
-     * @return (?string)[] Associative array of attributes to serialize.
+     * @return array<string, ?string> Associative array of attributes to serialize.
+     * @see Account::constructFromArray()
      */
     public function jsonSerialize(): array
     {
@@ -92,28 +118,38 @@ class Account implements \JsonSerializable
     /**
      * Provides a CardDavClient object to interact with the server for this account.
      *
+     * @param string $baseUrl
+     *  A base URL to use by the client to resolve relative URIs. If not given, the base url of the Account is used.
+     *  This is useful, for example, to override the base path with that of a collection.
+     *
      * @return CardDavClient
      *  A CardDavClient object to interact with the server for this account.
      */
-    public function getClient(string $baseUrl = null): CardDavClient
+    public function getClient(?string $baseUrl = null): CardDavClient
     {
         $clientUri = $baseUrl ?? $this->getUrl();
         return new CardDavClient($clientUri, $this->username, $this->password);
     }
 
+    /**
+     * Returns the discovery URI for this Account.
+     */
     public function getDiscoveryUri(): string
     {
         return $this->discoveryUri;
     }
 
     /**
-     * Set the base URL of this account once the server has been discovered.
+     * Set the base URL of this account once the service URL has been discovered.
      */
     public function setUrl(string $url): void
     {
         $this->baseUrl = $url;
     }
 
+    /**
+     * Returns the base URL of the CardDAV service.
+     */
     public function getUrl(): string
     {
         if (empty($this->baseUrl)) {
@@ -123,6 +159,12 @@ class Account implements \JsonSerializable
         return $this->baseUrl;
     }
 
+    /**
+     * Provides a readable form of the core properties of the Account.
+     *
+     * This is meant for printing to a human, not for parsing, and therefore may change without considering this a
+     * backwards incompatible change.
+     */
     public function __toString(): string
     {
         $str = $this->discoveryUri;
@@ -189,6 +231,9 @@ class Account implements \JsonSerializable
      *  The user's addressbook home URI (string), or null in case of error. The returned URI is suited
      *  to be used for queries with this client (i.e. either a full URI,
      *  or meaningful as relative URI to the base URI of this client).
+     *
+     * @todo Per RFC6352 several home locations could be returned, but we currently only use one. However, it is
+        rather unlikely that there would be several addressbook home locations.
      */
     public function findAddressbookHome(string $principalUri): ?string
     {
@@ -198,8 +243,6 @@ class Account implements \JsonSerializable
             $client = $this->getClient();
             $result = $client->findProperties($principalUri, [XmlEN::ABOOK_HOME]);
 
-            // FIXME per RFC several home locations could be returned, but we currently only use one. However, it is
-            // rather unlikely that there would be several addressbook home locations.
             if (isset($result[0]["props"][XmlEN::ABOOK_HOME])) {
                 /** @var list<string> $hrefs */
                 $hrefs = $result[0]["props"][XmlEN::ABOOK_HOME];

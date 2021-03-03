@@ -31,7 +31,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\XmlElements\{Filter,ResponsePropstat,ResponseStatus};
 
 /**
- * Objects of this class represent an addressbook collection on a WebDAV server.
+ * Represents an addressbook collection on a WebDAV server.
  *
  * @psalm-import-type SimpleConditions from Filter
  * @psalm-import-type ComplexConditions from Filter
@@ -44,7 +44,12 @@ use MStilkerich\CardDavClient\XmlElements\{Filter,ResponsePropstat,ResponseStatu
  */
 class AddressbookCollection extends WebDavCollection
 {
-    /** @var list<string> */
+    /**
+     * List of properties to query in refreshProperties() and returned by getProperties().
+     * @psalm-var list<string>
+     * @see WebDavResource::getProperties()
+     * @see WebDavResource::refreshProperties()
+     */
     private const PROPNAMES = [
         XmlEN::DISPNAME,
         XmlEN::GETCTAG,
@@ -266,6 +271,7 @@ class AddressbookCollection extends WebDavCollection
      * @return array<string, array{vcard: VCard, etag: string}>
      *
      * @see Filter
+     * @since v1.1.0
      */
     public function query(
         array $conditions,

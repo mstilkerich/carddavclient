@@ -74,7 +74,9 @@ class PropFilter implements \Sabre\Xml\XmlSerializable
     public $property;
 
     /**
-     * @var ?list<TextMatch|ParamFilter> List of filter conditions. Null to match if the property is not defined.
+     * @psalm-var null|list<TextMatch|ParamFilter>
+     * @var null|array<int, TextMatch|ParamFilter>
+     *  List of filter conditions. Null to match if the property is not defined.
      * @psalm-readonly
      */
     public $conditions;

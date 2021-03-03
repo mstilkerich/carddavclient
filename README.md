@@ -98,10 +98,8 @@ also uses this library for the interaction with the CardDAV server.
 
 ### API documentation
 
-An overview of the API is availabe [here](doc/README.md).
+An overview of the API is available [here](doc/README.md).
 
-Documentation for the API can be generated from the source code using [phpDocumentor](https://www.phpdoc.org/).
+The API documentation for the latest released version can be found [here](https://mstilkerich.github.io/carddavclient/).
 
-```sh
-phpdoc -d src/ -t doc/api/ --title="CardDAV Client Library"
-```
+Documentation for the API can be generated from the source code using [phpDocumentor](https://www.phpdoc.org/) by running `make doc`.

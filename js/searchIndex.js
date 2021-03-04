@@ -78,7 +78,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\AddressbookCollection",
             "name": "AddressbookCollection",
-            "summary": "Objects\u0020of\u0020this\u0020class\u0020represent\u0020an\u0020addressbook\u0020collection\u0020on\u0020a\u0020WebDAV\u0020server.",
+            "summary": "Represents\u0020an\u0020addressbook\u0020collection\u0020on\u0020a\u0020WebDAV\u0020server.",
             "url": "classes/MStilkerich-CardDavClient-AddressbookCollection.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\AddressbookCollection\u003A\u003AgetName\u0028\u0029",
@@ -98,12 +98,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\AddressbookCollection\u003A\u003AsupportsMultiGet\u0028\u0029",
             "name": "supportsMultiGet",
-            "summary": "",
+            "summary": "Queries\u0020whether\u0020the\u0020server\u0020supports\u0020the\u0020addressbook\u002Dmultiget\u0020REPORT\u0020on\u0020this\u0020addressbook\u0020collection.",
             "url": "classes/MStilkerich-CardDavClient-AddressbookCollection.html#method_supportsMultiGet"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\AddressbookCollection\u003A\u003AgetCTag\u0028\u0029",
             "name": "getCTag",
-            "summary": "",
+            "summary": "Retrieves\u0020the\u0020getctag\u0020property\u0020for\u0020this\u0020addressbook\u0020collection\u0020\u0028if\u0020supported\u0020by\u0020the\u0020server\u0029.",
             "url": "classes/MStilkerich-CardDavClient-AddressbookCollection.html#method_getCTag"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\AddressbookCollection\u003A\u003AgetCard\u0028\u0029",
@@ -1005,6 +1005,41 @@ Search.appendIndex(
             "name": "props",
             "summary": "",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Prop.html#property_props"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter",
+            "name": "PropFilter",
+            "summary": "Class\u0020to\u0020represent\u0020XML\u0020urn\u003Aietf\u003Aparams\u003Axml\u003Ans\u003Acarddav\u003Aprop\u002Dfilter\u0020elements\u0020as\u0020PHP\u0020objects.\u0020\u0028RFC\u00206352\u0029",
+            "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Constructs\u0020a\u0020PropFilter\u0020element.",
+            "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#method___construct"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003AxmlSerialize\u0028\u0029",
+            "name": "xmlSerialize",
+            "summary": "This\u0020function\u0020encodes\u0020the\u0020elements\u0020value\u0020\u0028not\u0020the\u0020element\u0020itself\u0021\u0029\u0020to\u0020the\u0020given\u0020XML\u0020writer.",
+            "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#method_xmlSerialize"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003AxmlAttributes\u0028\u0029",
+            "name": "xmlAttributes",
+            "summary": "Produces\u0020a\u0020list\u0020of\u0020attributes\u0020for\u0020this\u0020filter\u0020suitable\u0020to\u0020pass\u0020to\u0020a\u0020Sabre\u0020XML\u0020Writer.",
+            "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#method_xmlAttributes"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003A\u0024testType",
+            "name": "testType",
+            "summary": "",
+            "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#property_testType"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003A\u0024property",
+            "name": "property",
+            "summary": "",
+            "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#property_property"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003A\u0024conditions",
+            "name": "conditions",
+            "summary": "",
+            "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#property_conditions"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Propstat",
             "name": "Propstat",

@@ -21,10 +21,6 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Class Sync
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Services;
@@ -33,24 +29,33 @@ use MStilkerich\CardDavClient\{AddressbookCollection, CardDavClient, Config};
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\XmlElements\{ResponseStatus, ResponsePropstat};
 
+/**
+ * Performs a synchronization of a local cache of the addressbook to the current state on the server.
+ *
+ * If supported by the server, the synchronization uses the sync-collection (RFC 6578) report to efficiently request the
+ * changed cards and the addressbook-multiget (RFC 6352) report to fetch all changed cards in a single request. If the
+ * server does not support these operations, the service falls back to alternative methods transparently.
+ *
+ * @package Public\Services
+ */
 class Sync
 {
-    /********* PROPERTIES *********/
-
-
-    /********* PUBLIC FUNCTIONS *********/
-
     /**
      * Performs a synchronization of the given addressbook.
      *
      * @param AddressbookCollection $abook The addressbook to synchronize
      * @param SyncHandler $handler A SyncHandler object that will be informed about new/changed and deleted cards.
-     * @param list<string> $requestedVCardProps List of VCard properties to request for retrieved VCards. If empty the
-     *                                          full VCards are retrieved.
-     * @param string $prevSyncToken Sync-token of a previous sync when performing an incremental sync. Empty string to
-     *                              perform a full sync (all cards of the addressbook will be reported as changed).
+     * @psalm-param list<string> $requestedVCardProps
+     * @param string[] $requestedVCardProps
+     *  List of VCard properties to request for retrieved VCards. If empty the full VCards are retrieved. Note that many
+     *  servers do not support this and will always provide the full cards regardless of this parameter.
+     * @param string $prevSyncToken
+     *  Sync-token of a previous sync when performing an incremental sync. Empty string to perform a full sync (all
+     *  cards of the addressbook will be reported as changed).
      * @return string
      *  The sync token corresponding to the just synchronized (or slightly earlier) state of the collection.
+     *
+     * @api
      */
     public function synchronize(
         AddressbookCollection $abook,
@@ -81,12 +86,11 @@ class Sync
         return $syncResult->syncToken;
     }
 
-    /********* PRIVATE FUNCTIONS *********/
-
     /**
-     * Performs a synchronization of the given addressbook for one synchronization chunk as dicated by the server.
+     * Performs a synchronization of the given addressbook for one synchronization chunk as dictated by the server.
      *
-     * @param list<string> $requestedVCardProps
+     * @psalm-param list<string> $requestedVCardProps
+     * @param string[] $requestedVCardProps
      * @return SyncResult The synchronization result object.
      */
     private function synchronizeOneBatch(
@@ -177,6 +181,18 @@ class Sync
         return $syncResult;
     }
 
+    /**
+     * Determines changes to the addressbook at the server side using the sync-collection REPORT.
+     *
+     * @param CardDavClient $client
+     *  The client to use for communicating with the server.
+     * @param AddressbookCollection $abook
+     *  The addressbook that should be synchronized.
+     * @param string $prevSyncToken
+     *  The sync token of the last sync, or empty string if this is the initial sync.
+     * @return SyncResult
+     *  Changes to the addressbook reported by the server with respect to $prevSyncToken, including a new sync token.
+     */
     private function syncCollection(
         CardDavClient $client,
         AddressbookCollection $abook,
@@ -233,6 +249,21 @@ class Sync
         return $syncResult;
     }
 
+    /**
+     * Determines changes to the addressbook at the server side using PROPFIND.
+     *
+     * This performs a card-by-card ETag comparison of the current ETags reported by the server and the locally stored
+     * ETags corresponding to the state of the last retrieved cards.
+     *
+     * @param CardDavClient $client
+     *  The client to use for communicating with the server.
+     * @param AddressbookCollection $abook
+     *  The addressbook that should be synchronized.
+     * @param SyncHandler $handler
+     *  The application-side sync handler, that will have to provide the list of local cards and their ETags.
+     * @return SyncResult
+     *  Changes to the addressbook reported by the server with respect to $prevSyncToken, including a new sync token.
+     */
     private function determineChangesViaETags(
         CardDavClient $client,
         AddressbookCollection $abook,
@@ -289,7 +320,21 @@ class Sync
     }
 
     /**
-     * @param list<string> $requestedVCardProps
+     * Downloads a set of cards from the server using addressbook-multiget.
+     *
+     * The downloaded cards are stored to {@see SyncResult::$changedObjects} along with the corresponding ETag. In case
+     * the data for a card cannot be retrieved, a warning is logged and the corresponding card will have no data
+     * associated.
+     *
+     * @param CardDavClient $client
+     *  The client to use for communicating with the server.
+     * @param AddressbookCollection $abook
+     *  The addressbook to fetch the cards from.
+     * @param SyncResult $syncResult
+     *  The SyncResult object to store the retrieved cards to, which already contains the URIs of the changed cards to
+     *  fetch.
+     * @psalm-param list<string> $requestedVCardProps
+     * @param string[] $requestedVCardProps
      */
     private function multiGetChanges(
         CardDavClient $client,

@@ -21,7 +21,6 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
@@ -33,6 +32,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * Class to represent XML DAV:response elements with status children as PHP objects.
  *
  * @psalm-immutable
+ *
+ * @package Internal\XmlElements
  */
 class ResponseStatus extends Response
 {

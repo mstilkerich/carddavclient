@@ -59,6 +59,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * @psalm-immutable
  *
  * @psalm-import-type DeserializedElem from Deserializers
+ *
+ * @package Internal\XmlElements
  */
 abstract class Response implements \Sabre\Xml\XmlDeserializable
 {

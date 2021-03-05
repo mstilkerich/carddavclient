@@ -24,3 +24,5 @@ issues have so far been encountered:
   a bad request result should occur for any other value. [Issue](https://issuetracker.google.com/issues/160190530)
 - Google reports cards as deleted that have not been deleted between the last sync and the current one,
   but probably before that. [Issue](https://issuetracker.google.com/issues/160192237)
+
+<!-- vim: set ts=4 sw=4 expandtab fenc=utf8 ff=unix tw=120: -->

@@ -41,7 +41,7 @@ tests-interop: tests/interop/phpunit.xml
 
 doc:
 	rm -rf $(DOCDIR)
-	phpDocumentor.phar -d src/ -t $(DOCDIR) --title="CardDAV Client Library" --setting=graphs.enabled=true
+	phpDocumentor.phar -d src/ -t $(DOCDIR) --title="CardDAV Client Library" --setting=graphs.enabled=true --validate
 	[ -d ../carddavclient-pages ] && rsync -r --delete --exclude .git doc/api/ ../carddavclient-pages
 
 # For github CI system - if AccountData.php is not available, create from AccountData.php.dist

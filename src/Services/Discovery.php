@@ -28,7 +28,10 @@ namespace MStilkerich\CardDavClient\Services;
 use MStilkerich\CardDavClient\{Account, AddressbookCollection, CardDavClient, Config, WebDavCollection};
 
 /**
- * Class Discovery - Provides a service to discovery the addressbooks for a CardDAV account.
+ * Provides a service to discover the addressbooks for a CardDAV account.
+ *
+ * It implements the discovery using the mechanisms specified in RFC 6764, which is based on DNS SRV/TXT records and/or
+ * well-known URI redirection on the server.
  *
  * @psalm-type Server = array{
  *   host: string,
@@ -40,28 +43,36 @@ use MStilkerich\CardDavClient\{Account, AddressbookCollection, CardDavClient, Co
  *
  * @psalm-type SrvRecord = array{pri: int, weight: int, target: string, port: int}
  * @psalm-type TxtRecord = array{txt: string}
+ *
+ * @package Public\Services
  */
 class Discovery
 {
-    /********* PROPERTIES *********/
-
-    /** @var array<string,string> Some builtins for public providers that don't have discovery properly set up. */
+    /**
+     * Some builtins for public providers that don't have discovery properly set up.
+     *
+     * It maps a domain name that is part of the typically used usernames to a working discovery URI. This allows
+     * discovery from data as typically provided by a user without the application having to care about it.
+     *
+     * @var array<string,string>
+     */
     private const KNOWN_SERVERS = [
         "gmail.com" => "www.googleapis.com",
         "googlemail.com" => "www.googleapis.com",
     ];
 
-    /********* PUBLIC FUNCTIONS *********/
-
     /**
      * Discover the addressbooks for a CardDAV account.
      *
      * @param Account $account The CardDAV account providing credentials and initial discovery URI.
+     * @psalm-return list<AddressbookCollection>
+     * @return AddressbookCollection[] The discovered addressbooks.
      *
-     * @return list<AddressbookCollection> An array of the discovered addressbooks.
+     * @throws \Exception
+     *  In case of error, sub-classes of \Exception are thrown, with an error message contained within the \Exception
+     *  object.
      *
-     * @throws \Exception In case of error, sub-classes of \Exception are thrown, with an error message contained within
-     *         the \Exception object.
+     * @api
      */
     public function discoverAddressbooks(Account $account): array
     {
@@ -149,8 +160,6 @@ class Discovery
         return $addressbooks;
     }
 
-    /********* PRIVATE FUNCTIONS *********/
-
     /**
      * Discovers the CardDAV service for the given domain using DNS SRV lookups.
      *
@@ -158,8 +167,10 @@ class Discovery
      * @param bool   $force_ssl If true, only services with transport encryption (carddavs) will be discovered,
      *                          otherwise the function will try to discover unencrypted (carddav) services after failing
      *                          to discover encrypted ones.
-     * @return list<Server> Returns an array of associative arrays of services discovered via DNS. If nothing was found,
-     *                      the returned array is empty.
+     * @psalm-return list<Server>
+     * @return array
+     *  Returns an array of associative arrays of services discovered via DNS. If nothing was found, the returned array
+     *  is empty.
      */
     private function discoverServers(string $host, bool $force_ssl): array
     {
@@ -206,10 +217,10 @@ class Discovery
     /**
      * Orders DNS records by their prio and weight.
      *
-     * TODO weight is not quite correctly handled atm, see RFC2782, but this is not crucial to functionality
+     * @psalm-param SrvRecord $a
+     * @psalm-param SrvRecord $b
      *
-     * @param SrvRecord $a
-     * @param SrvRecord $b
+     * @todo weight is not quite correctly handled atm, see RFC2782, but this is not crucial to functionality
      */
     private static function orderDnsRecords(array $a, array $b): int
     {
@@ -227,8 +238,10 @@ class Discovery
      * lookup is only performed for servers that have themselves been discovery using DNS SRV lookups, using the same
      * service resource record.
      *
-     * @param Server $server An server record (associative array) as returned by discoverServers()
-     * @return list<string> Returns an array of context paths that should be tried for discovery in the provided order.
+     * @psalm-param Server $server
+     * @param array $server A server record (associative array) as returned by discoverServers()
+     * @psalm-return list<string>
+     * @return string[] The context paths that should be tried for discovery in the provided order.
      * @see Discovery::discoverServers()
      */
     private function discoverContextPath(array $server): array

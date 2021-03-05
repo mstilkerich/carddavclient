@@ -46,6 +46,8 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
  *   body?: string,
  *   headers?: array<string, string | list<string>>
  * }
+ *
+ * @package Internal\Communication
  */
 abstract class HttpClientAdapter
 {

@@ -38,6 +38,8 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *   attributes: array<string, string>,
  *   value: mixed
  * }
+ *
+ * @package Internal\XmlElements
  */
 class Deserializers
 {

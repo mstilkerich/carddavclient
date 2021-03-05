@@ -29,6 +29,8 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
 /**
  * Represents a collection on a WebDAV server.
+ *
+ * @package Public\Entities
  */
 class WebDavCollection extends WebDavResource
 {
@@ -52,6 +54,7 @@ class WebDavCollection extends WebDavResource
      * sync token is provided.
      *
      * @return ?string The sync token, or null if the server does not provide a sync-token for this collection.
+     * @api
      */
     public function getSyncToken(): ?string
     {
@@ -62,6 +65,7 @@ class WebDavCollection extends WebDavResource
     /**
      * Queries whether the server supports the sync-collection REPORT on this collection.
      * @return bool True if sync-collection is supported for this collection.
+     * @api
      */
     public function supportsSyncCollection(): bool
     {
@@ -73,6 +77,7 @@ class WebDavCollection extends WebDavResource
      *
      * @psalm-return list<WebDavResource>
      * @return array<int,WebDavResource> The children of this collection.
+     * @api
      */
     public function getChildren(): array
     {

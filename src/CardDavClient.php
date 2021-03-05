@@ -21,10 +21,6 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Class CardDavClient
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
@@ -37,15 +33,20 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\XmlElements\Deserializers;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
-/*
-Other needed features:
-  - Setting extra headers (Depth, Content-Type, charset, If-Match, If-None-Match)
-  - Debug output HTTP traffic to logfile
- */
-
 /**
+ * Implements the operations of the CardDAV protocol.
+ *
+ * This class implements the lower level interactions with the CardDAV server that are utilized by the higher-level
+ * operations offered by the public entities ({@see AddressbookCollection} etc.) and services ({@see Services\Sync},
+ * {@see Services\Discovery}.
+ *
+ * An application interacting with the carddavclient library should not interact with this class directly, and it is
+ * considered an internal part of the library whose interfaces may change without being considered a change of the
+ * library's API.
+ *
  * @psalm-import-type RequestOptions from HttpClientAdapter
  * @psalm-import-type PropTypes from Prop
+ * @package Internal\Communication
  */
 class CardDavClient
 {
@@ -71,6 +72,8 @@ class CardDavClient
     }
 
     /**
+     * Requests a sync-collection REPORT from the CardDAV server.
+     *
      * Note: Google's server does not accept an empty syncToken, though explicitly allowed for initial sync by RFC6578.
      * It will respond with 400 Bad Request and error message "Request contains an invalid argument."
      *

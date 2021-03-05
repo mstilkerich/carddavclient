@@ -34,6 +34,8 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
  * Adapter for the Guzzle HTTP client library.
  *
  * @psalm-import-type RequestOptions from HttpClientAdapter
+ *
+ * @package Internal\Communication
  */
 class HttpClientAdapterGuzzle extends HttpClientAdapter
 {

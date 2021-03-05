@@ -55,6 +55,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  *        collation CDATA "i;unicode-casemap"
  *        negate-condition (yes | no) "no"
  *        match-type (equals|contains|starts-with|ends-with) "contains">
+ *
+ * @package Internal\XmlElements
  */
 class TextMatch implements \Sabre\Xml\XmlSerializable
 {

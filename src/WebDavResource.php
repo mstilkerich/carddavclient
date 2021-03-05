@@ -33,6 +33,8 @@ use MStilkerich\CardDavClient\XmlElements\Prop;
  * Represents a resource on a WebDAV server.
  *
  * @psalm-import-type PropTypes from Prop
+ *
+ * @package Public\Entities
  */
 class WebDavResource implements \JsonSerializable
 {
@@ -88,6 +90,7 @@ class WebDavResource implements \JsonSerializable
      * @param null|array<int,string> $restype
      *  Array with the DAV:resourcetype properties of the URI (if already available saves the query)
      * @return WebDavResource An object that is an instance of the most suited subclass of WebDavResource.
+     * @api
      */
     public static function createInstance(string $uri, Account $account, ?array $restype = null): WebDavResource
     {
@@ -113,6 +116,7 @@ class WebDavResource implements \JsonSerializable
      *  The target URI of the resource.
      * @param Account $account
      *  The account by which the URI shall be accessed.
+     * @api
      */
     public function __construct(string $uri, Account $account)
     {
@@ -144,6 +148,7 @@ class WebDavResource implements \JsonSerializable
      * Forces a refresh of the cached standard WebDAV properties for this resource.
      *
      * @see WebDavResource::getProperties()
+     * @api
      */
     public function refreshProperties(): void
     {
@@ -169,6 +174,7 @@ class WebDavResource implements \JsonSerializable
 
     /**
      * Returns the Account this resource belongs to.
+     * @api
      */
     public function getAccount(): Account
     {
@@ -190,6 +196,7 @@ class WebDavResource implements \JsonSerializable
 
     /**
      * Returns the URI of this resource.
+     * @api
      */
     public function getUri(): string
     {
@@ -198,6 +205,7 @@ class WebDavResource implements \JsonSerializable
 
     /**
      * Returns the path component of the URI of this resource.
+     * @api
      */
     public function getUriPath(): string
     {
@@ -207,6 +215,7 @@ class WebDavResource implements \JsonSerializable
 
     /**
      * Returns the basename (last path component) of the URI of this resource.
+     * @api
      */
     public function getBasename(): string
     {
@@ -220,11 +229,12 @@ class WebDavResource implements \JsonSerializable
      * Downloads the content of a given resource.
      *
      * @param string $uri
-     *  URI of the requested resource. May be relative to the URI of this resource.
+     *  URI of the requested resource.
      *
      * @psalm-return array{body: string}
      * @return array<string,string>
      *  An associative array where the key 'body' maps to the content of the requested resource.
+     * @api
      */
     public function downloadResource(string $uri): array
     {

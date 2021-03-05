@@ -5,3 +5,5 @@ The following diagram shows the classes of the library and shows the public (blu
 ![Class diagram](Classes.svg)
 
 This library uses [semantic versioning](https://semver.org), for which the above identifies the public API.
+
+

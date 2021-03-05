@@ -43,6 +43,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * @template RT of Response
  *
  * @psalm-import-type DeserializedElem from Deserializers
+ *
+ * @package Internal\XmlElements
  */
 class Multistatus implements \Sabre\Xml\XmlDeserializable
 {

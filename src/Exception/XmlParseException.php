@@ -21,14 +21,15 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Exception type to indicate that a parsed XML did not comply with the requirements described in its RFC definition.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Exception;
 
+/**
+ * Exception type to indicate that a parsed XML did not comply with the requirements described in its RFC definition.
+ *
+ * @package Public\Exceptions
+ */
 class XmlParseException extends \Exception
 {
 }

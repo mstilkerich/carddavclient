@@ -41,6 +41,8 @@ use MStilkerich\CardDavClient\XmlElements\{Filter,ResponsePropstat,ResponseStatu
  *   message: string,
  *   node: \Sabre\VObject\Component | \Sabre\VObject\Property
  * }
+ *
+ * @package Public\Entities
  */
 class AddressbookCollection extends WebDavCollection
 {
@@ -65,11 +67,12 @@ class AddressbookCollection extends WebDavCollection
      * component of the URL is returned. This is suggested by RFC6352 to compose the addressbook name.
      *
      * @return string Name of the addressbook
+     * @api
      */
     public function getName(): string
     {
         $props = $this->getProperties();
-        return $props[XmlEN::DISPNAME] ?? basename($this->uri);
+        return $props[XmlEN::DISPNAME] ?? $this->getBasename();
     }
 
     /**
@@ -89,6 +92,8 @@ class AddressbookCollection extends WebDavCollection
      *
      * Note that the result of this function is meant for display, not parsing. Thus the content and formatting of the
      * text may change without considering backwards compatibility.
+     *
+     * @api
      */
     public function getDetails(): string
     {
@@ -137,11 +142,23 @@ class AddressbookCollection extends WebDavCollection
         return $desc;
     }
 
+    /**
+     * Queries whether the server supports the addressbook-multiget REPORT on this addressbook collection.
+     *
+     * @return bool True if addressbook-multiget is supported for this collection.
+     * @api
+     */
     public function supportsMultiGet(): bool
     {
         return $this->supportsReport(XmlEN::REPORT_MULTIGET);
     }
 
+    /**
+     * Retrieves the getctag property for this addressbook collection (if supported by the server).
+     *
+     * @return string The getctag property, or null if not provided by the server.
+     * @api
+     */
     public function getCTag(): ?string
     {
         $props = $this->getProperties();
@@ -158,6 +175,7 @@ class AddressbookCollection extends WebDavCollection
      *   - etag(string): Entity tag of the returned card
      *   - vcf(string): VCard as string
      *   - vcard(VCard): VCard as Sabre/VObject VCard
+     * @api
      */
     public function getCard(string $uri): array
     {
@@ -175,6 +193,7 @@ class AddressbookCollection extends WebDavCollection
      * Deletes a VCard from the addressbook.
      *
      * @param string $uri The URI of the VCard to be deleted.
+     * @api
      */
     public function deleteCard(string $uri): void
     {
@@ -186,14 +205,15 @@ class AddressbookCollection extends WebDavCollection
      * Creates a new VCard in the addressbook.
      *
      * If the given VCard lacks the mandatory UID property, one will be generated. If the server provides an add-member
-     * URI, the new card will be POSTed to that URI. Otherwise, the function attempts to store the card do a URI whose
+     * URI, the new card will be POSTed to that URI. Otherwise, the function attempts to store the card to a URI whose
      * last path component (filename) is derived from the UID of the VCard.
      *
      * @param VCard $vcard The VCard to be stored.
-     * @return array{uri: string, etag: string}
-     *  Associative array with keys
+     * @psalm-return array{uri: string, etag: string}
+     * @return array<string,string> Associative array with keys
      *   - uri (string): URI of the new resource if the request was successful
      *   - etag (string): Entity tag of the created resource if returned by server, otherwise empty string.
+     * @api
      */
     public function createCard(VCard $vcard): array
     {
@@ -247,6 +267,7 @@ class AddressbookCollection extends WebDavCollection
      * @return ?string Returns the ETag of the updated card if provided by the server, null otherwise. If null is
      *                 returned, it must be assumed that the server stored the card with modifications and the card
      *                 should be read back from the server (this is a good idea anyway).
+     * @api
      */
     public function updateCard(string $uri, VCard $vcard, string $etag): ?string
     {
@@ -262,16 +283,24 @@ class AddressbookCollection extends WebDavCollection
     /**
      * Issues an addressbook-query report.
      *
-     * @param SimpleConditions|ComplexConditions $conditions The query filter conditions, see Filter class for format.
-     * @param list<string> $requestedVCardProps A list of the requested VCard properties. If empty array, the full
-     *                                          VCards are requested from the server.
-     * @param bool $matchAll Whether all or any of the conditions needs to match.
-     * @param int $limit Tell the server to return at most $limit results. 0 means no limit.
+     * @psalm-param SimpleConditions|ComplexConditions $conditions
+     * @param array $conditions
+     *  The query filter conditions, see {@see Filter::__construct()} for format.
+     * @psalm-param list<string> $requestedVCardProps
+     * @param string[] $requestedVCardProps
+     *  A list of the requested VCard properties. If empty array, the full VCards are requested from the server.
+     * @param bool $matchAll
+     *  Whether all or any of the conditions needs to match.
+     * @param int $limit
+     *  Tell the server to return at most $limit results. 0 means no limit.
      *
-     * @return array<string, array{vcard: VCard, etag: string}>
-     *
+     * @psalm-return array<string, array{vcard: VCard, etag: string}>
+     * @return array<string, array> Returns an array of matched VCards:
+     *  - The keys of the array are the URIs of the vcards
+     *  - The values are associative arrays with keys etag (type: string) and vcard (type: VCard)
      * @see Filter
      * @since v1.1.0
+     * @api
      */
     public function query(
         array $conditions,
@@ -323,6 +352,9 @@ class AddressbookCollection extends WebDavCollection
 
     /**
      * This function replaces some well-known XML namespaces with a long name with shorter names for printing.
+     *
+     * @param string $s The fully-qualified XML element name (e.g. {urn:ietf:params:xml:ns:carddav}prop)
+     * @return string The short name (e.g. {CARDDAV}prop)
      */
     protected function shortenXmlNamespacesForPrinting(string $s): string
     {
@@ -337,6 +369,7 @@ class AddressbookCollection extends WebDavCollection
      * Validates a VCard before sending it to a CardDAV server.
      *
      * @param VCard $vcard The VCard to be validated.
+     * @throws \InvalidArgumentException if the validation fails.
      */
     protected function validateCard(VCard $vcard): void
     {
@@ -368,10 +401,11 @@ class AddressbookCollection extends WebDavCollection
     /**
      * Provides the list of property names that should be requested upon call of refreshProperties().
      *
-     * @return list<string> A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
+     * @psalm-return list<string>
+     * @return array<int,string> A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').
      *
-     * @see parent::getProperties()
-     * @see parent::refreshProperties()
+     * @see WebDavResource::getProperties()
+     * @see WebDavResource::refreshProperties()
      */
     protected function getNeededCollectionPropertyNames(): array
     {

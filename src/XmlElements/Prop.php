@@ -21,7 +21,6 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\XmlElements;
@@ -47,6 +46,8 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *   '{urn:ietf:params:xml:ns:carddav}addressbook-description'?: string,
  *   '{urn:ietf:params:xml:ns:carddav}max-resource-size'?: int,
  * }
+ *
+ * @package Internal\XmlElements
  */
 class Prop implements \Sabre\Xml\XmlDeserializable
 {

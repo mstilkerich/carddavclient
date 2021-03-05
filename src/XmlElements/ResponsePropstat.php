@@ -32,6 +32,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * Class to represent XML DAV:response elements with propstat children as PHP objects.
  *
  * @psalm-immutable
+ *
+ * @package Internal\XmlElements
  */
 class ResponsePropstat extends Response
 {

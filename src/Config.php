@@ -21,16 +21,17 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Class Config
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient;
 
 use Psr\Log\{LoggerInterface, NullLogger};
 
+/**
+ * Central configuration of the carddavclient library.
+ *
+ * @package Public\Infrastructure
+ */
 class Config
 {
     /** @var LoggerInterface */
@@ -44,8 +45,6 @@ class Config
         self::$logger = $logger ?? new NullLogger();
         self::$httplogger = $httplogger ?? new NullLogger();
     }
-
-    // TODO whether to allow repairing errors in VCards
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

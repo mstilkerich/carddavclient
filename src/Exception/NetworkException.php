@@ -21,10 +21,6 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Implementation of PSR-18 NetworkExceptionInterface.
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Exception;
@@ -34,6 +30,8 @@ use Psr\Http\Client\NetworkExceptionInterface;
 
 /**
  * Implementation of PSR-18 NetworkExceptionInterface.
+ *
+ * @package Public\Exceptions
  */
 class NetworkException extends ClientException implements NetworkExceptionInterface
 {

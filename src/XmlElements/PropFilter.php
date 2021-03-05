@@ -58,6 +58,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  *            allof logical AND for text-match/param-filter matches -->
  *
  * @psalm-import-type ComplexCondition from Filter
+ *
+ * @package Internal\XmlElements
  */
 class PropFilter implements \Sabre\Xml\XmlSerializable
 {

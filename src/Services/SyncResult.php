@@ -21,10 +21,6 @@
  * along with PHP-CardDavClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Class SyncResult
- */
-
 declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Services;
@@ -32,27 +28,63 @@ namespace MStilkerich\CardDavClient\Services;
 use Sabre\VObject\Component\VCard;
 use MStilkerich\CardDavClient\{CardDavClient, Config};
 
+/**
+ * Stores the changes reported by the server to be processed during a sync operation.
+ *
+ * This class is used internally only by the {@see Sync} service.
+ *
+ * @package Internal\Services
+ */
 class SyncResult
 {
-    /** @var string */
+    /**
+     * The new sync token returned by the server.
+     * @var string
+     */
     public $syncToken;
 
-    /** @var bool */
+    /**
+     * True if the server limited the returned differences and another followup sync is needed.
+     * @var bool
+     */
     public $syncAgain = false;
 
-    /** @var list<string> URIs of deleted objects */
+    /**
+     * URIs of deleted objects.
+     *
+     * @psalm-var list<string>
+     * @var string[]
+     */
     public $deletedObjects = [];
 
-    /** @var list<array{uri: string, etag: string, vcf?: string, vcard?: VCard}>
-     *       URIs and ETags of new or changed address objects.
+    /**
+     * URIs and ETags of new or changed address objects.
+     *
+     * @psalm-var list<array{uri: string, etag: string, vcf?: string, vcard?: VCard}>
+     * @var array
      */
     public $changedObjects = [];
 
+    /**
+     * Construct a new sync result.
+     *
+     * @param string $syncToken The new sync token returned by the server.
+     */
     public function __construct(string $syncToken)
     {
         $this->syncToken = $syncToken;
     }
 
+    /**
+     * Creates VCard objects for all changed cards.
+     *
+     * The objects are inserted into the {@see SyncResult::$changedObjects} array. In case the VCard object cannot be
+     * created for some of the cards (for example parse error), an error is logged. If no vcard string data is available
+     * in {@see SyncResult::$changedObjects} for a VCard, a warning is logged.
+     *
+     * @return bool
+     *  True if a VCard could be created for all cards in {@see SyncResult::$changedObjects}, false otherwise.
+     */
     public function createVCards(): bool
     {
         $ret = true;

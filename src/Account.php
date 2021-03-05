@@ -29,10 +29,11 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
 /**
  * Represents an account on a CardDAV Server.
+ *
+ * @package Public\Entities
  */
 class Account implements \JsonSerializable
 {
-    /********* PROPERTIES *********/
     /** @var string */
     private $username;
 
@@ -53,6 +54,7 @@ class Account implements \JsonSerializable
 
     /**
      * Construct a new Account object.
+     *
      * @param string $discoveryUri
      *  The URI to use for service discovery. This can be a partial URI, in the simplest case just a domain name. Note
      *  that if no protocol is given, https will be used. Unencrypted HTTP will only be done if explicitly given (e.g.
@@ -63,10 +65,11 @@ class Account implements \JsonSerializable
      *  The password to use for authentication. If no password is needed (e.g. GSSAPI/Kerberos), this may be an empty
      *  string.
      * @param string $baseUrl
-     *  The full URL of the CardDAV service. This URL is used as base URL for the underlying {@see CardDavClient} that
-     *  can be retrieved using {@see Account::getClient()}. When relative URIs are passed to the client, they will be
-     *  relative to this base URL. If this account is used for discovery with the {@see Services\Discovery} service,
-     *  this parameter can be omitted.
+     *  The URL of the CardDAV server without the path part (e.g. https://carddav.example.com:443). This URL is used as
+     *  base URL for the underlying {@see CardDavClient} that can be retrieved using {@see Account::getClient()}. When
+     *  relative URIs are passed to the client, they will be relative to this base URL. If this account is used for
+     *  discovery with the {@see Services\Discovery} service, this parameter can be omitted.
+     * @api
      */
     public function __construct(string $discoveryUri, string $username, string $password, string $baseUrl = null)
     {
@@ -84,6 +87,7 @@ class Account implements \JsonSerializable
      * @param array<string,?string> $props An associative array containing the Account attributes.
      *  Keys: discoveryUri, username, password, baseUrl with the meaning from {@see Account::__construct()}
      * @see Account::jsonSerialize()
+     * @api
      */
     public static function constructFromArray(array $props): Account
     {
@@ -95,7 +99,6 @@ class Account implements \JsonSerializable
         }
 
         /** @var array{discoveryUri: string, username: string, password: string} & array<string,string> $props */
-
         return new Account($props["discoveryUri"], $props["username"], $props["password"], $props["baseUrl"] ?? null);
     }
 
@@ -133,6 +136,7 @@ class Account implements \JsonSerializable
 
     /**
      * Returns the discovery URI for this Account.
+     * @api
      */
     public function getDiscoveryUri(): string
     {
@@ -149,6 +153,7 @@ class Account implements \JsonSerializable
 
     /**
      * Returns the base URL of the CardDAV service.
+     * @api
      */
     public function getUrl(): string
     {

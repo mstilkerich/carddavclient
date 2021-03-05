@@ -52,6 +52,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * @psalm-type SimpleConditions = array<PropName, SimpleCondition>
  * @psalm-type ComplexCondition = array{matchAll?: bool} & array<int,SimpleCondition>
  * @psalm-type ComplexConditions = list<array{PropName,ComplexCondition}>
+ *
+ * @package Internal\XmlElements
  */
 class Filter implements \Sabre\Xml\XmlSerializable
 {

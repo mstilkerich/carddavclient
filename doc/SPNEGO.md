@@ -43,29 +43,29 @@ in Apache (it requires the Apache mod\_auth\_gssapi):
         AuthType GSSAPI
         AuthName "GSSAPI Logon"
 
-		# The server needs access to its kerberos key in the keytab
-		# It should contain a service principal like HTTP/baikal.domain.com@REALM
+        # The server needs access to its kerberos key in the keytab
+        # It should contain a service principal like HTTP/baikal.domain.com@REALM
         GssapiCredStore keytab:/etc/apache2/apache.keytab
-        
+
         # The following enables server-side support for credential delegation (not that it needs to
-		# be enabled on the client-side as well, if desired. You need to specify a directory that the
-		# webserver can write to
-		# GSSAPI delegation enables the server to acquire tickets for additional backend services. For
-		# a CardDAV server, you will not normally need this. For a different service like roundcube
-		# webmail, this would enable the webmail client for example to authenticate on the user's behalf
-		# with backend IMAP, SMTP or CardDAV servers.
+        # be enabled on the client-side as well, if desired. You need to specify a directory that the
+        # webserver can write to
+        # GSSAPI delegation enables the server to acquire tickets for additional backend services. For
+        # a CardDAV server, you will not normally need this. For a different service like roundcube
+        # webmail, this would enable the webmail client for example to authenticate on the user's behalf
+        # with backend IMAP, SMTP or CardDAV servers.
         # GssapiDelegCcacheDir /var/run/apache2/krbclientcache
-        
+
         # maps the kerberos principal to a local username based on the settings in /etc/krb5.conf
         # e. g. username@REALM -> username
         GssapiLocalName On
 
-		# Restrict the mechanisms offered by SPNEGO to Kerberos 5
+        # Restrict the mechanisms offered by SPNEGO to Kerberos 5
         GssapiAllowedMech krb5
 
-		# Optional: The following allows to fallback to Basic authentication if no ticket is available.
-		# In this case, the username and kerberos password are required and the webserver would use them
-		# to acquire a ticket-granting ticket for the user from the KDC itself.
+        # Optional: The following allows to fallback to Basic authentication if no ticket is available.
+        # In this case, the username and kerberos password are required and the webserver would use them
+        # to acquire a ticket-granting ticket for the user from the KDC itself.
         #GssapiBasicAuth On
         #GssapiBasicAuthMech krb5
 
@@ -78,4 +78,4 @@ in Apache (it requires the Apache mod\_auth\_gssapi):
 </VirtualHost>
 ```
 
-
+<!-- vim: set ts=4 sw=4 expandtab fenc=utf8 ff=unix tw=120: -->

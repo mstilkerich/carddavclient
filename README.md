@@ -101,5 +101,9 @@ also uses this library for the interaction with the CardDAV server.
 An overview of the API is available [here](doc/README.md).
 
 The API documentation for the latest released version can be found [here](https://mstilkerich.github.io/carddavclient/).
+The public API of the library can be found via the `Public` package in the navigation sidebar.
 
-Documentation for the API can be generated from the source code using [phpDocumentor](https://www.phpdoc.org/) by running `make doc`.
+Documentation for the API can be generated from the source code using [phpDocumentor](https://www.phpdoc.org/) by
+running `make doc`.
+
+<!-- vim: set ts=4 sw=4 expandtab fenc=utf8 ff=unix tw=120: -->

@@ -42,6 +42,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * @psalm-immutable
  *
  * @psalm-import-type DeserializedElem from Deserializers
+ *
+ * @package Internal\XmlElements
  */
 class Propstat implements \Sabre\Xml\XmlDeserializable
 {

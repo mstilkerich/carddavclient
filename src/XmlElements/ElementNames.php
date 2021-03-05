@@ -31,6 +31,8 @@ namespace MStilkerich\CardDavClient\XmlElements;
  * This class serves merely as a collection of constants containing fully qualified XML
  * element names used inside this library in clark notation, i.e. including the namespace
  * as a braced prefix.
+ *
+ * @package Internal\XmlElements
  */
 class ElementNames
 {

@@ -44,6 +44,8 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * <!ELEMENT param-filter (is-not-defined | text-match)?>
  * <!ATTLIST param-filter name CDATA #REQUIRED>
  *   <!-- name value: a property parameter name (e.g., "TYPE") -->
+ *
+ * @package Internal\XmlElements
  */
 class ParamFilter implements \Sabre\Xml\XmlSerializable
 {

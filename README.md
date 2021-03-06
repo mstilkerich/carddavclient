@@ -5,6 +5,14 @@
 
 This is a library for PHP applications to interact with addressbooks stored on CardDAV servers.
 
+## Index
+
+- [Features](#features)
+- [Tested Servers](#tested-servers)
+- [Installation instructions](#installation-instructions)
+- [Quickstart](#quickstart)
+- [API documentation](#api-documentation)
+
 ## Features
 
 - CardDAV addressbook discovery as defined by [RFC 6764](https://tools.ietf.org/html/rfc6764) (using DNS SRV records
@@ -43,7 +51,7 @@ In theory, it should work with any CardDAV server. If it does not, please open a
 __Note: For using any authentication mechanism other than Basic, you need to have the php-curl extension installed with
 support for the corresponding authentication mechanism.__
 
-## Installation
+## Installation instructions
 
 This library is intended to be used with [composer](https://getcomposer.org/) to install/update the library and its
 dependencies. It is intended to be used with a PSR-4 compliant autoloader (as provided by composer).

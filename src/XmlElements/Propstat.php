@@ -29,15 +29,16 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /**
- * Class to represent XML DAV:propstat elements as PHP objects.
+ * Represents XML DAV:propstat elements as PHP objects.
  *
  * From RFC 4918:
- *
  * The propstat XML element MUST contain one prop XML element and one status XML element. The contents of the prop XML
  * element MUST only list the names of properties to which the result in the status element applies. The optional
  * precondition/ postcondition element and ’responsedescription’ text also apply to the properties named in ’prop’.
  *
+ * ```xml
  * <!ELEMENT propstat (prop, status, error?, responsedescription?) >
+ * ```
  *
  * @psalm-immutable
  *
@@ -47,18 +48,33 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  */
 class Propstat implements \Sabre\Xml\XmlDeserializable
 {
-    /** @var string Holds a single HTTP status-line. */
+    /**
+     * Holds a single HTTP status-line.
+     * @var string
+     */
     public $status;
 
-    /** @var Prop Contains properties related to a resource. */
+    /**
+     * Contains properties related to a resource.
+     * @var Prop
+     */
     public $prop;
 
+    /**
+     * Constructs a Propstat element.
+     *
+     * @param string $status The status value of the Propstat element.
+     * @param Prop $prop The Prop child element, containing the reported properties.
+     */
     public function __construct(string $status, Prop $prop)
     {
         $this->status = $status;
         $this->prop = $prop;
     }
 
+    /**
+     * Deserializes the child elements of a DAV:propstat element and creates a new instance of Propstat.
+     */
     public static function xmlDeserialize(\Sabre\Xml\Reader $reader): Propstat
     {
         $prop = null;
@@ -66,7 +82,7 @@ class Propstat implements \Sabre\Xml\XmlDeserializable
 
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
-            /** @var DeserializedElem $child */
+            /** @psalm-var DeserializedElem $child */
             foreach ($children as $child) {
                 if ($child["value"] instanceof Prop) {
                     if (isset($prop)) {

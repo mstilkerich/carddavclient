@@ -51,7 +51,10 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
  */
 abstract class HttpClientAdapter
 {
-    /** @var string The base URI for requests */
+    /**
+     * The base URI for requests.
+     * @var string
+     */
     protected $baseUri;
 
     /**
@@ -59,11 +62,12 @@ abstract class HttpClientAdapter
      *
      * @param string $method The request method (GET, PROPFIND, etc.)
      * @param string $uri The target URI. If relative, taken relative to the internal base URI of the HTTP client
-     * @param RequestOptions $options Request-specific options, merged with/override the default options of the client.
-     *        Supported options are:
-     *          'allow_redirects' => boolean: True, if redirect responses should be resolved by the client.
-     *          'body' => Request body as string: Optional body to send with the HTTP request
-     *          'headers' => [ 'Headername' => 'Value' | [ 'Val1', 'Val2', ...] ]: Headers to include with the request
+     * @psalm-param RequestOptions $options
+     * @param array<string,mixed> $options
+     *  Request-specific options, merged with/override the default options of the client. Supported options are:
+     *   - 'allow_redirects' => boolean: True, if redirect responses should be resolved by the client.
+     *   - 'body' => Request body as string: Optional body to send with the HTTP request
+     *   - 'headers' => [ 'Headername' => 'Value' | [ 'Val1', 'Val2', ...] ]: Headers to include with the request
      *
      * @return Psr7Response The response retrieved from the server.
      *

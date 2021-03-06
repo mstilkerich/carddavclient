@@ -29,10 +29,9 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /**
- * Class to represent XML urn:ietf:params:xml:ns:carddav:text-match elements as PHP objects. (RFC 6352)
+ * Represents XML urn:ietf:params:xml:ns:carddav:text-match elements as PHP objects (RFC 6352).
  *
- * From RFC 6352
- *
+ * From RFC 6352:
  * The CARDDAV:text-match XML element specifies text used for a substring match against the vCard
  * property or parameter value specified in an address book REPORT request.
  *
@@ -49,37 +48,43 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  *   - "starts-with" - a substring match, matching only at the start of the target string
  *   - "ends-with" - a substring match, matching only at the end of the target string
  *
+ * ```xml
  *     <!ELEMENT text-match (#PCDATA)>
  *     <!-- PCDATA value: string -->
  *     <!ATTLIST text-match
  *        collation CDATA "i;unicode-casemap"
  *        negate-condition (yes | no) "no"
  *        match-type (equals|contains|starts-with|ends-with) "contains">
- *
+ * ```
  * @package Internal\XmlElements
  */
 class TextMatch implements \Sabre\Xml\XmlSerializable
 {
     /**
-     * @var string Collation to use for comparison (currently constant)
+     * Collation to use for comparison (currently constant)
+     * @var string
      * @psalm-readonly
      */
     public $collation = 'i;unicode-casemap';
 
     /**
-     * @var bool Whether to invert the result of the match.
+     * Whether to invert the result of the match
+     * @var bool
      * @psalm-readonly
      */
     public $invertMatch = false;
 
     /**
-     * @var 'equals' | 'contains' | 'starts-with' | 'ends-with'
+     * The type of text match to apply
+     * @psalm-var 'equals' | 'contains' | 'starts-with' | 'ends-with'
+     * @var string
      * @psalm-readonly
      */
     public $matchType = 'contains';
 
     /**
-     * @var string The string to match for.
+     * The string to match for
+     * @var string
      * @psalm-readonly
      */
     public $needle = '';
@@ -88,16 +93,16 @@ class TextMatch implements \Sabre\Xml\XmlSerializable
      * Constructs a TextMatch element.
      *
      * The match is specified in a string form that encodes all properties of the match.
-     *   - The match string must be enclosed in / (e.g. /foo/)
+     *   - The match string must be enclosed in / (e.g. `/foo/`)
      *   - The / character has no special meaning other than to separate the match string from modifiers. No escaping is
-     *     needed if / appears as part of the match string (e.g. /http:/// matches for http://).
-     *   - To invert the match, insert ! before the initial / (e.g. !/foo/)
+     *     needed if / appears as part of the match string (e.g. `/http:///` matches for "http://").
+     *   - To invert the match, insert ! before the initial / (e.g. `!/foo/`)
      *   - The default match type is "contains" semantics. If you want to match the start or end of the property value,
      *     or perform an exact match, use the ^/$/= modifiers after the final slash. Examples:
-     *       - /abc/= - The property/parameter must match the value "abc" exactly
-     *       - /abc/^  - The property/parameter must start with "abc"
-     *       - /abc/$  - The property/parameter must end with "abc"
-     *       - /abc/   - The property/parameter must contain "abc"
+     *       - `/abc/=`: The property/parameter must match the value "abc" exactly
+     *       - `/abc/^`: The property/parameter must start with "abc"
+     *       - `/abc/$`: The property/parameter must end with "abc"
+     *       - `/abc/`: The property/parameter must contain "abc"
      *   - The matching is performed case insensitive with UTF8 character set (this is currently not changeable).
      *
      * @param string $matchSpec Specification of the text match that encodes all properties of the match.
@@ -129,7 +134,7 @@ class TextMatch implements \Sabre\Xml\XmlSerializable
     }
 
     /**
-     * This function encodes the elements value (not the element itself!) to the given XML writer.
+     * This function encodes the element's value (not the element itself!) to the given XML writer.
      */
     public function xmlSerialize(\Sabre\Xml\Writer $writer): void
     {

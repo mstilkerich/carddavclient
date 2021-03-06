@@ -39,34 +39,52 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
  */
 class HttpClientAdapterGuzzle extends HttpClientAdapter
 {
-    /** @var string[] A list of authentication schemes that can be handled by Guzzle itself,
-     *     independent on whether it works only with the Guzzle Curl HTTP handler or not.
+    /**
+     * A list of authentication schemes that can be handled by Guzzle itself, independent on whether it works only with
+     * the Guzzle Curl HTTP handler or not.
+     *
+     * @psalm-var list<string>
+     * @var array<int, string>
      */
     private const GUZZLE_KNOWN_AUTHSCHEMES = [ 'basic', 'digest', 'ntlm' ];
 
-    /********* PROPERTIES *********/
-
-    /** @var Client The Client object of the Guzzle HTTP library. */
+    /**
+     * The Client object of the Guzzle HTTP library.
+     * @var Client
+     */
     private $client;
 
-    /** @var string The username to use for authentication */
+    /**
+     * The username to use for authentication
+     * @var string
+     */
     private $username;
 
-    /** @var string The password to use for authentication */
+    /**
+     * The password to use for authentication
+     * @var string
+     */
     private $password;
 
-    /** @var ?string The HTTP authentication scheme to use */
+    /**
+     * The HTTP authentication scheme to use. Null if not determined yet.
+     * @var ?string
+     */
     private $authScheme;
 
-    /** @var string[] Auth-schemes tried without success */
+    /**
+     * HTTP authentication schemes tried without success, to avoid trying again.
+     * @psalm-var list<string>
+     * @var array<int, string>
+     */
     private $failedAuthSchemes = [];
 
-    /** @var ?int[] Maps lowercase auth-schemes to their CURLAUTH_XXX constant.
-     *     Only values not part of GUZZLE_KNOWN_AUTHSCHEMES are relevant here.
+    /**
+     * Maps lowercase auth-schemes to their CURLAUTH_XXX constant. Only values not part of GUZZLE_KNOWN_AUTHSCHEMES are
+     * relevant here.
+     * @var null|array<string, int>
      */
     private static $schemeToCurlOpt;
-
-    /********* PUBLIC FUNCTIONS *********/
 
     /** Constructs a HttpClientAdapterGuzzle object.
      *
@@ -112,8 +130,10 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      * Authentication is only attempted in case the domain name of the request URI matches that of the base URI
      * (subdomains may differ).
      *
-     * @param RequestOptions $options Options for the HTTP client, and default request options.
-     *        May include any of the options accepted by {@see HttpClientAdapter::sendRequest()}.
+     * @psalm-param RequestOptions $options
+     * @param array<string,mixed> $options
+     *  Options for the HTTP client, and default request options. May include any of the options accepted by
+     *  {@see HttpClientAdapter::sendRequest()}.
      */
     public function sendRequest(string $method, string $uri, array $options = []): Psr7Response
     {
@@ -162,8 +182,6 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         }
     }
 
-    /********* PRIVATE FUNCTIONS *********/
-
     /**
      * Checks if a request was rejected because of an incompatibility between curl and sabre/dav.
      *
@@ -180,7 +198,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      * only occurs for REPORT requests, for other requests such as PROPFIND the problem is not triggered in sabre and an
      * expected 401 response is returned.
      *
-     * Read all about it here: https://github.com/sabre-io/dav/issues/932
+     * Read all about it {@link https://github.com/sabre-io/dav/issues/932 here}.
      *
      * As a sidenote, nextcloud is not affected even though it uses sabre/dav, because the feature causing the server
      * errors can be disabled and is in nextcloud. But there are other servers (Baïkal) using sabre/dav that are
@@ -202,12 +220,14 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      *  - Result status code is 500
      *  - The server is a sabre/dav server (X-Sabre-Version header is set)
      *  - The response includes the known error message:
+     *    ```xml
      *    <?xml version="1.0" encoding="utf-8"?>
      *    <d:error xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns">
      *      <s:sabredav-version>4.1.2</s:sabredav-version>
      *      <s:exception>Sabre\Xml\ParseException</s:exception>
      *      <s:message>The input element to parse is empty. Do not attempt to parse</s:message>
      *    </d:error>
+     *    ```
      */
     private function checkSabreCurlIncompatibility(string $method, Psr7Response $response): bool
     {
@@ -228,7 +248,11 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
     }
 
     /**
-     * @param RequestOptions $options
+     * Prepares options for the Guzzle request.
+     *
+     * @psalm-param RequestOptions $options
+     * @param array<string,mixed> $options
+     * @param bool $doAuth True to attempt authentication. False will only try unauthenticated access.
      */
     private function prepareGuzzleOptions(array $options = [], bool $doAuth = false): array
     {
@@ -290,7 +314,8 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      *
      * @param Psr7Response $response A status 401 response returned by the server.
      *
-     * @return list<string> An array of authentication schemes that can be tried.
+     * @psalm-return list<string>
+     * @return array<int,string> An array of authentication schemes that can be tried.
      */
     private function getSupportedAuthSchemes(Psr7Response $response): array
     {

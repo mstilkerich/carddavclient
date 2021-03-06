@@ -29,7 +29,7 @@ use MStilkerich\CardDavClient\Config;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 
 /**
- * Class to represent XML DAV:prop elements as PHP objects.
+ * Represents XML DAV:prop elements as PHP objects.
  *
  * @psalm-import-type DeserializedElem from Deserializers
  *
@@ -79,7 +79,12 @@ class Prop implements \Sabre\Xml\XmlDeserializable
      *                             attributes content-type and version
      */
 
-    /** @var array<string, callable(\Sabre\Xml\Reader):void | class-string<\Sabre\Xml\XmlDeserializable>> */
+    /**
+     * Deserializers for various child elements of prop.
+     *
+     * @psalm-var array<string, callable(\Sabre\Xml\Reader):void | class-string<\Sabre\Xml\XmlDeserializable>>
+     * @var array<string, callable|string>
+     */
     public const PROP_DESERIALIZERS = [
         XmlEN::ABOOK_HOME => [ Deserializers::class, 'deserializeHrefMulti' ],
         XmlEN::ADD_MEMBER => [ Deserializers::class, 'deserializeHrefSingle' ],
@@ -90,15 +95,23 @@ class Prop implements \Sabre\Xml\XmlDeserializable
         XmlEN::ADDRDATATYPE => [ Deserializers::class, 'deserializeToAttributes' ],
     ];
 
-    /** @var PropTypes */
+    /**
+     * The child elements of this Prop element.
+     * Maps child element name to a child-element specific value.
+     * @psalm-var PropTypes
+     * @var array<string, mixed>
+     */
     public $props = [];
 
+    /**
+     * Deserializes the child elements of a DAV:prop element and creates a new instance of Prop.
+     */
     public static function xmlDeserialize(\Sabre\Xml\Reader $reader)
     {
         $prop = new self();
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
-            /** @var DeserializedElem $child */
+            /** @psalm-var DeserializedElem $child */
             foreach ($children as $child) {
                 $prop->storeProperty($child);
             }
@@ -107,9 +120,12 @@ class Prop implements \Sabre\Xml\XmlDeserializable
     }
 
     /**
-     * Processes a deserialized prop child element and stores the result if known.
+     * Processes a deserialized prop child element.
      *
-     * @param DeserializedElem $deserElem
+     * If the child element is known to this class, the deserialized value is stored to {@see Prop::$props}.
+     *
+     * @psalm-param DeserializedElem $deserElem
+     * @param array $deserElem
      */
     private function storeProperty(array $deserElem): void
     {

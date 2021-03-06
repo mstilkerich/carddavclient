@@ -50,21 +50,18 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  */
 class CardDavClient
 {
-    /********* CONSTANTS *********/
     private const MAP_NS2PREFIX = [
         XmlEN::NSDAV => 'DAV',
         XmlEN::NSCARDDAV => 'CARDDAV',
         XmlEN::NSCS => 'CS',
     ];
 
-    /********* PROPERTIES *********/
     /** @var string */
     protected $base_uri;
 
     /** @var HttpClientAdapter */
     protected $httpClient;
 
-    /********* PUBLIC FUNCTIONS *********/
     public function __construct(string $base_uri, string $username, string $password)
     {
         $this->base_uri = $base_uri;
@@ -127,7 +124,11 @@ class CardDavClient
      * Fetches an address object.
      *
      * @param string $uri URI of the address object to fetch
-     * @return array{etag: string, vcf: string}
+     * @psalm-return array{etag: string, vcf: string}
+     * @return array<string,string>
+     *  Associative array with keys
+     *   - etag (string): Entity tag of the created resource if returned by server, otherwise empty string.
+     *   - vcf (string): The address data of the address object
      */
     public function getAddressObject(string $uri): array
     {
@@ -198,7 +199,8 @@ class CardDavClient
      *
      * @param bool $post If true
      *
-     * @return array{uri: string, etag: string}
+     * @psalm-return array{uri: string, etag: string}
+     * @return array<string,string>
      *  Associative array with keys
      *   - uri (string): URI of the new resource if the request was successful
      *   - etag (string): Entity tag of the created resource if returned by server, otherwise empty string.
@@ -252,8 +254,12 @@ class CardDavClient
      * Issues an addressbook-multiget request to the server.
      *
      * @param string $addressbookUri URI of the addressbook to fetch the objects from
-     * @param list<string> $requestedUris List of URIs of the objects to fetch
-     * @param list<string> $requestedVCardProps List of VCard properties to request, empty to request the full cards.
+     * @psalm-param list<string> $requestedUris
+     * @param array<int,string> $requestedUris
+     *  List of URIs of the objects to fetch
+     * @psalm-param list<string> $requestedVCardProps
+     * @param array<int,string> $requestedVCardProps
+     *  List of VCard properties to request, empty to request the full cards.
      *
      * @psalm-return Multistatus<XmlElements\ResponsePropstat>
      */
@@ -301,8 +307,9 @@ class CardDavClient
      *
      * @param string $addressbookUri The URI of the addressbook collection to query
      * @param Filter $filter The query filter conditions
-     * @param list<string> $requestedVCardProps A list of the requested VCard properties. If empty array, the full
-     *                                          VCards are requested from the server.
+     * @psalm-param list<string> $requestedVCardProps
+     * @param array<int,string> $requestedVCardProps
+     *  A list of the requested VCard properties. If empty array, the full VCards are requested from the server.
      * @param int $limit Tell the server to return at most $limit results. 0 means no limit.
      * @psalm-return Multistatus
      */
@@ -359,8 +366,10 @@ class CardDavClient
      *
      * Some properties that are mandatory are added to the list.
      *
-     * @param list<string> $requestedVCardProps List of the VCard properties requested by the user
-     * @return null|list<array{name: string, attributes: array{name: string}}>
+     * @psalm-param list<string> $requestedVCardProps
+     * @param array<int,string> $requestedVCardProps List of the VCard properties requested by the user
+     * @psalm-return null|list<array{name: string, attributes: array{name: string}}>
+     * @return null|array<int, array<string, mixed>>
      */
     private function determineReqCardProps(array $requestedVCardProps): ?array
     {
@@ -387,10 +396,14 @@ class CardDavClient
      * Retrieves a set of WebDAV properties for a resource.
      *
      * @param string $uri The URI of the resource to retrieve properties for.
-     * @param list<string> $props List of properties to retrieve, given as XML element names
-     * @param "0"|"1"|"infinity" $depth Value for the Depth header
+     * @psalm-param list<string> $props
+     * @param array<int,string> $props
+     *  List of properties to retrieve, given as XML element names
+     * @psalm-param "0"|"1"|"infinity" $depth
+     * @param string $depth Value for the Depth header
      *
-     * @return list<array{uri: string, props: PropTypes}>
+     * @psalm-return list<array{uri: string, props: PropTypes}>
+     * @return array<int, array<string,mixed>>
      */
     public function findProperties(
         string $uri,
@@ -442,15 +455,15 @@ class CardDavClient
         return $resultProperties;
     }
 
-    /********* PRIVATE FUNCTIONS *********/
-
     /**
      * Adds required VCard properties to a set specified by the user.
      *
      * This is needed to ensure retrieval of a valid VCard, as some properties are mandatory.
      *
-     * @param list<string> $requestedVCardProps List of properties requested by the user
-     * @return list<string> List of properties requested by the user, completed with mandatory properties.
+     * @psalm-param list<string> $requestedVCardProps
+     * @param array<int,string> $requestedVCardProps List of properties requested by the user
+     * @psalm-return list<string>
+     * @return array<int,string> List of properties requested by the user, completed with mandatory properties.
      */
     private static function addRequiredVCardProperties(array $requestedVCardProps): array
     {
@@ -479,7 +492,8 @@ class CardDavClient
     /**
      * @template RT of XmlElements\Response
      * @psalm-param class-string<RT> $responseType
-     * @return MultiStatus<RT>
+     * @psalm-return Multistatus<RT>
+     * @return Multistatus
      */
     private static function checkAndParseXMLMultistatus(
         Psr7Response $davReply,
@@ -503,7 +517,7 @@ class CardDavClient
             }
         }
 
-        /** @var MultiStatus<RT> */
+        /** @psalm-var Multistatus<RT> */
         return $multistatus;
     }
 
@@ -514,7 +528,8 @@ class CardDavClient
      * @param string $uri The target of the request
      * @param RequestOptions $options Additional options for the request
      *
-     * @return array{redirected: bool, location: string, response: Psr7Response}
+     * @psalm-return array{redirected: bool, location: string, response: Psr7Response}
+     * @return array<string, mixed>
      */
     private function requestWithRedirectionTarget(string $method, string $uri, array $options = []): array
     {

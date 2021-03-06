@@ -34,20 +34,29 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  */
 class Account implements \JsonSerializable
 {
-    /** @var string */
+    /**
+     * The username to use for authentication.
+     * @var string
+     */
     private $username;
 
-    /** @var string */
+    /**
+     * The password to use for authentication. If no password is needed (e.g. GSSAPI/Kerberos), this may be an empty
+     * string.
+     * @var string
+     */
     private $password;
 
     /**
      * URI originally used to discover the account.
+     * Example: _example.com_
      * @var string
      */
     private $discoveryUri;
 
     /**
      * URL of the discovered CardDAV server, with empty path. May be null if not discovered yet.
+     * Example: _https://carddav.example.com:443_
      * @var ?string
      */
     private $baseUrl;
@@ -58,16 +67,16 @@ class Account implements \JsonSerializable
      * @param string $discoveryUri
      *  The URI to use for service discovery. This can be a partial URI, in the simplest case just a domain name. Note
      *  that if no protocol is given, https will be used. Unencrypted HTTP will only be done if explicitly given (e.g.
-     *  http://example.com).
+     *  _http://example.com_).
      * @param string $username
      *  The username to use for authentication.
      * @param string $password
      *  The password to use for authentication. If no password is needed (e.g. GSSAPI/Kerberos), this may be an empty
      *  string.
      * @param string $baseUrl
-     *  The URL of the CardDAV server without the path part (e.g. https://carddav.example.com:443). This URL is used as
-     *  base URL for the underlying {@see CardDavClient} that can be retrieved using {@see Account::getClient()}. When
-     *  relative URIs are passed to the client, they will be relative to this base URL. If this account is used for
+     *  The URL of the CardDAV server without the path part (e.g. _https://carddav.example.com:443_). This URL is used
+     *  as base URL for the underlying {@see CardDavClient} that can be retrieved using {@see Account::getClient()}.
+     *  When relative URIs are passed to the client, they will be relative to this base URL. If this account is used for
      *  discovery with the {@see Services\Discovery} service, this parameter can be omitted.
      * @api
      */
@@ -85,7 +94,7 @@ class Account implements \JsonSerializable
      * This can be used to reconstruct/deserialize an Account from a stored (JSON) representation.
      *
      * @param array<string,?string> $props An associative array containing the Account attributes.
-     *  Keys: discoveryUri, username, password, baseUrl with the meaning from {@see Account::__construct()}
+     *  Keys: `discoveryUri`, `username`, `password`, `baseUrl` with the meaning from {@see Account::__construct()}
      * @see Account::jsonSerialize()
      * @api
      */
@@ -98,7 +107,7 @@ class Account implements \JsonSerializable
             }
         }
 
-        /** @var array{discoveryUri: string, username: string, password: string} & array<string,string> $props */
+        /** @psalm-var array{discoveryUri: string, username: string, password: string} & array<string,string> $props */
         return new Account($props["discoveryUri"], $props["username"], $props["password"], $props["baseUrl"] ?? null);
     }
 
@@ -249,7 +258,7 @@ class Account implements \JsonSerializable
             $result = $client->findProperties($principalUri, [XmlEN::ABOOK_HOME]);
 
             if (isset($result[0]["props"][XmlEN::ABOOK_HOME])) {
-                /** @var list<string> $hrefs */
+                /** @psalm-var list<string> $hrefs */
                 $hrefs = $result[0]["props"][XmlEN::ABOOK_HOME];
                 if (!empty($hrefs)) {
                     $addressbookHomeUri = $hrefs[0];

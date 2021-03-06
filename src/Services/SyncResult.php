@@ -53,7 +53,7 @@ class SyncResult
      * URIs of deleted objects.
      *
      * @psalm-var list<string>
-     * @var string[]
+     * @var array<int,string>
      */
     public $deletedObjects = [];
 

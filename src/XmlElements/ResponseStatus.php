@@ -29,7 +29,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /**
- * Class to represent XML DAV:response elements with status children as PHP objects.
+ * Represents XML DAV:response elements with status children as PHP objects.
  *
  * @psalm-immutable
  *
@@ -37,14 +37,24 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  */
 class ResponseStatus extends Response
 {
-    /** @var string[] MUST contain a URI or a relative reference. */
+    /**
+     * URIs the status in this reponse applies to. MUST contain a URI or a relative reference.
+     * @psalm-var list<string>
+     * @var array<int,string>
+     */
     public $hrefs;
 
-    /** @var string $status */
+    /**
+     * The HTTP status value of this response.
+     * @var string
+     */
     public $status;
 
     /**
-     * @param string[] $hrefs
+     * Constructs a new ResponseStatus object.
+     *
+     * @psalm-param list<string> $hrefs
+     * @param array<int,string> $hrefs
      * @param string $status
      */
     public function __construct(array $hrefs, string $status)

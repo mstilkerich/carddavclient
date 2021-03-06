@@ -46,7 +46,7 @@ class Sync
      * @param AddressbookCollection $abook The addressbook to synchronize
      * @param SyncHandler $handler A SyncHandler object that will be informed about new/changed and deleted cards.
      * @psalm-param list<string> $requestedVCardProps
-     * @param string[] $requestedVCardProps
+     * @param array<int,string> $requestedVCardProps
      *  List of VCard properties to request for retrieved VCards. If empty the full VCards are retrieved. Note that many
      *  servers do not support this and will always provide the full cards regardless of this parameter.
      * @param string $prevSyncToken
@@ -90,7 +90,7 @@ class Sync
      * Performs a synchronization of the given addressbook for one synchronization chunk as dictated by the server.
      *
      * @psalm-param list<string> $requestedVCardProps
-     * @param string[] $requestedVCardProps
+     * @param array<int,string> $requestedVCardProps
      * @return SyncResult The synchronization result object.
      */
     private function synchronizeOneBatch(
@@ -334,7 +334,7 @@ class Sync
      *  The SyncResult object to store the retrieved cards to, which already contains the URIs of the changed cards to
      *  fetch.
      * @psalm-param list<string> $requestedVCardProps
-     * @param string[] $requestedVCardProps
+     * @param array<int,string> $requestedVCardProps
      */
     private function multiGetChanges(
         CardDavClient $client,

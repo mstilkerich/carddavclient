@@ -29,26 +29,26 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /**
- * Class to represent XML urn:ietf:params:xml:ns:carddav:prop-filter elements as PHP objects. (RFC 6352)
+ * Represents XML urn:ietf:params:xml:ns:carddav:prop-filter elements as PHP objects (RFC 6352).
  *
- * From RFC 6352
- *
+ * From RFC 6352:
  * The CARDDAV:prop-filter XML element specifies search criteria on a specific vCard property (e.g., "NICKNAME"). An
  * address object is said to match a CARDDAV:prop-filter if:
- *   -  A vCard property of the type specified by the "name" attribute exists, and the CARDDAV:prop-filter is empty, or
- *      it matches any specified CARDDAV:text-match or CARDDAV:param-filter conditions.  The "test" attribute specifies
- *      whether any (logical OR) or all (logical AND) of the text-filter and param- filter tests need to match in order
- *      for the overall filter to match.
- *   or:
+ *   - A vCard property of the type specified by the "name" attribute exists, and the CARDDAV:prop-filter is empty, or
+ *     it matches any specified CARDDAV:text-match or CARDDAV:param-filter conditions. The "test" attribute specifies
+ *     whether any (logical OR) or all (logical AND) of the text-filter and param- filter tests need to match in order
+ *     for the overall filter to match.
+ *   Or:
  *   - A vCard property of the type specified by the "name" attribute does not exist, and the CARDDAV:is-not-defined
  *     element is specified.
  *
- * vCard allows a "group" prefix to appear before a property name in the vCard data.  When the "name" attribute does not
+ * vCard allows a "group" prefix to appear before a property name in the vCard data. When the "name" attribute does not
  * specify a group prefix, it MUST match properties in the vCard data without a group prefix or with any group prefix.
  * When the "name" attribute includes a group prefix, it MUST match properties that have exactly the same group prefix
- * and name.  For example, a "name" set to "TEL" will match "TEL", "X-ABC.TEL", "X-ABC-1.TEL" vCard properties.  A
+ * and name. For example, a "name" set to "TEL" will match "TEL", "X-ABC.TEL", "X-ABC-1.TEL" vCard properties. A
  * "name" set to "X-ABC.TEL" will match an "X-ABC.TEL" vCard property only, it will not match "TEL" or "X-ABC-1.TEL".
  *
+ * ```xml
  * <!ELEMENT prop-filter (is-not-defined | (text-match*, param-filter*))>
  * <!ATTLIST prop-filter name CDATA #REQUIRED
  *                           test (anyof | allof) "anyof">
@@ -56,7 +56,7 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  *          test value:
  *            anyof logical OR for text-match/param-filter matches
  *            allof logical AND for text-match/param-filter matches -->
- *
+ * ```
  * @psalm-import-type ComplexCondition from Filter
  *
  * @package Internal\XmlElements
@@ -64,21 +64,25 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
 class PropFilter implements \Sabre\Xml\XmlSerializable
 {
     /**
-     * @var 'anyof'|'allof' Semantics of match for multiple conditions (AND or OR).
+     * Semantics of match for multiple conditions (AND or OR).
+     *
+     * @psalm-var 'anyof'|'allof'
+     * @var string
      * @psalm-readonly
      */
     public $testType = 'anyof';
 
     /**
-     * @var string Property this filter matches on (e.g. EMAIL), including optional group prefix (e.g. G1.EMAIL).
+     * Property this filter matches on (e.g. EMAIL), including optional group prefix (e.g. G1.EMAIL).
+     * @var string
      * @psalm-readonly
      */
     public $property;
 
     /**
+     * List of filter conditions. Null to match if the property is not defined.
      * @psalm-var null|list<TextMatch|ParamFilter>
      * @var null|array<int, TextMatch|ParamFilter>
-     *  List of filter conditions. Null to match if the property is not defined.
      * @psalm-readonly
      */
     public $conditions;
@@ -87,12 +91,12 @@ class PropFilter implements \Sabre\Xml\XmlSerializable
      * Constructs a PropFilter element.
      *
      * The $conditions parameter is an array of all the filter conditions for this property filter. An empty array
-     * causes the filter to always match. Otherwise, the conditions array has entries according to the ComplexFilter /
-     * elaborate form described in the Filter class.
+     * causes the filter to always match. Otherwise, the $conditions array has entries according to the ComplexFilter /
+     * elaborate form described in the {@see Filter} class.
      *
      * @param string $propname The name of the VCard property this filter matches on.
-     * @param ComplexCondition $conditions The match conditions for the property
-     * @see Filter
+     * @psalm-param ComplexCondition $conditions
+     * @param array $conditions The match conditions for the property
      */
     public function __construct(string $propname, array $conditions)
     {
@@ -146,7 +150,7 @@ class PropFilter implements \Sabre\Xml\XmlSerializable
     }
 
     /**
-     * This function encodes the elements value (not the element itself!) to the given XML writer.
+     * This function encodes the element's value (not the element itself!) to the given XML writer.
      */
     public function xmlSerialize(\Sabre\Xml\Writer $writer): void
     {

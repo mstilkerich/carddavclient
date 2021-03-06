@@ -29,10 +29,9 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /**
- * Class to represent XML urn:ietf:params:xml:ns:carddav:filter elements as PHP objects. (RFC 6352)
+ * Represents XML urn:ietf:params:xml:ns:carddav:filter elements as PHP objects (RFC 6352).
  *
- * From RFC 6352
- *
+ * From RFC 6352:
  * The "filter" element specifies the search filter used to match address objects that should be returned by a report.
  * The "test" attribute specifies whether any (logical OR) or all (logical AND) of the prop-filter tests need to match
  * in order for the overall filter to match.
@@ -58,13 +57,17 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
 class Filter implements \Sabre\Xml\XmlSerializable
 {
     /**
-     * @var 'anyof'|'allof' Semantics of match for multiple conditions (AND or OR).
+     * Semantics of match for multiple conditions (AND or OR).
+     * @psalm-var 'anyof'|'allof'
+     * @var string
      * @psalm-readonly
      */
     public $testType;
 
     /**
-     * @var list<PropFilter>
+     * The PropFilter child elements of this filter.
+     * @psalm-var list<PropFilter>
+     * @var array<int,PropFilter>
      * @psalm-readonly
      */
     public $propFilters = [];
@@ -80,6 +83,8 @@ class Filter implements \Sabre\Xml\XmlSerializable
      * belong to the given group. If no group prefix is given, the match applies to all properties of the type,
      * independent of whether they belong to a group or not.
      *
+     * __Simple form__
+     *
      * The simple form is an associative array mapping property names to null or a filter condition.
      *
      * A filter condition can either be a string with a text match specification (see TextMatch constructor for format)
@@ -87,14 +92,16 @@ class Filter implements \Sabre\Xml\XmlSerializable
      * string for TextMatch or null with a meaning as for a property filter.
      *
      * Examples for the simple form:
-     *   [ 'EMAIL' => null ] - matches all VCards that do NOT have an EMAIL property
-     *   [ 'EMAIL' => "//" ] - matches all VCards that DO have an EMAIL property (with any value)
-     *   [ 'EMAIL' => '/@example.com/$' ] - matches all VCards that have an EMAIL property with an email address of the
-     *                                      example.com domain
-     *   [ 'EMAIL' => '/@example.com/$', 'N' => '/Mustermann;/^' ] - like before, but additionally/alternatively the
-     *                                                               surname must be Mustermann (depending on $matchAll)
-     *   [ 'EMAIL' => [ 'TYPE' => '/home/=' ] ] - matches all VCards with an EMAIL property that has a TYPE parameter
-     *                                             with value home
+     *  - `['EMAIL' => null]`: Matches all VCards that do NOT have an EMAIL property
+     *  - `['EMAIL' => "//"]`: Matches all VCards that DO have an EMAIL property (with any value)
+     *  - `['EMAIL' => '/@example.com/$']`:
+     *     Matches all VCards that have an EMAIL property with an email address of the example.com domain
+     *  - `['EMAIL' => '/@example.com/$', 'N' => '/Mustermann;/^']`:
+     *     Like before, but additionally/alternatively the surname must be Mustermann (depending on $matchAll)
+     *  - `['EMAIL' => ['TYPE' => '/home/=']]`:
+     *     Matches all VCards with an EMAIL property that has a TYPE parameter with value home
+     *
+     * __Elaborate form__
      *
      * The more elaborate form is an array of two-element arrays where the first element is a property name and
      * the second element is any of the values possible in the simple form, or an array object with a list of
@@ -102,15 +109,16 @@ class Filter implements \Sabre\Xml\XmlSerializable
      * that all conditions need to match (AND semantics).
      *
      * Examples for the elaborate form:
-     *   [ [ 'EMAIL', ['/@example.com/$', ['TYPE', '/home/='], 'matchAll' => true] ], [ 'N', '/Mustermann;/^' ] ] -
-     *     Matches all VCards, that have an EMAIL property with an address in the domain example.com and at the
-     *     same time a TYPE parameter with value home, and/or an N property with a surname of Mustermann.
+     *  - `[['EMAIL', ['/@example.com/$', ['TYPE', '/home/='], 'matchAll' => true]], ['N', '/Mustermann;/^']]`:
+     *     Matches all VCards, that have an EMAIL property with an address in the domain example.com and at the same
+     *     time a TYPE parameter with value home, and/or an N property with a surname of Mustermann.
      *
      * It is also possible to mix both forms, where string keys are used for the simple form and numeric indexes are
      * used for the elaborate form filters.
      *
-     * @param SimpleConditions|ComplexConditions $conditions The match conditions for the query, or for one property
-     *                                                       filter. An empty array will cause all VCards to match.
+     * @psalm-param SimpleConditions|ComplexConditions $conditions
+     * @param array $conditions
+     *  The match conditions for the query, or for one property filter. An empty array will cause all VCards to match.
      * @param bool $matchAll Whether all or any of the conditions needs to match.
      */
     public function __construct(array $conditions, bool $matchAll)
@@ -133,7 +141,7 @@ class Filter implements \Sabre\Xml\XmlSerializable
     }
 
     /**
-     * This function encodes the elements value (not the element itself!) to the given XML writer.
+     * This function encodes the element's value (not the element itself!) to the given XML writer.
      */
     public function xmlSerialize(\Sabre\Xml\Writer $writer): void
     {
@@ -149,8 +157,8 @@ class Filter implements \Sabre\Xml\XmlSerializable
     /**
      * Produces a list of attributes for this filter suitable to pass to a Sabre XML Writer.
      *
-     * The attributes produced are: test="allof/anyof"
-     *                              name="$propname" - only if $propname is not null
+     * The attributes produced are:
+     *  - `test="allof/anyof"`
      *
      * @return array<string, string> A list of attributes (attrname => attrvalue)
      */

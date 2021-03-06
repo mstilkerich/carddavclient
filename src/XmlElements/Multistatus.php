@@ -29,15 +29,21 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /**
- * Class to represent XML DAV:multistatus elements as PHP objects. (RFC 4918)
+ * Represents XML DAV:multistatus elements as PHP objects (RFC 4918).
+ *
+ * The response child elements can be of two types, response elements containing a propstat ({@see ResponsePropstat}) or
+ * reponse elements containing a status (@{see ResponseStatus}). Depending on the request, either on response type is
+ * expected or a mixture of both is possible. This class has a template parameter that allows to define the specific
+ * expected response type.
  *
  * From RFC 4918:
- *
  * The ’multistatus’ root element holds zero or more ’response’ elements in any order, each with information about an
  * individual resource.
  *
  * RFC 6578 adds the sync-token child element:
+ * ```xml
  * <!ELEMENT multistatus (response*, responsedescription?, sync-token?) >
+ * ```
  *
  * @psalm-immutable
  * @template RT of Response
@@ -48,14 +54,22 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  */
 class Multistatus implements \Sabre\Xml\XmlDeserializable
 {
-    /** @var ?string $synctoken */
+    /**
+     * The optional sync-token child element of this multistatus.
+     * @var ?string $synctoken
+     */
     public $synctoken;
 
-    /** @var RT[] $responses */
+    /**
+     * The reponse children of this multistatus element.
+     * @psalm-var list<RT>
+     * @var array<int, Response>
+     */
     public $responses = [];
 
     /**
-     * @param RT[] $responses
+     * @psalm-param list<RT> $responses
+     * @param array<int, Response> $responses
      * @param ?string $synctoken
      */
     public function __construct(array $responses, ?string $synctoken)
@@ -64,6 +78,9 @@ class Multistatus implements \Sabre\Xml\XmlDeserializable
         $this->synctoken = $synctoken;
     }
 
+    /**
+     * Deserializes the child elements of a DAV:multistatus element and creates a new instance of Multistatus.
+     */
     public static function xmlDeserialize(\Sabre\Xml\Reader $reader): Multistatus
     {
         $responses = [];
@@ -71,7 +88,7 @@ class Multistatus implements \Sabre\Xml\XmlDeserializable
 
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
-            /** @var DeserializedElem $child */
+            /** @psalm-var DeserializedElem $child */
             foreach ($children as $child) {
                 if ($child["value"] instanceof Response) {
                     $responses[] = $child["value"];

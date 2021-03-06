@@ -29,10 +29,9 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /**
- * Class to represent XML DAV:response elements as PHP objects.
+ * Represents XML DAV:response elements as PHP objects.
  *
  * From RFC 4918:
- *
  * Each ’response’ element MUST have an ’href’ element to identify the resource.
  * A Multi-Status response uses one out of two distinct formats for representing the status:
  *
@@ -54,7 +53,9 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * and ’responsedescription’ text can provide additional information about this resource relative to the request or
  * result.
  *
+ * ```xml
  * <!ELEMENT response (href, ((href*, status)|(propstat+)), error?, responsedescription? , location?) >
+ * ```
  *
  * @psalm-immutable
  *
@@ -64,6 +65,10 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  */
 abstract class Response implements \Sabre\Xml\XmlDeserializable
 {
+    /**
+     * Deserializes the child elements of a DAV:response element and creates a new instance of the proper subclass of
+     * Response.
+     */
     public static function xmlDeserialize(\Sabre\Xml\Reader $reader): Response
     {
         $hrefs = [];
@@ -72,7 +77,7 @@ abstract class Response implements \Sabre\Xml\XmlDeserializable
 
         $children = $reader->parseInnerTree();
         if (is_array($children)) {
-            /** @var DeserializedElem $child */
+            /** @psalm-var DeserializedElem $child */
             foreach ($children as $child) {
                 if ($child["value"] instanceof Propstat) {
                     $propstat[] = $child["value"];

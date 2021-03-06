@@ -66,7 +66,7 @@ class Discovery
      *
      * @param Account $account The CardDAV account providing credentials and initial discovery URI.
      * @psalm-return list<AddressbookCollection>
-     * @return AddressbookCollection[] The discovered addressbooks.
+     * @return array<int,AddressbookCollection> The discovered addressbooks.
      *
      * @throws \Exception
      *  In case of error, sub-classes of \Exception are thrown, with an error message contained within the \Exception
@@ -185,7 +185,7 @@ class Discovery
             list($rrname, $scheme) = $rrnameAndScheme;
 
             // query SRV records
-            /** @var list<SrvRecord> | false */
+            /** @psalm-var list<SrvRecord> | false */
             $dnsresults = dns_get_record($rrname, DNS_SRV);
 
             if (is_array($dnsresults)) {
@@ -249,7 +249,7 @@ class Discovery
         $contextpaths = [];
 
         if (isset($server["dnsrr"])) {
-            /** @var list<TxtRecord> | false */
+            /** @psalm-var list<TxtRecord> | false */
             $dnsresults = dns_get_record($server["dnsrr"], DNS_TXT);
             if (is_array($dnsresults)) {
                 foreach ($dnsresults as $dnsresult) {

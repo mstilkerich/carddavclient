@@ -287,7 +287,7 @@ class AddressbookCollection extends WebDavCollection
      * @param array $conditions
      *  The query filter conditions, see {@see Filter::__construct()} for format.
      * @psalm-param list<string> $requestedVCardProps
-     * @param string[] $requestedVCardProps
+     * @param array<int,string> $requestedVCardProps
      *  A list of the requested VCard properties. If empty array, the full VCards are requested from the server.
      * @param bool $matchAll
      *  Whether all or any of the conditions needs to match.
@@ -299,7 +299,7 @@ class AddressbookCollection extends WebDavCollection
      *  - The keys of the array are the URIs of the vcards
      *  - The values are associative arrays with keys etag (type: string) and vcard (type: VCard)
      * @see Filter
-     * @since v1.1.0
+     * @since 1.1.0
      * @api
      */
     public function query(
@@ -377,7 +377,7 @@ class AddressbookCollection extends WebDavCollection
         $errors = "";
 
         // Assert validity of the Card for CardDAV, including valid UID property
-        /** @var list<VcardValidateResult> */
+        /** @psalm-var list<VcardValidateResult> */
         $validityIssues = $vcard->validate(\Sabre\VObject\Node::PROFILE_CARDDAV | \Sabre\VObject\Node::REPAIR);
         foreach ($validityIssues as $issue) {
             $name = $issue["node"]->name;

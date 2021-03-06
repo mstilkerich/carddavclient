@@ -29,10 +29,9 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /**
- * Class to represent XML urn:ietf:params:xml:ns:carddav:param-filter elements as PHP objects. (RFC 6352)
+ * Represents XML urn:ietf:params:xml:ns:carddav:param-filter elements as PHP objects (RFC 6352).
  *
- * From RFC 6352
- *
+ * From RFC 6352:
  * The CARDDAV:param-filter XML element specifies search criteria on a specific vCard property parameter (e.g., TYPE) in
  * the scope of a given CARDDAV:prop-filter. A vCard property is said to match a CARDDAV:param-filter if:
  *   - A parameter of the type specified by the "name" attribute exists, and the CARDDAV:param-filter is empty, or it
@@ -41,22 +40,26 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  *   - A parameter of the type specified by the "name" attribute does not exist, and the CARDDAV:is-not-defined element
  *     is specified.
  *
+ * ```xml
  * <!ELEMENT param-filter (is-not-defined | text-match)?>
  * <!ATTLIST param-filter name CDATA #REQUIRED>
  *   <!-- name value: a property parameter name (e.g., "TYPE") -->
+ * ```
  *
  * @package Internal\XmlElements
  */
 class ParamFilter implements \Sabre\Xml\XmlSerializable
 {
     /**
-     * @var string Parameter this filter matches on (e.g. TYPE).
+     * Parameter this filter matches on (e.g. TYPE).
+     * @var string
      * @psalm-readonly
      */
     public $param;
 
     /**
-     * @var ?TextMatch Filter condition. Null to match if the parameter is not defined.
+     * Filter condition. Null to match if the parameter is not defined.
+     * @var ?TextMatch
      * @psalm-readonly
      */
     public $filter;
@@ -65,9 +68,9 @@ class ParamFilter implements \Sabre\Xml\XmlSerializable
      * Constructs a ParamFilter element.
      *
      * @param string  $param The name of the parameter to match for
-     * @param ?string $matchSpec The match specifier. Null to match for non-existence of the parameter, otherwise a
-     *                           match specifier for TextMatch.
-     * @see TextMatch
+     * @param ?string $matchSpec
+     *  The match specifier. Null to match for non-existence of the parameter, otherwise a match specifier for
+     *  {@see TextMatch}.
      */
     public function __construct(string $param, ?string $matchSpec)
     {
@@ -79,7 +82,7 @@ class ParamFilter implements \Sabre\Xml\XmlSerializable
     }
 
     /**
-     * This function encodes the elements value (not the element itself!) to the given XML writer.
+     * This function encodes the element's value (not the element itself!) to the given XML writer.
      */
     public function xmlSerialize(\Sabre\Xml\Writer $writer): void
     {

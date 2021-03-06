@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -83,6 +100,13 @@
     CardDavClient
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-Communication.html">Communication</a></li>
+                            </ul>
+        </div>
     
     
     </h2>
@@ -90,11 +114,18 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">50</span>
+    <span class="phpdocumentor-element-found-in__line">51</span>
 </aside>
 
-        
-    <section class="phpdocumentor-description"></section>
+            <p class="phpdocumentor-summary">Implements the operations of the CardDAV protocol.</p>
+
+    <section class="phpdocumentor-description"><p>This class implements the lower level interactions with the CardDAV server that are utilized by the higher-level
+operations offered by the public entities (<a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a> etc.) and services (<a href="classes/MStilkerich-CardDavClient-Services-Sync.html"><abbr title="\MStilkerich\CardDavClient\Services\Sync">Sync</abbr></a>,
+<a href="classes/MStilkerich-CardDavClient-Services-Discovery.html"><abbr title="\MStilkerich\CardDavClient\Services\Discovery">Discovery</abbr></a>.</p>
+<p>An application interacting with the carddavclient library should not interact with this class directly, and it is
+considered an internal part of the library whose interfaces may change without being considered a change of the
+library's API.</p>
+</section>
 
 
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
@@ -185,7 +216,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-CardDavClient.html#method_createResource">createResource()</a>
     <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                        &nbsp;: array&lt;string, string&gt;    </span>
 </dt>
 <dd>Requests the server to create the given resource.</dd>
 
@@ -199,14 +230,14 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-CardDavClient.html#method_findProperties">findProperties()</a>
     <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                        &nbsp;: array&lt;int, array&lt;string, mixed&gt;&gt;    </span>
 </dt>
 <dd>Retrieves a set of WebDAV properties for a resource.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-CardDavClient.html#method_getAddressObject">getAddressObject()</a>
     <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                        &nbsp;: array&lt;string, string&gt;    </span>
 </dt>
 <dd>Fetches an address object.</dd>
 
@@ -236,7 +267,7 @@
     <span>
                         &nbsp;: <a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a>    </span>
 </dt>
-<dd>Note: Google&#039;s server does not accept an empty syncToken, though explicitly allowed for initial sync by RFC6578.</dd>
+<dd>Requests a sync-collection REPORT from the CardDAV server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-CardDavClient.html#method_updateResource">updateResource()</a>
@@ -248,7 +279,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-CardDavClient.html#method_addRequiredVCardProperties">addRequiredVCardProperties()</a>
     <span>
-                        &nbsp;: <abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;    </span>
+                        &nbsp;: array&lt;int, string&gt;    </span>
 </dt>
 <dd>Adds required VCard properties to a set specified by the user.</dd>
 
@@ -262,14 +293,14 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-CardDavClient.html#method_checkAndParseXMLMultistatus">checkAndParseXMLMultistatus()</a>
     <span>
-                        &nbsp;: <abbr title="\MStilkerich\CardDavClient\MultiStatus">MultiStatus</abbr>&lt;string|int, <abbr title="\MStilkerich\CardDavClient\RT">RT</abbr>&gt;    </span>
+                        &nbsp;: <a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a>    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-CardDavClient.html#method_determineReqCardProps">determineReqCardProps()</a>
     <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;|null    </span>
+                        &nbsp;: null|array&lt;int, array&lt;string, mixed&gt;&gt;    </span>
 </dt>
 <dd>Builds a CARDDAV::address-data element with the requested properties.</dd>
 
@@ -283,7 +314,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-CardDavClient.html#method_requestWithRedirectionTarget">requestWithRedirectionTarget()</a>
     <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                        &nbsp;: array&lt;string, mixed&gt;    </span>
 </dt>
 <dd>Performs a WebDAV request, automatically following redirections and providing the final target with the result.</dd>
 
@@ -346,7 +377,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">61</span>
+    <span class="phpdocumentor-element-found-in__line">60</span>
 </aside>
 
     
@@ -377,7 +408,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
+    <span class="phpdocumentor-element-found-in__line">63</span>
 </aside>
 
     
@@ -412,7 +443,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">67</span>
+    <span class="phpdocumentor-element-found-in__line">65</span>
 </aside>
 
     
@@ -468,7 +499,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">550</span>
+    <span class="phpdocumentor-element-found-in__line">568</span>
 </aside>
 
     
@@ -510,7 +541,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">560</span>
+    <span class="phpdocumentor-element-found-in__line">578</span>
 </aside>
 
     
@@ -559,7 +590,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">555</span>
+    <span class="phpdocumentor-element-found-in__line">573</span>
 </aside>
 
     
@@ -608,14 +639,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">203</span>
+    <span class="phpdocumentor-element-found-in__line">208</span>
 </aside>
 
         <p class="phpdocumentor-summary">Requests the server to create the given resource.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">createResource</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$body</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$suggestedUri</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$post</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                <span class="phpdocumentor-signature__name">createResource</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$body</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$suggestedUri</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$post</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -647,11 +678,31 @@
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>array{uri: string, etag: string}</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
+            <section class="phpdocumentor-description"><p>Associative array with keys</p>
+<ul>
+<li>uri (string): URI of the new resource if the request was successful</li>
+<li>etag (string): Entity tag of the created resource if returned by server, otherwise empty string.</li>
+</ul>
+</section>
 
     
 </article>
@@ -668,7 +719,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">152</span>
 </aside>
 
         <p class="phpdocumentor-summary">Requests the server to delete the given resource.</p>
@@ -712,14 +763,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">392</span>
+    <span class="phpdocumentor-element-found-in__line">408</span>
 </aside>
 
         <p class="phpdocumentor-summary">Retrieves a set of WebDAV properties for a resource.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">findProperties</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$props</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$depth</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;0&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                <span class="phpdocumentor-signature__name">findProperties</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$props</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$depth</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;0&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, array&lt;string, mixed&gt;&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -736,7 +787,7 @@
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$props</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>List of properties to retrieve, given as XML element names</p>
@@ -748,14 +799,49 @@
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&quot;0&quot;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>Value for the Depth header</p>
+</section>
+
             </dd>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string> $props</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>&quot;0&quot;|&quot;1&quot;|&quot;infinity&quot; $depth</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list&lt;array{uri: string, props: PropTypes}&gt;</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;int, array&lt;string, mixed&gt;&gt;</span>
             &mdash;
             <section class="phpdocumentor-description"></section>
 
@@ -774,14 +860,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">129</span>
+    <span class="phpdocumentor-element-found-in__line">133</span>
 </aside>
 
         <p class="phpdocumentor-summary">Fetches an address object.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getAddressObject</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                <span class="phpdocumentor-signature__name">getAddressObject</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -799,11 +885,31 @@
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>array{etag: string, vcf: string}</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
+            <section class="phpdocumentor-description"><p>Associative array with keys</p>
+<ul>
+<li>etag (string): Entity tag of the created resource if returned by server, otherwise empty string.</li>
+<li>vcf (string): The address data of the address object</li>
+</ul>
+</section>
 
     
 </article>
@@ -862,14 +968,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">257</span>
+    <span class="phpdocumentor-element-found-in__line">266</span>
 </aside>
 
         <p class="phpdocumentor-summary">Issues an addressbook-multiget request to the server.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">multiGet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$addressbookUri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedUris</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a></span></code>
+                <span class="phpdocumentor-signature__name">multiGet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$addressbookUri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedUris</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a></span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -886,7 +992,7 @@
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$requestedUris</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>List of URIs of the objects to fetch</p>
@@ -895,7 +1001,7 @@
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>List of VCard properties to request, empty to request the full cards.</p>
@@ -911,6 +1017,24 @@
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string> $requestedUris</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string> $requestedVCardProps</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">psalm-return</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -941,14 +1065,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">306</span>
+    <span class="phpdocumentor-element-found-in__line">316</span>
 </aside>
 
         <p class="phpdocumentor-summary">Issues an addressbook-query report.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">query</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$addressbookUri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Filter">Filter</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$filter</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$limit</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a></span></code>
+                <span class="phpdocumentor-signature__name">query</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$addressbookUri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Filter">Filter</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$filter</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$limit</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a></span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -974,11 +1098,10 @@
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>A list of the requested VCard properties. If empty array, the full
-VCards are requested from the server.</p>
+                    <section class="phpdocumentor-description"><p>A list of the requested VCard properties. If empty array, the full VCards are requested from the server.</p>
 </section>
 
             </dd>
@@ -1000,6 +1123,15 @@ VCards are requested from the server.</p>
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string> $requestedVCardProps</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">psalm-return</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -1033,13 +1165,14 @@ VCards are requested from the server.</p>
     <span class="phpdocumentor-element-found-in__line">79</span>
 </aside>
 
-        <p class="phpdocumentor-summary">Note: Google&#039;s server does not accept an empty syncToken, though explicitly allowed for initial sync by RFC6578.</p>
+        <p class="phpdocumentor-summary">Requests a sync-collection REPORT from the CardDAV server.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
                 <span class="phpdocumentor-signature__name">syncCollection</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$addressbookUri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$syncToken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a></span></code>
 
-        <section class="phpdocumentor-description"><p>It will respond with 400 Bad Request and error message &quot;Request contains an invalid argument.&quot;</p>
+        <section class="phpdocumentor-description"><p>Note: Google's server does not accept an empty syncToken, though explicitly allowed for initial sync by RFC6578.
+It will respond with 400 Bad Request and error message &quot;Request contains an invalid argument.&quot;</p>
 <p>The Google issues have been reported to Google: https://issuetracker.google.com/issues/160190530</p>
 </section>
 
@@ -1083,7 +1216,7 @@ VCards are requested from the server.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">165</span>
+    <span class="phpdocumentor-element-found-in__line">169</span>
 </aside>
 
         <p class="phpdocumentor-summary">Requests the server to update the given resource.</p>
@@ -1146,14 +1279,14 @@ because the server-side ETag did not match the given one.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">452</span>
+    <span class="phpdocumentor-element-found-in__line">468</span>
 </aside>
 
         <p class="phpdocumentor-summary">Adds required VCard properties to a set specified by the user.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">addRequiredVCardProperties</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">addRequiredVCardProperties</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>This is needed to ensure retrieval of a valid VCard, as some properties are mandatory.</p>
 </section>
@@ -1162,7 +1295,7 @@ because the server-side ETag did not match the given one.</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>List of properties requested by the user</p>
@@ -1172,9 +1305,33 @@ because the server-side ETag did not match the given one.</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string> $requestedVCardProps</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string></p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span>
             &mdash;
             <section class="phpdocumentor-description"><p>List of properties requested by the user, completed with mandatory properties.</p>
 </section>
@@ -1194,7 +1351,7 @@ because the server-side ETag did not match the given one.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">464</span>
+    <span class="phpdocumentor-element-found-in__line">480</span>
 </aside>
 
     
@@ -1257,13 +1414,13 @@ because the server-side ETag did not match the given one.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">481</span>
+    <span class="phpdocumentor-element-found-in__line">498</span>
 </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">checkAndParseXMLMultistatus</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$davReply</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$responseType</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">XmlElementsResponse::class</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\MultiStatus">MultiStatus</abbr>&lt;string|int, <abbr title="\MStilkerich\CardDavClient\RT">RT</abbr>&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">checkAndParseXMLMultistatus</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$davReply</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$responseType</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">XmlElementsResponse::class</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a></span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -1309,10 +1466,19 @@ because the server-side ETag did not match the given one.</p>
 </section>
 
                                     </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>Multistatus<RT></p>
+</section>
+
+                                    </dd>
                         </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\MultiStatus">MultiStatus</abbr>&lt;string|int, <abbr title="\MStilkerich\CardDavClient\RT">RT</abbr>&gt;</span>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a></span>
             &mdash;
             <section class="phpdocumentor-description"></section>
 
@@ -1331,14 +1497,14 @@ because the server-side ETag did not match the given one.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">362</span>
+    <span class="phpdocumentor-element-found-in__line">374</span>
 </aside>
 
         <p class="phpdocumentor-summary">Builds a CARDDAV::address-data element with the requested properties.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">determineReqCardProps</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span></code>
+                <span class="phpdocumentor-signature__name">determineReqCardProps</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">null|array&lt;int, array&lt;string, mixed&gt;&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>If no properties are requested, returns null - an empty address-data element means that the full VCards shall be
 returned.</p>
@@ -1349,7 +1515,7 @@ returned.</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>List of the VCard properties requested by the user</p>
@@ -1359,9 +1525,33 @@ returned.</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string> $requestedVCardProps</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>null|list&lt;array{name: string, attributes: array{name: string}}&gt;</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span>
+    <span class="phpdocumentor-signature__response_type">null|array&lt;int, array&lt;string, mixed&gt;&gt;</span>
             &mdash;
             <section class="phpdocumentor-description"></section>
 
@@ -1380,7 +1570,7 @@ returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">569</span>
+    <span class="phpdocumentor-element-found-in__line">587</span>
 </aside>
 
     
@@ -1412,14 +1602,14 @@ returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">516</span>
+    <span class="phpdocumentor-element-found-in__line">534</span>
 </aside>
 
         <p class="phpdocumentor-summary">Performs a WebDAV request, automatically following redirections and providing the final target with the result.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">requestWithRedirectionTarget</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\RequestOptions">RequestOptions</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                <span class="phpdocumentor-signature__name">requestWithRedirectionTarget</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\RequestOptions">RequestOptions</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, mixed&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -1455,9 +1645,24 @@ returned.</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>array{redirected: bool, location: string, response: Psr7Response}</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string, mixed&gt;</span>
             &mdash;
             <section class="phpdocumentor-description"></section>
 

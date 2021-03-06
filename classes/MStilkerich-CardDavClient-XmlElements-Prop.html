@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     Prop
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-XmlElements.html">XmlElements</a></li>
+                            </ul>
+        </div>
     
             <span class="phpdocumentor-element__implements">
             implements
@@ -94,10 +118,10 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Prop.php"><a href="files/src-xmlelements-prop.html"><abbr title="src/XmlElements/Prop.php">Prop.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">52</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class to represent XML DAV:prop elements as PHP objects.</p>
+            <p class="phpdocumentor-summary">Represents XML DAV:prop elements as PHP objects.</p>
 
     <section class="phpdocumentor-description"></section>
 
@@ -166,28 +190,28 @@
     <span>
         &nbsp;= [MStilkerichCardDavClientXmlElementsElementNames::ABOOK_HOME =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeHrefMulti&#039;], MStilkerichCardDavClientXmlElementsElementNames::ADD_MEMBER =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeHrefSingle&#039;], MStilkerichCardDavClientXmlElementsElementNames::CURUSRPRINC =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeHrefSingle&#039;], MStilkerichCardDavClientXmlElementsElementNames::RESTYPE =&gt; &#039;\Sabre\Xml\Deserializer\enum&#039;, MStilkerichCardDavClientXmlElementsElementNames::SUPPORTED_REPORT_SET =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeSupportedReportSet&#039;], MStilkerichCardDavClientXmlElementsElementNames::SUPPORTED_ADDRDATA =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeSupportedAddrData&#039;], MStilkerichCardDavClientXmlElementsElementNames::ADDRDATATYPE =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeToAttributes&#039;]]                    </span>
 </dt>
-<dd></dd>
+<dd>Deserializers for various child elements of prop.</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Prop.html#property_props">$props</a>
     <span>
-                &nbsp;: <abbr title="\MStilkerich\CardDavClient\XmlElements\PropTypes">PropTypes</abbr>            </span>
+                &nbsp;: array&lt;string, mixed&gt;            </span>
 </dt>
-<dd></dd>
+<dd>The child elements of this Prop element.</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Prop.html#method_xmlDeserialize">xmlDeserialize()</a>
     <span>
                         &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
+<dd>Deserializes the child elements of a DAV:prop element and creates a new instance of Prop.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Prop.html#method_storeProperty">storeProperty()</a>
     <span>
                         &nbsp;: void    </span>
 </dt>
-<dd>Processes a deserialized prop child element and stores the result if known.</dd>
+<dd>Processes a deserialized prop child element.</dd>
 
         </dl>
 
@@ -208,13 +232,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Prop.php"><a href="files/src-xmlelements-prop.html"><abbr title="src/XmlElements/Prop.php">Prop.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
+    <span class="phpdocumentor-element-found-in__line">88</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Deserializers for various child elements of prop.</p>
+
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__type">array&lt;string, callable|string&gt;</span>
     <span class="phpdocumentor-signature__name">PROP_DESERIALIZERS</span>
     = <span class="phpdocumentor-signature__default-value">[MStilkerichCardDavClientXmlElementsElementNames::ABOOK_HOME =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeHrefMulti&#039;], MStilkerichCardDavClientXmlElementsElementNames::ADD_MEMBER =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeHrefSingle&#039;], MStilkerichCardDavClientXmlElementsElementNames::CURUSRPRINC =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeHrefSingle&#039;], MStilkerichCardDavClientXmlElementsElementNames::RESTYPE =&gt; &#039;\Sabre\Xml\Deserializer\enum&#039;, MStilkerichCardDavClientXmlElementsElementNames::SUPPORTED_REPORT_SET =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeSupportedReportSet&#039;], MStilkerichCardDavClientXmlElementsElementNames::SUPPORTED_ADDRDATA =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeSupportedAddrData&#039;], MStilkerichCardDavClientXmlElementsElementNames::ADDRDATATYPE =&gt; [MStilkerichCardDavClientXmlElementsDeserializers::class, &#039;deserializeToAttributes&#039;]]</span>
 </code>
@@ -223,6 +248,21 @@
         <section class="phpdocumentor-description"></section>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-var</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>array&lt;string, callable(\Sabre\Xml\Reader):void | class-string&lt;\Sabre\Xml\XmlDeserializable&gt;&gt;</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
 </article>
             </section>
@@ -249,19 +289,36 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Prop.php"><a href="files/src-xmlelements-prop.html"><abbr title="src/XmlElements/Prop.php">Prop.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">93</span>
+    <span class="phpdocumentor-element-found-in__line">104</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The child elements of this Prop element.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\MStilkerich\CardDavClient\XmlElements\PropTypes">PropTypes</abbr></span>
+        <span class="phpdocumentor-signature__type">array&lt;string, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$props</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
-        <section class="phpdocumentor-description"></section>
+        <section class="phpdocumentor-description"><p>Maps child element name to a child-element specific value.</p>
+</section>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-var</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>PropTypes</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
 </article>
             </section>
@@ -284,15 +341,17 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Prop.php"><a href="files/src-xmlelements-prop.html"><abbr title="src/XmlElements/Prop.php">Prop.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">95</span>
+    <span class="phpdocumentor-element-found-in__line">109</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Deserializes the child elements of a DAV:prop element and creates a new instance of Prop.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">xmlDeserialize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -326,22 +385,23 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Prop.php"><a href="files/src-xmlelements-prop.html"><abbr title="src/XmlElements/Prop.php">Prop.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">113</span>
+    <span class="phpdocumentor-element-found-in__line">130</span>
 </aside>
 
-        <p class="phpdocumentor-summary">Processes a deserialized prop child element and stores the result if known.</p>
+        <p class="phpdocumentor-summary">Processes a deserialized prop child element.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">storeProperty</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\XmlElements\DeserializedElem">DeserializedElem</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$deserElem</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                <span class="phpdocumentor-signature__name">storeProperty</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$deserElem</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
+        <section class="phpdocumentor-description"><p>If the child element is known to this class, the deserialized value is stored to <a href="classes/MStilkerich-CardDavClient-XmlElements-Prop.html#property_props"><abbr title="\MStilkerich\CardDavClient\XmlElements\Prop::$props">Prop::$props</abbr></a>.</p>
+</section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$deserElem</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\XmlElements\DeserializedElem">DeserializedElem</abbr></span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -350,6 +410,21 @@
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>DeserializedElem $deserElem</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">void</span>

@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     Response
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-XmlElements.html">XmlElements</a></li>
+                            </ul>
+        </div>
     
             <span class="phpdocumentor-element__implements">
             implements
@@ -94,13 +118,13 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Response.php"><a href="files/src-xmlelements-response.html"><abbr title="src/XmlElements/Response.php">Response.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">63</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class to represent XML DAV:response elements as PHP objects.</p>
+            <p class="phpdocumentor-summary">Represents XML DAV:response elements as PHP objects.</p>
 
-    <section class="phpdocumentor-description"><p>From RFC 4918:</p>
-<p>Each ’response’ element MUST have an ’href’ element to identify the resource.
+    <section class="phpdocumentor-description"><p>From RFC 4918:
+Each ’response’ element MUST have an ’href’ element to identify the resource.
 A Multi-Status response uses one out of two distinct formats for representing the status:</p>
 <ol>
 <li>
@@ -122,7 +146,8 @@ XML element. This requirement is necessary in order to keep processing costs for
 however, no requirements regarding ordering based on ’href’ values. The optional precondition/postcondition element
 and ’responsedescription’ text can provide additional information about this resource relative to the request or
 result.</p>
-<!ELEMENT response (href, ((href*, status)|(propstat+)), error?, responsedescription? , location?) >
+<pre class="prettyprint"><code class="language-xml">&lt;!ELEMENT response (href, ((href*, status)|(propstat+)), error?, responsedescription? , location?) &gt;
+</code></pre>
 </section>
 
 
@@ -177,7 +202,8 @@ result.</p>
     <span>
                         &nbsp;: <a href="classes/MStilkerich-CardDavClient-XmlElements-Response.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Response">Response</abbr></a>    </span>
 </dt>
-<dd></dd>
+<dd>Deserializes the child elements of a DAV:response element and creates a new instance of the proper subclass of
+Response.</dd>
 
         </dl>
 
@@ -205,15 +231,18 @@ result.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Response.php"><a href="files/src-xmlelements-response.html"><abbr title="src/XmlElements/Response.php">Response.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">65</span>
+    <span class="phpdocumentor-element-found-in__line">72</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Deserializes the child elements of a DAV:response element and creates a new instance of the proper subclass of
+Response.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">xmlDeserialize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Response.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Response">Response</abbr></a></span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">

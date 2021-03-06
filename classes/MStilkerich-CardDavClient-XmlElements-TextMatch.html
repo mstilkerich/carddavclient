@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     TextMatch
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-XmlElements.html">XmlElements</a></li>
+                            </ul>
+        </div>
     
             <span class="phpdocumentor-element__implements">
             implements
@@ -94,13 +118,13 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/TextMatch.php"><a href="files/src-xmlelements-textmatch.html"><abbr title="src/XmlElements/TextMatch.php">TextMatch.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">59</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class to represent XML urn:ietf:params:xml:ns:carddav:text-match elements as PHP objects. (RFC 6352)</p>
+            <p class="phpdocumentor-summary">Represents XML urn:ietf:params:xml:ns:carddav:text-match elements as PHP objects (RFC 6352).</p>
 
-    <section class="phpdocumentor-description"><p>From RFC 6352</p>
-<p>The CARDDAV:text-match XML element specifies text used for a substring match against the vCard
+    <section class="phpdocumentor-description"><p>From RFC 6352:
+The CARDDAV:text-match XML element specifies text used for a substring match against the vCard
 property or parameter value specified in an address book REPORT request.</p>
 <p>The &quot;collation&quot; attribute is used to select the collation that the server MUST use for character string matching. In
 the absence of this attribute, the server MUST use the &quot;i;unicode-casemap&quot; collation.</p>
@@ -109,25 +133,18 @@ attribute value is set to &quot;no&quot;, or return a match if the text does not
 For example, this can be used to match components with a CATEGORIES property not set to PERSON.</p>
 <p>The &quot;match-type&quot; attribute is used to indicate the type of match operation to use.  Possible choices are:</p>
 <ul>
-<li>
-<p>&quot;equals&quot; - an exact match to the target string</p>
-</li>
-<li>
-<p>&quot;contains&quot; - a substring match, matching anywhere within the target string</p>
-</li>
-<li>
-<p>&quot;starts-with&quot; - a substring match, matching only at the start of the target string</p>
-</li>
-<li>
-<p>&quot;ends-with&quot; - a substring match, matching only at the end of the target string</p>
-<!ELEMENT text-match (#PCDATA)>
-<!-- PCDATA value: string -->
-<!ATTLIST text-match
-   collation CDATA "i;unicode-casemap"
-   negate-condition (yes | no) "no"
-   match-type (equals|contains|starts-with|ends-with) "contains">
-</li>
+<li>&quot;equals&quot; - an exact match to the target string</li>
+<li>&quot;contains&quot; - a substring match, matching anywhere within the target string</li>
+<li>&quot;starts-with&quot; - a substring match, matching only at the start of the target string</li>
+<li>&quot;ends-with&quot; - a substring match, matching only at the end of the target string</li>
 </ul>
+<pre class="prettyprint"><code class="language-xml">    &lt;!ELEMENT text-match (#PCDATA)&gt;
+    &lt;!-- PCDATA value: string --&gt;
+    &lt;!ATTLIST text-match
+       collation CDATA &quot;i;unicode-casemap&quot;
+       negate-condition (yes | no) &quot;no&quot;
+       match-type (equals|contains|starts-with|ends-with) &quot;contains&quot;&gt;
+</code></pre>
 </section>
 
 
@@ -159,28 +176,28 @@ For example, this can be used to match components with a CATEGORIES property not
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>Collation to use for comparison (currently constant)</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#property_invertMatch">$invertMatch</a>
     <span>
                 &nbsp;: bool            </span>
 </dt>
-<dd></dd>
+<dd>Whether to invert the result of the match</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#property_matchType">$matchType</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The type of text match to apply</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#property_needle">$needle</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The string to match for</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#method___construct">__construct()</a>
@@ -201,7 +218,7 @@ For example, this can be used to match components with a CATEGORIES property not
     <span>
                         &nbsp;: void    </span>
 </dt>
-<dd>This function encodes the elements value (not the element itself!) to the given XML writer.</dd>
+<dd>This function encodes the element&#039;s value (not the element itself!) to the given XML writer.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#method_xmlSerializeElement">xmlSerializeElement()</a>
@@ -238,10 +255,11 @@ For example, this can be used to match components with a CATEGORIES property not
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/TextMatch.php"><a href="files/src-xmlelements-textmatch.html"><abbr title="src/XmlElements/TextMatch.php">TextMatch.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">65</span>
+    <span class="phpdocumentor-element-found-in__line">68</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Collation to use for comparison (currently constant)</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -283,10 +301,11 @@ For example, this can be used to match components with a CATEGORIES property not
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/TextMatch.php"><a href="files/src-xmlelements-textmatch.html"><abbr title="src/XmlElements/TextMatch.php">TextMatch.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">71</span>
+    <span class="phpdocumentor-element-found-in__line">75</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Whether to invert the result of the match</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">bool</span>
@@ -328,13 +347,14 @@ For example, this can be used to match components with a CATEGORIES property not
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/TextMatch.php"><a href="files/src-xmlelements-textmatch.html"><abbr title="src/XmlElements/TextMatch.php">TextMatch.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">77</span>
+    <span class="phpdocumentor-element-found-in__line">83</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The type of text match to apply</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$matchType</span>
      = <span class="phpdocumentor-signature__default-value">&#039;contains&#039;</span></code>
 
@@ -347,6 +367,15 @@ For example, this can be used to match components with a CATEGORIES property not
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-var</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>'equals' | 'contains' | 'starts-with' | 'ends-with'</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">psalm-readonly</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -373,10 +402,11 @@ For example, this can be used to match components with a CATEGORIES property not
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/TextMatch.php"><a href="files/src-xmlelements-textmatch.html"><abbr title="src/XmlElements/TextMatch.php">TextMatch.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">83</span>
+    <span class="phpdocumentor-element-found-in__line">90</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The string to match for</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -422,7 +452,7 @@ For example, this can be used to match components with a CATEGORIES property not
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/TextMatch.php"><a href="files/src-xmlelements-textmatch.html"><abbr title="src/XmlElements/TextMatch.php">TextMatch.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">103</span>
+    <span class="phpdocumentor-element-found-in__line">110</span>
 </aside>
 
         <p class="phpdocumentor-summary">Constructs a TextMatch element.</p>
@@ -433,17 +463,21 @@ For example, this can be used to match components with a CATEGORIES property not
 
         <section class="phpdocumentor-description"><p>The match is specified in a string form that encodes all properties of the match.</p>
 <ul>
-<li>The match string must be enclosed in / (e.g. /foo/)</li>
+<li>The match string must be enclosed in / (e.g. <code class="prettyprint">/foo/</code>)</li>
 <li>The / character has no special meaning other than to separate the match string from modifiers. No escaping is
-needed if / appears as part of the match string (e.g. /http:/// matches for http://).</li>
-<li>To invert the match, insert ! before the initial / (e.g. !/foo/)</li>
+needed if / appears as part of the match string (e.g. <code class="prettyprint">/http:///</code> matches for &quot;http://&quot;).</li>
+<li>To invert the match, insert ! before the initial / (e.g. <code class="prettyprint">!/foo/</code>)</li>
 <li>The default match type is &quot;contains&quot; semantics. If you want to match the start or end of the property value,
 or perform an exact match, use the ^/$/= modifiers after the final slash. Examples:
 <ul>
-<li>/abc/= - The property/parameter must match the value &quot;abc&quot; exactly</li>
-<li>/abc/^  - The property/parameter must start with &quot;abc&quot;</li>
-<li>/abc/$  - The property/parameter must end with &quot;abc&quot;</li>
-<li>/abc/   - The property/parameter must contain &quot;abc&quot;</li>
+<li>
+<code class="prettyprint">/abc/=</code>: The property/parameter must match the value &quot;abc&quot; exactly</li>
+<li>
+<code class="prettyprint">/abc/^</code>: The property/parameter must start with &quot;abc&quot;</li>
+<li>
+<code class="prettyprint">/abc/$</code>: The property/parameter must end with &quot;abc&quot;</li>
+<li>
+<code class="prettyprint">/abc/</code>: The property/parameter must contain &quot;abc&quot;</li>
 </ul>
 </li>
 <li>The matching is performed case insensitive with UTF8 character set (this is currently not changeable).</li>
@@ -485,7 +519,7 @@ or perform an exact match, use the ^/$/= modifiers after the final slash. Exampl
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/TextMatch.php"><a href="files/src-xmlelements-textmatch.html"><abbr title="src/XmlElements/TextMatch.php">TextMatch.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">156</span>
+    <span class="phpdocumentor-element-found-in__line">163</span>
 </aside>
 
         <p class="phpdocumentor-summary">Produces a list of attributes for this filter suitable to pass to a Sabre XML Writer.</p>
@@ -520,10 +554,10 @@ or perform an exact match, use the ^/$/= modifiers after the final slash. Exampl
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/TextMatch.php"><a href="files/src-xmlelements-textmatch.html"><abbr title="src/XmlElements/TextMatch.php">TextMatch.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">132</span>
+    <span class="phpdocumentor-element-found-in__line">139</span>
 </aside>
 
-        <p class="phpdocumentor-summary">This function encodes the elements value (not the element itself!) to the given XML writer.</p>
+        <p class="phpdocumentor-summary">This function encodes the element&#039;s value (not the element itself!) to the given XML writer.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -564,7 +598,7 @@ or perform an exact match, use the ^/$/= modifiers after the final slash. Exampl
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/TextMatch.php"><a href="files/src-xmlelements-textmatch.html"><abbr title="src/XmlElements/TextMatch.php">TextMatch.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">140</span>
+    <span class="phpdocumentor-element-found-in__line">147</span>
 </aside>
 
         <p class="phpdocumentor-summary">This function serializes the full element to the given XML writer.</p>

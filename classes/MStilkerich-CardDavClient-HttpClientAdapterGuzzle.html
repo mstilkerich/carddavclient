@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -86,6 +103,13 @@
         extends <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html"><abbr title="\MStilkerich\CardDavClient\HttpClientAdapter">HttpClientAdapter</abbr></a>
     </span>
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-Communication.html">Communication</a></li>
+                            </ul>
+        </div>
     
     
     </h2>
@@ -93,7 +117,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">40</span>
 </aside>
 
             <p class="phpdocumentor-summary">Adapter for the Guzzle HTTP client library.</p>
@@ -133,56 +157,58 @@
     <span>
         &nbsp;= [&#039;basic&#039;, &#039;digest&#039;, &#039;ntlm&#039;]                    </span>
 </dt>
-<dd></dd>
+<dd>A list of authentication schemes that can be handled by Guzzle itself, independent on whether it works only with
+the Guzzle Curl HTTP handler or not.</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_baseUri">$baseUri</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The base URI for requests.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_authScheme">$authScheme</a>
     <span>
                 &nbsp;: string|null            </span>
 </dt>
-<dd></dd>
+<dd>The HTTP authentication scheme to use. Null if not determined yet.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_client">$client</a>
     <span>
                 &nbsp;: <abbr title="\GuzzleHttp\Client">Client</abbr>            </span>
 </dt>
-<dd></dd>
+<dd>The Client object of the Guzzle HTTP library.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_failedAuthSchemes">$failedAuthSchemes</a>
     <span>
-                &nbsp;: array&lt;string|int, string&gt;            </span>
+                &nbsp;: array&lt;int, string&gt;            </span>
 </dt>
-<dd></dd>
+<dd>HTTP authentication schemes tried without success, to avoid trying again.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_password">$password</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The password to use for authentication</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_schemeToCurlOpt">$schemeToCurlOpt</a>
     <span>
-                &nbsp;: array&lt;string|int, ?int&gt;            </span>
+                &nbsp;: null|array&lt;string, int&gt;            </span>
 </dt>
-<dd></dd>
+<dd>Maps lowercase auth-schemes to their CURLAUTH_XXX constant. Only values not part of GUZZLE_KNOWN_AUTHSCHEMES are
+relevant here.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_username">$username</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The username to use for authentication</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#method___construct">__construct()</a>
@@ -222,7 +248,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#method_getSupportedAuthSchemes">getSupportedAuthSchemes()</a>
     <span>
-                        &nbsp;: <abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;    </span>
+                        &nbsp;: array&lt;int, string&gt;    </span>
 </dt>
 <dd>Extracts HTTP authentication schemes from a WWW-Authenticate header.</dd>
 
@@ -231,7 +257,7 @@
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd></dd>
+<dd>Prepares options for the Guzzle request.</dd>
 
         </dl>
 
@@ -252,13 +278,15 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">43</span>
+    <span class="phpdocumentor-element-found-in__line">49</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">A list of authentication schemes that can be handled by Guzzle itself, independent on whether it works only with
+the Guzzle Curl HTTP handler or not.</p>
+
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__type">array&lt;int, string&gt;</span>
     <span class="phpdocumentor-signature__name">GUZZLE_KNOWN_AUTHSCHEMES</span>
     = <span class="phpdocumentor-signature__default-value">[&#039;basic&#039;, &#039;digest&#039;, &#039;ntlm&#039;]</span>
 </code>
@@ -267,6 +295,21 @@
         <section class="phpdocumentor-description"></section>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-var</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string></p>
+</section>
+
+                                    </dd>
+                        </dl>
 
 </article>
             </section>
@@ -293,10 +336,11 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">58</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The base URI for requests.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -324,10 +368,11 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
+    <span class="phpdocumentor-element-found-in__line">73</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The HTTP authentication scheme to use. Null if not determined yet.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">string|null</span>
@@ -355,10 +400,11 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">48</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The Client object of the Guzzle HTTP library.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type"><abbr title="\GuzzleHttp\Client">Client</abbr></span>
@@ -386,19 +432,35 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">60</span>
+    <span class="phpdocumentor-element-found-in__line">80</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">HTTP authentication schemes tried without success, to avoid trying again.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;int, string&gt;</span>
     <span class="phpdocumentor-signature__name">$failedAuthSchemes</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
         <section class="phpdocumentor-description"></section>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-var</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string></p>
+</section>
+
+                                    </dd>
+                        </dl>
 
 </article>
                     <article
@@ -417,10 +479,11 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">54</span>
+    <span class="phpdocumentor-element-found-in__line">67</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The password to use for authentication</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -448,13 +511,15 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">65</span>
+    <span class="phpdocumentor-element-found-in__line">87</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Maps lowercase auth-schemes to their CURLAUTH_XXX constant. Only values not part of GUZZLE_KNOWN_AUTHSCHEMES are
+relevant here.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, ?int&gt;</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">null|array&lt;string, int&gt;</span>
     <span class="phpdocumentor-signature__name">$schemeToCurlOpt</span>
     </code>
 
@@ -479,10 +544,11 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The username to use for authentication</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -514,7 +580,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">75</span>
+    <span class="phpdocumentor-element-found-in__line">95</span>
 </aside>
 
         <p class="phpdocumentor-summary">Constructs a HttpClientAdapterGuzzle object.</p>
@@ -578,14 +644,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">116</span>
+    <span class="phpdocumentor-element-found-in__line">138</span>
 </aside>
 
         <p class="phpdocumentor-summary">Sends a PSR-7 request and returns a PSR-7 response.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">sendRequest</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\RequestOptions">RequestOptions</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr></span></code>
+                <span class="phpdocumentor-signature__name">sendRequest</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr></span></code>
 
         <section class="phpdocumentor-description"><p>The given URI may be relative to the base URI given on construction of this object or a full URL.
 Authentication is only attempted in case the domain name of the request URI matches that of the base URI
@@ -614,17 +680,32 @@ Authentication is only attempted in case the domain name of the request URI matc
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$options</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\RequestOptions">RequestOptions</abbr></span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>Options for the HTTP client, and default request options.
-May include any of the options accepted by <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_sendRequest"><abbr title="\MStilkerich\CardDavClient\HttpClientAdapter::sendRequest()">HttpClientAdapter::sendRequest()</abbr></a>.</p>
+                    <section class="phpdocumentor-description"><p>Options for the HTTP client, and default request options. May include any of the options accepted by
+<a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_sendRequest"><abbr title="\MStilkerich\CardDavClient\HttpClientAdapter::sendRequest()">HttpClientAdapter::sendRequest()</abbr></a>.</p>
 </section>
 
             </dd>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>RequestOptions $options</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr></span>
@@ -647,7 +728,7 @@ May include any of the options accepted by <a href="classes/MStilkerich-CardDavC
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">85</span>
+    <span class="phpdocumentor-element-found-in__line">91</span>
 </aside>
 
         <p class="phpdocumentor-summary">Checks whether the given URI has the same domain as the base URI of this HTTP client.</p>
@@ -696,7 +777,7 @@ get that part from the base URI).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">113</span>
+    <span class="phpdocumentor-element-found-in__line">119</span>
 </aside>
 
         <p class="phpdocumentor-summary">Extracts the domain name from a subdomain.</p>
@@ -745,7 +826,7 @@ it is returned as provided.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">210</span>
+    <span class="phpdocumentor-element-found-in__line">232</span>
 </aside>
 
         <p class="phpdocumentor-summary">Checks if a request was rejected because of an incompatibility between curl and sabre/dav.</p>
@@ -765,7 +846,7 @@ attempt to evaluate the REPORT. A REPORT request requires a body, and thus sabre
 internal server error instead of a 401, normally causing the client library to fail. The problem specifically
 only occurs for REPORT requests, for other requests such as PROPFIND the problem is not triggered in sabre and an
 expected 401 response is returned.</p>
-<p>Read all about it here: https://github.com/sabre-io/dav/issues/932</p>
+<p>Read all about it <a href="https://github.com/sabre-io/dav/issues/932">here</a>.</p>
 <p>As a sidenote, nextcloud is not affected even though it uses sabre/dav, because the feature causing the server
 errors can be disabled and is in nextcloud. But there are other servers (Baïkal) using sabre/dav that are
 affected.</p>
@@ -784,12 +865,14 @@ above workaround without affecting the efficiency of communication when talking 
 <li>Result status code is 500</li>
 <li>The server is a sabre/dav server (X-Sabre-Version header is set)</li>
 <li>The response includes the known error message:
-<?xml version="1.0" encoding="utf-8"?>
+<pre class="prettyprint"><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 &lt;d:error xmlns:d=&quot;DAV:&quot; xmlns:s=&quot;http://sabredav.org/ns&quot;&gt;
-&lt;s:sabredav-version&gt;4.1.2&lt;/s:sabredav-version&gt;
-&lt;s:exception&gt;Sabre\Xml\ParseException&lt;/s:exception&gt;
-&lt;s:message&gt;The input element to parse is empty. Do not attempt to parse&lt;/s:message&gt;
-&lt;/d:error&gt;</li>
+  &lt;s:sabredav-version&gt;4.1.2&lt;/s:sabredav-version&gt;
+  &lt;s:exception&gt;Sabre\Xml\ParseException&lt;/s:exception&gt;
+  &lt;s:message&gt;The input element to parse is empty. Do not attempt to parse&lt;/s:message&gt;
+&lt;/d:error&gt;
+</code></pre>
+</li>
 </ul>
 </section>
 
@@ -833,14 +916,14 @@ above workaround without affecting the efficiency of communication when talking 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">293</span>
+    <span class="phpdocumentor-element-found-in__line">320</span>
 </aside>
 
         <p class="phpdocumentor-summary">Extracts HTTP authentication schemes from a WWW-Authenticate header.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">getSupportedAuthSchemes</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$response</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span></code>
+                <span class="phpdocumentor-signature__name">getSupportedAuthSchemes</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$response</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>The schemes offered by the server in the WWW-Authenticate header are intersected with those supported by Guzzle /
 curl. Schemes that havev been tried with this object without success are filtered.</p>
@@ -860,9 +943,24 @@ curl. Schemes that havev been tried with this object without success are filtere
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string></p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\list">list</abbr>&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span>
             &mdash;
             <section class="phpdocumentor-description"><p>An array of authentication schemes that can be tried.</p>
 </section>
@@ -882,13 +980,14 @@ curl. Schemes that havev been tried with this object without success are filtere
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapterGuzzle.php"><a href="files/src-httpclientadapterguzzle.html"><abbr title="src/HttpClientAdapterGuzzle.php">HttpClientAdapterGuzzle.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">231</span>
+    <span class="phpdocumentor-element-found-in__line">257</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Prepares options for the Guzzle request.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">prepareGuzzleOptions</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\RequestOptions">RequestOptions</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$doAuth</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                <span class="phpdocumentor-signature__name">prepareGuzzleOptions</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$doAuth</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -896,7 +995,7 @@ curl. Schemes that havev been tried with this object without success are filtere
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$options</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\RequestOptions">RequestOptions</abbr></span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -907,11 +1006,28 @@ curl. Schemes that havev been tried with this object without success are filtere
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>True to attempt authentication. False will only try unauthenticated access.</p>
+</section>
+
             </dd>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>RequestOptions $options</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>

@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     Multistatus
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-XmlElements.html">XmlElements</a></li>
+                            </ul>
+        </div>
     
             <span class="phpdocumentor-element__implements">
             implements
@@ -94,16 +118,21 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Multistatus.php"><a href="files/src-xmlelements-multistatus.html"><abbr title="src/XmlElements/Multistatus.php">Multistatus.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">47</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class to represent XML DAV:multistatus elements as PHP objects. (RFC 4918)</p>
+            <p class="phpdocumentor-summary">Represents XML DAV:multistatus elements as PHP objects (RFC 4918).</p>
 
-    <section class="phpdocumentor-description"><p>From RFC 4918:</p>
-<p>The ’multistatus’ root element holds zero or more ’response’ elements in any order, each with information about an
+    <section class="phpdocumentor-description"><p>The response child elements can be of two types, response elements containing a propstat (<a href="classes/MStilkerich-CardDavClient-XmlElements-ResponsePropstat.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\ResponsePropstat">ResponsePropstat</abbr></a>) or
+reponse elements containing a status (@{see ResponseStatus}). Depending on the request, either on response type is
+expected or a mixture of both is possible. This class has a template parameter that allows to define the specific
+expected response type.</p>
+<p>From RFC 4918:
+The ’multistatus’ root element holds zero or more ’response’ elements in any order, each with information about an
 individual resource.</p>
 <p>RFC 6578 adds the sync-token child element:</p>
-<!ELEMENT multistatus (response*, responsedescription?, sync-token?) >
+<pre class="prettyprint"><code class="language-xml">&lt;!ELEMENT multistatus (response*, responsedescription?, sync-token?) &gt;
+</code></pre>
 </section>
 
 
@@ -165,16 +194,16 @@ individual resource.</p>
                 <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html#property_responses">$responses</a>
     <span>
-                &nbsp;: array&lt;string|int, <abbr title="\MStilkerich\CardDavClient\XmlElements\RT">RT</abbr>&gt;            </span>
+                &nbsp;: array&lt;int, <a href="classes/MStilkerich-CardDavClient-XmlElements-Response.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Response">Response</abbr></a>&gt;            </span>
 </dt>
-<dd></dd>
+<dd>The reponse children of this multistatus element.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html#property_synctoken">$synctoken</a>
     <span>
                 &nbsp;: string|null            </span>
 </dt>
-<dd></dd>
+<dd>The optional sync-token child element of this multistatus.</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html#method___construct">__construct()</a>
@@ -188,7 +217,7 @@ individual resource.</p>
     <span>
                         &nbsp;: <a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a>    </span>
 </dt>
-<dd></dd>
+<dd>Deserializes the child elements of a DAV:multistatus element and creates a new instance of Multistatus.</dd>
 
         </dl>
 
@@ -218,19 +247,35 @@ individual resource.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Multistatus.php"><a href="files/src-xmlelements-multistatus.html"><abbr title="src/XmlElements/Multistatus.php">Multistatus.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">68</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The reponse children of this multistatus element.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, <abbr title="\MStilkerich\CardDavClient\XmlElements\RT">RT</abbr>&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-XmlElements-Response.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Response">Response</abbr></a>&gt;</span>
     <span class="phpdocumentor-signature__name">$responses</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
         <section class="phpdocumentor-description"></section>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-var</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<RT></p>
+</section>
+
+                                    </dd>
+                        </dl>
 
 </article>
                     <article
@@ -249,10 +294,11 @@ individual resource.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Multistatus.php"><a href="files/src-xmlelements-multistatus.html"><abbr title="src/XmlElements/Multistatus.php">Multistatus.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">50</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The optional sync-token child element of this multistatus.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string|null</span>
@@ -284,13 +330,13 @@ individual resource.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Multistatus.php"><a href="files/src-xmlelements-multistatus.html"><abbr title="src/XmlElements/Multistatus.php">Multistatus.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">59</span>
+    <span class="phpdocumentor-element-found-in__line">75</span>
 </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <abbr title="\MStilkerich\CardDavClient\XmlElements\RT">RT</abbr>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$responses</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$synctoken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-XmlElements-Response.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Response">Response</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$responses</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$synctoken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -298,7 +344,7 @@ individual resource.</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$responses</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <abbr title="\MStilkerich\CardDavClient\XmlElements\RT">RT</abbr>&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-XmlElements-Response.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Response">Response</abbr></a>&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -315,6 +361,21 @@ individual resource.</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<RT> $responses</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
@@ -336,15 +397,17 @@ individual resource.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Multistatus.php"><a href="files/src-xmlelements-multistatus.html"><abbr title="src/XmlElements/Multistatus.php">Multistatus.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">65</span>
+    <span class="phpdocumentor-element-found-in__line">84</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Deserializes the child elements of a DAV:multistatus element and creates a new instance of Multistatus.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">xmlDeserialize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Multistatus">Multistatus</abbr></a></span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">

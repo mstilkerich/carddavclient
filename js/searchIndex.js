@@ -58,12 +58,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024username",
             "name": "username",
-            "summary": "",
+            "summary": "The\u0020username\u0020to\u0020use\u0020for\u0020authentication.",
             "url": "classes/MStilkerich-CardDavClient-Account.html#property_username"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024password",
             "name": "password",
-            "summary": "",
+            "summary": "The\u0020password\u0020to\u0020use\u0020for\u0020authentication.\u0020If\u0020no\u0020password\u0020is\u0020needed\u0020\u0028e.g.\u0020GSSAPI\/Kerberos\u0029,\u0020this\u0020may\u0020be\u0020an\u0020empty\nstring.",
             "url": "classes/MStilkerich-CardDavClient-Account.html#property_password"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024discoveryUri",
@@ -153,7 +153,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient",
             "name": "CardDavClient",
-            "summary": "",
+            "summary": "Implements\u0020the\u0020operations\u0020of\u0020the\u0020CardDAV\u0020protocol.",
             "url": "classes/MStilkerich-CardDavClient-CardDavClient.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient\u003A\u003A__construct\u0028\u0029",
@@ -163,7 +163,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient\u003A\u003AsyncCollection\u0028\u0029",
             "name": "syncCollection",
-            "summary": "Note\u003A\u0020Google\u0027s\u0020server\u0020does\u0020not\u0020accept\u0020an\u0020empty\u0020syncToken,\u0020though\u0020explicitly\u0020allowed\u0020for\u0020initial\u0020sync\u0020by\u0020RFC6578.",
+            "summary": "Requests\u0020a\u0020sync\u002Dcollection\u0020REPORT\u0020from\u0020the\u0020CardDAV\u0020server.",
             "url": "classes/MStilkerich-CardDavClient-CardDavClient.html#method_syncCollection"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient\u003A\u003AgetResource\u0028\u0029",
@@ -268,7 +268,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Config",
             "name": "Config",
-            "summary": "",
+            "summary": "Central\u0020configuration\u0020of\u0020the\u0020carddavclient\u0020library.",
             "url": "classes/MStilkerich-CardDavClient-Config.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Config\u003A\u003Ainit\u0028\u0029",
@@ -313,7 +313,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Exception\\XmlParseException",
             "name": "XmlParseException",
-            "summary": "",
+            "summary": "Exception\u0020type\u0020to\u0020indicate\u0020that\u0020a\u0020parsed\u0020XML\u0020did\u0020not\u0020comply\u0020with\u0020the\u0020requirements\u0020described\u0020in\u0020its\u0020RFC\u0020definition.",
             "url": "classes/MStilkerich-CardDavClient-Exception-XmlParseException.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter",
@@ -338,7 +338,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003A\u0024baseUri",
             "name": "baseUri",
-            "summary": "",
+            "summary": "The\u0020base\u0020URI\u0020for\u0020requests.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_baseUri"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle",
@@ -363,7 +363,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003AprepareGuzzleOptions\u0028\u0029",
             "name": "prepareGuzzleOptions",
-            "summary": "",
+            "summary": "Prepares\u0020options\u0020for\u0020the\u0020Guzzle\u0020request.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#method_prepareGuzzleOptions"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003AgetSupportedAuthSchemes\u0028\u0029",
@@ -373,42 +373,42 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003AGUZZLE_KNOWN_AUTHSCHEMES",
             "name": "GUZZLE_KNOWN_AUTHSCHEMES",
-            "summary": "",
+            "summary": "A\u0020list\u0020of\u0020authentication\u0020schemes\u0020that\u0020can\u0020be\u0020handled\u0020by\u0020Guzzle\u0020itself,\u0020independent\u0020on\u0020whether\u0020it\u0020works\u0020only\u0020with\nthe\u0020Guzzle\u0020Curl\u0020HTTP\u0020handler\u0020or\u0020not.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#constant_GUZZLE_KNOWN_AUTHSCHEMES"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024client",
             "name": "client",
-            "summary": "",
+            "summary": "The\u0020Client\u0020object\u0020of\u0020the\u0020Guzzle\u0020HTTP\u0020library.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_client"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024username",
             "name": "username",
-            "summary": "",
+            "summary": "The\u0020username\u0020to\u0020use\u0020for\u0020authentication",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_username"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024password",
             "name": "password",
-            "summary": "",
+            "summary": "The\u0020password\u0020to\u0020use\u0020for\u0020authentication",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_password"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024authScheme",
             "name": "authScheme",
-            "summary": "",
+            "summary": "The\u0020HTTP\u0020authentication\u0020scheme\u0020to\u0020use.\u0020Null\u0020if\u0020not\u0020determined\u0020yet.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_authScheme"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024failedAuthSchemes",
             "name": "failedAuthSchemes",
-            "summary": "",
+            "summary": "HTTP\u0020authentication\u0020schemes\u0020tried\u0020without\u0020success,\u0020to\u0020avoid\u0020trying\u0020again.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_failedAuthSchemes"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024schemeToCurlOpt",
             "name": "schemeToCurlOpt",
-            "summary": "",
+            "summary": "Maps\u0020lowercase\u0020auth\u002Dschemes\u0020to\u0020their\u0020CURLAUTH_XXX\u0020constant.\u0020Only\u0020values\u0020not\u0020part\u0020of\u0020GUZZLE_KNOWN_AUTHSCHEMES\u0020are\nrelevant\u0020here.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_schemeToCurlOpt"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery",
             "name": "Discovery",
-            "summary": "Class\u0020Discovery\u0020\u002D\u0020Provides\u0020a\u0020service\u0020to\u0020discovery\u0020the\u0020addressbooks\u0020for\u0020a\u0020CardDAV\u0020account.",
+            "summary": "Provides\u0020a\u0020service\u0020to\u0020discover\u0020the\u0020addressbooks\u0020for\u0020a\u0020CardDAV\u0020account.",
             "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AdiscoverAddressbooks\u0028\u0029",
@@ -433,12 +433,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AKNOWN_SERVERS",
             "name": "KNOWN_SERVERS",
-            "summary": "",
+            "summary": "Some\u0020builtins\u0020for\u0020public\u0020providers\u0020that\u0020don\u0027t\u0020have\u0020discovery\u0020properly\u0020set\u0020up.",
             "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#constant_KNOWN_SERVERS"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Sync",
             "name": "Sync",
-            "summary": "",
+            "summary": "Performs\u0020a\u0020synchronization\u0020of\u0020a\u0020local\u0020cache\u0020of\u0020the\u0020addressbook\u0020to\u0020the\u0020current\u0020state\u0020on\u0020the\u0020server.",
             "url": "classes/MStilkerich-CardDavClient-Services-Sync.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Sync\u003A\u003Asynchronize\u0028\u0029",
@@ -448,22 +448,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Sync\u003A\u003AsynchronizeOneBatch\u0028\u0029",
             "name": "synchronizeOneBatch",
-            "summary": "Performs\u0020a\u0020synchronization\u0020of\u0020the\u0020given\u0020addressbook\u0020for\u0020one\u0020synchronization\u0020chunk\u0020as\u0020dicated\u0020by\u0020the\u0020server.",
+            "summary": "Performs\u0020a\u0020synchronization\u0020of\u0020the\u0020given\u0020addressbook\u0020for\u0020one\u0020synchronization\u0020chunk\u0020as\u0020dictated\u0020by\u0020the\u0020server.",
             "url": "classes/MStilkerich-CardDavClient-Services-Sync.html#method_synchronizeOneBatch"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Sync\u003A\u003AsyncCollection\u0028\u0029",
             "name": "syncCollection",
-            "summary": "",
+            "summary": "Determines\u0020changes\u0020to\u0020the\u0020addressbook\u0020at\u0020the\u0020server\u0020side\u0020using\u0020the\u0020sync\u002Dcollection\u0020REPORT.",
             "url": "classes/MStilkerich-CardDavClient-Services-Sync.html#method_syncCollection"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Sync\u003A\u003AdetermineChangesViaETags\u0028\u0029",
             "name": "determineChangesViaETags",
-            "summary": "",
+            "summary": "Determines\u0020changes\u0020to\u0020the\u0020addressbook\u0020at\u0020the\u0020server\u0020side\u0020using\u0020PROPFIND.",
             "url": "classes/MStilkerich-CardDavClient-Services-Sync.html#method_determineChangesViaETags"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Sync\u003A\u003AmultiGetChanges\u0028\u0029",
             "name": "multiGetChanges",
-            "summary": "",
+            "summary": "Downloads\u0020a\u0020set\u0020of\u0020cards\u0020from\u0020the\u0020server\u0020using\u0020addressbook\u002Dmultiget.",
             "url": "classes/MStilkerich-CardDavClient-Services-Sync.html#method_multiGetChanges"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\SyncHandler",
@@ -488,42 +488,42 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\SyncHandler\u003A\u003AfinalizeSync\u0028\u0029",
             "name": "finalizeSync",
-            "summary": "Called\u0020upon\u0020completion\u0020of\u0020the\u0020synchronization\u0020process\u0020to\u0020enable\u0020the\u0020handler\u0020to\nperform\u0020final\u0020actions\u0020if\u0020needed.",
+            "summary": "Called\u0020upon\u0020completion\u0020of\u0020the\u0020synchronization\u0020process\u0020to\u0020enable\u0020the\u0020handler\u0020to\u0020perform\u0020final\u0020actions\u0020if\u0020needed.",
             "url": "classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_finalizeSync"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\SyncResult",
             "name": "SyncResult",
-            "summary": "",
+            "summary": "Stores\u0020the\u0020changes\u0020reported\u0020by\u0020the\u0020server\u0020to\u0020be\u0020processed\u0020during\u0020a\u0020sync\u0020operation.",
             "url": "classes/MStilkerich-CardDavClient-Services-SyncResult.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\SyncResult\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "Construct\u0020a\u0020new\u0020sync\u0020result.",
             "url": "classes/MStilkerich-CardDavClient-Services-SyncResult.html#method___construct"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\SyncResult\u003A\u003AcreateVCards\u0028\u0029",
             "name": "createVCards",
-            "summary": "",
+            "summary": "Creates\u0020VCard\u0020objects\u0020for\u0020all\u0020changed\u0020cards.",
             "url": "classes/MStilkerich-CardDavClient-Services-SyncResult.html#method_createVCards"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\SyncResult\u003A\u003A\u0024syncToken",
             "name": "syncToken",
-            "summary": "",
+            "summary": "The\u0020new\u0020sync\u0020token\u0020returned\u0020by\u0020the\u0020server.",
             "url": "classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_syncToken"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\SyncResult\u003A\u003A\u0024syncAgain",
             "name": "syncAgain",
-            "summary": "",
+            "summary": "True\u0020if\u0020the\u0020server\u0020limited\u0020the\u0020returned\u0020differences\u0020and\u0020another\u0020followup\u0020sync\u0020is\u0020needed.",
             "url": "classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_syncAgain"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\SyncResult\u003A\u003A\u0024deletedObjects",
             "name": "deletedObjects",
-            "summary": "",
+            "summary": "URIs\u0020of\u0020deleted\u0020objects.",
             "url": "classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_deletedObjects"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\SyncResult\u003A\u003A\u0024changedObjects",
             "name": "changedObjects",
-            "summary": "",
+            "summary": "URIs\u0020and\u0020ETags\u0020of\u0020new\u0020or\u0020changed\u0020address\u0020objects.",
             "url": "classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_changedObjects"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\WebDavCollection",
@@ -653,22 +653,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Deserializers",
             "name": "Deserializers",
-            "summary": "Class\u0020Deserializers.",
+            "summary": "Contains\u0020static\u0020deserializer\u0020functions\u0020to\u0020be\u0020used\u0020with\u0020Sabre\/XML.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Deserializers\u003A\u003AdeserializeHrefSingle\u0028\u0029",
             "name": "deserializeHrefSingle",
-            "summary": "",
+            "summary": "Deserializes\u0020a\u0020single\u0020DAV\u003Ahref\u0020child\u0020element\u0020to\u0020a\u0020string.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeHrefSingle"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Deserializers\u003A\u003AdeserializeHrefMulti\u0028\u0029",
             "name": "deserializeHrefMulti",
-            "summary": "",
+            "summary": "Deserializes\u0020a\u0020multiple\u0020DAV\u003Ahref\u0020child\u0020elements\u0020to\u0020an\u0020array\u0020of\u0020strings.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeHrefMulti"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Deserializers\u003A\u003AdeserializeSupportedReportSet\u0028\u0029",
             "name": "deserializeSupportedReportSet",
-            "summary": "Deserializes\u0020XML\u0020DAV\u003Asupported\u002Dreport\u002Dset\u0020elements\u0020to\u0020an\u0020array.\u0020\u0028RFC3253\u0029",
+            "summary": "Deserializes\u0020XML\u0020DAV\u003Asupported\u002Dreport\u002Dset\u0020elements\u0020to\u0020an\u0020array\u0020\u0028RFC3253\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeSupportedReportSet"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Deserializers\u003A\u003AdeserializeToAttributes\u0028\u0029",
@@ -683,7 +683,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ElementNames",
             "name": "ElementNames",
-            "summary": "Class\u0020ElementNames.",
+            "summary": "Defines\u0020constants\u0020with\u0020fully\u002Dqualified\u0020XML\u0020element\u0020names.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ElementNames\u003A\u003ANSDAV",
@@ -893,7 +893,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Filter",
             "name": "Filter",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020urn\u003Aietf\u003Aparams\u003Axml\u003Ans\u003Acarddav\u003Afilter\u0020elements\u0020as\u0020PHP\u0020objects.\u0020\u0028RFC\u00206352\u0029",
+            "summary": "Represents\u0020XML\u0020urn\u003Aietf\u003Aparams\u003Axml\u003Ans\u003Acarddav\u003Afilter\u0020elements\u0020as\u0020PHP\u0020objects\u0020\u0028RFC\u00206352\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Filter.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Filter\u003A\u003A__construct\u0028\u0029",
@@ -903,7 +903,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Filter\u003A\u003AxmlSerialize\u0028\u0029",
             "name": "xmlSerialize",
-            "summary": "This\u0020function\u0020encodes\u0020the\u0020elements\u0020value\u0020\u0028not\u0020the\u0020element\u0020itself\u0021\u0029\u0020to\u0020the\u0020given\u0020XML\u0020writer.",
+            "summary": "This\u0020function\u0020encodes\u0020the\u0020element\u0027s\u0020value\u0020\u0028not\u0020the\u0020element\u0020itself\u0021\u0029\u0020to\u0020the\u0020given\u0020XML\u0020writer.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method_xmlSerialize"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Filter\u003A\u003AxmlAttributes\u0028\u0029",
@@ -913,17 +913,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Filter\u003A\u003A\u0024testType",
             "name": "testType",
-            "summary": "",
+            "summary": "Semantics\u0020of\u0020match\u0020for\u0020multiple\u0020conditions\u0020\u0028AND\u0020or\u0020OR\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_testType"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Filter\u003A\u003A\u0024propFilters",
             "name": "propFilters",
-            "summary": "",
+            "summary": "The\u0020PropFilter\u0020child\u0020elements\u0020of\u0020this\u0020filter.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_propFilters"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Multistatus",
             "name": "Multistatus",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020DAV\u003Amultistatus\u0020elements\u0020as\u0020PHP\u0020objects.\u0020\u0028RFC\u00204918\u0029",
+            "summary": "Represents\u0020XML\u0020DAV\u003Amultistatus\u0020elements\u0020as\u0020PHP\u0020objects\u0020\u0028RFC\u00204918\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Multistatus\u003A\u003A__construct\u0028\u0029",
@@ -933,22 +933,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Multistatus\u003A\u003AxmlDeserialize\u0028\u0029",
             "name": "xmlDeserialize",
-            "summary": "",
+            "summary": "Deserializes\u0020the\u0020child\u0020elements\u0020of\u0020a\u0020DAV\u003Amultistatus\u0020element\u0020and\u0020creates\u0020a\u0020new\u0020instance\u0020of\u0020Multistatus.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html#method_xmlDeserialize"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Multistatus\u003A\u003A\u0024synctoken",
             "name": "synctoken",
-            "summary": "",
+            "summary": "The\u0020optional\u0020sync\u002Dtoken\u0020child\u0020element\u0020of\u0020this\u0020multistatus.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html#property_synctoken"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Multistatus\u003A\u003A\u0024responses",
             "name": "responses",
-            "summary": "",
+            "summary": "The\u0020reponse\u0020children\u0020of\u0020this\u0020multistatus\u0020element.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Multistatus.html#property_responses"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ParamFilter",
             "name": "ParamFilter",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020urn\u003Aietf\u003Aparams\u003Axml\u003Ans\u003Acarddav\u003Aparam\u002Dfilter\u0020elements\u0020as\u0020PHP\u0020objects.\u0020\u0028RFC\u00206352\u0029",
+            "summary": "Represents\u0020XML\u0020urn\u003Aietf\u003Aparams\u003Axml\u003Ans\u003Acarddav\u003Aparam\u002Dfilter\u0020elements\u0020as\u0020PHP\u0020objects\u0020\u0028RFC\u00206352\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ParamFilter.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ParamFilter\u003A\u003A__construct\u0028\u0029",
@@ -958,7 +958,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ParamFilter\u003A\u003AxmlSerialize\u0028\u0029",
             "name": "xmlSerialize",
-            "summary": "This\u0020function\u0020encodes\u0020the\u0020elements\u0020value\u0020\u0028not\u0020the\u0020element\u0020itself\u0021\u0029\u0020to\u0020the\u0020given\u0020XML\u0020writer.",
+            "summary": "This\u0020function\u0020encodes\u0020the\u0020element\u0027s\u0020value\u0020\u0028not\u0020the\u0020element\u0020itself\u0021\u0029\u0020to\u0020the\u0020given\u0020XML\u0020writer.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ParamFilter.html#method_xmlSerialize"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ParamFilter\u003A\u003AxmlSerializeElement\u0028\u0029",
@@ -973,42 +973,42 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ParamFilter\u003A\u003A\u0024param",
             "name": "param",
-            "summary": "",
+            "summary": "Parameter\u0020this\u0020filter\u0020matches\u0020on\u0020\u0028e.g.\u0020TYPE\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ParamFilter.html#property_param"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ParamFilter\u003A\u003A\u0024filter",
             "name": "filter",
-            "summary": "",
+            "summary": "Filter\u0020condition.\u0020Null\u0020to\u0020match\u0020if\u0020the\u0020parameter\u0020is\u0020not\u0020defined.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ParamFilter.html#property_filter"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Prop",
             "name": "Prop",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020DAV\u003Aprop\u0020elements\u0020as\u0020PHP\u0020objects.",
+            "summary": "Represents\u0020XML\u0020DAV\u003Aprop\u0020elements\u0020as\u0020PHP\u0020objects.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Prop.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Prop\u003A\u003AxmlDeserialize\u0028\u0029",
             "name": "xmlDeserialize",
-            "summary": "",
+            "summary": "Deserializes\u0020the\u0020child\u0020elements\u0020of\u0020a\u0020DAV\u003Aprop\u0020element\u0020and\u0020creates\u0020a\u0020new\u0020instance\u0020of\u0020Prop.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Prop.html#method_xmlDeserialize"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Prop\u003A\u003AstoreProperty\u0028\u0029",
             "name": "storeProperty",
-            "summary": "Processes\u0020a\u0020deserialized\u0020prop\u0020child\u0020element\u0020and\u0020stores\u0020the\u0020result\u0020if\u0020known.",
+            "summary": "Processes\u0020a\u0020deserialized\u0020prop\u0020child\u0020element.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Prop.html#method_storeProperty"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Prop\u003A\u003APROP_DESERIALIZERS",
             "name": "PROP_DESERIALIZERS",
-            "summary": "",
+            "summary": "Deserializers\u0020for\u0020various\u0020child\u0020elements\u0020of\u0020prop.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Prop.html#constant_PROP_DESERIALIZERS"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Prop\u003A\u003A\u0024props",
             "name": "props",
-            "summary": "",
+            "summary": "The\u0020child\u0020elements\u0020of\u0020this\u0020Prop\u0020element.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Prop.html#property_props"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter",
             "name": "PropFilter",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020urn\u003Aietf\u003Aparams\u003Axml\u003Ans\u003Acarddav\u003Aprop\u002Dfilter\u0020elements\u0020as\u0020PHP\u0020objects.\u0020\u0028RFC\u00206352\u0029",
+            "summary": "Represents\u0020XML\u0020urn\u003Aietf\u003Aparams\u003Axml\u003Ans\u003Acarddav\u003Aprop\u002Dfilter\u0020elements\u0020as\u0020PHP\u0020objects\u0020\u0028RFC\u00206352\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003A__construct\u0028\u0029",
@@ -1018,7 +1018,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003AxmlSerialize\u0028\u0029",
             "name": "xmlSerialize",
-            "summary": "This\u0020function\u0020encodes\u0020the\u0020elements\u0020value\u0020\u0028not\u0020the\u0020element\u0020itself\u0021\u0029\u0020to\u0020the\u0020given\u0020XML\u0020writer.",
+            "summary": "This\u0020function\u0020encodes\u0020the\u0020element\u0027s\u0020value\u0020\u0028not\u0020the\u0020element\u0020itself\u0021\u0029\u0020to\u0020the\u0020given\u0020XML\u0020writer.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#method_xmlSerialize"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003AxmlAttributes\u0028\u0029",
@@ -1028,97 +1028,97 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003A\u0024testType",
             "name": "testType",
-            "summary": "",
+            "summary": "Semantics\u0020of\u0020match\u0020for\u0020multiple\u0020conditions\u0020\u0028AND\u0020or\u0020OR\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#property_testType"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003A\u0024property",
             "name": "property",
-            "summary": "",
+            "summary": "Property\u0020this\u0020filter\u0020matches\u0020on\u0020\u0028e.g.\u0020EMAIL\u0029,\u0020including\u0020optional\u0020group\u0020prefix\u0020\u0028e.g.\u0020G1.EMAIL\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#property_property"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\PropFilter\u003A\u003A\u0024conditions",
             "name": "conditions",
-            "summary": "",
+            "summary": "List\u0020of\u0020filter\u0020conditions.\u0020Null\u0020to\u0020match\u0020if\u0020the\u0020property\u0020is\u0020not\u0020defined.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#property_conditions"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Propstat",
             "name": "Propstat",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020DAV\u003Apropstat\u0020elements\u0020as\u0020PHP\u0020objects.",
+            "summary": "Represents\u0020XML\u0020DAV\u003Apropstat\u0020elements\u0020as\u0020PHP\u0020objects.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Propstat.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Propstat\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "Constructs\u0020a\u0020Propstat\u0020element.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Propstat.html#method___construct"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Propstat\u003A\u003AxmlDeserialize\u0028\u0029",
             "name": "xmlDeserialize",
-            "summary": "",
+            "summary": "Deserializes\u0020the\u0020child\u0020elements\u0020of\u0020a\u0020DAV\u003Apropstat\u0020element\u0020and\u0020creates\u0020a\u0020new\u0020instance\u0020of\u0020Propstat.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Propstat.html#method_xmlDeserialize"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Propstat\u003A\u003A\u0024status",
             "name": "status",
-            "summary": "",
+            "summary": "Holds\u0020a\u0020single\u0020HTTP\u0020status\u002Dline.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Propstat.html#property_status"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Propstat\u003A\u003A\u0024prop",
             "name": "prop",
-            "summary": "",
+            "summary": "Contains\u0020properties\u0020related\u0020to\u0020a\u0020resource.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Propstat.html#property_prop"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Response",
             "name": "Response",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020DAV\u003Aresponse\u0020elements\u0020as\u0020PHP\u0020objects.",
+            "summary": "Represents\u0020XML\u0020DAV\u003Aresponse\u0020elements\u0020as\u0020PHP\u0020objects.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Response.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\Response\u003A\u003AxmlDeserialize\u0028\u0029",
             "name": "xmlDeserialize",
-            "summary": "",
+            "summary": "Deserializes\u0020the\u0020child\u0020elements\u0020of\u0020a\u0020DAV\u003Aresponse\u0020element\u0020and\u0020creates\u0020a\u0020new\u0020instance\u0020of\u0020the\u0020proper\u0020subclass\u0020of\nResponse.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-Response.html#method_xmlDeserialize"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ResponsePropstat",
             "name": "ResponsePropstat",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020DAV\u003Aresponse\u0020elements\u0020with\u0020propstat\u0020children\u0020as\u0020PHP\u0020objects.",
+            "summary": "Represents\u0020XML\u0020DAV\u003Aresponse\u0020elements\u0020with\u0020propstat\u0020children\u0020as\u0020PHP\u0020objects.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ResponsePropstat.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ResponsePropstat\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "Constructs\u0020a\u0020new\u0020ResponsePropstat\u0020element.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ResponsePropstat.html#method___construct"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ResponsePropstat\u003A\u003A\u0024href",
             "name": "href",
-            "summary": "",
+            "summary": "URI\u0020the\u0020response\u0020applies\u0020to.\u0020MUST\u0020contain\u0020a\u0020URI\u0020or\u0020a\u0020relative\u0020reference.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ResponsePropstat.html#property_href"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ResponsePropstat\u003A\u003A\u0024propstat",
             "name": "propstat",
-            "summary": "",
+            "summary": "Propstat\u0020child\u0020elements.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ResponsePropstat.html#property_propstat"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ResponseStatus",
             "name": "ResponseStatus",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020DAV\u003Aresponse\u0020elements\u0020with\u0020status\u0020children\u0020as\u0020PHP\u0020objects.",
+            "summary": "Represents\u0020XML\u0020DAV\u003Aresponse\u0020elements\u0020with\u0020status\u0020children\u0020as\u0020PHP\u0020objects.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ResponseStatus.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ResponseStatus\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "Constructs\u0020a\u0020new\u0020ResponseStatus\u0020object.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ResponseStatus.html#method___construct"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ResponseStatus\u003A\u003A\u0024hrefs",
             "name": "hrefs",
-            "summary": "",
+            "summary": "URIs\u0020the\u0020status\u0020in\u0020this\u0020reponse\u0020applies\u0020to.\u0020MUST\u0020contain\u0020a\u0020URI\u0020or\u0020a\u0020relative\u0020reference.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ResponseStatus.html#property_hrefs"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\ResponseStatus\u003A\u003A\u0024status",
             "name": "status",
-            "summary": "",
+            "summary": "The\u0020HTTP\u0020status\u0020value\u0020of\u0020this\u0020response.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-ResponseStatus.html#property_status"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\TextMatch",
             "name": "TextMatch",
-            "summary": "Class\u0020to\u0020represent\u0020XML\u0020urn\u003Aietf\u003Aparams\u003Axml\u003Ans\u003Acarddav\u003Atext\u002Dmatch\u0020elements\u0020as\u0020PHP\u0020objects.\u0020\u0028RFC\u00206352\u0029",
+            "summary": "Represents\u0020XML\u0020urn\u003Aietf\u003Aparams\u003Axml\u003Ans\u003Acarddav\u003Atext\u002Dmatch\u0020elements\u0020as\u0020PHP\u0020objects\u0020\u0028RFC\u00206352\u0029.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\TextMatch\u003A\u003A__construct\u0028\u0029",
@@ -1128,7 +1128,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\TextMatch\u003A\u003AxmlSerialize\u0028\u0029",
             "name": "xmlSerialize",
-            "summary": "This\u0020function\u0020encodes\u0020the\u0020elements\u0020value\u0020\u0028not\u0020the\u0020element\u0020itself\u0021\u0029\u0020to\u0020the\u0020given\u0020XML\u0020writer.",
+            "summary": "This\u0020function\u0020encodes\u0020the\u0020element\u0027s\u0020value\u0020\u0028not\u0020the\u0020element\u0020itself\u0021\u0029\u0020to\u0020the\u0020given\u0020XML\u0020writer.",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#method_xmlSerialize"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\TextMatch\u003A\u003AxmlSerializeElement\u0028\u0029",
@@ -1143,22 +1143,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\TextMatch\u003A\u003A\u0024collation",
             "name": "collation",
-            "summary": "",
+            "summary": "Collation\u0020to\u0020use\u0020for\u0020comparison\u0020\u0028currently\u0020constant\u0029",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#property_collation"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\TextMatch\u003A\u003A\u0024invertMatch",
             "name": "invertMatch",
-            "summary": "",
+            "summary": "Whether\u0020to\u0020invert\u0020the\u0020result\u0020of\u0020the\u0020match",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#property_invertMatch"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\TextMatch\u003A\u003A\u0024matchType",
             "name": "matchType",
-            "summary": "",
+            "summary": "The\u0020type\u0020of\u0020text\u0020match\u0020to\u0020apply",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#property_matchType"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\XmlElements\\TextMatch\u003A\u003A\u0024needle",
             "name": "needle",
-            "summary": "",
+            "summary": "The\u0020string\u0020to\u0020match\u0020for",
             "url": "classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html#property_needle"
         },                {
             "fqsen": "\\",

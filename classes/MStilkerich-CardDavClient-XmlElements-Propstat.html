@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     Propstat
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-XmlElements.html">XmlElements</a></li>
+                            </ul>
+        </div>
     
             <span class="phpdocumentor-element__implements">
             implements
@@ -94,16 +118,17 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Propstat.php"><a href="files/src-xmlelements-propstat.html"><abbr title="src/XmlElements/Propstat.php">Propstat.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">46</span>
+    <span class="phpdocumentor-element-found-in__line">49</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class to represent XML DAV:propstat elements as PHP objects.</p>
+            <p class="phpdocumentor-summary">Represents XML DAV:propstat elements as PHP objects.</p>
 
-    <section class="phpdocumentor-description"><p>From RFC 4918:</p>
-<p>The propstat XML element MUST contain one prop XML element and one status XML element. The contents of the prop XML
+    <section class="phpdocumentor-description"><p>From RFC 4918:
+The propstat XML element MUST contain one prop XML element and one status XML element. The contents of the prop XML
 element MUST only list the names of properties to which the result in the status element applies. The optional
 precondition/ postcondition element and ’responsedescription’ text also apply to the properties named in ’prop’.</p>
-<!ELEMENT propstat (prop, status, error?, responsedescription?) >
+<pre class="prettyprint"><code class="language-xml">&lt;!ELEMENT propstat (prop, status, error?, responsedescription?) &gt;
+</code></pre>
 </section>
 
 
@@ -158,28 +183,28 @@ precondition/ postcondition element and ’responsedescription’ text also appl
     <span>
                 &nbsp;: <a href="classes/MStilkerich-CardDavClient-XmlElements-Prop.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Prop">Prop</abbr></a>            </span>
 </dt>
-<dd></dd>
+<dd>Contains properties related to a resource.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Propstat.html#property_status">$status</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>Holds a single HTTP status-line.</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Propstat.html#method___construct">__construct()</a>
     <span>
                         &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
+<dd>Constructs a Propstat element.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Propstat.html#method_xmlDeserialize">xmlDeserialize()</a>
     <span>
                         &nbsp;: <a href="classes/MStilkerich-CardDavClient-XmlElements-Propstat.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Propstat">Propstat</abbr></a>    </span>
 </dt>
-<dd></dd>
+<dd>Deserializes the child elements of a DAV:propstat element and creates a new instance of Propstat.</dd>
 
         </dl>
 
@@ -209,10 +234,11 @@ precondition/ postcondition element and ’responsedescription’ text also appl
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Propstat.php"><a href="files/src-xmlelements-propstat.html"><abbr title="src/XmlElements/Propstat.php">Propstat.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">52</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Contains properties related to a resource.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Prop.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Prop">Prop</abbr></a></span>
@@ -240,10 +266,11 @@ precondition/ postcondition element and ’responsedescription’ text also appl
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Propstat.php"><a href="files/src-xmlelements-propstat.html"><abbr title="src/XmlElements/Propstat.php">Propstat.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">49</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Holds a single HTTP status-line.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -275,15 +302,17 @@ precondition/ postcondition element and ’responsedescription’ text also appl
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Propstat.php"><a href="files/src-xmlelements-propstat.html"><abbr title="src/XmlElements/Propstat.php">Propstat.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">54</span>
+    <span class="phpdocumentor-element-found-in__line">69</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Constructs a Propstat element.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
                 <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$status</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Prop.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Prop">Prop</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$prop</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -291,14 +320,18 @@ precondition/ postcondition element and ’responsedescription’ text also appl
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The status value of the Propstat element.</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$prop</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Prop.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Prop">Prop</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The Prop child element, containing the reported properties.</p>
+</section>
+
             </dd>
             </dl>
 
@@ -324,15 +357,17 @@ precondition/ postcondition element and ’responsedescription’ text also appl
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Propstat.php"><a href="files/src-xmlelements-propstat.html"><abbr title="src/XmlElements/Propstat.php">Propstat.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">60</span>
+    <span class="phpdocumentor-element-found-in__line">78</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Deserializes the child elements of a DAV:propstat element and creates a new instance of Propstat.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">xmlDeserialize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-XmlElements-Propstat.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Propstat">Propstat</abbr></a></span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">

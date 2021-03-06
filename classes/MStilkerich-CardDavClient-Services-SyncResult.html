@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     SyncResult
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-Services.html">Services</a></li>
+                            </ul>
+        </div>
     
     
     </h2>
@@ -91,10 +115,13 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncResult.php"><a href="files/src-services-syncresult.html"><abbr title="src/Services/SyncResult.php">SyncResult.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">38</span>
 </aside>
 
-        
+            <p class="phpdocumentor-summary">Stores the changes reported by the server to be processed during a sync operation.</p>
+
+    <section class="phpdocumentor-description"><p>This class is used internally only by the <a href="classes/MStilkerich-CardDavClient-Services-Sync.html"><abbr title="\MStilkerich\CardDavClient\Services\Sync">Sync</abbr></a> service.</p>
+</section>
 
 
 
@@ -112,44 +139,44 @@
                 <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_changedObjects">$changedObjects</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd></dd>
+<dd>URIs and ETags of new or changed address objects.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_deletedObjects">$deletedObjects</a>
     <span>
-                &nbsp;: <abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;            </span>
+                &nbsp;: array&lt;int, string&gt;            </span>
 </dt>
-<dd></dd>
+<dd>URIs of deleted objects.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_syncAgain">$syncAgain</a>
     <span>
                 &nbsp;: bool            </span>
 </dt>
-<dd></dd>
+<dd>True if the server limited the returned differences and another followup sync is needed.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_syncToken">$syncToken</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The new sync token returned by the server.</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#method___construct">__construct()</a>
     <span>
                         &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
+<dd>Construct a new sync result.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#method_createVCards">createVCards()</a>
     <span>
                         &nbsp;: bool    </span>
 </dt>
-<dd></dd>
+<dd>Creates VCard objects for all changed cards.</dd>
 
         </dl>
 
@@ -179,19 +206,35 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncResult.php"><a href="files/src-services-syncresult.html"><abbr title="src/Services/SyncResult.php">SyncResult.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">49</span>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">URIs and ETags of new or changed address objects.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$changedObjects</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
         <section class="phpdocumentor-description"></section>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-var</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list&lt;array{uri: string, etag: string, vcf?: string, vcard?: VCard}&gt;</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
 </article>
                     <article
@@ -210,19 +253,35 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncResult.php"><a href="files/src-services-syncresult.html"><abbr title="src/Services/SyncResult.php">SyncResult.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">44</span>
+    <span class="phpdocumentor-element-found-in__line">58</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">URIs of deleted objects.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;</span>
+        <span class="phpdocumentor-signature__type">array&lt;int, string&gt;</span>
     <span class="phpdocumentor-signature__name">$deletedObjects</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
         <section class="phpdocumentor-description"></section>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-var</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string></p>
+</section>
+
+                                    </dd>
+                        </dl>
 
 </article>
                     <article
@@ -241,10 +300,11 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncResult.php"><a href="files/src-services-syncresult.html"><abbr title="src/Services/SyncResult.php">SyncResult.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">41</span>
+    <span class="phpdocumentor-element-found-in__line">50</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">True if the server limited the returned differences and another followup sync is needed.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">bool</span>
@@ -272,10 +332,11 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncResult.php"><a href="files/src-services-syncresult.html"><abbr title="src/Services/SyncResult.php">SyncResult.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
+    <span class="phpdocumentor-element-found-in__line">44</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The new sync token returned by the server.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -307,15 +368,17 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncResult.php"><a href="files/src-services-syncresult.html"><abbr title="src/Services/SyncResult.php">SyncResult.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">73</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Construct a new sync result.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
                 <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$syncToken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -323,7 +386,9 @@
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The new sync token returned by the server.</p>
+</section>
+
             </dd>
             </dl>
 
@@ -349,22 +414,28 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncResult.php"><a href="files/src-services-syncresult.html"><abbr title="src/Services/SyncResult.php">SyncResult.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">56</span>
+    <span class="phpdocumentor-element-found-in__line">88</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Creates VCard objects for all changed cards.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
                 <span class="phpdocumentor-signature__name">createVCards</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-    
+        <section class="phpdocumentor-description"><p>The objects are inserted into the <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_changedObjects"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult::$changedObjects">SyncResult::$changedObjects</abbr></a> array. In case the VCard object cannot be
+created for some of the cards (for example parse error), an error is logged. If no vcard string data is available
+in <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_changedObjects"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult::$changedObjects">SyncResult::$changedObjects</abbr></a> for a VCard, a warning is logged.</p>
+</section>
+
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">bool</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
+            <section class="phpdocumentor-description"><p>True if a VCard could be created for all cards in <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_changedObjects"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult::$changedObjects">SyncResult::$changedObjects</abbr></a>, false otherwise.</p>
+</section>
 
     
 </article>

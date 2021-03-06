@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     Sync
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Public.html">Public</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Public-Services.html">Services</a></li>
+                            </ul>
+        </div>
     
     
     </h2>
@@ -91,10 +115,15 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Sync.php"><a href="files/src-services-sync.html"><abbr title="src/Services/Sync.php">Sync.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">36</span>
+    <span class="phpdocumentor-element-found-in__line">41</span>
 </aside>
 
-        
+            <p class="phpdocumentor-summary">Performs a synchronization of a local cache of the addressbook to the current state on the server.</p>
+
+    <section class="phpdocumentor-description"><p>If supported by the server, the synchronization uses the sync-collection (RFC 6578) report to efficiently request the
+changed cards and the addressbook-multiget (RFC 6352) report to fetch all changed cards in a single request. If the
+server does not support these operations, the service falls back to alternative methods transparently.</p>
+</section>
 
 
 
@@ -121,28 +150,28 @@
     <span>
                         &nbsp;: <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a>    </span>
 </dt>
-<dd></dd>
+<dd>Determines changes to the addressbook at the server side using PROPFIND.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-Services-Sync.html#method_multiGetChanges">multiGetChanges()</a>
     <span>
                         &nbsp;: void    </span>
 </dt>
-<dd></dd>
+<dd>Downloads a set of cards from the server using addressbook-multiget.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-Services-Sync.html#method_syncCollection">syncCollection()</a>
     <span>
                         &nbsp;: <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a>    </span>
 </dt>
-<dd></dd>
+<dd>Determines changes to the addressbook at the server side using the sync-collection REPORT.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-Services-Sync.html#method_synchronizeOneBatch">synchronizeOneBatch()</a>
     <span>
                         &nbsp;: <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a>    </span>
 </dt>
-<dd>Performs a synchronization of the given addressbook for one synchronization chunk as dicated by the server.</dd>
+<dd>Performs a synchronization of the given addressbook for one synchronization chunk as dictated by the server.</dd>
 
         </dl>
 
@@ -170,14 +199,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Sync.php"><a href="files/src-services-sync.html"><abbr title="src/Services/Sync.php">Sync.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">55</span>
+    <span class="phpdocumentor-element-found-in__line">60</span>
 </aside>
 
         <p class="phpdocumentor-summary">Performs a synchronization of the given addressbook.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">synchronize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$abook</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncHandler">SyncHandler</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$handler</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$prevSyncToken</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                <span class="phpdocumentor-signature__name">synchronize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$abook</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncHandler">SyncHandler</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$handler</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$prevSyncToken</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -203,11 +232,11 @@
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>List of VCard properties to request for retrieved VCards. If empty the
-full VCards are retrieved.</p>
+                    <section class="phpdocumentor-description"><p>List of VCard properties to request for retrieved VCards. If empty the full VCards are retrieved. Note that many
+servers do not support this and will always provide the full cards regardless of this parameter.</p>
 </section>
 
             </dd>
@@ -216,14 +245,29 @@ full VCards are retrieved.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>Sync-token of a previous sync when performing an incremental sync. Empty string to
-perform a full sync (all cards of the addressbook will be reported as changed).</p>
+                    <section class="phpdocumentor-description"><p>Sync-token of a previous sync when performing an incremental sync. Empty string to perform a full sync (all
+cards of the addressbook will be reported as changed).</p>
 </section>
 
             </dd>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string> $requestedVCardProps</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string</span>
@@ -246,15 +290,19 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Sync.php"><a href="files/src-services-sync.html"><abbr title="src/Services/Sync.php">Sync.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">236</span>
+    <span class="phpdocumentor-element-found-in__line">267</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Determines changes to the addressbook at the server side using PROPFIND.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
                 <span class="phpdocumentor-signature__name">determineChangesViaETags</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$client</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$abook</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncHandler">SyncHandler</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$handler</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a></span></code>
 
-    
+        <section class="phpdocumentor-description"><p>This performs a card-by-card ETag comparison of the current ETags reported by the server and the locally stored
+ETags corresponding to the state of the last retrieved cards.</p>
+</section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -262,21 +310,27 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The client to use for communicating with the server.</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$abook</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The addressbook that should be synchronized.</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$handler</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncHandler">SyncHandler</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The application-side sync handler, that will have to provide the list of local cards and their ETags.</p>
+</section>
+
             </dd>
             </dl>
 
@@ -285,7 +339,8 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a></span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
+            <section class="phpdocumentor-description"><p>Changes to the addressbook reported by the server with respect to $prevSyncToken, including a new sync token.</p>
+</section>
 
     
 </article>
@@ -302,15 +357,19 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Sync.php"><a href="files/src-services-sync.html"><abbr title="src/Services/Sync.php">Sync.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">294</span>
+    <span class="phpdocumentor-element-found-in__line">339</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Downloads a set of cards from the server using addressbook-multiget.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">multiGetChanges</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$client</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$abook</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$syncResult</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                <span class="phpdocumentor-signature__name">multiGetChanges</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$client</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$abook</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$syncResult</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
+        <section class="phpdocumentor-description"><p>The downloaded cards are stored to <a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html#property_changedObjects"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult::$changedObjects">SyncResult::$changedObjects</abbr></a> along with the corresponding ETag. In case
+the data for a card cannot be retrieved, a warning is logged and the corresponding card will have no data
+associated.</p>
+</section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -319,25 +378,32 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The client to use for communicating with the server.</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$abook</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The addressbook to fetch the cards from.</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$syncResult</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The SyncResult object to store the retrieved cards to, which already contains the URIs of the changed cards to
+fetch.</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -346,6 +412,21 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string> $requestedVCardProps</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">void</span>
@@ -367,15 +448,17 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Sync.php"><a href="files/src-services-sync.html"><abbr title="src/Services/Sync.php">Sync.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">180</span>
+    <span class="phpdocumentor-element-found-in__line">196</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Determines changes to the addressbook at the server side using the sync-collection REPORT.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
                 <span class="phpdocumentor-signature__name">syncCollection</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$client</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$abook</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$prevSyncToken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a></span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -383,21 +466,27 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The client to use for communicating with the server.</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$abook</span>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The addressbook that should be synchronized.</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$prevSyncToken</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>The sync token of the last sync, or empty string if this is the initial sync.</p>
+</section>
+
             </dd>
             </dl>
 
@@ -406,7 +495,8 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a></span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
+            <section class="phpdocumentor-description"><p>Changes to the addressbook reported by the server with respect to $prevSyncToken, including a new sync token.</p>
+</section>
 
     
 </article>
@@ -423,14 +513,14 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Sync.php"><a href="files/src-services-sync.html"><abbr title="src/Services/Sync.php">Sync.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">92</span>
+    <span class="phpdocumentor-element-found-in__line">96</span>
 </aside>
 
-        <p class="phpdocumentor-summary">Performs a synchronization of the given addressbook for one synchronization chunk as dicated by the server.</p>
+        <p class="phpdocumentor-summary">Performs a synchronization of the given addressbook for one synchronization chunk as dictated by the server.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">synchronizeOneBatch</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$abook</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncHandler">SyncHandler</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$handler</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$prevSyncToken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a></span></code>
+                <span class="phpdocumentor-signature__name">synchronizeOneBatch</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$abook</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncHandler">SyncHandler</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$handler</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$prevSyncToken</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a></span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -452,7 +542,7 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$requestedVCardProps</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;int, string&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -468,6 +558,21 @@ perform a full sync (all cards of the addressbook will be reported as changed).<
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string> $requestedVCardProps</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Services-SyncResult.html"><abbr title="\MStilkerich\CardDavClient\Services\SyncResult">SyncResult</abbr></a></span>

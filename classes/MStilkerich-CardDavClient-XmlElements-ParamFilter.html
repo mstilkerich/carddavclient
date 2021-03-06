@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     ParamFilter
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-XmlElements.html">XmlElements</a></li>
+                            </ul>
+        </div>
     
             <span class="phpdocumentor-element__implements">
             implements
@@ -94,13 +118,13 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ParamFilter.php"><a href="files/src-xmlelements-paramfilter.html"><abbr title="src/XmlElements/ParamFilter.php">ParamFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">48</span>
+    <span class="phpdocumentor-element-found-in__line">51</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class to represent XML urn:ietf:params:xml:ns:carddav:param-filter elements as PHP objects. (RFC 6352)</p>
+            <p class="phpdocumentor-summary">Represents XML urn:ietf:params:xml:ns:carddav:param-filter elements as PHP objects (RFC 6352).</p>
 
-    <section class="phpdocumentor-description"><p>From RFC 6352</p>
-<p>The CARDDAV:param-filter XML element specifies search criteria on a specific vCard property parameter (e.g., TYPE) in
+    <section class="phpdocumentor-description"><p>From RFC 6352:
+The CARDDAV:param-filter XML element specifies search criteria on a specific vCard property parameter (e.g., TYPE) in
 the scope of a given CARDDAV:prop-filter. A vCard property is said to match a CARDDAV:param-filter if:</p>
 <ul>
 <li>A parameter of the type specified by the &quot;name&quot; attribute exists, and the CARDDAV:param-filter is empty, or it
@@ -109,9 +133,10 @@ or:</li>
 <li>A parameter of the type specified by the &quot;name&quot; attribute does not exist, and the CARDDAV:is-not-defined element
 is specified.</li>
 </ul>
-<!ELEMENT param-filter (is-not-defined | text-match)?>
-<!ATTLIST param-filter name CDATA #REQUIRED>
-  <!-- name value: a property parameter name (e.g., "TYPE") -->
+<pre class="prettyprint"><code class="language-xml">&lt;!ELEMENT param-filter (is-not-defined | text-match)?&gt;
+&lt;!ATTLIST param-filter name CDATA #REQUIRED&gt;
+  &lt;!-- name value: a property parameter name (e.g., &quot;TYPE&quot;) --&gt;
+</code></pre>
 </section>
 
 
@@ -143,14 +168,14 @@ is specified.</li>
     <span>
                 &nbsp;: <a href="classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\TextMatch">TextMatch</abbr></a>|null            </span>
 </dt>
-<dd></dd>
+<dd>Filter condition. Null to match if the parameter is not defined.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-ParamFilter.html#property_param">$param</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>Parameter this filter matches on (e.g. TYPE).</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-ParamFilter.html#method___construct">__construct()</a>
@@ -171,7 +196,7 @@ is specified.</li>
     <span>
                         &nbsp;: void    </span>
 </dt>
-<dd>This function encodes the elements value (not the element itself!) to the given XML writer.</dd>
+<dd>This function encodes the element&#039;s value (not the element itself!) to the given XML writer.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-ParamFilter.html#method_xmlSerializeElement">xmlSerializeElement()</a>
@@ -208,10 +233,11 @@ is specified.</li>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ParamFilter.php"><a href="files/src-xmlelements-paramfilter.html"><abbr title="src/XmlElements/ParamFilter.php">ParamFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">60</span>
+    <span class="phpdocumentor-element-found-in__line">65</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Filter condition. Null to match if the parameter is not defined.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type"><a href="classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\TextMatch">TextMatch</abbr></a>|null</span>
@@ -253,10 +279,11 @@ is specified.</li>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ParamFilter.php"><a href="files/src-xmlelements-paramfilter.html"><abbr title="src/XmlElements/ParamFilter.php">ParamFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">54</span>
+    <span class="phpdocumentor-element-found-in__line">58</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Parameter this filter matches on (e.g. TYPE).</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -302,7 +329,7 @@ is specified.</li>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ParamFilter.php"><a href="files/src-xmlelements-paramfilter.html"><abbr title="src/XmlElements/ParamFilter.php">ParamFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">70</span>
+    <span class="phpdocumentor-element-found-in__line">75</span>
 </aside>
 
         <p class="phpdocumentor-summary">Constructs a ParamFilter element.</p>
@@ -329,29 +356,14 @@ is specified.</li>
                 : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The match specifier. Null to match for non-existence of the parameter, otherwise a
-match specifier for TextMatch.</p>
+                    <section class="phpdocumentor-description"><p>The match specifier. Null to match for non-existence of the parameter, otherwise a match specifier for
+<a href="classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\TextMatch">TextMatch</abbr></a>.</p>
 </section>
 
             </dd>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                    <span class="phpdocumentor-tag-link"><a href="classes/MStilkerich-CardDavClient-XmlElements-TextMatch.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\TextMatch">TextMatch</abbr></a></span>
-                                        
-                                                 <section class="phpdocumentor-description"></section>
-
-                                    </dd>
-                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
@@ -373,7 +385,7 @@ match specifier for TextMatch.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ParamFilter.php"><a href="files/src-xmlelements-paramfilter.html"><abbr title="src/XmlElements/ParamFilter.php">ParamFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">108</span>
+    <span class="phpdocumentor-element-found-in__line">113</span>
 </aside>
 
         <p class="phpdocumentor-summary">Produces a list of attributes for this filter suitable to pass to a Sabre XML Writer.</p>
@@ -408,10 +420,10 @@ match specifier for TextMatch.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ParamFilter.php"><a href="files/src-xmlelements-paramfilter.html"><abbr title="src/XmlElements/ParamFilter.php">ParamFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
+    <span class="phpdocumentor-element-found-in__line">87</span>
 </aside>
 
-        <p class="phpdocumentor-summary">This function encodes the elements value (not the element itself!) to the given XML writer.</p>
+        <p class="phpdocumentor-summary">This function encodes the element&#039;s value (not the element itself!) to the given XML writer.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -452,7 +464,7 @@ match specifier for TextMatch.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ParamFilter.php"><a href="files/src-xmlelements-paramfilter.html"><abbr title="src/XmlElements/ParamFilter.php">ParamFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">94</span>
+    <span class="phpdocumentor-element-found-in__line">99</span>
 </aside>
 
         <p class="phpdocumentor-summary">This function serializes the full element to the given XML writer.</p>

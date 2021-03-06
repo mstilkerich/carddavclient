@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     Discovery
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Public.html">Public</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Public-Services.html">Services</a></li>
+                            </ul>
+        </div>
     
     
     </h2>
@@ -91,12 +115,14 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Discovery.php"><a href="files/src-services-discovery.html"><abbr title="src/Services/Discovery.php">Discovery.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">44</span>
+    <span class="phpdocumentor-element-found-in__line">49</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class Discovery - Provides a service to discovery the addressbooks for a CardDAV account.</p>
+            <p class="phpdocumentor-summary">Provides a service to discover the addressbooks for a CardDAV account.</p>
 
-    <section class="phpdocumentor-description"></section>
+    <section class="phpdocumentor-description"><p>It implements the discovery using the mechanisms specified in RFC 6764, which is based on DNS SRV/TXT records and/or
+well-known URI redirection on the server.</p>
+</section>
 
 
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
@@ -155,26 +181,26 @@ userinput?: bool
     <span>
         &nbsp;= [&quot;gmail.com&quot; =&gt; &quot;www.googleapis.com&quot;, &quot;googlemail.com&quot; =&gt; &quot;www.googleapis.com&quot;]                    </span>
 </dt>
-<dd></dd>
+<dd>Some builtins for public providers that don&#039;t have discovery properly set up.</dd>
 
                     <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-Services-Discovery.html#method_discoverAddressbooks">discoverAddressbooks()</a>
     <span>
-                        &nbsp;: <abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, <a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&gt;    </span>
+                        &nbsp;: array&lt;int, <a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&gt;    </span>
 </dt>
 <dd>Discover the addressbooks for a CardDAV account.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-Services-Discovery.html#method_discoverContextPath">discoverContextPath()</a>
     <span>
-                        &nbsp;: <abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;    </span>
+                        &nbsp;: array&lt;string|int, string&gt;    </span>
 </dt>
 <dd>Provides a list of URIs to check for discovering the location of the CardDAV service.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/MStilkerich-CardDavClient-Services-Discovery.html#method_discoverServers">discoverServers()</a>
     <span>
-                        &nbsp;: <abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, <abbr title="\MStilkerich\CardDavClient\Services\Server">Server</abbr>&gt;    </span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd>Discovers the CardDAV service for the given domain using DNS SRV lookups.</dd>
 
@@ -204,10 +230,11 @@ userinput?: bool
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Discovery.php"><a href="files/src-services-discovery.html"><abbr title="src/Services/Discovery.php">Discovery.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">49</span>
+    <span class="phpdocumentor-element-found-in__line">59</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Some builtins for public providers that don&#039;t have discovery properly set up.</p>
+
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">private</span>
     <span class="phpdocumentor-signature__type">array&lt;string, string&gt;</span>
@@ -216,7 +243,9 @@ userinput?: bool
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
+        <section class="phpdocumentor-description"><p>It maps a domain name that is part of the typically used usernames to a working discovery URI. This allows
+discovery from data as typically provided by a user without the application having to care about it.</p>
+</section>
 
     
 
@@ -243,14 +272,14 @@ userinput?: bool
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Discovery.php"><a href="files/src-services-discovery.html"><abbr title="src/Services/Discovery.php">Discovery.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">66</span>
+    <span class="phpdocumentor-element-found-in__line">77</span>
 </aside>
 
         <p class="phpdocumentor-summary">Discover the addressbooks for a CardDAV account.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">discoverAddressbooks</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$account</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, <a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&gt;</span></code>
+                <span class="phpdocumentor-signature__name">discoverAddressbooks</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$account</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -274,22 +303,31 @@ userinput?: bool
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<AddressbookCollection></p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">throws</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                 <span class="phpdocumentor-tag-link"><abbr title="\Exception">Exception</abbr></span>
                                                             
-                                                 <section class="phpdocumentor-description"><p>In case of error, sub-classes of \Exception are thrown, with an error message contained within
-the \Exception object.</p>
+                                                 <section class="phpdocumentor-description"><p>In case of error, sub-classes of \Exception are thrown, with an error message contained within the \Exception
+object.</p>
 </section>
 
                                     </dd>
                         </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, <a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-AddressbookCollection.html"><abbr title="\MStilkerich\CardDavClient\AddressbookCollection">AddressbookCollection</abbr></a>&gt;</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>An array of the discovered addressbooks.</p>
+            <section class="phpdocumentor-description"><p>The discovered addressbooks.</p>
 </section>
 
     
@@ -307,14 +345,14 @@ the \Exception object.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Discovery.php"><a href="files/src-services-discovery.html"><abbr title="src/Services/Discovery.php">Discovery.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">234</span>
+    <span class="phpdocumentor-element-found-in__line">247</span>
 </aside>
 
         <p class="phpdocumentor-summary">Provides a list of URIs to check for discovering the location of the CardDAV service.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">discoverContextPath</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\Server">Server</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$server</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;</span></code>
+                <span class="phpdocumentor-signature__name">discoverContextPath</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$server</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>The provided context paths comprise both well-known URIs as well as paths discovered via DNS TXT records. DNS TXT
 lookup is only performed for servers that have themselves been discovery using DNS SRV lookups, using the same
@@ -325,10 +363,10 @@ service resource record.</p>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$server</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\Server">Server</abbr></span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>An server record (associative array) as returned by discoverServers()</p>
+                    <section class="phpdocumentor-description"><p>A server record (associative array) as returned by discoverServers()</p>
 </section>
 
             </dd>
@@ -341,6 +379,24 @@ service resource record.</p>
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>Server $server</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string></p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">see</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -352,9 +408,9 @@ service resource record.</p>
                         </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>Returns an array of context paths that should be tried for discovery in the provided order.</p>
+            <section class="phpdocumentor-description"><p>The context paths that should be tried for discovery in the provided order.</p>
 </section>
 
     
@@ -372,14 +428,14 @@ service resource record.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Discovery.php"><a href="files/src-services-discovery.html"><abbr title="src/Services/Discovery.php">Discovery.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">164</span>
+    <span class="phpdocumentor-element-found-in__line">175</span>
 </aside>
 
         <p class="phpdocumentor-summary">Discovers the CardDAV service for the given domain using DNS SRV lookups.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">discoverServers</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$host</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$force_ssl</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, <abbr title="\MStilkerich\CardDavClient\Services\Server">Server</abbr>&gt;</span></code>
+                <span class="phpdocumentor-signature__name">discoverServers</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$host</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$force_ssl</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -408,12 +464,27 @@ to discover encrypted ones.</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<Server></p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\Services\list">list</abbr>&lt;string|int, <abbr title="\MStilkerich\CardDavClient\Services\Server">Server</abbr>&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>Returns an array of associative arrays of services discovered via DNS. If nothing was found,
-the returned array is empty.</p>
+            <section class="phpdocumentor-description"><p>Returns an array of associative arrays of services discovered via DNS. If nothing was found, the returned array
+is empty.</p>
 </section>
 
     
@@ -431,39 +502,69 @@ the returned array is empty.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/Discovery.php"><a href="files/src-services-discovery.html"><abbr title="src/Services/Discovery.php">Discovery.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">214</span>
+    <span class="phpdocumentor-element-found-in__line">225</span>
 </aside>
 
         <p class="phpdocumentor-summary">Orders DNS records by their prio and weight.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">orderDnsRecords</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\SrvRecord">SrvRecord</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$a</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\SrvRecord">SrvRecord</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$b</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">orderDnsRecords</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$a</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$b</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
-        <section class="phpdocumentor-description"><p>TODO weight is not quite correctly handled atm, see RFC2782, but this is not crucial to functionality</p>
-</section>
+        <section class="phpdocumentor-description"></section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$a</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\SrvRecord">SrvRecord</abbr></span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$b</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Services\SrvRecord">SrvRecord</abbr></span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>SrvRecord $a</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>SrvRecord $b</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>weight is not quite correctly handled atm, see RFC2782, but this is not crucial to functionality</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">int</span>

@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     PropFilter
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-XmlElements.html">XmlElements</a></li>
+                            </ul>
+        </div>
     
             <span class="phpdocumentor-element__implements">
             implements
@@ -94,35 +118,35 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/PropFilter.php"><a href="files/src-xmlelements-propfilter.html"><abbr title="src/XmlElements/PropFilter.php">PropFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">64</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class to represent XML urn:ietf:params:xml:ns:carddav:prop-filter elements as PHP objects. (RFC 6352)</p>
+            <p class="phpdocumentor-summary">Represents XML urn:ietf:params:xml:ns:carddav:prop-filter elements as PHP objects (RFC 6352).</p>
 
-    <section class="phpdocumentor-description"><p>From RFC 6352</p>
-<p>The CARDDAV:prop-filter XML element specifies search criteria on a specific vCard property (e.g., &quot;NICKNAME&quot;). An
+    <section class="phpdocumentor-description"><p>From RFC 6352:
+The CARDDAV:prop-filter XML element specifies search criteria on a specific vCard property (e.g., &quot;NICKNAME&quot;). An
 address object is said to match a CARDDAV:prop-filter if:</p>
 <ul>
 <li>A vCard property of the type specified by the &quot;name&quot; attribute exists, and the CARDDAV:prop-filter is empty, or
-it matches any specified CARDDAV:text-match or CARDDAV:param-filter conditions.  The &quot;test&quot; attribute specifies
+it matches any specified CARDDAV:text-match or CARDDAV:param-filter conditions. The &quot;test&quot; attribute specifies
 whether any (logical OR) or all (logical AND) of the text-filter and param- filter tests need to match in order
 for the overall filter to match.
-or:</li>
+Or:</li>
 <li>A vCard property of the type specified by the &quot;name&quot; attribute does not exist, and the CARDDAV:is-not-defined
 element is specified.</li>
 </ul>
-<p>vCard allows a &quot;group&quot; prefix to appear before a property name in the vCard data.  When the &quot;name&quot; attribute does not
+<p>vCard allows a &quot;group&quot; prefix to appear before a property name in the vCard data. When the &quot;name&quot; attribute does not
 specify a group prefix, it MUST match properties in the vCard data without a group prefix or with any group prefix.
 When the &quot;name&quot; attribute includes a group prefix, it MUST match properties that have exactly the same group prefix
-and name.  For example, a &quot;name&quot; set to &quot;TEL&quot; will match &quot;TEL&quot;, &quot;X-ABC.TEL&quot;, &quot;X-ABC-1.TEL&quot; vCard properties.  A
+and name. For example, a &quot;name&quot; set to &quot;TEL&quot; will match &quot;TEL&quot;, &quot;X-ABC.TEL&quot;, &quot;X-ABC-1.TEL&quot; vCard properties. A
 &quot;name&quot; set to &quot;X-ABC.TEL&quot; will match an &quot;X-ABC.TEL&quot; vCard property only, it will not match &quot;TEL&quot; or &quot;X-ABC-1.TEL&quot;.</p>
-<!ELEMENT prop-filter (is-not-defined | (text-match*, param-filter*))>
-<!ATTLIST prop-filter name CDATA #REQUIRED
-                          test (anyof | allof) "anyof">
-<pre class="prettyprint"><code class="prettyprint">&lt;!-- name value: a vCard property name (e.g., &quot;NICKNAME&quot;)
-     test value:
-       anyof logical OR for text-match/param-filter matches
-       allof logical AND for text-match/param-filter matches --&gt;
+<pre class="prettyprint"><code class="language-xml">&lt;!ELEMENT prop-filter (is-not-defined | (text-match*, param-filter*))&gt;
+&lt;!ATTLIST prop-filter name CDATA #REQUIRED
+                          test (anyof | allof) &quot;anyof&quot;&gt;
+    &lt;!-- name value: a vCard property name (e.g., &quot;NICKNAME&quot;)
+         test value:
+           anyof logical OR for text-match/param-filter matches
+           allof logical AND for text-match/param-filter matches --&gt;
 </code></pre>
 </section>
 
@@ -170,21 +194,21 @@ and name.  For example, a &quot;name&quot; set to &quot;TEL&quot; will match &qu
     <span>
                 &nbsp;: null|array&lt;int, \MStilkerich\CardDavClient\XmlElements\TextMatch|\MStilkerich\CardDavClient\XmlElements\ParamFilter&gt;            </span>
 </dt>
-<dd></dd>
+<dd>List of filter conditions. Null to match if the property is not defined.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#property_property">$property</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>Property this filter matches on (e.g. EMAIL), including optional group prefix (e.g. G1.EMAIL).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#property_testType">$testType</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>Semantics of match for multiple conditions (AND or OR).</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html#method___construct">__construct()</a>
@@ -205,7 +229,7 @@ and name.  For example, a &quot;name&quot; set to &quot;TEL&quot; will match &qu
     <span>
                         &nbsp;: void    </span>
 </dt>
-<dd>This function encodes the elements value (not the element itself!) to the given XML writer.</dd>
+<dd>This function encodes the element&#039;s value (not the element itself!) to the given XML writer.</dd>
 
         </dl>
 
@@ -235,10 +259,11 @@ and name.  For example, a &quot;name&quot; set to &quot;TEL&quot; will match &qu
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/PropFilter.php"><a href="files/src-xmlelements-propfilter.html"><abbr title="src/XmlElements/PropFilter.php">PropFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
+    <span class="phpdocumentor-element-found-in__line">88</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">List of filter conditions. Null to match if the property is not defined.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">null|array&lt;int, \MStilkerich\CardDavClient\XmlElements\TextMatch|\MStilkerich\CardDavClient\XmlElements\ParamFilter&gt;</span>
@@ -289,10 +314,11 @@ and name.  For example, a &quot;name&quot; set to &quot;TEL&quot; will match &qu
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/PropFilter.php"><a href="files/src-xmlelements-propfilter.html"><abbr title="src/XmlElements/PropFilter.php">PropFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">74</span>
+    <span class="phpdocumentor-element-found-in__line">80</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Property this filter matches on (e.g. EMAIL), including optional group prefix (e.g. G1.EMAIL).</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -334,13 +360,14 @@ and name.  For example, a &quot;name&quot; set to &quot;TEL&quot; will match &qu
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/PropFilter.php"><a href="files/src-xmlelements-propfilter.html"><abbr title="src/XmlElements/PropFilter.php">PropFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">68</span>
+    <span class="phpdocumentor-element-found-in__line">73</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Semantics of match for multiple conditions (AND or OR).</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$testType</span>
      = <span class="phpdocumentor-signature__default-value">&#039;anyof&#039;</span></code>
 
@@ -353,6 +380,15 @@ and name.  For example, a &quot;name&quot; set to &quot;TEL&quot; will match &qu
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-var</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>'anyof'|'allof'</p>
+</section>
+
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">psalm-readonly</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -383,18 +419,18 @@ and name.  For example, a &quot;name&quot; set to &quot;TEL&quot; will match &qu
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/PropFilter.php"><a href="files/src-xmlelements-propfilter.html"><abbr title="src/XmlElements/PropFilter.php">PropFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">95</span>
+    <span class="phpdocumentor-element-found-in__line">101</span>
 </aside>
 
         <p class="phpdocumentor-summary">Constructs a PropFilter element.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$propname</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\XmlElements\ComplexCondition">ComplexCondition</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$conditions</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$propname</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$conditions</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"><p>The $conditions parameter is an array of all the filter conditions for this property filter. An empty array
-causes the filter to always match. Otherwise, the conditions array has entries according to the ComplexFilter /
-elaborate form described in the Filter class.</p>
+causes the filter to always match. Otherwise, the $conditions array has entries according to the ComplexFilter /
+elaborate form described in the <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Filter">Filter</abbr></a> class.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -410,7 +446,7 @@ elaborate form described in the Filter class.</p>
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$conditions</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\XmlElements\ComplexCondition">ComplexCondition</abbr></span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The match conditions for the property</p>
@@ -426,12 +462,12 @@ elaborate form described in the Filter class.</p>
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                                                                    <span class="phpdocumentor-tag-link"><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\Filter">Filter</abbr></a></span>
-                                        
-                                                 <section class="phpdocumentor-description"></section>
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>ComplexCondition $conditions</p>
+</section>
 
                                     </dd>
                         </dl>
@@ -456,7 +492,7 @@ elaborate form described in the Filter class.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/PropFilter.php"><a href="files/src-xmlelements-propfilter.html"><abbr title="src/XmlElements/PropFilter.php">PropFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">166</span>
+    <span class="phpdocumentor-element-found-in__line">172</span>
 </aside>
 
         <p class="phpdocumentor-summary">Produces a list of attributes for this filter suitable to pass to a Sabre XML Writer.</p>
@@ -491,10 +527,10 @@ elaborate form described in the Filter class.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/PropFilter.php"><a href="files/src-xmlelements-propfilter.html"><abbr title="src/XmlElements/PropFilter.php">PropFilter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">149</span>
+    <span class="phpdocumentor-element-found-in__line">155</span>
 </aside>
 
-        <p class="phpdocumentor-summary">This function encodes the elements value (not the element itself!) to the given XML writer.</p>
+        <p class="phpdocumentor-summary">This function encodes the element&#039;s value (not the element itself!) to the given XML writer.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>

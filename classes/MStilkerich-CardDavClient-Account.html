@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -83,6 +100,13 @@
     Account
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Public.html">Public</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Public-Entities.html">Entities</a></li>
+                            </ul>
+        </div>
     
             <span class="phpdocumentor-element__implements">
             implements
@@ -93,7 +117,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">33</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 </aside>
 
             <p class="phpdocumentor-summary">Represents an account on a CardDAV Server.</p>
@@ -143,14 +167,15 @@
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The password to use for authentication. If no password is needed (e.g. GSSAPI/Kerberos), this may be an empty
+string.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/MStilkerich-CardDavClient-Account.html#property_username">$username</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The username to use for authentication.</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-Account.html#method___construct">__construct()</a>
@@ -250,7 +275,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">52</span>
+    <span class="phpdocumentor-element-found-in__line">62</span>
 </aside>
 
         <p class="phpdocumentor-summary">URL of the discovered CardDAV server, with empty path. May be null if not discovered yet.</p>
@@ -261,7 +286,8 @@
     <span class="phpdocumentor-signature__name">$baseUrl</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
+        <section class="phpdocumentor-description"><p>Example: <em>https://carddav.example.com:443</em></p>
+</section>
 
     
 
@@ -282,7 +308,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">46</span>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 </aside>
 
         <p class="phpdocumentor-summary">URI originally used to discover the account.</p>
@@ -293,7 +319,8 @@
     <span class="phpdocumentor-signature__name">$discoveryUri</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
+        <section class="phpdocumentor-description"><p>Example: <em>example.com</em></p>
+</section>
 
     
 
@@ -314,10 +341,12 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">40</span>
+    <span class="phpdocumentor-element-found-in__line">48</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The password to use for authentication. If no password is needed (e.g. GSSAPI/Kerberos), this may be an empty
+string.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -345,10 +374,11 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">37</span>
+    <span class="phpdocumentor-element-found-in__line">41</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The username to use for authentication.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -380,7 +410,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">73</span>
+    <span class="phpdocumentor-element-found-in__line">83</span>
 </aside>
 
         <p class="phpdocumentor-summary">Construct a new Account object.</p>
@@ -400,7 +430,7 @@
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The URI to use for service discovery. This can be a partial URI, in the simplest case just a domain name. Note
 that if no protocol is given, https will be used. Unencrypted HTTP will only be done if explicitly given (e.g.
-http://example.com).</p>
+<em>http://example.com</em>).</p>
 </section>
 
             </dd>
@@ -428,9 +458,9 @@ string.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The URL of the CardDAV server without the path part (e.g. https://carddav.example.com:443). This URL is used as
-base URL for the underlying <a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a> that can be retrieved using <a href="classes/MStilkerich-CardDavClient-Account.html#method_getClient"><abbr title="\MStilkerich\CardDavClient\Account::getClient()">Account::getClient()</abbr></a>. When
-relative URIs are passed to the client, they will be relative to this base URL. If this account is used for
+                    <section class="phpdocumentor-description"><p>The URL of the CardDAV server without the path part (e.g. <em>https://carddav.example.com:443</em>). This URL is used
+as base URL for the underlying <a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a> that can be retrieved using <a href="classes/MStilkerich-CardDavClient-Account.html#method_getClient"><abbr title="\MStilkerich\CardDavClient\Account::getClient()">Account::getClient()</abbr></a>.
+When relative URIs are passed to the client, they will be relative to this base URL. If this account is used for
 discovery with the <a href="classes/MStilkerich-CardDavClient-Services-Discovery.html"><abbr title="\MStilkerich\CardDavClient\Services\Discovery">Discovery</abbr></a> service, this parameter can be omitted.</p>
 </section>
 
@@ -459,7 +489,7 @@ discovery with the <a href="classes/MStilkerich-CardDavClient-Services-Discovery
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">172</span>
+    <span class="phpdocumentor-element-found-in__line">182</span>
 </aside>
 
         <p class="phpdocumentor-summary">Provides a readable form of the core properties of the Account.</p>
@@ -495,7 +525,7 @@ backwards incompatible change.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">91</span>
+    <span class="phpdocumentor-element-found-in__line">101</span>
 </aside>
 
         <p class="phpdocumentor-summary">Constructs an Account object from an array representation.</p>
@@ -515,7 +545,7 @@ backwards incompatible change.</p>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>An associative array containing the Account attributes.
-Keys: discoveryUri, username, password, baseUrl with the meaning from <a href="classes/MStilkerich-CardDavClient-Account.html#method___construct"><abbr title="\MStilkerich\CardDavClient\Account::__construct()">Account::__construct()</abbr></a></p>
+Keys: <code class="prettyprint">discoveryUri</code>, <code class="prettyprint">username</code>, <code class="prettyprint">password</code>, <code class="prettyprint">baseUrl</code> with the meaning from <a href="classes/MStilkerich-CardDavClient-Account.html#method___construct"><abbr title="\MStilkerich\CardDavClient\Account::__construct()">Account::__construct()</abbr></a></p>
 </section>
 
             </dd>
@@ -558,7 +588,7 @@ Keys: discoveryUri, username, password, baseUrl with the meaning from <a href="c
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">242</span>
+    <span class="phpdocumentor-element-found-in__line">252</span>
 </aside>
 
         <p class="phpdocumentor-summary">Queries the given URI for the CARDDAV:addressbook-home-set property.</p>
@@ -628,7 +658,7 @@ or meaningful as relative URI to the base URI of this client).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">201</span>
+    <span class="phpdocumentor-element-found-in__line">211</span>
 </aside>
 
         <p class="phpdocumentor-summary">Queries the given URI for the current-user-principal property.</p>
@@ -685,7 +715,7 @@ this client (i.e. either a full URI, or meaningful as relative URI to the base U
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">130</span>
+    <span class="phpdocumentor-element-found-in__line">140</span>
 </aside>
 
         <p class="phpdocumentor-summary">Provides a CardDavClient object to interact with the server for this account.</p>
@@ -733,7 +763,7 @@ This is useful, for example, to override the base path with that of a collection
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">140</span>
+    <span class="phpdocumentor-element-found-in__line">150</span>
 </aside>
 
         <p class="phpdocumentor-summary">Returns the discovery URI for this Account.</p>
@@ -767,7 +797,7 @@ This is useful, for example, to override the base path with that of a collection
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">157</span>
+    <span class="phpdocumentor-element-found-in__line">167</span>
 </aside>
 
         <p class="phpdocumentor-summary">Returns the base URL of the CardDAV service.</p>
@@ -801,7 +831,7 @@ This is useful, for example, to override the base path with that of a collection
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">110</span>
+    <span class="phpdocumentor-element-found-in__line">120</span>
 </aside>
 
         <p class="phpdocumentor-summary">Allows to serialize an Account object to JSON.</p>
@@ -851,7 +881,7 @@ This is useful, for example, to override the base path with that of a collection
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Account.php"><a href="files/src-account.html"><abbr title="src/Account.php">Account.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">158</span>
 </aside>
 
         <p class="phpdocumentor-summary">Set the base URL of this account once the service URL has been discovered.</p>

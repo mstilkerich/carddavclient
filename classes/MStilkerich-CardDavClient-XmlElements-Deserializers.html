@@ -57,6 +57,23 @@
                                     </ul>
                         </section>
 
+        <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
+                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
+                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
+                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
+                            </ul>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
+                        <ul class="phpdocumentor-list">
+                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
+                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
+                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
+                            </ul>
+                        </section>
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
@@ -84,6 +101,13 @@
     Deserializers
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal.html">Internal</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Internal-XmlElements.html">XmlElements</a></li>
+                            </ul>
+        </div>
     
     
     </h2>
@@ -94,10 +118,9 @@
     <span class="phpdocumentor-element-found-in__line">42</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class Deserializers.</p>
+            <p class="phpdocumentor-summary">Contains static deserializer functions to be used with Sabre/XML.</p>
 
-    <section class="phpdocumentor-description"><p>This class contains static deserializer functions to be used with Sabre/XML.</p>
-</section>
+    <section class="phpdocumentor-description"></section>
 
 
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
@@ -134,16 +157,16 @@ value: mixed
                     <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeHrefMulti">deserializeHrefMulti()</a>
     <span>
-                        &nbsp;: <abbr title="\MStilkerich\CardDavClient\XmlElements\list">list</abbr>&lt;string|int, string&gt;    </span>
+                        &nbsp;: array&lt;int, string&gt;    </span>
 </dt>
-<dd></dd>
+<dd>Deserializes a multiple DAV:href child elements to an array of strings.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeHrefSingle">deserializeHrefSingle()</a>
     <span>
                         &nbsp;: string|null    </span>
 </dt>
-<dd></dd>
+<dd>Deserializes a single DAV:href child element to a string.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeSupportedAddrData">deserializeSupportedAddrData()</a>
@@ -155,9 +178,9 @@ value: mixed
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeSupportedReportSet">deserializeSupportedReportSet()</a>
     <span>
-                        &nbsp;: <abbr title="\MStilkerich\CardDavClient\XmlElements\list">list</abbr>&lt;string|int, string&gt;    </span>
+                        &nbsp;: array&lt;int, string&gt;    </span>
 </dt>
-<dd>Deserializes XML DAV:supported-report-set elements to an array. (RFC3253)</dd>
+<dd>Deserializes XML DAV:supported-report-set elements to an array (RFC3253).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeToAttributes">deserializeToAttributes()</a>
@@ -192,13 +215,75 @@ value: mixed
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Deserializers.php"><a href="files/src-xmlelements-deserializers.html"><abbr title="src/XmlElements/Deserializers.php">Deserializers.php</abbr></a></abbr>
     :
+    <span class="phpdocumentor-element-found-in__line">65</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Deserializes a multiple DAV:href child elements to an array of strings.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">deserializeHrefMulti</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$reader</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string></p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>An array of strings, each representing the value of a href child element. Empty array if no href child elements
+present.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_deserializeHrefSingle">
+        deserializeHrefSingle()
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeHrefSingle" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Deserializers.php"><a href="files/src-xmlelements-deserializers.html"><abbr title="src/XmlElements/Deserializers.php">Deserializers.php</abbr></a></abbr>
+    :
     <span class="phpdocumentor-element-found-in__line">51</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Deserializes a single DAV:href child element to a string.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">deserializeHrefMulti</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\XmlElements\list">list</abbr>&lt;string|int, string&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">deserializeHrefSingle</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -216,51 +301,11 @@ value: mixed
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\XmlElements\list">list</abbr>&lt;string|int, string&gt;</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_deserializeHrefSingle">
-        deserializeHrefSingle()
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-Deserializers.html#method_deserializeHrefSingle" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Deserializers.php"><a href="files/src-xmlelements-deserializers.html"><abbr title="src/XmlElements/Deserializers.php">Deserializers.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">44</span>
-</aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">deserializeHrefSingle</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$reader</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string|null</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
+            <section class="phpdocumentor-description"><p>If no href child element is present, null is returned. If multiple href child elements are present, the value of
+the first one is returned.</p>
+</section>
 
     
 </article>
@@ -277,7 +322,7 @@ value: mixed
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Deserializers.php"><a href="files/src-xmlelements-deserializers.html"><abbr title="src/XmlElements/Deserializers.php">Deserializers.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">140</span>
+    <span class="phpdocumentor-element-found-in__line">157</span>
 </aside>
 
         <p class="phpdocumentor-summary">Deserializes a CARDDAV:supported-address-data element (RFC 6352).</p>
@@ -322,29 +367,30 @@ value: mixed
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Deserializers.php"><a href="files/src-xmlelements-deserializers.html"><abbr title="src/XmlElements/Deserializers.php">Deserializers.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">89</span>
+    <span class="phpdocumentor-element-found-in__line">106</span>
 </aside>
 
-        <p class="phpdocumentor-summary">Deserializes XML DAV:supported-report-set elements to an array. (RFC3253)</p>
+        <p class="phpdocumentor-summary">Deserializes XML DAV:supported-report-set elements to an array (RFC3253).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">deserializeSupportedReportSet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\XmlElements\list">list</abbr>&lt;string|int, string&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">deserializeSupportedReportSet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Reader">Reader</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reader</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span></code>
 
         <section class="phpdocumentor-description"><p>Per RFC3252, arbitrary report element types are nested within the DAV:supported-report-set element.
-Example:
-<supported-report-set>
-<supported-report>           &lt;--- 0+ supported-report elements
-<report>                   &lt;--- 1  each containing exactly one report element
-<sync-collection/>       &lt;--- 1  containing exactly one ANY element for the corresponding report
-</report>
-</supported-report>
-<supported-report>
-<report>
-<addressbook-multiget xmlns="urn:ietf:params:xml:ns:carddav"/>
-</report>
-</supported-report>
-</supported-report-set></p>
+Example:</p>
+<pre class="prettyprint"><code class="language-xml"> &lt;supported-report-set&gt;
+   &lt;supported-report&gt;      &lt;--- 0+ supported-report elements --&gt;
+     &lt;report&gt;              &lt;--- 1  each containing exactly one report element --&gt;
+       &lt;sync-collection/&gt;  &lt;--- 1  containing exactly one ANY element for the corresponding report --&gt;
+     &lt;/report&gt;
+   &lt;/supported-report&gt;
+   &lt;supported-report&gt;
+     &lt;report&gt;
+       &lt;addressbook-multiget xmlns=&quot;urn:ietf:params:xml:ns:carddav&quot;/&gt;
+     &lt;/report&gt;
+   &lt;/supported-report&gt;
+ &lt;/supported-report-set&gt;
+</code></pre>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -359,9 +405,24 @@ Example:
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-return</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>list<string></p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\MStilkerich\CardDavClient\XmlElements\list">list</abbr>&lt;string|int, string&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span>
             &mdash;
             <section class="phpdocumentor-description"><p>Array with the element names of the supported reports.</p>
 </section>
@@ -381,7 +442,7 @@ Example:
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Deserializers.php"><a href="files/src-xmlelements-deserializers.html"><abbr title="src/XmlElements/Deserializers.php">Deserializers.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">127</span>
+    <span class="phpdocumentor-element-found-in__line">144</span>
 </aside>
 
         <p class="phpdocumentor-summary">Deserializes an XML element to an array of its attributes, discarding its contents.</p>

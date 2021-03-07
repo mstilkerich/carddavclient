@@ -133,6 +133,32 @@ final class AddressbookCollectionTest extends TestCase
             $this->assertMatchesRegularExpression("/HTTP.*404/", $e->getMessage());
         }
     }
+
+    /**
+     * @param TestAddressbook $cfg
+     * @dataProvider addressbookProvider
+     */
+    public function testGetDetailsProvidesCoreInformation(string $abookname, array $cfg): void
+    {
+        $abook = TIS::$addressbooks[$abookname];
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+
+        $details = $abook->getDetails();
+        $this->assertStringContainsString($cfg["displayname"], $details, "Displayname not contained in details");
+        $this->assertStringContainsString($cfg["url"], $details, "URI not contained in details");
+
+        $chkFeatures = [
+            [ TIS::FEAT_SYNCCOLL, "{DAV:}sync-collection" ],
+            [ TIS::FEAT_MULTIGET, "{CARDDAV}addressbook-multiget" ],
+            [ TIS::FEAT_CTAG, "{CS}getctag" ],
+        ];
+
+        foreach ($chkFeatures as $feat) {
+            if (TIS::hasFeature($abookname, $feat[0])) {
+                $this->assertStringContainsString($feat[1], $details, "$feat[1] missing from details");
+            }
+        }
+    }
 }
 
 // vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

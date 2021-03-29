@@ -2,6 +2,8 @@
 ![CI Build](https://github.com/mstilkerich/carddavclient/workflows/CI%20Build/badge.svg)
 [![codecov](https://codecov.io/gh/mstilkerich/carddavclient/branch/master/graph/badge.svg)](https://codecov.io/gh/mstilkerich/carddavclient/branch/master)
 [![Type Coverage](https://shepherd.dev/github/mstilkerich/carddavclient/coverage.svg)](https://shepherd.dev/github/mstilkerich/carddavclient)
+[![Psalm level](https://shepherd.dev/github/mstilkerich/carddavclient/level.svg?)](https://psalm.dev/)
+
 
 This is a library for PHP applications to interact with addressbooks stored on CardDAV servers.
 

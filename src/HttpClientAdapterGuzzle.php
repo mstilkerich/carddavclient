@@ -26,7 +26,9 @@ declare(strict_types=1);
 namespace MStilkerich\CardDavClient;
 
 use GuzzleHttp\{Client, HandlerStack, Middleware, MessageFormatter};
+use Psr\Http\Message\RequestInterface as Psr7Request;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
+use Psr\Http\Message\UriInterface as Psr7Uri;
 use Psr\Http\Client\ClientInterface as Psr18ClientInterface;
 use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
 
@@ -34,6 +36,26 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
  * Adapter for the Guzzle HTTP client library.
  *
  * @psalm-import-type RequestOptions from HttpClientAdapter
+ *
+ * @psalm-type GuzzleAllowRedirectCfg = array{
+ *   max?: int,
+ *   strict?: bool,
+ *   referer?: bool,
+ *   protocols?: list<string>,
+ *   on_redirect?: callable(Psr7Request, Psr7Response, Psr7Uri): void,
+ *   track_redirects?: bool
+ * }
+ *
+ * @psalm-type GuzzleRequestOptions = array{
+ *   headers?: array<string, string | list<string>>,
+ *   body?: string | resource | \Psr\Http\Message\StreamInterface,
+ *   allow_redirects?: bool | GuzzleAllowRedirectCfg,
+ *   auth?: null | array{string, string} | array{string, string, string},
+ *   curl?: array,
+ *   base_uri?: string,
+ *   http_errors?: bool,
+ *   handler?: HandlerStack
+ * }
  *
  * @package Internal\Communication
  */
@@ -252,6 +274,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      *
      * @psalm-param RequestOptions $options
      * @param array<string,mixed> $options
+     * @psalm-return GuzzleRequestOptions
      * @param bool $doAuth True to attempt authentication. False will only try unauthenticated access.
      */
     private function prepareGuzzleOptions(array $options = [], bool $doAuth = false): array
@@ -281,7 +304,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             Config::$logger->debug("Using auth scheme $authScheme");
 
             if (in_array($authScheme, self::GUZZLE_KNOWN_AUTHSCHEMES)) {
-                $guzzleOptions['auth'] = [$this->username, $this->password, $this->authScheme];
+                $guzzleOptions['auth'] = [$this->username, $this->password, $authScheme];
             } elseif (isset(self::$schemeToCurlOpt[$authScheme])) { // will always be true
                 if (isset($_SERVER['KRB5CCNAME']) && is_string($_SERVER['KRB5CCNAME'])) {
                     putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
@@ -303,6 +326,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         }
         */
 
+        /** @psalm-var GuzzleRequestOptions $guzzleOptions */
         return $guzzleOptions;
     }
 

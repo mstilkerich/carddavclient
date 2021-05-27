@@ -26,8 +26,7 @@ This is a library for PHP applications to interact with addressbooks stored on C
     support these reports
 - Modification of addressbooks (adding/changing/deleting address objects)
 - Uses [Guzzle](https://github.com/guzzle/guzzle) HTTP client library, including support for HTTP/2 and various
-  authentication schemes
-  - OAuth/OAuth2 is *not* supported at the moment
+  authentication schemes, including OAuth2 bearer token
 - Uses [Sabre/VObject](https://github.com/sabre-io/vobject) at the application-side interface to exchange VCards
 - Uses any PSR-3 compliant logger object to record log messages and the HTTP traffic. A separate logger object is used
   for the HTTP traffic, which tends to be verbose and therefore logging for HTTP could be done to a separate location or
@@ -42,7 +41,7 @@ Currently, this library has been tested to interoperate with:
 
 * Nextcloud 18 and later (Basic Auth and GSSAPI/Kerberos 5)
 * iCloud
-* Google Contacts via CardDAV API (only HTTP Basic Authentication)
+* Google Contacts via CardDAV API
 * Radicale 3 (also used by Synology as DSM CardDAV server)
 * Owncloud 10
 * Baïkal 0.7 (Digest Auth and GSSAPI/Kerberos 5)

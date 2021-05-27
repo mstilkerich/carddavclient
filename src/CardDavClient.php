@@ -44,6 +44,7 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * considered an internal part of the library whose interfaces may change without being considered a change of the
  * library's API.
  *
+ * @psalm-import-type Credentials from HttpClientAdapter
  * @psalm-import-type RequestOptions from HttpClientAdapter
  * @psalm-import-type PropTypes from Prop
  * @package Internal\Communication
@@ -62,10 +63,13 @@ class CardDavClient
     /** @var HttpClientAdapter */
     protected $httpClient;
 
-    public function __construct(string $base_uri, string $username, string $password)
+    /**
+     * @psalm-param Credentials $credentials
+     */
+    public function __construct(string $base_uri, array $credentials)
     {
         $this->base_uri = $base_uri;
-        $this->httpClient = new HttpClientAdapterGuzzle($base_uri, $username, $password);
+        $this->httpClient = new HttpClientAdapterGuzzle($base_uri, $credentials);
     }
 
     /**

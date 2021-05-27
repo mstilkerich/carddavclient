@@ -6,16 +6,21 @@ namespace MStilkerich\Tests\CardDavClient\Interop;
 
 use Wa72\SimpleLogger\FileLogger;
 use MStilkerich\Tests\CardDavClient\TestInfrastructure;
-use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config};
+use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config,HttpClientAdapter};
 use PHPUnit\Framework\TestCase;
 
 /**
  * @psalm-type TestAccount = array{
- *   username: string,
- *   password: string,
+ *   username?: string,
+ *   password?: string,
+ *   refreshtoken?: string,
+ *   tokenUri?: string,
+ *   clientId?: string,
+ *   clientSecret?: string,
+ *   oAuthScopes?: string,
  *   discoveryUri: string,
  *   syncAllowExtraChanges: bool,
- *   featureSet: int
+ *   featureSet: int,
  * }
  *
  * @psalm-type TestAddressbook = array{
@@ -24,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  *   displayname: string,
  *   readonly?: bool
  * }
+ *
+ * @psalm-import-type Credentials from HttpClientAdapter
  */
 
 final class TestInfrastructureSrv
@@ -142,6 +149,59 @@ final class TestInfrastructureSrv
     /** @var array<string, AddressbookCollection> Objects for all addressbooks from AccountData::ADDRESSBOOKS */
     public static $addressbooks = [];
 
+    /**
+     * @psalm-param TestAccount $cfg
+     * @psalm-return Credentials
+     */
+    public static function makeCredentials(array $cfg): array
+    {
+        $cred = [];
+        if (isset($cfg['username'])) {
+            $cred['username'] = $cfg['username'];
+        }
+        if (isset($cfg['password'])) {
+            $cred['password'] = $cfg['password'];
+        }
+
+        if (
+            isset($cfg['tokenUri'])
+            && isset($cfg['refreshtoken'])
+            && isset($cfg['clientId'])
+            && isset($cfg['clientSecret'])
+        ) {
+            $postData = [
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $cfg['refreshtoken'],
+                'client_id' => $cfg['clientId'],
+                'client_secret' => $cfg['clientSecret'],
+            ];
+
+            if (isset($cfg['oAuthScopes'])) {
+                $postData['scope'] = $cfg['oAuthScopes'];
+            }
+
+            $options = array(
+                'http' => array(
+                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method'  => 'POST',
+                    'content' => http_build_query($postData)
+                )
+            );
+            $context  = stream_context_create($options);
+            $result = file_get_contents($cfg['tokenUri'], false, $context);
+
+            if (is_string($result)) {
+                /** @var array | false */
+                $json = json_decode($result, true);
+                if (isset($json["access_token"]) && is_string($json["access_token"])) {
+                    $cred["bearertoken"] = $json["access_token"];
+                }
+            }
+        }
+
+        return $cred;
+    }
+
     public static function init(): void
     {
         if (empty(self::$accounts)) {
@@ -154,7 +214,8 @@ final class TestInfrastructureSrv
         }
 
         foreach (AccountData::ACCOUNTS as $name => $cfg) {
-            self::$accounts[$name] = new Account($cfg["discoveryUri"], $cfg["username"], $cfg["password"]);
+            $cred = self::makeCredentials($cfg);
+            self::$accounts[$name] = new Account($cfg["discoveryUri"], $cred);
         }
 
         foreach (AccountData::ADDRESSBOOKS as $name => $cfg) {

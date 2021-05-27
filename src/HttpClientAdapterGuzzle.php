@@ -35,6 +35,7 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
 /**
  * Adapter for the Guzzle HTTP client library.
  *
+ * @psalm-import-type Credentials from HttpClientAdapter
  * @psalm-import-type RequestOptions from HttpClientAdapter
  *
  * @psalm-type GuzzleAllowRedirectCfg = array{
@@ -63,30 +64,26 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
 {
     /**
      * A list of authentication schemes that can be handled by Guzzle itself, independent on whether it works only with
-     * the Guzzle Curl HTTP handler or not.
+     * the Guzzle Curl HTTP handler or not. Strings must be lowercase!
      *
-     * @psalm-var list<string>
+     * @psalm-var list<lowercase-string>
      * @var array<int, string>
      */
     private const GUZZLE_KNOWN_AUTHSCHEMES = [ 'basic', 'digest', 'ntlm' ];
+
+    /**
+     * A list of authentication schemes that can be handled by this HttpClientAdapter.
+     *
+     * @psalm-var list<lowercase-string>
+     * @var array<int, string>
+     */
+    private $known_authschemes;
 
     /**
      * The Client object of the Guzzle HTTP library.
      * @var Client
      */
     private $client;
-
-    /**
-     * The username to use for authentication
-     * @var string
-     */
-    private $username;
-
-    /**
-     * The password to use for authentication
-     * @var string
-     */
-    private $password;
 
     /**
      * The HTTP authentication scheme to use. Null if not determined yet.
@@ -96,7 +93,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
 
     /**
      * HTTP authentication schemes tried without success, to avoid trying again.
-     * @psalm-var list<string>
+     * @psalm-var list<lowercase-string>
      * @var array<int, string>
      */
     private $failedAuthSchemes = [];
@@ -104,21 +101,18 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
     /**
      * Maps lowercase auth-schemes to their CURLAUTH_XXX constant. Only values not part of GUZZLE_KNOWN_AUTHSCHEMES are
      * relevant here.
-     * @var null|array<string, int>
+     * @var null|array<lowercase-string, int>
      */
     private static $schemeToCurlOpt;
 
     /** Constructs a HttpClientAdapterGuzzle object.
      *
      * @param string $base_uri Base URI to be used when relative URIs are given to requests.
-     * @param string $username Username used to authenticate with the server.
-     * @param string $password Password used to authenticate with the server.
+     * @param Credentials $credentials Credentials used to authenticate with the server.
      */
-    public function __construct(string $base_uri, string $username, string $password)
+    public function __construct(string $base_uri, array $credentials)
     {
-        $this->baseUri = $base_uri;
-        $this->username = $username;
-        $this->password = $password;
+        parent::__construct($base_uri, $credentials);
 
         if (!isset(self::$schemeToCurlOpt)) {
             if (extension_loaded("curl")) {
@@ -130,6 +124,12 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                 self::$schemeToCurlOpt = [];
             }
         }
+
+        $this->known_authschemes = array_merge(
+            [ 'bearer' ],
+            self::GUZZLE_KNOWN_AUTHSCHEMES,
+            array_keys(self::$schemeToCurlOpt)
+        );
 
         $stack = HandlerStack::create();
         $stack->push(Middleware::log(
@@ -304,16 +304,26 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             Config::$logger->debug("Using auth scheme $authScheme");
 
             if (in_array($authScheme, self::GUZZLE_KNOWN_AUTHSCHEMES)) {
-                $guzzleOptions['auth'] = [$this->username, $this->password, $authScheme];
-            } elseif (isset(self::$schemeToCurlOpt[$authScheme])) { // will always be true
+                $guzzleOptions['auth'] = [
+                    $this->credentials['username'] ?? "",
+                    $this->credentials['password'] ?? "",
+                    $authScheme
+                ];
+            } elseif (isset(self::$schemeToCurlOpt[$authScheme])) {
                 if (isset($_SERVER['KRB5CCNAME']) && is_string($_SERVER['KRB5CCNAME'])) {
                     putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
                 }
                 $guzzleOptions["curl"] = [
                     CURLOPT_HTTPAUTH => self::$schemeToCurlOpt[$authScheme],
-                    CURLOPT_USERNAME => $this->username,
-                    CURLOPT_PASSWORD => $this->password
+                    CURLOPT_USERNAME => $this->credentials['username'] ?? "",
+                    CURLOPT_PASSWORD => $this->credentials['password'] ?? ""
                 ];
+            } else { // handled by HttpClientAdapterGuzzle directly
+                if ($authScheme == "bearer" && isset($this->credentials['bearertoken'])) {
+                    $authHeader = sprintf("%s %s", 'Bearer', $this->credentials['bearertoken']);
+                    /** @psalm-var GuzzleRequestOptions $guzzleOptions */
+                    $guzzleOptions["headers"]["Authorization"] = $authHeader;
+                }
             }
         }
 
@@ -334,29 +344,37 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      * Extracts HTTP authentication schemes from a WWW-Authenticate header.
      *
      * The schemes offered by the server in the WWW-Authenticate header are intersected with those supported by Guzzle /
-     * curl. Schemes that havev been tried with this object without success are filtered.
+     * curl. Schemes that have been tried with this object without success are filtered.
      *
      * @param Psr7Response $response A status 401 response returned by the server.
      *
-     * @psalm-return list<string>
+     * @psalm-return list<lowercase-string>
      * @return array<int,string> An array of authentication schemes that can be tried.
      */
     private function getSupportedAuthSchemes(Psr7Response $response): array
     {
         $authHeaders = $response->getHeader("WWW-Authenticate");
         $schemes = [];
-
+        $availableSchemes = array_diff($this->known_authschemes, $this->failedAuthSchemes);
         foreach ($authHeaders as $authHeader) {
             $authHeader = trim($authHeader);
+            $srvSchemes = [];
+
             foreach (preg_split("/\s*,\s*/", $authHeader) as $challenge) {
                 if (preg_match("/^([^ =]+)(\s+[^=].*)?$/", $challenge, $matches)) { // filter auth-params
-                    $scheme = strtolower($matches[1]);
-                    if (
-                        (in_array($scheme, self::GUZZLE_KNOWN_AUTHSCHEMES) || isset(self::$schemeToCurlOpt[$scheme]))
-                        && (! in_array($scheme, $this->failedAuthSchemes))
-                    ) {
-                        $schemes[] = $scheme;
-                    }
+                    $srvSchemes[] = strtolower($matches[1]);
+                }
+            }
+
+            // Another hack for Google: Google APIs does not advertise Bearer in the WWW-Authenticate header
+            // https://issuetracker.google.com/issues/189153568
+            if (str_contains($authHeader, 'realm="Google APIs"')) {
+                $srvSchemes[] = 'bearer';
+            }
+
+            foreach ($srvSchemes as $scheme) {
+                if (in_array($scheme, $availableSchemes) && $this->checkCredentialsAvailable($scheme)) {
+                    $schemes[] = $scheme;
                 }
             }
         }

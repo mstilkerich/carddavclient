@@ -77,12 +77,12 @@ final class AccountTest extends TestCase
     public function testCanBeCreatedFromArrayWithoutRequiredProps(): void
     {
         $accSerial = [
+            'username' => 'theUser',
             'password' => 'thePassword',
             'baseUrl' => 'https://carddav.example.com:443',
-            'discoveryUri' => 'example.com'
         ];
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("does not contain required property username");
+        $this->expectExceptionMessage("does not contain required property discoveryUri");
         Account::constructFromArray($accSerial);
     }
 

@@ -47,15 +47,48 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
  *   headers?: array<string, string | list<string>>
  * }
  *
+ * @psalm-type Credentials = array{
+ *   username?: string,
+ *   password?: string,
+ *   bearertoken?: string
+ * }
+ *
  * @package Internal\Communication
  */
 abstract class HttpClientAdapter
 {
     /**
+     * Defines which credential attributes are required for auth mechanisms.
+     * If a mechanism is not listed, it is assumed that no credentials are mandatory (e.g. GSSAPI/Kerberos).
+     */
+    protected const NEEDED_AUTHNFO = [
+        'basic' => [ 'username', 'password' ],
+        'digest' => [ 'username', 'password' ],
+        'bearer' => [ 'bearertoken' ]
+    ];
+
+    /**
      * The base URI for requests.
      * @var string
      */
     protected $baseUri;
+
+    /**
+     * The credentials to use for authentication
+     * @var Credentials
+     */
+    protected $credentials;
+
+    /** Constructs a HttpClientAdapter object.
+     *
+     * @param string $base_uri Base URI to be used when relative URIs are given to requests.
+     * @param Credentials $credentials Credentials used to authenticate with the server.
+     */
+    protected function __construct(string $base_uri, array $credentials)
+    {
+        $this->baseUri = $base_uri;
+        $this->credentials = $credentials;
+    }
 
     /**
      * Sends an HTTP request and returns a PSR-7 response.
@@ -105,6 +138,25 @@ abstract class HttpClientAdapter
         }
 
         return $result;
+    }
+
+    /**
+     * Checks if the needed credentials for an authentication scheme are available.
+     *
+     * @param lowercase-string $scheme The authentication scheme to check for
+     * @return bool True if the credentials needed for the scheme are available.
+     */
+    protected function checkCredentialsAvailable(string $scheme): bool
+    {
+        if (isset(self::NEEDED_AUTHNFO[$scheme])) {
+            foreach (self::NEEDED_AUTHNFO[$scheme] as $c) {
+                if (!isset($this->credentials[$c])) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

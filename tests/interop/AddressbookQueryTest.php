@@ -458,6 +458,7 @@ final class AddressbookQueryTest extends TestCase
         $numTestCards = count(self::$insertedCards[$abookname]);
 
         $result = $abook->query(['NICKNAME' => '/Jonny/^'], ['EMAIL', 'TEL']);
+        $result = $this->filterReceivedCards($abookname, $result);
         $this->assertCount($numTestCards, $result, "Expected $numTestCards cards in result");
 
         if (TIS::hasFeature($abookname, TIS::FEAT_ABOOKQUERY_PARTIALCARDS)) {
@@ -471,13 +472,12 @@ final class AddressbookQueryTest extends TestCase
     }
 
     /**
-     * Checks that a result returned by the query matches the expected cards.
+     * Removes cards not created by this test (may exist on server and match query filters)
      *
      * @param array<string, array{vcard: VCard, etag: string}> $result
-     * @param list<int> $expCardIdxs List of indexes into self::$insertedCards with the cards that are expected in the
-     *                               result
+     * @return array<string, array{vcard: VCard, etag: string}>
      */
-    private function checkExpectedCards(string $abookname, array $result, array $expCardIdxs): void
+    private function filterReceivedCards(string $abookname, array $result): array
     {
         // remove cards not created by this test (may exist on server and match query filters)
         $knownUris = array_column(self::$insertedCards[$abookname], 'uri');
@@ -486,6 +486,20 @@ final class AddressbookQueryTest extends TestCase
                 unset($result[$uri]);
             }
         }
+
+        return $result;
+    }
+
+    /**
+     * Checks that a result returned by the query matches the expected cards.
+     *
+     * @param array<string, array{vcard: VCard, etag: string}> $result
+     * @param list<int> $expCardIdxs List of indexes into self::$insertedCards with the cards that are expected in the
+     *                               result
+     */
+    private function checkExpectedCards(string $abookname, array $result, array $expCardIdxs): void
+    {
+        $result = $this->filterReceivedCards($abookname, $result);
 
         $expUris = [];
         foreach ($expCardIdxs as $idx) {

@@ -30,22 +30,17 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 /**
  * Represents an account on a CardDAV Server.
  *
+ * @psalm-import-type Credentials from HttpClientAdapter
+ *
  * @package Public\Entities
  */
 class Account implements \JsonSerializable
 {
     /**
-     * The username to use for authentication.
-     * @var string
+     * The credentials for authentication, null to disable authentication.
+     * @var Credentials
      */
-    private $username;
-
-    /**
-     * The password to use for authentication. If no password is needed (e.g. GSSAPI/Kerberos), this may be an empty
-     * string.
-     * @var string
-     */
-    private $password;
+    private $credentials;
 
     /**
      * URI originally used to discover the account.
@@ -68,11 +63,17 @@ class Account implements \JsonSerializable
      *  The URI to use for service discovery. This can be a partial URI, in the simplest case just a domain name. Note
      *  that if no protocol is given, https will be used. Unencrypted HTTP will only be done if explicitly given (e.g.
      *  _http://example.com_).
-     * @param string $username
-     *  The username to use for authentication.
+     * @psalm-param string|Credentials $credentials
+     * @param string|array $credentials
+     *  The credentials to use for authentication.
+     *  An array with any of the keys (if no password is needed, the array may be empty, e.g. GSSAPI/Kerberos):
+     *    - username/password: The username and password for mechanisms requiring such credentials (e.g. Basic, Digest)
+     *    - bearertoken: The token to use for Bearer authentication (OAUTH2)
+     *
+     *  Deprecated: username as string for authentication mechanisms requiring username / password.
      * @param string $password
-     *  The password to use for authentication. If no password is needed (e.g. GSSAPI/Kerberos), this may be an empty
-     *  string.
+     *  Deprecated: The password to use for authentication. This parameter is deprecated, include the password in the
+     *  $credentials parameter. This parameter is ignored unless $credentials is used in its deprecated string form.
      * @param string $baseUrl
      *  The URL of the CardDAV server without the path part (e.g. _https://carddav.example.com:443_). This URL is used
      *  as base URL for the underlying {@see CardDavClient} that can be retrieved using {@see Account::getClient()}.
@@ -80,12 +81,19 @@ class Account implements \JsonSerializable
      *  discovery with the {@see Services\Discovery} service, this parameter can be omitted.
      * @api
      */
-    public function __construct(string $discoveryUri, string $username, string $password, string $baseUrl = null)
+    public function __construct(string $discoveryUri, $credentials, string $password = "", string $baseUrl = null)
     {
         $this->discoveryUri = $discoveryUri;
-        $this->username = $username;
-        $this->password = $password;
-        $this->baseUrl  = $baseUrl;
+        $this->baseUrl = $baseUrl;
+
+        if (is_string($credentials)) {
+            $this->credentials = [
+                'username' => $credentials,
+                'password' => $password
+            ];
+        } else {
+            $this->credentials = $credentials;
+        }
     }
 
     /**
@@ -100,15 +108,23 @@ class Account implements \JsonSerializable
      */
     public static function constructFromArray(array $props): Account
     {
-        $requiredProps = [ 'discoveryUri', 'username', 'password' ];
+        $requiredProps = [ 'discoveryUri' ];
         foreach ($requiredProps as $prop) {
             if (!isset($props[$prop])) {
                 throw new \Exception("Array used to reconstruct account does not contain required property $prop");
             }
         }
 
-        /** @psalm-var array{discoveryUri: string, username: string, password: string} & array<string,string> $props */
-        return new Account($props["discoveryUri"], $props["username"], $props["password"], $props["baseUrl"] ?? null);
+        $credProps = [ 'username', 'password', 'bearertoken' ];
+        $credentials = [];
+        foreach ($credProps as $prop) {
+            if (isset($props[$prop])) {
+                $credentials[$prop] = $props[$prop];
+            }
+        }
+
+        /** @psalm-var array{discoveryUri: string} & array<string,string> $props */
+        return new Account($props["discoveryUri"], $credentials, "", $props["baseUrl"] ?? null);
     }
 
     /**
@@ -120,11 +136,9 @@ class Account implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            "username" => $this->username,
-            "password" => $this->password,
             "discoveryUri" => $this->discoveryUri,
             "baseUrl" => $this->baseUrl
-        ];
+        ] + $this->credentials;
     }
 
     /**
@@ -140,7 +154,7 @@ class Account implements \JsonSerializable
     public function getClient(?string $baseUrl = null): CardDavClient
     {
         $clientUri = $baseUrl ?? $this->getUrl();
-        return new CardDavClient($clientUri, $this->username, $this->password);
+        return new CardDavClient($clientUri, $this->credentials);
     }
 
     /**
@@ -182,7 +196,7 @@ class Account implements \JsonSerializable
     public function __toString(): string
     {
         $str = $this->discoveryUri;
-        $str .= ", user: " . $this->username;
+        $str .= ", user: " . ($this->credentials['username'] ?? "");
         $str .= ", CardDAV URI: ";
         $str .= $this->baseUrl ?? "not discovered yet";
         return $str;

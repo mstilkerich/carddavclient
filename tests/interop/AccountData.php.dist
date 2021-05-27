@@ -23,14 +23,23 @@ final class AccountData
             // For providers that report extra changes or deleted cards between two syncs, set this to true to limit the
             // sync tests to check whether all known changes are actually reported, without raising an error on any
             // additional changes that the server reports. (Google has been observed to behave like this)
-            "syncAllowExtraChanges" => false,
+            "syncAllowExtraChanges" => true,
 
             // known/expected features
             "featureSet" => TestInfrastructureSrv::SRVFEATS_ICLOUD,
         ],
         "Google" => [
+            // for basic auth
             "username" => "gmailid@example.com",
             "password" => "foobar",
+
+            // for OAuth
+            "refreshtoken" => "abcd"
+            "tokenUri" => "https://oauth2.googleapis.com/token",
+            "oAuthScopes" => "https://www.googleapis.com/auth/carddav",
+            "clientId" => 'abcd',
+            "clientSecret" => 'abcd',
+
             "discoveryUri" => "gmail.com",
             "syncAllowExtraChanges" => true,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_GOOGLE,

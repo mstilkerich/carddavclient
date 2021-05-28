@@ -368,7 +368,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
 
             // Another hack for Google: Google APIs does not advertise Bearer in the WWW-Authenticate header
             // https://issuetracker.google.com/issues/189153568
-            if (str_contains($authHeader, 'realm="Google APIs"')) {
+            if (strstr($authHeader, 'realm="Google APIs"') !== false) {
                 $srvSchemes[] = 'bearer';
             }
 

@@ -56,15 +56,10 @@ Search.appendIndex(
             "summary": "Queries\u0020the\u0020given\u0020URI\u0020for\u0020the\u0020CARDDAV\u003Aaddressbook\u002Dhome\u002Dset\u0020property.",
             "url": "classes/MStilkerich-CardDavClient-Account.html#method_findAddressbookHome"
         },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024username",
-            "name": "username",
-            "summary": "The\u0020username\u0020to\u0020use\u0020for\u0020authentication.",
-            "url": "classes/MStilkerich-CardDavClient-Account.html#property_username"
-        },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024password",
-            "name": "password",
-            "summary": "The\u0020password\u0020to\u0020use\u0020for\u0020authentication.\u0020If\u0020no\u0020password\u0020is\u0020needed\u0020\u0028e.g.\u0020GSSAPI\/Kerberos\u0029,\u0020this\u0020may\u0020be\u0020an\u0020empty\nstring.",
-            "url": "classes/MStilkerich-CardDavClient-Account.html#property_password"
+            "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024credentials",
+            "name": "credentials",
+            "summary": "The\u0020credentials\u0020for\u0020authentication,\u0020null\u0020to\u0020disable\u0020authentication.",
+            "url": "classes/MStilkerich-CardDavClient-Account.html#property_credentials"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024discoveryUri",
             "name": "discoveryUri",
@@ -321,6 +316,11 @@ Search.appendIndex(
             "summary": "Abstract\u0020base\u0020class\u0020for\u0020the\u0020internal\u0020HTTP\u0020client\u0020adapter.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html"
         },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Constructs\u0020a\u0020HttpClientAdapter\u0020object.",
+            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method___construct"
+        },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003AsendRequest\u0028\u0029",
             "name": "sendRequest",
             "summary": "Sends\u0020an\u0020HTTP\u0020request\u0020and\u0020returns\u0020a\u0020PSR\u002D7\u0020response.",
@@ -331,15 +331,30 @@ Search.appendIndex(
             "summary": "Checks\u0020whether\u0020the\u0020given\u0020URI\u0020has\u0020the\u0020same\u0020domain\u0020as\u0020the\u0020base\u0020URI\u0020of\u0020this\u0020HTTP\u0020client.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkSameDomainAsBase"
         },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003AcheckCredentialsAvailable\u0028\u0029",
+            "name": "checkCredentialsAvailable",
+            "summary": "Checks\u0020if\u0020the\u0020needed\u0020credentials\u0020for\u0020an\u0020authentication\u0020scheme\u0020are\u0020available.",
+            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkCredentialsAvailable"
+        },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003AgetDomainFromSubdomain\u0028\u0029",
             "name": "getDomainFromSubdomain",
             "summary": "Extracts\u0020the\u0020domain\u0020name\u0020from\u0020a\u0020subdomain.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_getDomainFromSubdomain"
         },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003ANEEDED_AUTHNFO",
+            "name": "NEEDED_AUTHNFO",
+            "summary": "Defines\u0020which\u0020credential\u0020attributes\u0020are\u0020required\u0020for\u0020auth\u0020mechanisms.",
+            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#constant_NEEDED_AUTHNFO"
+        },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003A\u0024baseUri",
             "name": "baseUri",
             "summary": "The\u0020base\u0020URI\u0020for\u0020requests.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_baseUri"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003A\u0024credentials",
+            "name": "credentials",
+            "summary": "The\u0020credentials\u0020to\u0020use\u0020for\u0020authentication",
+            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_credentials"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle",
             "name": "HttpClientAdapterGuzzle",
@@ -373,23 +388,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003AGUZZLE_KNOWN_AUTHSCHEMES",
             "name": "GUZZLE_KNOWN_AUTHSCHEMES",
-            "summary": "A\u0020list\u0020of\u0020authentication\u0020schemes\u0020that\u0020can\u0020be\u0020handled\u0020by\u0020Guzzle\u0020itself,\u0020independent\u0020on\u0020whether\u0020it\u0020works\u0020only\u0020with\nthe\u0020Guzzle\u0020Curl\u0020HTTP\u0020handler\u0020or\u0020not.",
+            "summary": "A\u0020list\u0020of\u0020authentication\u0020schemes\u0020that\u0020can\u0020be\u0020handled\u0020by\u0020Guzzle\u0020itself,\u0020independent\u0020on\u0020whether\u0020it\u0020works\u0020only\u0020with\nthe\u0020Guzzle\u0020Curl\u0020HTTP\u0020handler\u0020or\u0020not.\u0020Strings\u0020must\u0020be\u0020lowercase\u0021",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#constant_GUZZLE_KNOWN_AUTHSCHEMES"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024known_authschemes",
+            "name": "known_authschemes",
+            "summary": "A\u0020list\u0020of\u0020authentication\u0020schemes\u0020that\u0020can\u0020be\u0020handled\u0020by\u0020this\u0020HttpClientAdapter.",
+            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_known_authschemes"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024client",
             "name": "client",
             "summary": "The\u0020Client\u0020object\u0020of\u0020the\u0020Guzzle\u0020HTTP\u0020library.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_client"
-        },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024username",
-            "name": "username",
-            "summary": "The\u0020username\u0020to\u0020use\u0020for\u0020authentication",
-            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_username"
-        },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024password",
-            "name": "password",
-            "summary": "The\u0020password\u0020to\u0020use\u0020for\u0020authentication",
-            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapterGuzzle.html#property_password"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle\u003A\u003A\u0024authScheme",
             "name": "authScheme",

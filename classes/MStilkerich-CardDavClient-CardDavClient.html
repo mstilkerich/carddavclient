@@ -114,7 +114,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">52</span>
 </aside>
 
             <p class="phpdocumentor-summary">Implements the operations of the CardDAV protocol.</p>
@@ -134,6 +134,15 @@ library's API.</p>
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-import-type</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>Credentials from HttpClientAdapter</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">psalm-import-type</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -337,7 +346,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">54</span>
 </aside>
 
     
@@ -377,7 +386,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">60</span>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 </aside>
 
     
@@ -408,7 +417,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">63</span>
+    <span class="phpdocumentor-element-found-in__line">64</span>
 </aside>
 
     
@@ -443,15 +452,16 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">65</span>
+    <span class="phpdocumentor-element-found-in__line">69</span>
 </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$base_uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$username</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$password</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$base_uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$credentials</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -462,15 +472,8 @@ library's API.</p>
                 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$username</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$password</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$credentials</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -478,6 +481,21 @@ library's API.</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">psalm-param</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>Credentials $credentials</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
@@ -499,7 +517,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">568</span>
+    <span class="phpdocumentor-element-found-in__line">572</span>
 </aside>
 
     
@@ -541,7 +559,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">578</span>
+    <span class="phpdocumentor-element-found-in__line">582</span>
 </aside>
 
     
@@ -590,7 +608,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">573</span>
+    <span class="phpdocumentor-element-found-in__line">577</span>
 </aside>
 
     
@@ -639,7 +657,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">208</span>
+    <span class="phpdocumentor-element-found-in__line">212</span>
 </aside>
 
         <p class="phpdocumentor-summary">Requests the server to create the given resource.</p>
@@ -719,7 +737,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">152</span>
+    <span class="phpdocumentor-element-found-in__line">156</span>
 </aside>
 
         <p class="phpdocumentor-summary">Requests the server to delete the given resource.</p>
@@ -763,7 +781,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">408</span>
+    <span class="phpdocumentor-element-found-in__line">412</span>
 </aside>
 
         <p class="phpdocumentor-summary">Retrieves a set of WebDAV properties for a resource.</p>
@@ -860,7 +878,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">133</span>
+    <span class="phpdocumentor-element-found-in__line">137</span>
 </aside>
 
         <p class="phpdocumentor-summary">Fetches an address object.</p>
@@ -926,7 +944,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">110</span>
+    <span class="phpdocumentor-element-found-in__line">114</span>
 </aside>
 
     
@@ -968,7 +986,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">266</span>
+    <span class="phpdocumentor-element-found-in__line">270</span>
 </aside>
 
         <p class="phpdocumentor-summary">Issues an addressbook-multiget request to the server.</p>
@@ -1065,7 +1083,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">316</span>
+    <span class="phpdocumentor-element-found-in__line">320</span>
 </aside>
 
         <p class="phpdocumentor-summary">Issues an addressbook-query report.</p>
@@ -1162,7 +1180,7 @@ library's API.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">79</span>
+    <span class="phpdocumentor-element-found-in__line">83</span>
 </aside>
 
         <p class="phpdocumentor-summary">Requests a sync-collection REPORT from the CardDAV server.</p>
@@ -1216,7 +1234,7 @@ It will respond with 400 Bad Request and error message &quot;Request contains an
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">169</span>
+    <span class="phpdocumentor-element-found-in__line">173</span>
 </aside>
 
         <p class="phpdocumentor-summary">Requests the server to update the given resource.</p>
@@ -1279,7 +1297,7 @@ because the server-side ETag did not match the given one.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">468</span>
+    <span class="phpdocumentor-element-found-in__line">472</span>
 </aside>
 
         <p class="phpdocumentor-summary">Adds required VCard properties to a set specified by the user.</p>
@@ -1351,7 +1369,7 @@ because the server-side ETag did not match the given one.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">480</span>
+    <span class="phpdocumentor-element-found-in__line">484</span>
 </aside>
 
     
@@ -1414,7 +1432,7 @@ because the server-side ETag did not match the given one.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">498</span>
+    <span class="phpdocumentor-element-found-in__line">502</span>
 </aside>
 
     
@@ -1497,7 +1515,7 @@ because the server-side ETag did not match the given one.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">374</span>
+    <span class="phpdocumentor-element-found-in__line">378</span>
 </aside>
 
         <p class="phpdocumentor-summary">Builds a CARDDAV::address-data element with the requested properties.</p>
@@ -1570,7 +1588,7 @@ returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">587</span>
+    <span class="phpdocumentor-element-found-in__line">591</span>
 </aside>
 
     
@@ -1602,7 +1620,7 @@ returned.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/CardDavClient.php"><a href="files/src-carddavclient.html"><abbr title="src/CardDavClient.php">CardDavClient.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">534</span>
+    <span class="phpdocumentor-element-found-in__line">538</span>
 </aside>
 
         <p class="phpdocumentor-summary">Performs a WebDAV request, automatically following redirections and providing the final target with the result.</p>

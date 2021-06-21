@@ -1,6 +1,7 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
-## Since last version
+## Version 1.2.0 (to 1.1.0)
+
 - Support for OAUTH2/Bearer authentication. Specify bearertoken in credentials when creating Account. Acquiring the
   access token is outside the scope of this library.
 - The interface for specifying credentials for an Account changed. The old username/password parameters are deprecated,

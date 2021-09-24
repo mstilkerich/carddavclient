@@ -372,6 +372,11 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                 $srvSchemes[] = 'bearer';
             }
 
+            // hack for Yahoo: Yahoo APIs does not advertise Bearer in the WWW-Authenticate header
+            if (strstr($authHeader, 'realm="progrss"') !== false) {
+                $srvSchemes[] = 'bearer';
+            }
+
             foreach ($srvSchemes as $scheme) {
                 if (in_array($scheme, $availableSchemes) && $this->checkCredentialsAvailable($scheme)) {
                     $schemes[] = $scheme;

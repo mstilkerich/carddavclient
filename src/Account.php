@@ -7,6 +7,19 @@
  * Licensed under the MIT license. See COPYING file in the project root for details.
  */
 
+declare(strict_types=1);
+
+namespace MStilkerich\CardDavClient;
+
+use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
+
+/**
+ * Represents an account on a CardDAV Server.
+ *
+ * @psalm-import-type Credentials from HttpClientAdapter
+ *
+ * @package Public\Entities
+ */
 class Account implements \JsonSerializable
 {
     /**

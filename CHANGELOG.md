@@ -3,6 +3,7 @@
 ## Version 1.2.1 (to 1.2.0)
 
 - Change license to less restrictive MIT license
+- Add workaround to enable Bearer authentication with yahoo CardDAV API (#14)
 
 ## Version 1.2.0 (to 1.1.0)
 

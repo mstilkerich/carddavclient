@@ -4,7 +4,7 @@
     "type": "library",
     "keywords": ["addressbook","carddav","contacts","owncloud","nextcloud"],
     "homepage": "https://github.com/mstilkerich/carddavclient",
-    "license": "GPL-3.0-or-later",
+    "license": "MIT",
     "authors": [
         {
             "name": "Michael Stilkerich",

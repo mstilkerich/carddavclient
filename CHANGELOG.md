@@ -1,5 +1,9 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.2.1 (to 1.2.0)
+
+- Change license to less restrictive MIT license
+
 ## Version 1.2.0 (to 1.1.0)
 
 - Support for OAUTH2/Bearer authentication. Specify bearertoken in credentials when creating Account. Acquiring the

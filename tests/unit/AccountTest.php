@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * CardDAV client library for PHP ("PHP-CardDavClient").
+ *
+ * Copyright (c) 2020-2021 Michael Stilkerich <ms@mike2k.de>
+ * Licensed under the MIT license. See COPYING file in the project root for details.
+ */
+
 declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient\Unit;

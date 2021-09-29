@@ -80,7 +80,7 @@ $httplog = new NullLogger(); // parameter could simply be omitted for the same e
 Config::init($log, $httplog);
 
 // Now create an Account object that contains credentials and discovery information
-$account = new Account(DISCOVERY_URI, USERNAME, PASSWORD);
+$account = new Account(DISCOVERY_URI, ["username" => USERNAME, "password" => PASSWORD]);
 
 // Discover the addressbooks for that account
 try {

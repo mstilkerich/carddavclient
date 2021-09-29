@@ -143,7 +143,7 @@ class WebDavResource implements \JsonSerializable
         if (isset($result[0]["props"])) {
             $this->props = $result[0]["props"];
         } else {
-            throw new \Exception("Failed to retrieve properties for collection " . $this->uri);
+            throw new \Exception("Failed to retrieve properties for resource " . $this->uri);
         }
     }
 

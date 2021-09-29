@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace MStilkerich\Tests\CardDavClient\Interop;
 
 use MStilkerich\Tests\CardDavClient\TestInfrastructure;
-use MStilkerich\CardDavClient\{Account,AddressbookCollection};
+use MStilkerich\CardDavClient\{Account,AddressbookCollection,WebDavResource};
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCard;
 use MStilkerich\Tests\CardDavClient\Interop\TestInfrastructureSrv as TIS;
@@ -91,6 +91,9 @@ final class AddressbookCollectionTest extends TestCase
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $vcard = TestInfrastructure::createVCard();
+        // delete the UID - createCard should create one by itself
+        unset($vcard->UID);
+
         $createResult = $abook->createCard($vcard);
         $createResult["vcard"] = $vcard;
         self::$insertedCards[$abookname] = $createResult;
@@ -116,6 +119,39 @@ final class AddressbookCollectionTest extends TestCase
         }
 
         TestInfrastructure::compareVCards($vcard, $vcardGet, true);
+
+        // retrieve card raw using downloadResource()
+        [ 'body' => $vcfString ] = $abook->downloadResource($cardUri);
+        $vcardRaw = \Sabre\VObject\Reader::read($vcfString);
+        $this->assertInstanceOf(VCard::class, $vcardRaw);
+        TestInfrastructure::compareVCards($vcardGet, $vcardRaw, true);
+    }
+
+    /**
+     * Since it happens nowhere in the tests, we test that WebDavResource::createInstance() properly
+     * creates a WebDavResource instance for an addressbook object (which is not a collection).
+     *
+     * @param TestAddressbook $cfg
+     * @depends testCanInsertValidCard
+     * @dataProvider addressbookProvider
+     */
+    public function testCanCreateWebDavResourceForNonCollection(string $abookname, array $cfg): void
+    {
+        $abook = TIS::$addressbooks[$abookname];
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+        $this->assertArrayHasKey($abookname, self::$insertedCards);
+        $cardUri = self::$insertedCards[$abookname]['uri'];
+
+        $resource = WebDavResource::createInstance($cardUri, $abook->getAccount());
+        $this->assertSame(WebDavResource::class, get_class($resource));
+
+        // test getBasename reports vcard filename
+        $expName = preg_replace('/^.*\//', '', $cardUri);
+        $this->assertSame($expName, $resource->getBasename());
+
+        // test jsonSerialize on WebDavResource yields an array containing the URL
+        $json = $resource->jsonSerialize();
+        $this->assertSame(['uri' => $cardUri], $json);
     }
 
     /**

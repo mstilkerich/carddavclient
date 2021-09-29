@@ -352,14 +352,13 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                 }
             }
 
-            // Another hack for Google: Google APIs does not advertise Bearer in the WWW-Authenticate header
-            // https://issuetracker.google.com/issues/189153568
-            if (strstr($authHeader, 'realm="Google APIs"') !== false) {
-                $srvSchemes[] = 'bearer';
-            }
-
-            // hack for Yahoo: Yahoo APIs does not advertise Bearer in the WWW-Authenticate header
-            if (strstr($authHeader, 'realm="progrss"') !== false) {
+            // some providers do not advertise Bearer auth in the WWW-Authenticate header, this is a hack to work around
+            if (
+                // Google: https://issuetracker.google.com/issues/189153568
+                strstr($authHeader, 'realm="Google APIs"') !== false
+                // Yahoo
+                || strstr($authHeader, 'realm="progrss"') !== false
+            ) {
                 $srvSchemes[] = 'bearer';
             }
 

@@ -187,7 +187,20 @@ class CardDavClient
     /**
      * Requests the server to create the given resource.
      *
-     * @param bool $post If true
+     * On success, the actual URI of the new resource is contained in the returned array.
+     *
+     * @param string $body
+     *   The content of the newly created resource.
+     *
+     * @param string $suggestedUri
+     *   - If $post=false: The suggested new URI for the resource to create. If a resource by that name
+     *     already exists, names will be derived from this URI by appending a numerical suffix for a limited number of
+     *     retries.
+     *   - If $post=true: The "Add-Member" URI to perform the POST request to. The server chooses the URI of the new
+     *     resource.
+     *
+     * @param bool $post
+     *   If true, use a POST instead of a PUT request to create the resource (RFC 5995).
      *
      * @psalm-return array{uri: string, etag: string}
      * @return array<string,string>

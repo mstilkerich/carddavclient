@@ -141,6 +141,7 @@ final class AddressbookCollectionTest extends TestCase
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         $cardUri = self::$insertedCards[$abookname]['uri'];
+        $cardUri = TestInfrastructure::normalizeUri($abook, $cardUri);
 
         $resource = WebDavResource::createInstance($cardUri, $abook->getAccount());
         $this->assertSame(WebDavResource::class, get_class($resource));

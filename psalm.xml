@@ -16,6 +16,9 @@
         <directory name="src/"/>
         <directory name="tests/"/>
         <file name="doc/quickstart.php"/>
+        <ignoreFiles>
+            <file name="tests/interop/AccountData-*.php" />
+        </ignoreFiles>
     </projectFiles>
 
     <plugins>

@@ -250,9 +250,10 @@ class AddressbookCollection extends WebDavCollection
      * @param string $uri The URI of the card to update.
      * @param VCard $vcard The updated VCard to be stored.
      * @param string $etag The ETag of the card that was originally retrieved and modified.
-     * @return ?string Returns the ETag of the updated card if provided by the server, null otherwise. If null is
-     *                 returned, it must be assumed that the server stored the card with modifications and the card
-     *                 should be read back from the server (this is a good idea anyway).
+     * @return ?string On success, returns the ETag of the updated card if provided by the server, an empty string
+     *                 otherwise. In the latter case, it must be assumed that the server stored the card with
+     *                 modifications and the card should be read back from the server (this is a good idea anyway).
+     *                 In case of ETag precondition failure, null is returned. For other errors, an exception is thrown.
      * @api
      */
     public function updateCard(string $uri, VCard $vcard, string $etag): ?string

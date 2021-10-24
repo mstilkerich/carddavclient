@@ -256,6 +256,9 @@ final class TestInfrastructureSrv
     {
         $ret = [];
         foreach (AccountData::ADDRESSBOOKS as $name => $cfg) {
+            /** @psalm-suppress TypeDoesNotContainType
+             *     Depending on AccountData settings, readonly may not be used or only with a single value
+             */
             if ($excludeReadOnly && ($cfg["readonly"] ?? false)) {
                 continue;
             }

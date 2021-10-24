@@ -118,9 +118,14 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         );
 
         $stack = HandlerStack::create();
+
+        $msgFormat = (Config::$httpLoglevel == "debug")
+            ? "\"{method} {target} HTTP/{version}\" {code}\n" . MessageFormatter::DEBUG
+            : "\"{method} {target} HTTP/{version}\" {code} {res_header_Content-Length}";
+
         $stack->push(Middleware::log(
             Config::$httplogger,
-            new MessageFormatter("\"{method} {target} HTTP/{version}\" {code}\n" . MessageFormatter::DEBUG)
+            new MessageFormatter($msgFormat)
         ));
 
         $guzzleOptions = $this->prepareGuzzleOptions();

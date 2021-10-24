@@ -1,5 +1,10 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Unreleased (to 1.2.1)
+
+- Option to set loglevel for HTTP requests in Config. The prior verbose log format will only be used if the level is set
+  to debug. A shorted version without the full requests/responses is used for other loglevels.
+
 ## Version 1.2.1 (to 1.2.0)
 
 - Change license to less restrictive MIT license

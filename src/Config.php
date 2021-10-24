@@ -17,6 +17,8 @@ use Psr\Log\{LoggerInterface, NullLogger};
  * Central configuration of the carddavclient library.
  *
  * @package Public\Infrastructure
+ *
+ * @psalm-type Loglevel = 'emergency'|'alert'|'critical'|'error'|'warning'|'notice'|'info'|'debug'
  */
 class Config
 {
@@ -26,10 +28,20 @@ class Config
     /** @var LoggerInterface */
     public static $httplogger;
 
-    public static function init(LoggerInterface $logger = null, LoggerInterface $httplogger = null): void
-    {
+    /** @var Loglevel $httpLoglevel The loglevel to use for the HTTP logger. Affects the amount of data logged. */
+    public static $httpLoglevel = 'info';
+
+    /**
+     * @psalm-param Loglevel $httpLoglevel The loglevel to use for the HTTP logger. Affects the amount of data logged.
+     */
+    public static function init(
+        LoggerInterface $logger = null,
+        LoggerInterface $httplogger = null,
+        string $httpLoglevel = 'info'
+    ): void {
         self::$logger = $logger ?? new NullLogger();
         self::$httplogger = $httplogger ?? new NullLogger();
+        self::$httpLoglevel = $httpLoglevel;
     }
 }
 

@@ -63,6 +63,10 @@ final class TestInfrastructure
      */
     public static function compareVCards(VCard $vcardExpected, VCard $vcardRoundcube, bool $isNew): void
     {
+        // clone to make sure we don't modify the passed in object when deleting properties that should not be compared
+        $vcardExpected = clone $vcardExpected;
+        $vcardRoundcube = clone $vcardRoundcube;
+
         // These attributes are dynamically created / updated and therefore cannot be statically compared
         $noCompare = [ 'REV', 'PRODID', 'VERSION' ]; // different VERSION may imply differences in other properties
 

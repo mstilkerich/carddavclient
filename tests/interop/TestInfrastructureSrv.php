@@ -256,10 +256,14 @@ final class TestInfrastructureSrv
     {
         $ret = [];
         foreach (AccountData::ADDRESSBOOKS as $name => $cfg) {
-            /** @psalm-suppress TypeDoesNotContainType
-             *     Depending on AccountData settings, readonly may not be used or only with a single value
+            /**
+             * @psalm-var 0|bool $readonly
+             *   Actually this can only be true or false - this is to make psalm quiet depending on some AccountData
+             *   configs where only a fixed value for readonly is used.
              */
-            if ($excludeReadOnly && ($cfg["readonly"] ?? false)) {
+            $readonly = $cfg["readonly"] ?? false;
+
+            if ($excludeReadOnly && $readonly) {
                 continue;
             }
             $ret[$name] = [ $name, $cfg ];

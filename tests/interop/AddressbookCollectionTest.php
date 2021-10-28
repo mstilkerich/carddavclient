@@ -113,6 +113,9 @@ final class AddressbookCollectionTest extends TestCase
 
         [ 'etag' => $etagGet, 'vcard' => $vcardGet ] = $abook->getCard($cardUri);
 
+        // store ETag for the updateCard tests
+        self::$insertedCards[$abookname]['etag'] = $etagGet;
+
         // insertCards etag return is optional
         if (!empty($cardETag)) {
             $this->assertSame($cardETag, $etagGet);
@@ -157,7 +160,57 @@ final class AddressbookCollectionTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
+     * @depends testCanInsertValidCard
      * @depends testCanRetrieveCreatedCard
+     * @dataProvider addressbookProvider
+     */
+    public function testCanUpdateCreatedCard(string $abookname, array $cfg): void
+    {
+        $abook = TIS::$addressbooks[$abookname];
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+        $this->assertArrayHasKey($abookname, self::$insertedCards);
+        [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
+
+        $this->assertNotEmpty($cardETag);
+        $vcard->NOTE = 'First update';
+        $etagUpdated = $abook->updateCard($cardUri, $vcard, $cardETag);
+
+        [ 'etag' => $etagGet, 'vcard' => $vcardGet ] = $abook->getCard($cardUri);
+
+        // insertCards etag return is optional
+        if (!empty($etagUpdated)) {
+            $this->assertSame($etagUpdated, $etagGet);
+        }
+        TestInfrastructure::compareVCards($vcard, $vcardGet, true);
+    }
+
+    /**
+     * @param TestAddressbook $cfg
+     * @depends testCanUpdateCreatedCard
+     * @dataProvider addressbookProvider
+     */
+    public function testUpdateOfOutdatedCardFails(string $abookname, array $cfg): void
+    {
+        if (TIS::hasFeature($abookname, TIS::BUG_ETAGPRECOND_NOTCHECKED)) {
+            $this->markTestSkipped("$abookname has a bug: If-Match ETag precondition is ignored by server");
+            return;
+        }
+
+        $abook = TIS::$addressbooks[$abookname];
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+        $this->assertArrayHasKey($abookname, self::$insertedCards);
+        [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
+
+        $this->assertNotEmpty($cardETag);
+        $vcard->NOTE = 'Second update';
+        // the etag is still from the initial insert, missing the update done in testCanUpdateCreatedCard
+        $etagUpdated = $abook->updateCard($cardUri, $vcard, $cardETag);
+        $this->assertNull($etagUpdated, "update should have failed with status 412, but did not");
+    }
+
+    /**
+     * @param TestAddressbook $cfg
+     * @depends testCanInsertValidCard
      * @dataProvider addressbookProvider
      */
     public function testCanDeleteExistingCard(string $abookname, array $cfg): void

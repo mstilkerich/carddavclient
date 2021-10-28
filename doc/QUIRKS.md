@@ -145,6 +145,13 @@ Description | For the initial sync, the server must accept an empty sync-token a
 Affected operations | `Sync::synchronize()` when called with an empty `$prevSyncToken` parameter.
 User-visibile impact and possible workaround | Carddavclient will transparently fall back to a slower synchronization method based on `PROPFIND`. Carddavclient will ask the server for a synctoken that can be used for future incremental syncs using the sync-collection report. A log message with loglevel *error* will be logged.
 
+BUG_ETAGPRECOND_NOTCHECKED | ETag precondition ignored when storing a vcard
+--------|----------------------------------------------------------
+Affected servers / services | Google Contacts
+Description | When updating a vcard on the server, one should make the operation dependent on the precondition that the ETag of the server-side card still is the same as for the card that was locally used as base date for the update. If another client changed the card at the server in the meantime, this makes the update fail and avoids overwriting the other client's changes. Google ignores the precondition and performs the update even in case of ETag mismatch.
+Affected operations | `AddressbookCollection::updateCard()` when called with a non-empty `$etag` parameter.
+User-visibile impact and possible workaround | Changes of another client could be overwritten. No workaround available.
+
 
 []()    | Depth: 0 header rejected for sync-collection report
 --------|----------------------------------------------------------

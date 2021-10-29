@@ -367,8 +367,7 @@ class AddressbookCollection extends WebDavCollection
         /** @psalm-var list<VcardValidateResult> */
         $validityIssues = $vcard->validate(\Sabre\VObject\Node::PROFILE_CARDDAV | \Sabre\VObject\Node::REPAIR);
         foreach ($validityIssues as $issue) {
-            $name = $issue["node"]->name;
-            $msg = "Issue with $name of new VCard: " . $issue["message"];
+            $msg = "Issue with provided VCard: " . $issue["message"];
 
             if ($issue["level"] <= 2) { // warning
                 Config::$logger->warning($msg);

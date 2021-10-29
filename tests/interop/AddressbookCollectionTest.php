@@ -164,6 +164,35 @@ final class AddressbookCollectionTest extends TestCase
      * @depends testCanRetrieveCreatedCard
      * @dataProvider addressbookProvider
      */
+    public function testUpdateFailsWithErroneousCard(string $abookname, array $cfg): void
+    {
+        $abook = TIS::$addressbooks[$abookname];
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+        $this->assertArrayHasKey($abookname, self::$insertedCards);
+        [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
+
+        $this->assertNotEmpty($cardETag);
+        // make sure changes do not affect subsequent tests
+        $vcardCopy = clone $vcard;
+        $vcardCopy->VERSION = '2.1'; // not allowed for CardDAV
+
+        try {
+            $abook->updateCard($cardUri, $vcardCopy, $cardETag);
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString("CardDAV servers are not allowed to accept vCard 2.1", $e->getMessage());
+            TestInfrastructure::logger()->expectMessage('error', 'Issue with provided VCard');
+            return;
+        }
+
+        $this->assertFalse(true, "Expected InvalidArgumentException not thrown");
+    }
+
+    /**
+     * @param TestAddressbook $cfg
+     * @depends testCanInsertValidCard
+     * @depends testCanRetrieveCreatedCard
+     * @dataProvider addressbookProvider
+     */
     public function testCanUpdateCreatedCard(string $abookname, array $cfg): void
     {
         $abook = TIS::$addressbooks[$abookname];
@@ -229,6 +258,30 @@ final class AddressbookCollectionTest extends TestCase
         } catch (\Exception $e) {
             $this->assertMatchesRegularExpression("/HTTP.*404/", $e->getMessage());
         }
+    }
+
+    /**
+     * Tests that a card with minor/repairable issues (missing FN) can be inserted successfully.
+     *
+     * @param TestAddressbook $cfg
+     * @depends testCanInsertValidCard
+     * @depends testCanDeleteExistingCard
+     * @dataProvider addressbookProvider
+     */
+    public function testCanInsertCardWithMinorProblems(string $abookname, array $cfg): void
+    {
+        $abook = TIS::$addressbooks[$abookname];
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+
+        $vcard = TestInfrastructure::createVCard();
+        // delete the FN - should be recreated from FN by createCard
+        unset($vcard->FN);
+
+        $createResult = $abook->createCard($vcard);
+        // clean up
+        $abook->deleteCard($createResult['uri']);
+
+        TestInfrastructure::logger()->expectMessage('warning', 'Issue with provided VCard');
     }
 
     /**

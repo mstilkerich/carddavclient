@@ -16,6 +16,7 @@ use Psr\Http\Message\RequestInterface as Psr7Request;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Http\Message\UriInterface as Psr7Uri;
 use Psr\Http\Client\ClientInterface as Psr18ClientInterface;
+use Psr\Log\NullLogger;
 use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
 
 /**
@@ -119,14 +120,12 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
 
         $stack = HandlerStack::create();
 
-        $msgFormat = (Config::$httpLoglevel == "debug")
-            ? "\"{method} {target} HTTP/{version}\" {code}\n" . MessageFormatter::DEBUG
-            : "\"{method} {target} HTTP/{version}\" {code} {res_header_Content-Length}";
-
-        $stack->push(Middleware::log(
-            Config::$httplogger,
-            new MessageFormatter($msgFormat)
-        ));
+        if (!(Config::$httplogger instanceof NullLogger)) {
+            $stack->push(Middleware::log(
+                Config::$httplogger,
+                new MessageFormatter(Config::$options['guzzle_logformat'])
+            ));
+        }
 
         $guzzleOptions = $this->prepareGuzzleOptions();
         $guzzleOptions['handler'] = $stack;

@@ -2,8 +2,8 @@
 
 ## Unreleased (to 1.2.1)
 
-- Option to set loglevel for HTTP requests in Config. The prior verbose log format will only be used if the level is set
-  to debug. A shorted version without the full requests/responses is used for other loglevels.
+- Config::init() now accepts an options array as third parameter, which currently allows to customize the log format for
+  the HTTP logs. It is meant to be extended with further options in the future.
 
 ## Version 1.2.1 (to 1.2.0)
 

@@ -222,7 +222,6 @@ final class AddressbookCollectionTest extends TestCase
     {
         if (TIS::hasFeature($abookname, TIS::BUG_ETAGPRECOND_NOTCHECKED)) {
             $this->markTestSkipped("$abookname has a bug: If-Match ETag precondition is ignored by server");
-            return;
         }
 
         $abook = TIS::$addressbooks[$abookname];

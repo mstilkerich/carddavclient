@@ -25,5 +25,13 @@
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
         <pluginClass class="AlexS\Guzzle\PsalmPlugin"/>
     </plugins>
+
+    <issueHandlers>
+        <UnevaluatedCode>
+            <errorLevel type="suppress">
+                <file name="doc/quickstart.php" />
+            </errorLevel>
+        </UnevaluatedCode>
+    </issueHandlers>
 </psalm>
 <!-- vim: set ts=4 sw=4 expandtab fenc=utf8 ff=unix tw=120: -->

@@ -227,7 +227,7 @@ User-visibile impact and possible workaround | The `query()` result may contain 
 
 []() | Filtering for non-defined properties results in bad request
 --------|----------------------------------------------------------
-Affected servers / services | [Radicale](https://github.com/Kozea/Radicale/pull/1139)
+Affected servers / services | [Radicale < 3.1.0](https://github.com/Kozea/Radicale/pull/1139)
 Description | The server rejects a filter for non-defined properties (e.g. `'EMAIL' => null` as bad request.
 Affected operations | `AddressbookCollection::query()` when using property filters for non-defined properties
 User-visibile impact and possible workaround | The query operation fails with a bad request error

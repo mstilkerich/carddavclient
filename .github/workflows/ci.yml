@@ -115,7 +115,8 @@ jobs:
           php-version: '8.0'
       - name: Create Radicale Addressbooks
         run: |
-          bash wait-for-healthy-container/wait-for-healthy-container.sh radicale 20
+          chmod 755 wait-for-healthy-container/wait-for-healthy-container.sh
+          sudo wait-for-healthy-container/wait-for-healthy-container.sh radicale 20
           .github/scripts/createabook.sh "http://127.0.0.1:5232/citest/book1/" 'Book 1' 'First addressbook' citest citest
           .github/scripts/createabook.sh "http://127.0.0.1:5232/citest/book2/" 'Book 2' 'Second addressbook' citest citest
       - name: Run interop tests

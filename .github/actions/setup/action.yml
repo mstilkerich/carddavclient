@@ -18,8 +18,3 @@ runs:
       - name: Install dependencies
         run: composer update --no-interaction --no-progress
         shell: bash
-      - name: Checkout wait-for-healthy-container
-        uses: actions/checkout@v2
-        with:
-          path: wait-for-healthy-container
-          repository: jordyv/wait-for-healthy-container

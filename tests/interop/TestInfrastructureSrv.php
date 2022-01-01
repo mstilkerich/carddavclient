@@ -240,7 +240,13 @@ final class TestInfrastructureSrv
     public static function accountProvider(): array
     {
         $ret = [];
+        $accountFilter = getenv('CARDDAVCLIENT_INTEROP_SRV');
+
         foreach (AccountData::ACCOUNTS as $name => $cfg) {
+            if (is_string($accountFilter) && ($accountFilter != $name)) {
+                continue;
+            }
+
             $ret[$name] = [ $name, $cfg ];
         }
         return $ret;
@@ -259,6 +265,8 @@ final class TestInfrastructureSrv
     public static function addressbookProvider(bool $excludeReadOnly = true): array
     {
         $ret = [];
+        $accounts = self::accountProvider();
+
         foreach (AccountData::ADDRESSBOOKS as $name => $cfg) {
             /**
              * @psalm-var 0|bool $readonly
@@ -270,7 +278,10 @@ final class TestInfrastructureSrv
             if ($excludeReadOnly && $readonly) {
                 continue;
             }
-            $ret[$name] = [ $name, $cfg ];
+
+            if (isset($accounts[$cfg["account"]])) {
+                $ret[$name] = [ $name, $cfg ];
+            }
         }
         return $ret;
     }

@@ -94,3 +94,36 @@ jobs:
           flags: interop
           name: Carddavclient nextcloud interoperability test coverage
           fail_ci_if_error: false
+
+  interop-radicale:
+    runs-on: ubuntu-20.04
+
+    env:
+      XDEBUG_MODE: coverage
+      CARDDAVCLIENT_INTEROP_SRV: Radicale
+
+    steps:
+      - name: Checkout carddavclient
+        uses: actions/checkout@v2
+      - name: Start Radicale
+        run: |
+          mkdir -p ${{ github.workspace }}/.github/configs/radicale/data
+          sudo docker run --name radicale -d -p 5232:5232 -v ${{ github.workspace }}/.github/configs/radicale/data:/data -v ${{ github.workspace }}/.github/configs/radicale/config:/config:ro tomsquest/docker-radicale:next
+      - name: Set up CI environment
+        uses: ./.github/actions/setup
+        with:
+          php-version: '8.0'
+      - name: Create Radicale Addressbooks
+        run: |
+          bash wait-for-healthy-container/wait-for-healthy-container.sh radicale 20
+          .github/scripts/createabook.sh "http://127.0.0.1:5232/citest/book1/" 'Book 1' 'First addressbook' citest citest
+          .github/scripts/createabook.sh "http://127.0.0.1:5232/citest/book2/" 'Book 2' 'Second addressbook' citest citest
+      - name: Run interop tests
+        run: make tests-interop
+      - name: Upload interop-radicale test coverage reports to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          file: testreports/interop/clover.xml
+          flags: interop
+          name: Carddavclient radicale interoperability test coverage
+          fail_ci_if_error: false

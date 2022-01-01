@@ -1,0 +1,31 @@
+# Allow reading root collection for authenticated users
+[root]
+user: .+
+collection:
+permissions: R
+
+# Allow reading and writing principal collection (same as user name)
+[principal]
+user: .+
+collection: {user}
+permissions: RW
+
+# Allow reading and writing calendars and address books that are direct
+# children of the principal collection
+[calendars]
+user: .+
+collection: {user}/[^/]+
+permissions: rw
+
+# Allow reading collection "public" for authenticated users
+[public-principal]
+user: .+
+collection: public
+permissions: R
+
+# Allow reading all calendars and address books that are direct children of
+# the collection "public" for authenticated users
+[public-calendars]
+user: .+
+collection: public/[^/]+
+permissions: r

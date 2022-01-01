@@ -59,6 +59,13 @@ final class AccountData
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
+        "Radicale" => [
+            "username" => "citest",
+            "password" => "citest",
+            "discoveryUri" => "http://localhost:5232/",
+            "syncAllowExtraChanges" => false,
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_RADICALE,
+        ],
         /*
         "Baikal" => [
             "username" => "baikalUser",
@@ -80,13 +87,6 @@ final class AccountData
             "discoveryUri" => "http://localhost/owncloud/remote.php/dav/addressbooks/users/owncloudUser/contacts/",
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
-        ],
-        "Radicale" => [
-            "username" => "radicaleUser",
-            "password" => "foobar",
-            "discoveryUri" => "http://localhost:5232/",
-            "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_RADICALE,
         ],
         "Davical" => [
             "username" => "davicalUser",
@@ -125,6 +125,17 @@ final class AccountData
             "displayname" => "Contacts",
             "readonly" => false,
         ],
+        "Radicale_1" => [
+            "account" => "Radicale",
+            "url" => "http://localhost:5232/citest/book1/",
+            "displayname" => "Book 1",
+        ],
+        "Radicale_2" => [
+            "account" => "Radicale",
+            "url" => "http://localhost:5232/citest/book2/",
+            "displayname" => "Book 2",
+            "readonly" => true,
+        ],
         /*
         "Owncloud" => [
             "account" => "Owncloud",
@@ -146,11 +157,6 @@ final class AccountData
             "account" => "BaikalKrb",
             "url" => "http://baikal.example.com/dav.php/addressbooks/baikalUser/default/",
             "displayname" => "Default Address Book",
-        ],
-        "Radicale" => [
-            "account" => "Radicale",
-            "url" => "http://localhost:5232/radicaleUser/abcdef/",
-            "displayname" => "The radical addressbook",
         ],
         "Davical_0" => [
             "account" => "Davical",

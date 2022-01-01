@@ -1,0 +1,20 @@
+name: 'carddavclient-ci-setup'
+description: 'Setup CardDavClient test environment'
+inputs:
+  php-version:
+    description: 'PHP version to use'
+    required: true
+    default: '8.0'
+runs:
+  using: "composite"
+  steps:
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php-version }}
+          tools: composer:v2
+          extensions: gd, xdebug, curl
+          coverage: xdebug
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress
+        shell: bash

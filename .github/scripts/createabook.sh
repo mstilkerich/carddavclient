@@ -24,7 +24,7 @@ if [ -n "$ABOOKDESC" ]; then
     ABOOKDESC="<CR:addressbook-description>${ABOOKDESC}</CR:addressbook-description>"
 fi
 
-curl $AUTH -X MKCOL "$ABOOKURL" --data \
+curl --no-progress-meter $AUTH -X MKCOL "$ABOOKURL" --data \
 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
 <create xmlns=\"DAV:\" xmlns:CR=\"urn:ietf:params:xml:ns:carddav\">
   <set>

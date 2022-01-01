@@ -63,6 +63,7 @@ jobs:
 
     env:
       XDEBUG_MODE: coverage
+      CARDDAVCLIENT_INTEROP_SRV: Nextcloud
 
     services:
       nextcloud:

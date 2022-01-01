@@ -5,7 +5,7 @@
         <ini name="error_reporting" value="-1"/>
     </php>
     <testsuites>
-        <testsuite name="unit">
+        <testsuite name="interoperability">
             <directory>.</directory>
         </testsuite>
     </testsuites>
@@ -16,13 +16,13 @@
         </include>
 
         <report>
-            <php outputFile="../../testreports/unit/coverage.cov"/>
-            <clover outputFile="../../testreports/unit/clover.xml"/>
+            <php outputFile="../../testreports/interop/coverage.cov"/>
+            <clover outputFile="../../testreports/interop/clover.xml"/>
         </report>
     </coverage>
 
     <logging>
-        <testdoxHtml outputFile="../../testreports/unit/results.html"/>
+        <testdoxHtml outputFile="../../testreports/interop/results.html"/>
     </logging>
 </phpunit>
 

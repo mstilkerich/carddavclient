@@ -30,7 +30,7 @@ unittests: tests/unit/phpunit.xml
 	vendor/bin/phpunit -c tests/unit/phpunit.xml
 
 .PHONY: tests-interop
-tests-interop: tests/interop/phpunit.xml
+tests-interop: tests/interop/phpunit.xml tests/interop/AccountData.php
 	@echo
 	@echo  ==========================================================
 	@echo "       EXECUTING CARDDAV INTEROPERABILITY TESTS"

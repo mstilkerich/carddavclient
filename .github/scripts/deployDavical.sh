@@ -5,7 +5,7 @@ set -e
 BASEDIR=/var/www/html/davical
 
 sudo apt-get update
-sudo apt-get install -y apache2 libapache2-mod-php postgresql-client libyaml-perl libdbd-pg-perl libdbi-perl php php-pgsql php-imap php-curl php-cgi php-xml
+sudo apt-get install -y apache2 libapache2-mod-php7.4 postgresql-client libyaml-perl libdbd-pg-perl libdbi-perl php php-pgsql php-imap php-curl php-cgi php-xml
 
 wget -O awl.tar.xz https://www.davical.org/downloads/awl_0.62.orig.tar.xz
 wget -O davical.tar.xz https://www.davical.org/downloads/davical_1.1.10.orig.tar.xz

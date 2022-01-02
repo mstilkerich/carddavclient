@@ -150,24 +150,38 @@ jobs:
         ports:
           - 5432:5432
 
+      davical:
+        image: tuxnvape/davical-standalone
+        env:
+          HOST_NAME: davical.localdomain
+          PGSQL_ROOT_PASS: postgres
+          PASSDAVDB: postgres
+          DBHOST: postgres
+          ADMINDAVICALPASS: admin
+        options: >-
+          --health-cmd "nc -z localhost 80"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --name davical
+        ports:
+          - 8088:80
+
     steps:
       - name: Checkout carddavclient
         uses: actions/checkout@v2
       - name: Install dependencies
         run: composer update --no-interaction --no-progress
         shell: bash
-      - name: Setup Davical
-        run: |
-          .github/scripts/deployDavical.sh
       - name: Create Davical Addressbooks
         run: |
-          .github/scripts/createabook.sh "http://davical.localdomain/davical/caldav.php/admin/book1/" 'Test addressbook' 'Davical test addresses' admin admin
+          .github/scripts/createabook.sh "http://localhost:8088/caldav.php/admin/book1/" 'Test addressbook' 'Davical test addresses' admin admin
       - name: Run interop tests
         run: make tests-interop
-      - name: Upload interop-radicale test coverage reports to codecov.io
+      - name: Upload interop-davical test coverage reports to codecov.io
         uses: codecov/codecov-action@v1
         with:
           file: testreports/interop/clover.xml
           flags: interop
-          name: Carddavclient radicale interoperability test coverage
+          name: Carddavclient Davical interoperability test coverage
           fail_ci_if_error: false

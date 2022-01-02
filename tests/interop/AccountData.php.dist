@@ -55,7 +55,7 @@ final class AccountData
         "Davical" => [
             "username" => "admin",
             "password" => "admin",
-            "discoveryUri" => "http://davical.localdomain/davical",
+            "discoveryUri" => "http://localhost:8088/",
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_DAVICAL,
         ],
@@ -121,7 +121,7 @@ final class AccountData
          */
         "Davical_0" => [
             "account" => "Davical",
-            "url" => "http://davical.localdomain/davical/caldav.php/admin/book1/",
+            "url" => "http://localhost:8088/caldav.php/admin/book1/",
             "displayname" => "Test addressbook",
         ],
         "Nextcloud" => [

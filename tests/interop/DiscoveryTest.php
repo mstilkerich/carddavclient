@@ -60,7 +60,7 @@ final class DiscoveryTest extends TestCase
         $abookUris = [];
         foreach (TestInfrastructureSrv::$addressbooks as $abook) {
             if ($abook->getAccount() === $account) {
-                $abookUris[] = $abook->getUri();
+                $abookUris[] = TestInfrastructure::normalizeUri($abook, $abook->getUri());
             }
         }
 
@@ -70,7 +70,8 @@ final class DiscoveryTest extends TestCase
         $this->assertCount(count($abookUris), $abooks, "Unexpected number of addressbooks discovered");
 
         foreach ($abooks as $abook) {
-            $this->assertContains($abook->getUri(), $abookUris, "Unexpected addressbook discovered");
+            $uri = TestInfrastructure::normalizeUri($abook, $abook->getUri());
+            $this->assertContains($uri, $abookUris, "Unexpected addressbook discovered");
         }
     }
 }

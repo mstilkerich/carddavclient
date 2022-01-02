@@ -160,6 +160,18 @@ final class TestInfrastructureSrv
     /** @var array<string, AddressbookCollection> Objects for all addressbooks from AccountData::ADDRESSBOOKS */
     public static $addressbooks = [];
 
+    private static function replaceEnvVar(string $setting): string
+    {
+        $matches = [];
+        if (preg_match('/^%([A-Za-z0-9_]+)%$/', $setting, $matches)) {
+            $setting = getenv($matches[1]);
+            if (!is_string($setting)) {
+                return "";
+            }
+        }
+        return $setting;
+    }
+
     /**
      * @psalm-param TestAccount $cfg
      * @psalm-return Credentials
@@ -168,10 +180,10 @@ final class TestInfrastructureSrv
     {
         $cred = [];
         if (isset($cfg['username'])) {
-            $cred['username'] = $cfg['username'];
+            $cred['username'] = self::replaceEnvVar($cfg['username']);
         }
         if (isset($cfg['password'])) {
-            $cred['password'] = $cfg['password'];
+            $cred['password'] = self::replaceEnvVar($cfg['password']);
         }
 
         if (
@@ -182,9 +194,9 @@ final class TestInfrastructureSrv
         ) {
             $postData = [
                 'grant_type' => 'refresh_token',
-                'refresh_token' => $cfg['refreshtoken'],
-                'client_id' => $cfg['clientId'],
-                'client_secret' => $cfg['clientSecret'],
+                'refresh_token' => self::replaceEnvVar($cfg['refreshtoken']),
+                'client_id' => self::replaceEnvVar($cfg['clientId']),
+                'client_secret' => self::replaceEnvVar($cfg['clientSecret']),
             ];
 
             if (isset($cfg['oAuthScopes'])) {
@@ -230,7 +242,10 @@ final class TestInfrastructureSrv
         }
 
         foreach (AccountData::ADDRESSBOOKS as $name => $cfg) {
-            self::$addressbooks[$name] = new AddressbookCollection($cfg["url"], self::$accounts[$cfg["account"]]);
+            self::$addressbooks[$name] = new AddressbookCollection(
+                self::replaceEnvVar($cfg["url"]),
+                self::$accounts[$cfg["account"]]
+            );
         }
     }
 

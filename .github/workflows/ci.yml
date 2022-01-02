@@ -181,10 +181,6 @@ jobs:
         run: |
           .github/scripts/createabook.sh "http://localhost:8088/caldav.php/admin/book1/" 'Test addressbook' 'Davical test addresses' admin admin
       - name: Run interop tests
-        env:
-            ICLOUD_USER: ${{ secrets.ICLOUD_USER }}
-            ICLOUD_PASSWORD: ${{ secrets.ICLOUD_PASSWORD }}
-            ICLOUD_URL_ABOOK0: ${{ secrets.ICLOUD_URL_ABOOK0 }}
         run: make tests-interop
       - name: Upload interop-davical test coverage reports to codecov.io
         uses: codecov/codecov-action@v1
@@ -209,6 +205,10 @@ jobs:
         with:
           php-version: '8.0'
       - name: Run interop tests
+        env:
+            ICLOUD_USER: ${{ secrets.ICLOUD_USER }}
+            ICLOUD_PASSWORD: ${{ secrets.ICLOUD_PASSWORD }}
+            ICLOUD_URL_ABOOK0: ${{ secrets.ICLOUD_URL_ABOOK0 }}
         run: make tests-interop
       - name: Upload interop-iCloud test coverage reports to codecov.io
         uses: codecov/codecov-action@v1

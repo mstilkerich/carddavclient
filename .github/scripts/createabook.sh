@@ -24,7 +24,7 @@ if [ -n "$ABOOKDESC" ]; then
     ABOOKDESC="<CARD:addressbook-description>${ABOOKDESC}</CARD:addressbook-description>"
 fi
 
-curl --no-progress-meter $AUTH -X MKCOL "$ABOOKURL" \
+curl --no-progress-meter $AUTH -X MKCOL "$ABOOKURL" -v \
 	-H 'Content-Type: application/xml' \
 	--data \
 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>

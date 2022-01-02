@@ -154,7 +154,7 @@ final class TestInfrastructure
 
     public static function normalizeUri(WebDavCollection $coll, string $uri): string
     {
-        return \Sabre\Uri\resolve($coll->getUri(), $uri);
+        return \Sabre\Uri\normalize(\Sabre\Uri\resolve($coll->getUri(), $uri));
     }
 
     public static function getUriPath(string $uri): string

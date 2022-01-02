@@ -217,3 +217,32 @@ jobs:
           flags: interop
           name: Carddavclient iCloud interoperability test coverage
           fail_ci_if_error: false
+
+  interop-google:
+    runs-on: ubuntu-20.04
+
+    env:
+      XDEBUG_MODE: coverage
+      CARDDAVCLIENT_INTEROP_SRV: Google
+
+    steps:
+      - name: Checkout carddavclient
+        uses: actions/checkout@v2
+      - name: Set up CI environment
+        uses: ./.github/actions/setup
+        with:
+          php-version: '8.0'
+      - name: Run interop tests
+        env:
+            GOOGLE_CLIENTID: ${{ secrets.GOOGLE_CLIENTID }}
+            GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+            GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+            GOOGLE_URL_ABOOK0: ${{ secrets.GOOGLE_URL_ABOOK0 }}
+        run: make tests-interop
+      - name: Upload interop-Google test coverage reports to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          file: testreports/interop/clover.xml
+          flags: interop
+          name: Carddavclient Google interoperability test coverage
+          fail_ci_if_error: false

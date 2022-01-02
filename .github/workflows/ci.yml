@@ -126,3 +126,49 @@ jobs:
           flags: interop
           name: Carddavclient radicale interoperability test coverage
           fail_ci_if_error: false
+
+  interop-davical:
+    runs-on: ubuntu-20.04
+
+    env:
+      XDEBUG_MODE: coverage
+      CARDDAVCLIENT_INTEROP_SRV: Davical
+      PGHOST: localhost
+      PGUSER: postgres
+
+    services:
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --name postgres
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout carddavclient
+        uses: actions/checkout@v2
+      - name: Set up CI environment
+        uses: ./.github/actions/setup
+        with:
+          php-version: '8.0'
+      - name: Setup Davical
+        run: |
+          .github/scripts/deployDavical.sh
+      - name: Create Davical Addressbooks
+        run: |
+          .github/scripts/createabook.sh "http://davical.localdomain/davical/caldav.php/admin/book1/" 'Test addressbook' 'Davical test addresses' admin admin
+      - name: Run interop tests
+        run: make tests-interop
+      - name: Upload interop-radicale test coverage reports to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          file: testreports/interop/clover.xml
+          flags: interop
+          name: Carddavclient radicale interoperability test coverage
+          fail_ci_if_error: false

@@ -21,20 +21,22 @@ if [ -n "$ABOOKDISP" ]; then
     ABOOKDISP="<displayname>${ABOOKDISP}</displayname>"
 fi
 if [ -n "$ABOOKDESC" ]; then
-    ABOOKDESC="<CR:addressbook-description>${ABOOKDESC}</CR:addressbook-description>"
+    ABOOKDESC="<CARD:addressbook-description>${ABOOKDESC}</CARD:addressbook-description>"
 fi
 
-curl --no-progress-meter $AUTH -X MKCOL "$ABOOKURL" --data \
+curl --no-progress-meter $AUTH -X MKCOL "$ABOOKURL" \
+	-H 'Content-Type: application/xml' \
+	--data \
 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
-<create xmlns=\"DAV:\" xmlns:CR=\"urn:ietf:params:xml:ns:carddav\">
+<mkcol xmlns=\"DAV:\" xmlns:CARD=\"urn:ietf:params:xml:ns:carddav\">
   <set>
     <prop>
       <resourcetype>
         <collection />
-        <CR:addressbook />
+        <CARD:addressbook />
       </resourcetype>
       $ABOOKDISP
       $ABOOKDESC
     </prop>
   </set>
-</create>"
+</mkcol>"

@@ -52,6 +52,13 @@ final class AccountData
             "featureSet" => TestInfrastructureSrv::SRVFEATS_GOOGLE,
         ],
          */
+        "Davical" => [
+            "username" => "admin",
+            "password" => "admin",
+            "discoveryUri" => "http://davical.localdomain/davical",
+            "syncAllowExtraChanges" => false,
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_DAVICAL,
+        ],
         "Nextcloud" => [
             "username" => "ncadm",
             "password" => "ncadmPassw0rd",
@@ -88,13 +95,6 @@ final class AccountData
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
-        "Davical" => [
-            "username" => "davicalUser",
-            "password" => "foobar",
-            "discoveryUri" => "http://localhost/davical",
-            "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_DAVICAL,
-        ],
         "Synology" => [
             "username" => "xxx",
             "password" => "yyy",
@@ -119,6 +119,11 @@ final class AccountData
             "displayname" => "Address Book",
         ],
          */
+        "Davical_0" => [
+            "account" => "Davical",
+            "url" => "http://davical.localdomain/davical/caldav.php/admin/book1/",
+            "displayname" => "Test addressbook",
+        ],
         "Nextcloud" => [
             "account" => "Nextcloud",
             "url" => "http://localhost:8080/remote.php/dav/addressbooks/users/ncadm/contacts/",
@@ -157,11 +162,6 @@ final class AccountData
             "account" => "BaikalKrb",
             "url" => "http://baikal.example.com/dav.php/addressbooks/baikalUser/default/",
             "displayname" => "Default Address Book",
-        ],
-        "Davical_0" => [
-            "account" => "Davical",
-            "url" => "http://localhost/davical/caldav.php/davicalUser/addresses/",
-            "displayname" => "Test addressbook",
         ],
          */
     ];

@@ -173,13 +173,18 @@ jobs:
     steps:
       - name: Checkout carddavclient
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: composer update --no-interaction --no-progress
-        shell: bash
+      - name: Set up CI environment
+        uses: ./.github/actions/setup
+        with:
+          php-version: '8.0'
       - name: Create Davical Addressbooks
         run: |
           .github/scripts/createabook.sh "http://localhost:8088/caldav.php/admin/book1/" 'Test addressbook' 'Davical test addresses' admin admin
       - name: Run interop tests
+        env:
+            ICLOUD_USER: ${{ secrets.ICLOUD_USER }}
+            ICLOUD_PASSWORD: ${{ secrets.ICLOUD_PASSWORD }}
+            ICLOUD_URL_ABOOK0: ${{ secrets.ICLOUD_URL_ABOOK0 }}
         run: make tests-interop
       - name: Upload interop-davical test coverage reports to codecov.io
         uses: codecov/codecov-action@v1
@@ -187,4 +192,28 @@ jobs:
           file: testreports/interop/clover.xml
           flags: interop
           name: Carddavclient Davical interoperability test coverage
+          fail_ci_if_error: false
+
+  interop-icloud:
+    runs-on: ubuntu-20.04
+
+    env:
+      XDEBUG_MODE: coverage
+      CARDDAVCLIENT_INTEROP_SRV: iCloud
+
+    steps:
+      - name: Checkout carddavclient
+        uses: actions/checkout@v2
+      - name: Set up CI environment
+        uses: ./.github/actions/setup
+        with:
+          php-version: '8.0'
+      - name: Run interop tests
+        run: make tests-interop
+      - name: Upload interop-iCloud test coverage reports to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          file: testreports/interop/clover.xml
+          flags: interop
+          name: Carddavclient iCloud interoperability test coverage
           fail_ci_if_error: false

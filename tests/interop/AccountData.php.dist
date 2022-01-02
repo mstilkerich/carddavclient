@@ -22,19 +22,6 @@ final class AccountData
     /** @var array<string, TestAccount> */
     public const ACCOUNTS = [
         /*
-        "iCloud" => [
-            "username" => "icloudid@example.com",
-            "password" => "foobar",
-            "discoveryUri" => "icloud.com",
-
-            // For providers that report extra changes or deleted cards between two syncs, set this to true to limit the
-            // sync tests to check whether all known changes are actually reported, without raising an error on any
-            // additional changes that the server reports. (Google has been observed to behave like this)
-            "syncAllowExtraChanges" => true,
-
-            // known/expected features
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_ICLOUD,
-        ],
         "Google" => [
             // for basic auth
             "username" => "gmailid@example.com",
@@ -52,6 +39,19 @@ final class AccountData
             "featureSet" => TestInfrastructureSrv::SRVFEATS_GOOGLE,
         ],
          */
+        "iCloud" => [
+            "username" => "%ICLOUD_USER%",
+            "password" => "%ICLOUD_PASSWORD%",
+            "discoveryUri" => "icloud.com",
+
+            // For providers that report extra changes or deleted cards between two syncs, set this to true to limit the
+            // sync tests to check whether all known changes are actually reported, without raising an error on any
+            // additional changes that the server reports. (Google has been observed to behave like this)
+            "syncAllowExtraChanges" => true,
+
+            // known/expected features
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_ICLOUD,
+        ],
         "Davical" => [
             "username" => "admin",
             "password" => "admin",
@@ -108,17 +108,17 @@ final class AccountData
     /** @var array<string, TestAddressbook> */
     public const ADDRESSBOOKS = [
         /*
-        "iCloud" => [
-            "account" => "iCloud",
-            "url" => "https://pXX-contacts.icloud.com:443/1234567/carddavhome/card/",
-            "displayname" => "card",
-        ],
         "Google" => [
             "account" => "Google",
             "url" => "https://www.googleapis.com:443/carddav/v1/principals/gmailid@example.com/lists/default/",
             "displayname" => "Address Book",
         ],
          */
+        "iCloud" => [
+            "account" => "iCloud",
+            "url" => "%ICLOUD_URL_ABOOK0%",
+            "displayname" => "card",
+        ],
         "Davical_0" => [
             "account" => "Davical",
             "url" => "http://localhost:8088/caldav.php/admin/book1/",

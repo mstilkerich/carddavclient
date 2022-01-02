@@ -153,10 +153,9 @@ jobs:
     steps:
       - name: Checkout carddavclient
         uses: actions/checkout@v2
-      - name: Set up CI environment
-        uses: ./.github/actions/setup
-        with:
-          php-version: '7.4'
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress
+        shell: bash
       - name: Setup Davical
         run: |
           .github/scripts/deployDavical.sh

@@ -165,7 +165,7 @@ final class TestInfrastructureSrv
         $matches = [];
         if (preg_match('/^%([A-Za-z0-9_]+)%$/', $setting, $matches)) {
             $setting = getenv($matches[1]);
-            echo "Replacing {$matches[1]} by string of length: " . strlen($setting) . "\n";
+            echo "Replacing {$matches[1]} by string of length: " . strlen($setting === false ? "" : $setting) . "\n";
             if (!is_string($setting)) {
                 return "";
             }

@@ -2,6 +2,9 @@ name: CI Build
 
 on:
   workflow_dispatch:
+  # run once a week so we learn about breakage with updates of other software
+  schedule:
+    - cron:  '15 4 * * 5'
   push:
     branches:
       - master

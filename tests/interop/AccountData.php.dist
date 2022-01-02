@@ -22,7 +22,7 @@ final class AccountData
     /** @var array<string, TestAccount> */
     public const ACCOUNTS = [
         "Google" => [
-            "refreshtoken" => "%GOOGLE_REFRESH_TOKEN%"
+            "refreshtoken" => "%GOOGLE_REFRESH_TOKEN%",
             "tokenUri" => "https://oauth2.googleapis.com/token",
             "oAuthScopes" => "https://www.googleapis.com/auth/carddav",
             "clientId" => '%GOOGLE_CLIENTID%',

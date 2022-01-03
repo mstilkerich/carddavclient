@@ -288,3 +288,42 @@ jobs:
           flags: interop
           name: Carddavclient Google interoperability test coverage
           fail_ci_if_error: false
+
+  interop-baikal:
+    runs-on: ubuntu-20.04
+
+    env:
+      XDEBUG_MODE: coverage
+      CARDDAVCLIENT_INTEROP_SRV: Baikal
+
+    services:
+      baikal:
+        image: ckulka/baikal
+        options: >-
+          --health-cmd "nc -z localhost 80"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --name baikal
+        ports:
+          - 8088:80
+
+    steps:
+      - name: Checkout carddavclient
+        uses: actions/checkout@v2
+      - name: Set up CI environment
+        uses: ./.github/actions/setup
+        with:
+          php-version: '8.0'
+      - name: Setup Baikal
+        run: |
+          .github/scripts/deployBaikal.sh
+      - name: Run interop tests
+        run: make tests-interop
+      - name: Upload interop-baikal test coverage reports to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          file: testreports/interop/clover.xml
+          flags: interop
+          name: Carddavclient Baikal interoperability test coverage
+          fail_ci_if_error: false

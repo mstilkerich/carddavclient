@@ -73,14 +73,16 @@ final class AccountData
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
-        /*
         "Baikal" => [
-            "username" => "baikalUser",
-            "password" => "foobar",
-            "discoveryUri" => "http://baikal.localhost",
+            "username" => "citest",
+            "password" => "citest",
+            "discoveryUri" => "http://localhost:8080/",
             "syncAllowExtraChanges" => false,
+              // as of Baikal 0.8.0, the shipped Sabre/DAV version 4.1.4 still does not contain the fix for this bug
+              // Bug is fixed in Sabre/DAV 4.1.5
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
+        /*
         "BaikalKrb" => [
             "username" => "",
             "password" => "",
@@ -137,18 +139,12 @@ final class AccountData
             "url" => "http://localhost:8080/remote.php/dav/addressbooks/users/admin/contacts/",
             "displayname" => "Contacts",
         ],
-        /*
-        "Baikal_First" => [
+        "Baikal_0" => [
             "account" => "Baikal",
-            "url" => "http://baikal.localhost/dav.php/addressbooks/baikalUser/default/",
+            "url" => "http://localhost:8080/dav.php/addressbooks/citest/default/",
             "displayname" => "Default Address Book",
         ],
-        "Baikal_Second" => [
-            "account" => "Baikal",
-            "url" => "http://baikal.localhost/dav.php/addressbooks/baikalUser/abook2/",
-            "displayname" => "Addressbook 2",
-            "readonly" => true
-        ],
+        /*
         "BaikalKrb_First" => [
             "account" => "BaikalKrb",
             "url" => "http://baikal.example.com/dav.php/addressbooks/baikalUser/default/",

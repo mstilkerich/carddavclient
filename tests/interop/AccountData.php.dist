@@ -71,7 +71,8 @@ final class AccountData
             "password" => "admin",
             "discoveryUri" => "http://localhost:8080/remote.php/dav/",
             "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
+            // Owncloud as of 10.9 uses Sabre 4.2.0, which has the bugs reported for sabre/dav fixed
+            "featureSet" => TestInfrastructureSrv::SRVFEATSONLY_SABRE,
         ],
         "Baikal" => [
             "username" => "citest",

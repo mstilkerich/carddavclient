@@ -154,11 +154,14 @@ final class TestInfrastructureSrv
         ;
     public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
 
+    /** @var bool */
+    private static $initialized = false;
+
     /** @var array<string, Account> Objects for all accounts from AccountData::ACCOUNTS */
-    public static $accounts = [];
+    private static $accounts = [];
 
     /** @var array<string, AddressbookCollection> Objects for all addressbooks from AccountData::ADDRESSBOOKS */
-    public static $addressbooks = [];
+    private static $addressbooks = [];
 
     private static function replaceEnvVar(string $setting): string
     {
@@ -227,7 +230,9 @@ final class TestInfrastructureSrv
 
     public static function init(): void
     {
-        if (empty(self::$accounts)) {
+        if (!self::$initialized) {
+            self::$initialized = true;
+
             $logfileHttp = 'testreports/interop/tests_http.log';
             if (file_exists($logfileHttp)) {
                 unlink($logfileHttp);
@@ -235,18 +240,36 @@ final class TestInfrastructureSrv
 
             TestInfrastructure::init(new FileLogger($logfileHttp, \Psr\Log\LogLevel::DEBUG));
         }
+    }
 
-        foreach (AccountData::ACCOUNTS as $name => $cfg) {
+    public static function getAccount(string $name): Account
+    {
+        $accountCfgs = self::accountProvider();
+
+        if (!isset(self::$accounts[$name])) {
+            TestCase::assertArrayHasKey($name, $accountCfgs, "Unknown account $name");
+            $cfg = $accountCfgs[$name][1];
             $cred = self::makeCredentials($cfg);
             self::$accounts[$name] = new Account($cfg["discoveryUri"], $cred);
         }
 
-        foreach (AccountData::ADDRESSBOOKS as $name => $cfg) {
+        return self::$accounts[$name];
+    }
+
+    public static function getAddressbook(string $name): AddressbookCollection
+    {
+        if (!isset(self::$addressbooks[$name])) {
+            TestCase::assertArrayHasKey($name, AccountData::ADDRESSBOOKS, "Unknown addressbook $name");
+            $cfg = AccountData::ADDRESSBOOKS[$name];
+            $account = self::getAccount($cfg['account']);
+
             self::$addressbooks[$name] = new AddressbookCollection(
                 self::replaceEnvVar($cfg["url"]),
-                self::$accounts[$cfg["account"]]
+                $account
             );
         }
+
+        return self::$addressbooks[$name];
     }
 
     /**

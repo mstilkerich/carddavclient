@@ -54,7 +54,7 @@ final class SyncTest extends TestCase
     {
         // try to clean up leftovers
         foreach (self::$insertedUris as $abookname => $uris) {
-            $abook = TestInfrastructureSrv::$addressbooks[$abookname];
+            $abook = TestInfrastructureSrv::getAddressbook($abookname);
             foreach ($uris as $uri) {
                 $abook->deleteCard($uri);
             }
@@ -73,7 +73,7 @@ final class SyncTest extends TestCase
      */
     public function testInitialSyncWorks(string $abookname, array $cfg): void
     {
-        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         // insert two cards we can expect to be reported by the initial sync
@@ -109,7 +109,7 @@ final class SyncTest extends TestCase
         $accountcfg = AccountData::ACCOUNTS[$accountname];
         $this->assertArrayHasKey("syncAllowExtraChanges", $accountcfg);
 
-        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$cacheState);
 
@@ -145,7 +145,7 @@ final class SyncTest extends TestCase
         $accountcfg = AccountData::ACCOUNTS[$accountname];
         $this->assertArrayHasKey("syncAllowExtraChanges", $accountcfg);
 
-        $abook = TestInfrastructureSrv::$addressbooks[$abookname];
+        $abook = TestInfrastructureSrv::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$cacheState);
 

@@ -82,7 +82,7 @@ final class AddressbookQueryTest extends TestCase
     {
         // delete cards
         foreach (self::$insertedCards as $abookname => $cards) {
-            $abook = TIS::$addressbooks[$abookname];
+            $abook = TIS::getAddressbook($abookname);
             TestCase::assertInstanceOf(AddressbookCollection::class, $abook);
 
             foreach ($cards as $card) {
@@ -524,7 +524,7 @@ final class AddressbookQueryTest extends TestCase
 
     private function createSamples(string $abookname): AddressbookCollection
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         if (isset(self::$insertedCards[$abookname])) {

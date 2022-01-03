@@ -102,7 +102,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        owncloud-version: ['10.9']
+        owncloud-version: ['10']
 
     runs-on: ubuntu-20.04
 

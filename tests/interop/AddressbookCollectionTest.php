@@ -58,7 +58,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testPropertiesCorrectlyReported(string $abookname, array $cfg): void
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $this->assertSame($cfg["displayname"], $abook->getName(), "Displayname");
@@ -87,7 +87,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testCanInsertValidCard(string $abookname, array $cfg): void
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $vcard = TestInfrastructure::createVCard();
@@ -106,7 +106,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testCanRetrieveCreatedCard(string $abookname, array $cfg): void
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
@@ -140,7 +140,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testCanCreateWebDavResourceForNonCollection(string $abookname, array $cfg): void
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         $cardUri = self::$insertedCards[$abookname]['uri'];
@@ -166,7 +166,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testUpdateFailsWithErroneousCard(string $abookname, array $cfg): void
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
@@ -195,7 +195,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testCanUpdateCreatedCard(string $abookname, array $cfg): void
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
@@ -224,7 +224,7 @@ final class AddressbookCollectionTest extends TestCase
             $this->markTestSkipped("$abookname has a bug: If-Match ETag precondition is ignored by server");
         }
 
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         [ 'uri' => $cardUri, 'etag' => $cardETag, 'vcard' => $vcard ] = self::$insertedCards[$abookname];
@@ -243,7 +243,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testCanDeleteExistingCard(string $abookname, array $cfg): void
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
         $this->assertArrayHasKey($abookname, self::$insertedCards);
         [ 'uri' => $cardUri ] = self::$insertedCards[$abookname];
@@ -269,7 +269,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testCanInsertCardWithMinorProblems(string $abookname, array $cfg): void
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $vcard = TestInfrastructure::createVCard();
@@ -289,7 +289,7 @@ final class AddressbookCollectionTest extends TestCase
      */
     public function testGetDetailsProvidesCoreInformation(string $abookname, array $cfg): void
     {
-        $abook = TIS::$addressbooks[$abookname];
+        $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $details = $abook->getDetails();

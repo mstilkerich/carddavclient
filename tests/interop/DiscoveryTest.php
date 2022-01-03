@@ -54,13 +54,16 @@ final class DiscoveryTest extends TestCase
      */
     public function testAllAddressbooksCanBeDiscovered(string $accountname, array $cfg): void
     {
-        $account = TestInfrastructureSrv::$accounts[$accountname];
+        $account = TestInfrastructureSrv::getAccount($accountname);
         $this->assertInstanceOf(Account::class, $account);
 
         $abookUris = [];
-        foreach (TestInfrastructureSrv::$addressbooks as $abook) {
-            if ($abook->getAccount() === $account) {
-                $abookUris[] = TestInfrastructure::normalizeUri($abook, $abook->getUri());
+        foreach (AccountData::ADDRESSBOOKS as $abookname => $abookcfg) {
+            if ($abookcfg['account'] === $accountname) {
+                $abook = TestInfrastructureSrv::getAddressbook($abookname);
+                if ($abook->getAccount() === $account) {
+                    $abookUris[] = TestInfrastructure::normalizeUri($abook, $abook->getUri());
+                }
             }
         }
 

@@ -290,6 +290,10 @@ jobs:
           fail_ci_if_error: false
 
   interop-baikal:
+    strategy:
+      fail-fast: false
+      matrix:
+        baikal-version: ['0.8.0', '0.7.2']
     runs-on: ubuntu-20.04
 
     env:
@@ -298,7 +302,7 @@ jobs:
 
     services:
       baikal:
-        image: ckulka/baikal
+        image: ckulka/baikal:${{ matrix.baikal-version }}
         options: >-
           --name baikal
         ports:

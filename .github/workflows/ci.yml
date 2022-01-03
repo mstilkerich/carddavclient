@@ -98,6 +98,48 @@ jobs:
           name: Carddavclient nextcloud interoperability test coverage
           fail_ci_if_error: false
 
+  interop-owncloud:
+    strategy:
+      fail-fast: false
+      matrix:
+        owncloud-version: ['10.9']
+
+    runs-on: ubuntu-20.04
+
+    env:
+      XDEBUG_MODE: coverage
+      CARDDAVCLIENT_INTEROP_SRV: Owncloud
+
+    services:
+      owncloud:
+        image: owncloud/server:${{ matrix.owncloud-version }}
+        env:
+          ADMIN_USERNAME: admin
+          ADMIN_PASSWORD: admin
+          OWNCLOUD_DOMAIN: localhost:8080
+	      HTTP_PORT: 8080
+        options: >-
+          --name owncloud
+        ports:
+          - 8080:8080
+
+    steps:
+      - name: Checkout carddavclient
+        uses: actions/checkout@v2
+      - name: Set up CI environment
+        uses: ./.github/actions/setup
+        with:
+          php-version: '8.0'
+      - name: Run interop tests
+        run: make tests-interop
+      - name: Upload interop-owncloud test coverage reports to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          file: testreports/interop/clover.xml
+          flags: interop
+          name: Carddavclient owncloud interoperability test coverage
+          fail_ci_if_error: false
+
   interop-radicale:
     runs-on: ubuntu-20.04
 

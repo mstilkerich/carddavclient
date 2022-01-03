@@ -66,6 +66,13 @@ final class AccountData
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_RADICALE,
         ],
+        "Owncloud" => [
+            "username" => "admin",
+            "password" => "admin",
+            "discoveryUri" => "http://localhost:8080/remote.php/dav/",
+            "syncAllowExtraChanges" => false,
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
+        ],
         /*
         "Baikal" => [
             "username" => "baikalUser",
@@ -78,13 +85,6 @@ final class AccountData
             "username" => "",
             "password" => "",
             "discoveryUri" => "http://baikal.example.com",
-            "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
-        ],
-        "Owncloud" => [
-            "username" => "owncloudUser",
-            "password" => "foobar",
-            "discoveryUri" => "http://localhost/owncloud/remote.php/dav/addressbooks/users/owncloudUser/contacts/",
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
@@ -132,12 +132,12 @@ final class AccountData
             "displayname" => "Book 2",
             "readonly" => true,
         ],
-        /*
         "Owncloud" => [
             "account" => "Owncloud",
-            "url" => "http://localhost:80/owncloud/remote.php/dav/addressbooks/users/owncloudUser/contacts/",
+            "url" => "http://localhost:8080/remote.php/dav/addressbooks/users/admin/contacts/",
             "displayname" => "Contacts",
         ],
+        /*
         "Baikal_First" => [
             "account" => "Baikal",
             "url" => "http://baikal.localhost/dav.php/addressbooks/baikalUser/default/",

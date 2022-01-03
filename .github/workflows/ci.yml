@@ -306,7 +306,7 @@ jobs:
           --health-retries 5
           --name baikal
         ports:
-          - 8088:80
+          - 8080:80
 
     steps:
       - name: Checkout carddavclient

@@ -57,6 +57,8 @@ final class AccountData
             "password" => "ncadmPassw0rd",
             "discoveryUri" => "http://localhost:8080/remote.php/dav/",
             "syncAllowExtraChanges" => false,
+            // Nextcloud 21 (oldest still supported) uses Sabre 4.1.4 which still contains the reported issues, so we
+            // need to exclude some tests until 21 is EOL
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
         "Radicale" => [

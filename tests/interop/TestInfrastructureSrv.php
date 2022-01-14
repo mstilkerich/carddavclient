@@ -195,6 +195,8 @@ final class TestInfrastructureSrv
             && isset($cfg['clientId'])
             && isset($cfg['clientSecret'])
         ) {
+            // Fetch an access token using the available refresh token
+            $client = new \GuzzleHttp\Client();
             $postData = [
                 'grant_type' => 'refresh_token',
                 'refresh_token' => self::replaceEnvVar($cfg['refreshtoken']),
@@ -206,22 +208,13 @@ final class TestInfrastructureSrv
                 $postData['scope'] = $cfg['oAuthScopes'];
             }
 
-            $options = array(
-                'http' => array(
-                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method'  => 'POST',
-                    'content' => http_build_query($postData)
-                )
-            );
-            $context  = stream_context_create($options);
-            $result = file_get_contents($cfg['tokenUri'], false, $context);
+            $response = $client->request('POST', $cfg['tokenUri'], ['form_params' => $postData]);
+            $body = (string) $response->getBody();
 
-            if (is_string($result)) {
-                /** @var array | false */
-                $json = json_decode($result, true);
-                if (isset($json["access_token"]) && is_string($json["access_token"])) {
-                    $cred["bearertoken"] = $json["access_token"];
-                }
+            /** @var array | false */
+            $json = json_decode($body, true);
+            if (isset($json["access_token"]) && is_string($json["access_token"])) {
+                $cred["bearertoken"] = $json["access_token"];
             }
         }
 

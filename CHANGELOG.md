@@ -1,9 +1,10 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
-## Unreleased (to 1.2.1)
+## Version 1.2.2 (to 1.2.1)
 
 - Config::init() now accepts an options array as third parameter, which currently allows to customize the log format for
   the HTTP logs. It is meant to be extended with further options in the future.
+- Use CURLAUTH_NEGOTIATE only when curl supports SPNEGO (Fixes #20)
 
 ## Version 1.2.1 (to 1.2.0)
 

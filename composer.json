@@ -50,5 +50,10 @@
             "dev-master": "1.2.x-dev"
         }
     },
-    "prefer-stable" : true
+    "prefer-stable" : true,
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
 }

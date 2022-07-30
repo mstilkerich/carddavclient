@@ -104,9 +104,12 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         if (!isset(self::$schemeToCurlOpt)) {
             if (extension_loaded("curl")) {
                 self::$schemeToCurlOpt = [
-                    'negotiate' => CURLAUTH_NEGOTIATE,
                     'curlany' => CURLAUTH_ANY,
                 ];
+                // if CURL is compiled without support for SPNEGO, CURLAUTH_NEGOTIATE is not defined
+                if (defined('CURLAUTH_NEGOTIATE')) {
+                    self::$schemeToCurlOpt['negotiate'] = CURLAUTH_NEGOTIATE;
+                }
             } else {
                 self::$schemeToCurlOpt = [];
             }

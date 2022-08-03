@@ -132,9 +132,9 @@ class Discovery
                                 }
                             }
 
-                            if (count($addressbooks) > 0) {
-                                break 2;
-                            }
+                            // We found a valid addressbook home. If it contains no addressbooks, this is fine and the
+                            // result of the discovery is an empty set.
+                            return $addressbooks;
                         } catch (\Exception $e) {
                             Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
                         }
@@ -143,7 +143,7 @@ class Discovery
             }
         }
 
-        return $addressbooks;
+        throw new \Exception("Could not determine the addressbook home");
     }
 
     /**

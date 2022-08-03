@@ -1,5 +1,10 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.X.Y (to 1.2.2)
+
+- Fix: Throw an exception in the Discovery service in case no addressbook home could be discovered. Previously, an empty
+       list would be returned without indication that the discovery was not successful.
+
 ## Version 1.2.2 (to 1.2.1)
 
 - Config::init() now accepts an options array as third parameter, which currently allows to customize the log format for

@@ -152,6 +152,7 @@ class Sync
                     ] = $abook->getCard($objref["uri"]);
                 }
             }
+            unset($objref);
 
             if ($syncResult->createVCards() === false) {
                 Config::$logger->warning("Not for all changed objects, the VCard data was provided by the server");
@@ -365,6 +366,7 @@ class Sync
                 Config::$logger->warning("Server did not return data for $couri");
             }
         }
+        unset($objref);
     }
 }
 

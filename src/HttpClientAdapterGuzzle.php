@@ -183,7 +183,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
 
                 if ($response->getStatusCode() >= 400) {
                     Config::$logger->debug("None of the available auth schemes worked");
-                    unset($this->authScheme);
+                    $this->authScheme = null;
                 }
             }
 

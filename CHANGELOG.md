@@ -1,9 +1,12 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
-## Version 1.X.Y (to 1.2.2)
+## Version 1.2.3 (to 1.2.2)
 
 - Fix: Throw an exception in the Discovery service in case no addressbook home could be discovered. Previously, an empty
        list would be returned without indication that the discovery was not successful.
+- Fix: After failure to authenticate with the server, the CardDavClient object might be left in a state that causes a
+       PHP warning on next usage (a property of the object was unintentionally deleted in that case and the warning
+       would be triggered on next attempt to access that property).
 
 ## Version 1.2.2 (to 1.2.1)
 

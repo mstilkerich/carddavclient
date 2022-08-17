@@ -90,6 +90,7 @@ class SyncResult
                 }
             }
         }
+        unset($obj);
 
         return $ret;
     }

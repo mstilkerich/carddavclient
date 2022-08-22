@@ -49,11 +49,10 @@ final class ConfigTest extends TestCase
         $this->assertInstanceOf(NullLogger::class, Config::$httplogger);
     }
 
-    public function testInitSetsCustomOptionsCorrectly(): void
+    public function testInitSetsOptionsCorrectly(): void
     {
-        Config::init(null, null, [ 'customopt' => 'foo']);
-        $this->assertArrayHasKey('customopt', Config::$options);
-        $this->assertSame('foo', Config::$options['customopt']);
+        Config::init(null, null, [ 'guzzle_logformat' => Config::GUZZLE_LOGFMT_SHORT]);
+        $this->assertSame(Config::GUZZLE_LOGFMT_SHORT, Config::$options['guzzle_logformat']);
     }
 }
 

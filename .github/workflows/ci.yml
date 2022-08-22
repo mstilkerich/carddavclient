@@ -60,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextcloud-version: ['21', '22', '23']
+        nextcloud-version: ['23, '24']
 
     runs-on: ubuntu-20.04
 
@@ -293,7 +293,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        baikal-version: ['0.9.1-php8.0', '0.8.0', '0.7.2']
+        baikal-version: ['0.9.2-php8.0', '0.8.0', '0.7.2']
     runs-on: ubuntu-20.04
 
     env:

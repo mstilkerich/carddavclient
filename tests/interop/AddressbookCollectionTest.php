@@ -62,6 +62,11 @@ final class AddressbookCollectionTest extends TestCase
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $this->assertSame($cfg["displayname"], $abook->getName(), "Displayname");
+
+        $abookStringified = (string) $abook;
+        $this->assertStringContainsString($cfg["displayname"], $abookStringified);
+        $this->assertStringContainsString($cfg["url"], $abookStringified);
+
         $this->assertSame(
             TIS::hasFeature($abookname, TIS::FEAT_SYNCCOLL),
             $abook->supportsSyncCollection(),

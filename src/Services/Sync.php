@@ -287,7 +287,7 @@ class Sync
                         || ($etag !== $localCacheState[$uri])
                     ) {
                         $changes[] = [
-                            'uri' => $uri,
+                            'uri' => $uri ?? '',
                             'etag' => $etag
                         ];
                     }

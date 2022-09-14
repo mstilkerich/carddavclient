@@ -7,6 +7,6 @@
 /composer.lock
 /vendor
 /testreports
-/tests/interop/AccountData.php
+/tests/Interop/AccountData.php
 /xml
 /doc/api

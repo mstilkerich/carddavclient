@@ -17,7 +17,7 @@
         <directory name="tests/"/>
         <file name="doc/quickstart.php"/>
         <ignoreFiles allowMissingFiles="true">
-            <file name="tests/interop/AccountData-*.php" />
+            <file name="tests/Interop/AccountData-*.php" />
         </ignoreFiles>
     </projectFiles>
 

@@ -13,31 +13,31 @@ stylecheck:
 phpcompatcheck:
 	vendor/bin/phpcs --colors --standard=PHPCompatibility --runtime-set testVersion 7.1 src/ tests/
 
-psalmanalysis: tests/interop/AccountData.php
+psalmanalysis: tests/Interop/AccountData.php
 	vendor/bin/psalm --no-cache --shepherd --report=testreports/psalm.txt --report-show-info=true --no-progress
 
 tests: tests-interop unittests
 	vendor/bin/phpcov merge --html testreports/coverage testreports
 
 .PHONY: unittests
-unittests: tests/unit/phpunit.xml
+unittests: tests/Unit/phpunit.xml
 	@echo
 	@echo  ==========================================================
 	@echo "                   EXECUTING UNIT TESTS"
 	@echo  ==========================================================
 	@echo
 	@mkdir -p testreports/unit
-	vendor/bin/phpunit -c tests/unit/phpunit.xml
+	vendor/bin/phpunit -c tests/Unit/phpunit.xml
 
 .PHONY: tests-interop
-tests-interop: tests/interop/phpunit.xml tests/interop/AccountData.php
+tests-interop: tests/Interop/phpunit.xml tests/Interop/AccountData.php
 	@echo
 	@echo  ==========================================================
 	@echo "       EXECUTING CARDDAV INTEROPERABILITY TESTS"
 	@echo  ==========================================================
 	@echo
 	@mkdir -p testreports/interop
-	vendor/bin/phpunit -c tests/interop/phpunit.xml
+	vendor/bin/phpunit -c tests/Interop/phpunit.xml
 
 doc:
 	rm -rf $(DOCDIR)
@@ -45,7 +45,7 @@ doc:
 	[ -d ../carddavclient-pages ] && rsync -r --delete --exclude .git doc/api/ ../carddavclient-pages
 
 # For github CI system - if AccountData.php is not available, create from AccountData.php.dist
-tests/interop/AccountData.php: | tests/interop/AccountData.php.dist
+tests/Interop/AccountData.php: | tests/Interop/AccountData.php.dist
 	cp $| $@
 
 .PHONY: codecov-upload

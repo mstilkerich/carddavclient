@@ -34,6 +34,11 @@
             "MStilkerich\\CardDavClient\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "MStilkerich\\Tests\\CardDavClient\\": "tests/"
+        }
+    },
     "require-dev": {
         "vimeo/psalm": ">= 3.11",
         "squizlabs/php_codesniffer": "^3.5.1",

@@ -1,4 +1,10 @@
 DOCDIR := doc/api/
+
+# Set some options on Github actions
+ifeq ($(CI),true)
+PSALM_XOPTIONS=--shepherd --no-progress --no-cache
+endif
+
 .PHONY: all stylecheck phpcompatcheck staticanalyses psalmanalysis doc tests verification
 
 all: staticanalyses doc
@@ -14,7 +20,7 @@ phpcompatcheck:
 	vendor/bin/phpcs --colors --standard=PHPCompatibility --runtime-set testVersion 7.1 src/ tests/
 
 psalmanalysis: tests/Interop/AccountData.php
-	vendor/bin/psalm --no-cache --shepherd --report=testreports/psalm.txt --report-show-info=true --no-progress
+	vendor/bin/psalm --threads=8 --no-cache --report=testreports/psalm.txt --report-show-info=true --no-diff $(PSALM_XOPTIONS)
 
 tests: tests-interop unittests
 	vendor/bin/phpcov merge --html testreports/coverage testreports

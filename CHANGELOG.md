@@ -1,5 +1,9 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.3
+
+- New APIs AddressbookCollection::getDisplayName() and AddressbookCollection::getDescription()
+
 ## Version 1.2.3 (to 1.2.2)
 
 - Fix: Throw an exception in the Discovery service in case no addressbook home could be discovered. Previously, an empty

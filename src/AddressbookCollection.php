@@ -62,6 +62,30 @@ class AddressbookCollection extends WebDavCollection
     }
 
     /**
+     * Returns value of the DAV:displayname for the addressbook collection.
+     *
+     * @return ?string DAV:displayname of the addressbook collection, null if not set.
+     * @api
+     */
+    public function getDisplayName(): ?string
+    {
+        $props = $this->getProperties();
+        return $props[XmlEN::DISPNAME] ?? null;
+    }
+
+    /**
+     * Returns value of the CARDDAV:addressbook-description for the addressbook collection.
+     *
+     * @return ?string CARDDAV:addressbook-description of the addressbook collection, null if not set.
+     * @api
+     */
+    public function getDescription(): ?string
+    {
+        $props = $this->getProperties();
+        return $props[XmlEN::ABOOK_DESC] ?? null;
+    }
+
+    /**
      * Provides a stringified representation of this addressbook (name and URI).
      *
      * Note that the result of this function is meant for display, not parsing. Thus the content and formatting of the

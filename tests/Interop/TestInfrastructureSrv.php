@@ -33,7 +33,8 @@ use PHPUnit\Framework\TestCase;
  * @psalm-type TestAddressbook = array{
  *   account: string,
  *   url: string,
- *   displayname: string,
+ *   displayname: ?string,
+ *   description: ?string,
  *   readonly?: bool
  * }
  *

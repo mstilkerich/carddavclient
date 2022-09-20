@@ -61,10 +61,15 @@ final class AddressbookCollectionTest extends TestCase
         $abook = TIS::getAddressbook($abookname);
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
-        $this->assertSame($cfg["displayname"], $abook->getName(), "Displayname");
+        $this->assertSame($cfg["displayname"], $abook->getDisplayName(), "Displayname");
+        $this->assertSame($cfg["description"], $abook->getDescription(), "Displayname");
+
+        $pathcomp = explode("/", rtrim($cfg["url"], "/"));
+        $expAbName = $cfg["displayname"] ?? end($pathcomp);
+        $this->assertSame($expAbName, $abook->getName(), "Name");
 
         $abookStringified = (string) $abook;
-        $this->assertStringContainsString($cfg["displayname"], $abookStringified);
+        $this->assertStringContainsString($expAbName, $abookStringified);
         $this->assertStringContainsString($cfg["url"], $abookStringified);
 
         $this->assertSame(
@@ -298,7 +303,8 @@ final class AddressbookCollectionTest extends TestCase
         $this->assertInstanceOf(AddressbookCollection::class, $abook);
 
         $details = $abook->getDetails();
-        $this->assertStringContainsString($cfg["displayname"], $details, "Displayname not contained in details");
+        $expAbName = $abook->getName();
+        $this->assertStringContainsString($expAbName, $details, "Displayname not contained in details");
         $this->assertStringContainsString($cfg["url"], $details, "URI not contained in details");
 
         $chkFeatures = [

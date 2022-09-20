@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient\Interop;
 
-use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config};
-
 /**
  * @psalm-import-type TestAccount from TestInfrastructureSrv
  * @psalm-import-type TestAddressbook from TestInfrastructureSrv
@@ -27,7 +25,6 @@ final class AccountData
             "oAuthScopes" => "https://www.googleapis.com/auth/carddav",
             "clientId" => '%GOOGLE_CLIENTID%',
             "clientSecret" => '%GOOGLE_CLIENT_SECRET%',
-
             "discoveryUri" => "gmail.com",
             "syncAllowExtraChanges" => true,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_GOOGLE,
@@ -85,22 +82,6 @@ final class AccountData
               // Bug is fixed in Sabre/DAV 4.1.5
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
-        /*
-        "BaikalKrb" => [
-            "username" => "",
-            "password" => "",
-            "discoveryUri" => "http://baikal.example.com",
-            "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
-        ],
-        "Synology" => [
-            "username" => "xxx",
-            "password" => "yyy",
-            "discoveryUri" => "http://synology:5000/carddav/admin/",
-            "syncAllowExtraChanges" => false,
-            "featureSet" => TestInfrastructureSrv::SRVFEATS_SYNOLOGY_CONTACTS,
-        ],
-         */
     ];
 
     /** @var array<string, TestAddressbook> */
@@ -109,51 +90,52 @@ final class AccountData
             "account" => "Google",
             "url" => "%GOOGLE_URL_ABOOK0%",
             "displayname" => "Address Book",
+            "description" => 'My Contacts',
         ],
         "iCloud" => [
             "account" => "iCloud",
             "url" => "%ICLOUD_URL_ABOOK0%",
-            "displayname" => "card",
+            "displayname" => null,
+            "description" => null,
         ],
         "Davical_0" => [
             "account" => "Davical",
             "url" => "http://localhost:8088/caldav.php/admin/book1/",
             "displayname" => "Test addressbook",
+            "description" => "Davical test addresses",
         ],
         "Nextcloud" => [
             "account" => "Nextcloud",
             "url" => "http://localhost:8080/remote.php/dav/addressbooks/users/ncadm/contacts/",
             "displayname" => "Contacts",
+            "description" => null,
             "readonly" => false,
         ],
-        "Radicale_1" => [
+        "Radicale_0" => [
             "account" => "Radicale",
             "url" => "http://localhost:5232/citest/book1/",
             "displayname" => "Book 1",
+            "description" => "First addressbook",
         ],
-        "Radicale_2" => [
+        "Radicale_1" => [
             "account" => "Radicale",
             "url" => "http://localhost:5232/citest/book2/",
             "displayname" => "Book 2",
+            "description" => "Second addressbook",
             "readonly" => true,
         ],
         "Owncloud" => [
             "account" => "Owncloud",
             "url" => "http://localhost:8080/remote.php/dav/addressbooks/users/admin/contacts/",
             "displayname" => "Contacts",
+            "description" => null,
         ],
         "Baikal_0" => [
             "account" => "Baikal",
             "url" => "http://localhost:8080/dav.php/addressbooks/citest/default/",
             "displayname" => "Default Address Book",
+            "description" => "Default Address Book for citest",
         ],
-        /*
-        "BaikalKrb_First" => [
-            "account" => "BaikalKrb",
-            "url" => "http://baikal.example.com/dav.php/addressbooks/baikalUser/default/",
-            "displayname" => "Default Address Book",
-        ],
-         */
     ];
 }
 

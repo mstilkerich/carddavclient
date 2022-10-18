@@ -302,7 +302,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                     $authScheme
                 ];
             } elseif (isset(self::$schemeToCurlOpt[$authScheme])) {
-                if (isset($_SERVER['KRB5CCNAME']) && is_string($_SERVER['KRB5CCNAME'])) {
+                if (isset($_SERVER['KRB5CCNAME'])) {
                     putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
                 }
                 $guzzleOptions["curl"] = [

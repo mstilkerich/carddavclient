@@ -20,11 +20,8 @@ final class AccountData
     /** @var array<string, TestAccount> */
     public const ACCOUNTS = [
         "Google" => [
-            "refreshtoken" => "%GOOGLE_REFRESH_TOKEN%",
-            "tokenUri" => "https://oauth2.googleapis.com/token",
-            "oAuthScopes" => "https://www.googleapis.com/auth/carddav",
-            "clientId" => '%GOOGLE_CLIENTID%',
-            "clientSecret" => '%GOOGLE_CLIENT_SECRET%',
+            "username" => "%GOOGLE_USER%",
+            "password" => "%GOOGLE_PASSWORD%",
             "discoveryUri" => "gmail.com",
             "syncAllowExtraChanges" => true,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_GOOGLE,

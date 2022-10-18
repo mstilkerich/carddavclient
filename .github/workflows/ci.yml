@@ -273,9 +273,8 @@ jobs:
           php-version: '8.0'
       - name: Run interop tests
         env:
-          GOOGLE_CLIENTID: ${{ secrets.GOOGLE_CLIENTID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          GOOGLE_USER: ${{ secrets.GOOGLE_USER }}
+          GOOGLE_PASSWORD: ${{ secrets.GOOGLE_PASSWORD }}
           GOOGLE_URL_ABOOK0: ${{ secrets.GOOGLE_URL_ABOOK0 }}
         run: make tests-interop
       - name: Upload interop-Google test coverage reports to codecov.io

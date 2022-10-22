@@ -11,8 +11,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient\Interop;
 
-use Wa72\SimpleLogger\FileLogger;
-use MStilkerich\Tests\CardDavClient\TestInfrastructure;
+use MStilkerich\Tests\CardDavClient\{TestInfrastructure,TestLogger};
 use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config,HttpClientAdapter};
 use PHPUnit\Framework\TestCase;
 
@@ -226,13 +225,7 @@ final class TestInfrastructureSrv
     {
         if (!self::$initialized) {
             self::$initialized = true;
-
-            $logfileHttp = 'testreports/interop/tests_http.log';
-            if (file_exists($logfileHttp)) {
-                unlink($logfileHttp);
-            }
-
-            TestInfrastructure::init(new FileLogger($logfileHttp, \Psr\Log\LogLevel::DEBUG));
+            TestInfrastructure::init(new TestLogger('tests_http.log'));
         }
     }
 

@@ -3,6 +3,8 @@
 ## Version 1.3
 
 - New APIs AddressbookCollection::getDisplayName() and AddressbookCollection::getDescription()
+- Widen dependency on psr/log to include all v1-v3 versions. To enable this, remove dev-dependency on wa72/simplelogger
+  (Fixes #23).
 
 ## Version 1.2.3 (to 1.2.2)
 

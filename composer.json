@@ -24,7 +24,7 @@
         "guzzlehttp/guzzle": "^6.0.0 || ^7.0.0",
         "psr/http-client": "^1.0",
         "psr/http-message": "^1.0",
-        "psr/log": "^1.1",
+        "psr/log": "^1.0 || ^2.0 || ^3.0",
         "sabre/vobject": "^3.3.5 || ^4.0.0",
         "sabre/xml": "^2.2 || ^3.0.0",
         "sabre/uri": "^2.2"
@@ -46,7 +46,6 @@
         "dealerdirect/phpcodesniffer-composer-installer": ">= 0.7.0",
         "phpunit/phpunit": "~9",
         "phpunit/phpcov": "*",
-        "wa72/simplelogger": "^1.1",
         "psalm/plugin-phpunit": "^0.15.0",
         "alexeyshockov/guzzle-psalm-plugin": "^0.3.1"
     },

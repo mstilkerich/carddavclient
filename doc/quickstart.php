@@ -34,7 +34,7 @@ use Sabre\VObject\Component\VCard;
 // there are many implementations available (e.g. monolog)
 class StdoutLogger extends AbstractLogger
 {
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = array()): void
     {
         if ($level !== LogLevel::DEBUG) {
             $ctx = empty($context) ? "" : json_encode($context);

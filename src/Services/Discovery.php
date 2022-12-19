@@ -120,19 +120,21 @@ class Discovery
                 $principalUri = $account->findCurrentUserPrincipal($contextpath);
                 if (isset($principalUri)) {
                     // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
-                    $addressbookHomeUri = $account->findAddressbookHome($principalUri);
-                    if (isset($addressbookHomeUri)) {
+                    $addressbookHomeUris = $account->findAddressbookHome($principalUri);
+                    if (isset($addressbookHomeUris)) {
                         try {
-                            // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
-                            $addressbookHome = new WebDavCollection($addressbookHomeUri, $account);
+                            foreach ($addressbookHomeUris as $addressbookHomeUri) {
+                                // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
+                                $addressbookHome = new WebDavCollection($addressbookHomeUri, $account);
 
-                            foreach ($addressbookHome->getChildren() as $abookCandidate) {
-                                if ($abookCandidate instanceof AddressbookCollection) {
-                                    $addressbooks[] = $abookCandidate;
+                                foreach ($addressbookHome->getChildren() as $abookCandidate) {
+                                    if ($abookCandidate instanceof AddressbookCollection) {
+                                        $addressbooks[] = $abookCandidate;
+                                    }
                                 }
                             }
 
-                            // We found a valid addressbook home. If it contains no addressbooks, this is fine and the
+                            // We found valid addressbook homes. If they contain no addressbooks, this is fine and the
                             // result of the discovery is an empty set.
                             return $addressbooks;
                         } catch (\Exception $e) {

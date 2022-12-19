@@ -114,6 +114,11 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             }
         }
 
+        // This hack forces preemptive basic auth for every request
+        if (isset($credentials['username']) && isset($credentials['password'])) {
+            $this->authScheme = 'basic';
+        }
+
         $this->known_authschemes = array_merge(
             [ 'bearer' ],
             self::GUZZLE_KNOWN_AUTHSCHEMES,

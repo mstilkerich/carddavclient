@@ -241,17 +241,15 @@ class Account implements \JsonSerializable
      * @param string $principalUri
      *  The given URI should be (one of) the authenticated user's principal URI(s).
      *
-     * @return ?string
-     *  The user's addressbook home URI (string), or null in case of error. The returned URI is suited
+     * @return null|list<string>
+     *  The user's addressbook home URIs, or null in case of error. The returned URI is suited
      *  to be used for queries with this client (i.e. either a full URI,
      *  or meaningful as relative URI to the base URI of this client).
      *
-     * @todo Per RFC6352 several home locations could be returned, but we currently only use one. However, it is
-        rather unlikely that there would be several addressbook home locations.
      */
-    public function findAddressbookHome(string $principalUri): ?string
+    public function findAddressbookHome(string $principalUri): ?array
     {
-        $addressbookHomeUri = null;
+        $addressbookHomeUris = [];
 
         try {
             $client = $this->getClient();
@@ -260,17 +258,18 @@ class Account implements \JsonSerializable
             if (isset($result[0]["props"][XmlEN::ABOOK_HOME])) {
                 /** @psalm-var list<string> $hrefs */
                 $hrefs = $result[0]["props"][XmlEN::ABOOK_HOME];
-                if (!empty($hrefs)) {
-                    $addressbookHomeUri = $hrefs[0];
-                    $addressbookHomeUri = CardDavClient::concatUrl($result[0]["uri"], $addressbookHomeUri);
+                foreach ($hrefs as $href) {
+                    $addressbookHomeUri = CardDavClient::concatUrl($result[0]["uri"], $href);
+                    $addressbookHomeUris[] = $addressbookHomeUri;
                     Config::$logger->info("addressbook home: $addressbookHomeUri");
                 }
             }
         } catch (\Exception $e) {
             Config::$logger->info("Exception while querying addressbook-home-set: " . $e->getMessage());
+            return null;
         }
 
-        return $addressbookHomeUri;
+        return $addressbookHomeUris;
     }
 }
 

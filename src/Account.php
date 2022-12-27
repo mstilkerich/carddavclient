@@ -217,7 +217,6 @@ class Account implements \JsonSerializable
             $result = $client->findProperties($contextPathUri, [XmlEN::CURUSRPRINC]);
 
             if (isset($result[0]["props"][XmlEN::CURUSRPRINC])) {
-                /** @var string Ensured by deserializer function */
                 $princUrl = $result[0]["props"][XmlEN::CURUSRPRINC];
                 $princUrl = CardDavClient::concatUrl($result[0]["uri"], $princUrl);
                 Config::$logger->info("principal URL: $princUrl");
@@ -258,7 +257,6 @@ class Account implements \JsonSerializable
             $result = $client->findProperties($principalUri, [XmlEN::ABOOK_HOME]);
 
             if (isset($result[0]["props"][XmlEN::ABOOK_HOME])) {
-                /** @psalm-var list<string> $hrefs */
                 $hrefs = $result[0]["props"][XmlEN::ABOOK_HOME];
                 if (!empty($hrefs)) {
                     $addressbookHomeUri = $hrefs[0];

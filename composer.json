@@ -40,14 +40,14 @@
         }
     },
     "require-dev": {
-        "vimeo/psalm": ">= 3.11",
         "squizlabs/php_codesniffer": "^3.5.1",
         "phpcompatibility/php-compatibility": "*",
         "dealerdirect/phpcodesniffer-composer-installer": ">= 0.7.0",
         "phpunit/phpunit": "~9",
         "phpunit/phpcov": "*",
-        "psalm/plugin-phpunit": "^0.15.0",
-        "alexeyshockov/guzzle-psalm-plugin": "^0.3.1"
+        "vimeo/psalm": "^5.0",
+        "psalm/plugin-phpunit": "*",
+        "alexeyshockov/guzzle-psalm-plugin": "*"
     },
     "extra": {
         "branch-alias": {

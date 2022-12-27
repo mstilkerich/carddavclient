@@ -21,6 +21,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *
  * @psalm-type PropTypes = array {
  *   '{DAV:}add-member'?: string,
+ *   '{DAV:}current-user-principal'?: string,
  *   '{DAV:}getetag'?: string,
  *   '{DAV:}resourcetype'?: list<string>,
  *   '{DAV:}supported-report-set'?: list<string>,
@@ -31,6 +32,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *   '{urn:ietf:params:xml:ns:carddav}address-data'?: string,
  *   '{urn:ietf:params:xml:ns:carddav}addressbook-description'?: string,
  *   '{urn:ietf:params:xml:ns:carddav}max-resource-size'?: int,
+ *   '{urn:ietf:params:xml:ns:carddav}addressbook-home-set'?: list<string>,
  * }
  *
  * @package Internal\XmlElements

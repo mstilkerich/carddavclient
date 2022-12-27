@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up CI environment
         uses: ./.github/actions/setup
         with:
@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up CI environment
         uses: ./.github/actions/setup
         with:
@@ -46,12 +46,11 @@ jobs:
       - name: Run unit tests
         run: make unittests
       - name: Upload unit test coverage reports to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: testreports/unit/clover.xml
+          files: testreports/unit/clover.xml
           flags: unittests
           name: Carddavclient unit test coverage
-          fail_ci_if_error: false
 
   interop-nextcloud:
     strategy:
@@ -75,7 +74,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up CI environment
         uses: ./.github/actions/setup
         with:
@@ -88,12 +87,11 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-nextcloud test coverage reports to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: testreports/interop/clover.xml
+          files: testreports/interop/clover.xml
           flags: interop
           name: Carddavclient nextcloud interoperability test coverage
-          fail_ci_if_error: false
 
   interop-owncloud:
     strategy:
@@ -122,7 +120,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up CI environment
         uses: ./.github/actions/setup
         with:
@@ -130,12 +128,11 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-owncloud test coverage reports to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: testreports/interop/clover.xml
+          files: testreports/interop/clover.xml
           flags: interop
           name: Carddavclient owncloud interoperability test coverage
-          fail_ci_if_error: false
 
   interop-radicale:
     runs-on: ubuntu-20.04
@@ -146,7 +143,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Start Radicale
         run: |
           mkdir -p ${{ github.workspace }}/.github/configs/radicale/data
@@ -162,12 +159,11 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-radicale test coverage reports to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: testreports/interop/clover.xml
+          files: testreports/interop/clover.xml
           flags: interop
           name: Carddavclient radicale interoperability test coverage
-          fail_ci_if_error: false
 
   interop-davical:
     runs-on: ubuntu-20.04
@@ -211,7 +207,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up CI environment
         uses: ./.github/actions/setup
         with:
@@ -222,12 +218,11 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-davical test coverage reports to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: testreports/interop/clover.xml
+          files: testreports/interop/clover.xml
           flags: interop
           name: Carddavclient Davical interoperability test coverage
-          fail_ci_if_error: false
 
   interop-icloud:
     runs-on: ubuntu-20.04
@@ -238,7 +233,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up CI environment
         uses: ./.github/actions/setup
         with:
@@ -250,12 +245,11 @@ jobs:
           ICLOUD_URL_ABOOK0: ${{ secrets.ICLOUD_URL_ABOOK0 }}
         run: make tests-interop
       - name: Upload interop-iCloud test coverage reports to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: testreports/interop/clover.xml
+          files: testreports/interop/clover.xml
           flags: interop
           name: Carddavclient iCloud interoperability test coverage
-          fail_ci_if_error: false
 
   interop-google:
     runs-on: ubuntu-20.04
@@ -266,7 +260,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up CI environment
         uses: ./.github/actions/setup
         with:
@@ -278,12 +272,11 @@ jobs:
           GOOGLE_URL_ABOOK0: ${{ secrets.GOOGLE_URL_ABOOK0 }}
         run: make tests-interop
       - name: Upload interop-Google test coverage reports to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: testreports/interop/clover.xml
+          files: testreports/interop/clover.xml
           flags: interop
           name: Carddavclient Google interoperability test coverage
-          fail_ci_if_error: false
 
   interop-baikal:
     strategy:
@@ -306,7 +299,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up CI environment
         uses: ./.github/actions/setup
         with:
@@ -317,9 +310,8 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-baikal test coverage reports to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: testreports/interop/clover.xml
+          files: testreports/interop/clover.xml
           flags: interop
           name: Carddavclient Baikal interoperability test coverage
-          fail_ci_if_error: false

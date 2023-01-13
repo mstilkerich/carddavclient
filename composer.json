@@ -40,8 +40,7 @@
         }
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.5.1",
-        "phpcompatibility/php-compatibility": "*",
+        "phpcompatibility/php-compatibility": "dev-develop",
         "dealerdirect/phpcodesniffer-composer-installer": ">= 0.7.0",
         "phpunit/phpunit": "~9",
         "phpunit/phpcov": "*",

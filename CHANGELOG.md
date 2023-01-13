@@ -1,6 +1,6 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
-## Version 1.3
+## Version 1.3.0 (to 1.2.3)
 
 - New APIs AddressbookCollection::getDisplayName() and AddressbookCollection::getDescription()
 - Widen dependency on psr/log to include all v1-v3 versions. To enable this, remove dev-dependency on wa72/simplelogger

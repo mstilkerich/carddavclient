@@ -167,7 +167,7 @@ final class SyncTestHandler implements SyncHandler
         $numChg = '{' . $numChgMin . ',' . $numChgMax . '}';
 
         Assert::assertMatchesRegularExpression(
-            "/^D${numDel}C${numChg}F$/",
+            "/^D{$numDel}C{$numChg}F$/",
             $this->opSequence,
             "Delete must be reported before changes"
         );

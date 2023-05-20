@@ -17,7 +17,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 /**
  * Contains static deserializer functions to be used with Sabre/XML.
  *
- * @psalm-type DeserializedElem = array {
+ * @psalm-type DeserializedElem = array{
  *   name: string,
  *   attributes: array<string, string>,
  *   value: mixed

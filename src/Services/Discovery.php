@@ -22,7 +22,7 @@ use MStilkerich\CardDavClient\{Account, AddressbookCollection, CardDavClient, Co
  * @psalm-type Server = array{
  *   host: string,
  *   port: string,
- *   scheme: 'http' | 'https',
+ *   scheme: string,
  *   dnsrr?: string,
  *   userinput?: bool
  * }

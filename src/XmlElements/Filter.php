@@ -114,6 +114,7 @@ class Filter implements \Sabre\Xml\XmlSerializable
         foreach ($conditions as $idx => $condition) {
             if (is_string($idx)) {
                 // simple form - single condition only
+                /** @psalm-var SimpleCondition $condition */
                 $this->propFilters[] = new PropFilter($idx, [$condition]);
             } elseif (is_array($condition) && count($condition) == 2) {
                 // elaborate form [ property name, list of simple conditions ]

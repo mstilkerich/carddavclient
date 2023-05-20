@@ -18,11 +18,11 @@ use Psr\Log\{LoggerInterface, NullLogger};
  *
  * @package Public\Infrastructure
  *
- * @psalm-type LibOptionsInput = array {
+ * @psalm-type LibOptionsInput = array{
  *   guzzle_logformat?: string,
  * }
  *
- * @psalm-type LibOptions = array {
+ * @psalm-type LibOptions = array{
  *   guzzle_logformat: string,
  * }
  */
@@ -57,7 +57,7 @@ class Config
      * null for any logger to disable the corresponding logging.
      *
      * The $options parameter allows to override the default behavior of the library in various options. It is an
-     * associative array that may have the following keys and values::
+     * associative array that may have the following keys and values:
      *   - guzzle_logformat(string):
      *     Value is a string defining the HTTP log format when Guzzle is used as HTTP client library. See the
      *     documentation of the Guzzle MessageFormatter class for the available placeholders. This class offers two

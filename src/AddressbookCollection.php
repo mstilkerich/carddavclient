@@ -22,7 +22,7 @@ use MStilkerich\CardDavClient\XmlElements\{Filter,ResponsePropstat,ResponseStatu
  * @psalm-import-type SimpleConditions from Filter
  * @psalm-import-type ComplexConditions from Filter
  *
- * @psalm-type VcardValidateResult = array {
+ * @psalm-type VcardValidateResult = array{
  *   level: int,
  *   message: string,
  *   node: \Sabre\VObject\Component | \Sabre\VObject\Property

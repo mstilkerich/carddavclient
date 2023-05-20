@@ -26,7 +26,7 @@
         "psr/http-message": "^1.0",
         "psr/log": "^1.0 || ^2.0 || ^3.0",
         "sabre/vobject": "^3.3.5 || ^4.0.0",
-        "sabre/xml": "^2.2 || ^3.0.0",
+        "sabre/xml": "^2.2 || ^3.0.0 || ^4.0.0",
         "sabre/uri": "^2.2"
     },
     "autoload": {
@@ -44,7 +44,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": ">= 0.7.0",
         "phpunit/phpunit": "~9",
         "phpunit/phpcov": "*",
-        "vimeo/psalm": "^5.0",
+        "vimeo/psalm": "~5.11.0",
         "psalm/plugin-phpunit": "*",
         "alexeyshockov/guzzle-psalm-plugin": "*"
     },

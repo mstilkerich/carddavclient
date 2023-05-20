@@ -7,8 +7,9 @@
 /composer.lock
 /vendor
 /testreports
-/tests/Interop/AccountData.php
+/tests/Interop/AccountData*.php
 /xml
 /doc/api
 .DS_Store
 /.idea/
+/tools/

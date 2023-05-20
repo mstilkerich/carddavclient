@@ -19,7 +19,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *
  * @psalm-import-type DeserializedElem from Deserializers
  *
- * @psalm-type PropTypes = array {
+ * @psalm-type PropTypes = array{
  *   '{DAV:}add-member'?: string,
  *   '{DAV:}current-user-principal'?: string,
  *   '{DAV:}getetag'?: string,
@@ -170,8 +170,8 @@ class Prop implements \Sabre\Xml\XmlDeserializable
 
             // Special handling
             case XmlEN::SUPPORTED_ADDRDATA:
-                if (!isset($this->props[$name])) {
-                    $this->props[$name] = [];
+                if (!isset($this->props[XmlEN::SUPPORTED_ADDRDATA])) {
+                    $this->props[XmlEN::SUPPORTED_ADDRDATA] = [];
                 }
 
                 if (is_array($deserElem["value"])) {
@@ -184,7 +184,7 @@ class Prop implements \Sabre\Xml\XmlDeserializable
                                     $addrData[$a] = $addrDataXml[$a];
                                 }
                             }
-                            $this->props[$name][] = $addrData;
+                            $this->props[XmlEN::SUPPORTED_ADDRDATA][] = $addrData;
                         }
                     }
                 } else {

@@ -27,7 +27,7 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
  * So for now, this is not compliant with PSR-18 for simplicity, but we aim at staying close to the definition
  * considering a potential later refactoring.
  *
- * @psalm-type RequestOptions = array {
+ * @psalm-type RequestOptions = array{
  *   allow_redirects?: bool,
  *   body?: string,
  *   headers?: array<string, string | list<string>>

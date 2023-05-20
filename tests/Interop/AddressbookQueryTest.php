@@ -32,7 +32,7 @@ final class AddressbookQueryTest extends TestCase
      * not know and changes the spelling of these two to uppercase.
      *
      * For IMPP, we can use X-SERVICE-TYPE=Jabber/Skype with schemes xmpp/skype, again in that spelling.
-     * @var list<list<array{string, string, array<string,string>}>>
+     * @var list<list<array{string, string, array<string, string|list<string>>}>>
      */
     private const SAMPLES = [
         // properties are added to prepared cards from TestInfrastructure::createVCard()

@@ -58,6 +58,7 @@ final class AccountData
         "Radicale" => [
             "username" => "citest",
             "password" => "citest",
+            "preemptive_basic_auth" => true,
             "discoveryUri" => "http://localhost:5232/",
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_RADICALE,
@@ -73,7 +74,8 @@ final class AccountData
         "Baikal" => [
             "username" => "citest",
             "password" => "citest",
-            "discoveryUri" => "http://localhost:8080/",
+            "discoveryUri" => "https://localhost:8080/",
+            "verify" => false,
             "syncAllowExtraChanges" => false,
               // as of Baikal 0.8.0, the shipped Sabre/DAV version 4.1.4 still does not contain the fix for this bug
               // Bug is fixed in Sabre/DAV 4.1.5
@@ -129,7 +131,7 @@ final class AccountData
         ],
         "Baikal_0" => [
             "account" => "Baikal",
-            "url" => "http://localhost:8080/dav.php/addressbooks/citest/default/",
+            "url" => "https://localhost:8080/dav.php/addressbooks/citest/default/",
             "displayname" => "Default Address Book",
             "description" => "Default Address Book for citest",
         ],

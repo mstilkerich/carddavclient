@@ -16,17 +16,24 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 /**
  * Represents an account on a CardDAV Server.
  *
- * @psalm-import-type Credentials from HttpClientAdapter
+ * @psalm-type HttpOptions = array{
+ *   username?: string,
+ *   password?: string,
+ *   bearertoken?: string,
+ *   verify?: bool|string,
+ *   preemptive_basic_auth?: bool,
+ * }
+ * @psalm-type SerializedAccount = HttpOptions & array{discoveryUri: string, baseUrl?: ?string}
  *
  * @package Public\Entities
  */
 class Account implements \JsonSerializable
 {
     /**
-     * The credentials for authentication, null to disable authentication.
-     * @var Credentials
+     * Options for the HTTP communication, including authentication credentials.
+     * @var HttpOptions
      */
-    private $credentials;
+    private $httpOptions;
 
     /**
      * URI originally used to discover the account.
@@ -49,17 +56,25 @@ class Account implements \JsonSerializable
      *  The URI to use for service discovery. This can be a partial URI, in the simplest case just a domain name. Note
      *  that if no protocol is given, https will be used. Unencrypted HTTP will only be done if explicitly given (e.g.
      *  _http://example.com_).
-     * @psalm-param string|Credentials $credentials
-     * @param string|array $credentials
-     *  The credentials to use for authentication.
+     * @psalm-param string|HttpOptions $httpOptions
+     * @param string|array $httpOptions
+     *  The options for HTTP communication, including authentication credentials.
      *  An array with any of the keys (if no password is needed, the array may be empty, e.g. GSSAPI/Kerberos):
      *    - username/password: The username and password for mechanisms requiring such credentials (e.g. Basic, Digest)
      *    - bearertoken: The token to use for Bearer authentication (OAUTH2)
+     *    - verify: How to verify the server-side HTTPS certificate. True (the default) enables certificate
+     *                  verification against the default CA bundle of the OS, false disables certificate verification
+     *                  (note that this defeats the purpose of HTTPS and opens the door for man in the middle attacks).
+     *                  Set to the path of a PEM file containing a custom CA bundle to perform verification against a
+     *                  custom set of certification authorities.
+     *    - preemptive_basic_auth: Set to true to always submit an Authorization header for HTTP Basic authentication
+     *      (username and password options also required in this case) even if not challenged by the server. This may be
+     *      required in rare use cases where the server allows unauthenticated access and will not challenge the client.
      *
      *  Deprecated: username as string for authentication mechanisms requiring username / password.
      * @param string $password
      *  Deprecated: The password to use for authentication. This parameter is deprecated, include the password in the
-     *  $credentials parameter. This parameter is ignored unless $credentials is used in its deprecated string form.
+     *  $httpOptions parameter. This parameter is ignored unless $httpOptions is used in its deprecated string form.
      * @param string $baseUrl
      *  The URL of the CardDAV server without the path part (e.g. _https://carddav.example.com:443_). This URL is used
      *  as base URL for the underlying {@see CardDavClient} that can be retrieved using {@see Account::getClient()}.
@@ -67,18 +82,18 @@ class Account implements \JsonSerializable
      *  discovery with the {@see Services\Discovery} service, this parameter can be omitted.
      * @api
      */
-    public function __construct(string $discoveryUri, $credentials, string $password = "", string $baseUrl = null)
+    public function __construct(string $discoveryUri, $httpOptions, string $password = "", string $baseUrl = null)
     {
         $this->discoveryUri = $discoveryUri;
         $this->baseUrl = $baseUrl;
 
-        if (is_string($credentials)) {
-            $this->credentials = [
-                'username' => $credentials,
+        if (is_string($httpOptions)) {
+            $this->httpOptions = [
+                'username' => $httpOptions,
                 'password' => $password
             ];
         } else {
-            $this->credentials = $credentials;
+            $this->httpOptions = $httpOptions;
         }
     }
 
@@ -87,8 +102,10 @@ class Account implements \JsonSerializable
      *
      * This can be used to reconstruct/deserialize an Account from a stored (JSON) representation.
      *
-     * @param array<string,?string> $props An associative array containing the Account attributes.
-     *  Keys: `discoveryUri`, `username`, `password`, `baseUrl` with the meaning from {@see Account::__construct()}
+     * @psalm-param SerializedAccount $props
+     * @param array<string,?string|bool> $props An associative array containing the Account attributes.
+     *  Keys with the meaning from {@see Account::__construct()}:
+     *  `discoveryUri`, `baseUrl`, `username`, `password`, `bearertoken`, `verify`, `preemptive_basic_auth`
      * @see Account::jsonSerialize()
      * @api
      */
@@ -101,22 +118,18 @@ class Account implements \JsonSerializable
             }
         }
 
-        $credProps = [ 'username', 'password', 'bearertoken' ];
-        $credentials = [];
-        foreach ($credProps as $prop) {
-            if (isset($props[$prop])) {
-                $credentials[$prop] = $props[$prop];
-            }
-        }
+        $discoveryUri = $props["discoveryUri"];
+        $baseUrl = $props["baseUrl"] ?? null;
+        unset($props["discoveryUri"], $props["baseUrl"]);
 
-        /** @psalm-var array{discoveryUri: string} & array<string,string> $props */
-        return new Account($props["discoveryUri"], $credentials, "", $props["baseUrl"] ?? null);
+        return new Account($discoveryUri, $props, "", $baseUrl);
     }
 
     /**
      * Allows to serialize an Account object to JSON.
      *
-     * @return array<string, ?string> Associative array of attributes to serialize.
+     * @psalm-return SerializedAccount
+     * @return array<string, ?string|bool> Associative array of attributes to serialize.
      * @see Account::constructFromArray()
      */
     public function jsonSerialize(): array
@@ -124,7 +137,7 @@ class Account implements \JsonSerializable
         return [
             "discoveryUri" => $this->discoveryUri,
             "baseUrl" => $this->baseUrl
-        ] + $this->credentials;
+        ] + $this->httpOptions;
     }
 
     /**
@@ -140,7 +153,7 @@ class Account implements \JsonSerializable
     public function getClient(?string $baseUrl = null): CardDavClient
     {
         $clientUri = $baseUrl ?? $this->getUrl();
-        return new CardDavClient($clientUri, $this->credentials);
+        return new CardDavClient($clientUri, $this->httpOptions);
     }
 
     /**
@@ -182,7 +195,7 @@ class Account implements \JsonSerializable
     public function __toString(): string
     {
         $str = $this->discoveryUri;
-        $str .= ", user: " . ($this->credentials['username'] ?? "");
+        $str .= ", user: " . ($this->httpOptions['username'] ?? "");
         $str .= ", CardDAV URI: ";
         $str .= $this->baseUrl ?? "not discovered yet";
         return $str;

@@ -33,11 +33,7 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
  *   headers?: array<string, string | list<string>>
  * }
  *
- * @psalm-type Credentials = array{
- *   username?: string,
- *   password?: string,
- *   bearertoken?: string
- * }
+ * @psalm-import-type HttpOptions from Account
  *
  * @package Internal\Communication
  */
@@ -60,20 +56,20 @@ abstract class HttpClientAdapter
     protected $baseUri;
 
     /**
-     * The credentials to use for authentication
-     * @var Credentials
+     * The HTTP options to use for communication, including authentication credentials.
+     * @var HttpOptions
      */
-    protected $credentials;
+    protected $httpOptions;
 
     /** Constructs a HttpClientAdapter object.
      *
      * @param string $base_uri Base URI to be used when relative URIs are given to requests.
-     * @param Credentials $credentials Credentials used to authenticate with the server.
+     * @param HttpOptions $httpOptions Credentials used to authenticate with the server.
      */
-    protected function __construct(string $base_uri, array $credentials)
+    protected function __construct(string $base_uri, array $httpOptions)
     {
         $this->baseUri = $base_uri;
-        $this->credentials = $credentials;
+        $this->httpOptions = $httpOptions;
     }
 
     /**
@@ -136,7 +132,7 @@ abstract class HttpClientAdapter
     {
         if (isset(self::NEEDED_AUTHNFO[$scheme])) {
             foreach (self::NEEDED_AUTHNFO[$scheme] as $c) {
-                if (!isset($this->credentials[$c])) {
+                if (!isset($this->httpOptions[$c])) {
                     return false;
                 }
             }

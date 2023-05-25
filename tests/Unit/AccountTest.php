@@ -90,6 +90,7 @@ final class AccountTest extends TestCase
         ];
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage("does not contain required property discoveryUri");
+        /** @psalm-suppress InvalidArgument intended invalid argument passed for test */
         Account::constructFromArray($accSerial);
     }
 

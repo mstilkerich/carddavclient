@@ -22,7 +22,7 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
 /**
  * Adapter for the Guzzle HTTP client library.
  *
- * @psalm-import-type Credentials from HttpClientAdapter
+ * @psalm-import-type HttpOptions from Account
  * @psalm-import-type RequestOptions from HttpClientAdapter
  *
  * @psalm-type GuzzleAllowRedirectCfg = array{
@@ -95,11 +95,11 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
     /** Constructs a HttpClientAdapterGuzzle object.
      *
      * @param string $base_uri Base URI to be used when relative URIs are given to requests.
-     * @param Credentials $credentials Credentials used to authenticate with the server.
+     * @param HttpOptions $httpOptions Options for HTTP communication, including authentication credentials.
      */
-    public function __construct(string $base_uri, array $credentials)
+    public function __construct(string $base_uri, array $httpOptions)
     {
-        parent::__construct($base_uri, $credentials);
+        parent::__construct($base_uri, $httpOptions);
 
         if (!isset(self::$schemeToCurlOpt)) {
             self::$schemeToCurlOpt = [];
@@ -111,6 +111,14 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                 if (defined('CURLAUTH_NEGOTIATE')) {
                     self::$schemeToCurlOpt['negotiate'] = CURLAUTH_NEGOTIATE;
                 }
+            }
+        }
+
+        if ($httpOptions['preemptive_basic_auth'] ?? false) {
+            if ($this->checkCredentialsAvailable('basic')) {
+                $this->authScheme = 'basic';
+            } else {
+                Config::$logger->warning("Ignoring option preemptive_basic_auth as username/password are not set");
             }
         }
 
@@ -273,7 +281,9 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
     {
         $guzzleOptions = [];
 
-        foreach ([ "headers", "body" ] as $copyopt) {
+        $options = $options + $this->httpOptions;
+
+        foreach ([ "headers", "body", "verify" ] as $copyopt) {
             if (isset($options[$copyopt])) {
                 $guzzleOptions[$copyopt] = $options[$copyopt];
             }
@@ -297,8 +307,8 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
 
             if (in_array($authScheme, self::GUZZLE_KNOWN_AUTHSCHEMES)) {
                 $guzzleOptions['auth'] = [
-                    $this->credentials['username'] ?? "",
-                    $this->credentials['password'] ?? "",
+                    $this->httpOptions['username'] ?? "",
+                    $this->httpOptions['password'] ?? "",
                     $authScheme
                 ];
             } elseif (isset(self::$schemeToCurlOpt[$authScheme])) {
@@ -307,12 +317,12 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                 }
                 $guzzleOptions["curl"] = [
                     CURLOPT_HTTPAUTH => self::$schemeToCurlOpt[$authScheme],
-                    CURLOPT_USERNAME => $this->credentials['username'] ?? "",
-                    CURLOPT_PASSWORD => $this->credentials['password'] ?? ""
+                    CURLOPT_USERNAME => $this->httpOptions['username'] ?? "",
+                    CURLOPT_PASSWORD => $this->httpOptions['password'] ?? ""
                 ];
             } else { // handled by HttpClientAdapterGuzzle directly
-                if ($authScheme == "bearer" && isset($this->credentials['bearertoken'])) {
-                    $authHeader = sprintf("%s %s", 'Bearer', $this->credentials['bearertoken']);
+                if ($authScheme == "bearer" && isset($this->httpOptions['bearertoken'])) {
+                    $authHeader = sprintf("%s %s", 'Bearer', $this->httpOptions['bearertoken']);
                     /** @psalm-var GuzzleRequestOptions $guzzleOptions */
                     $guzzleOptions["headers"]["Authorization"] = $authHeader;
                 }

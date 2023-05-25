@@ -27,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  *   discoveryUri: string,
  *   syncAllowExtraChanges: bool,
  *   featureSet: int,
+ *   verify?: bool|string,
+ *   preemptive_basic_auth?: bool,
  * }
  *
  * @psalm-type TestAddressbook = array{
@@ -37,7 +39,7 @@ use PHPUnit\Framework\TestCase;
  *   readonly?: bool
  * }
  *
- * @psalm-import-type Credentials from HttpClientAdapter
+ * @psalm-import-type HttpOptions from Account
  */
 
 final class TestInfrastructureSrv
@@ -177,7 +179,7 @@ final class TestInfrastructureSrv
 
     /**
      * @psalm-param TestAccount $cfg
-     * @psalm-return Credentials
+     * @psalm-return HttpOptions
      */
     public static function makeCredentials(array $cfg): array
     {
@@ -187,6 +189,14 @@ final class TestInfrastructureSrv
         }
         if (isset($cfg['password'])) {
             $cred['password'] = self::replaceEnvVar($cfg['password']);
+        }
+
+        if (isset($cfg['verify'])) {
+            $cred['verify'] = $cfg['verify'];
+        }
+
+        if (isset($cfg['preemptive_basic_auth'])) {
+            $cred['preemptive_basic_auth'] = $cfg['preemptive_basic_auth'];
         }
 
         if (

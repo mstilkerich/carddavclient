@@ -120,9 +120,9 @@ class Discovery
                 $principalUri = $account->findCurrentUserPrincipal($contextpath);
                 if (isset($principalUri)) {
                     // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
-                    $addressbookHomeUri = $account->findAddressbookHome($principalUri);
-                    if (isset($addressbookHomeUri)) {
-                        try {
+                    $addressbookHomeUris = $account->findAddressbookHomes($principalUri);
+                    try {
+                        foreach ($addressbookHomeUris ?? [] as $addressbookHomeUri) {
                             // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
                             $addressbookHome = new WebDavCollection($addressbookHomeUri, $account);
 
@@ -131,13 +131,13 @@ class Discovery
                                     $addressbooks[] = $abookCandidate;
                                 }
                             }
-
-                            // We found a valid addressbook home. If it contains no addressbooks, this is fine and the
-                            // result of the discovery is an empty set.
-                            return $addressbooks;
-                        } catch (\Exception $e) {
-                            Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
                         }
+
+                        // We found valid addressbook homes. If they contain no addressbooks, this is fine and the
+                        // result of the discovery is an empty set.
+                        return $addressbooks;
+                    } catch (\Exception $e) {
+                        Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
                     }
                 }
             }

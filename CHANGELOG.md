@@ -1,5 +1,13 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.4.0 (to 1.3.0)
+
+- Support servers with multiple addressbook home locations for one principal in the Discovery service.
+- Support configuration of server SSL certificate validation against custom CA (or disable verification)
+- Support preemptive basic authentication, i.e. send basic authentication Authorization header even if not requested by
+  server. This is useful in rare use cases where the server allows unauthenticated access and would not challenge the
+  client. It might also be useful to reduce the number of requests if the authentication scheme is known to the client.
+
 ## Version 1.3.0 (to 1.2.3)
 
 - New APIs AddressbookCollection::getDisplayName() and AddressbookCollection::getDescription()

@@ -279,8 +279,6 @@ class CardDavClient
             XmlEN::ADDRDATA => $this->determineReqCardProps($requestedVCardProps)
         ];
 
-
-        /** @psalm-suppress InvalidArgument See https://github.com/sabre-io/xml/issues/237 */
         $body = $srv->write(
             XmlEN::REPORT_MULTIGET,
             array_merge(
@@ -348,7 +346,6 @@ class CardDavClient
             $reportOptions[] = [ 'name' => XmlEN::LIMIT, 'value' => [ 'name' => XmlEN::NRESULTS, 'value' => $limit ] ];
         }
 
-        /** @psalm-suppress InvalidArgument See https://github.com/sabre-io/xml/issues/237 */
         $body = $srv->write(XmlEN::REPORT_QUERY, $reportOptions);
 
         $response = $this->httpClient->sendRequest('REPORT', $addressbookUri, [

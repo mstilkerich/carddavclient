@@ -16,6 +16,8 @@ use MStilkerich\CardDavClient\{Account,AddressbookCollection,Config,HttpClientAd
 use PHPUnit\Framework\TestCase;
 
 /**
+ * @psalm-import-type HttpOptions from Account
+ *
  * @psalm-type TestAccount = array{
  *   username?: string,
  *   password?: string,
@@ -27,8 +29,7 @@ use PHPUnit\Framework\TestCase;
  *   discoveryUri: string,
  *   syncAllowExtraChanges: bool,
  *   featureSet: int,
- *   verify?: bool|string,
- *   preemptive_basic_auth?: bool,
+ *   httpOptions?: HttpOptions,
  * }
  *
  * @psalm-type TestAddressbook = array{
@@ -38,8 +39,6 @@ use PHPUnit\Framework\TestCase;
  *   description: ?string,
  *   readonly?: bool
  * }
- *
- * @psalm-import-type HttpOptions from Account
  */
 
 final class TestInfrastructureSrv
@@ -191,12 +190,8 @@ final class TestInfrastructureSrv
             $cred['password'] = self::replaceEnvVar($cfg['password']);
         }
 
-        if (isset($cfg['verify'])) {
-            $cred['verify'] = $cfg['verify'];
-        }
-
-        if (isset($cfg['preemptive_basic_auth'])) {
-            $cred['preemptive_basic_auth'] = $cfg['preemptive_basic_auth'];
+        if (isset($cfg['httpOptions'])) {
+            $cred = $cred + $cfg['httpOptions'];
         }
 
         if (

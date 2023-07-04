@@ -58,7 +58,9 @@ final class AccountData
         "Radicale" => [
             "username" => "citest",
             "password" => "citest",
-            "preemptive_basic_auth" => true,
+            "httpOptions" => [
+                "preemptive_basic_auth" => true,
+            ],
             "discoveryUri" => "http://localhost:5232/",
             "syncAllowExtraChanges" => false,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_RADICALE,

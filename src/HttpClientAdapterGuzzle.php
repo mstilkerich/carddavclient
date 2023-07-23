@@ -36,6 +36,7 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
  *
  * @psalm-type GuzzleRequestOptions = array{
  *   headers?: array<string, string | list<string>>,
+ *   query?: array<string, string>,
  *   body?: string | resource | \Psr\Http\Message\StreamInterface,
  *   allow_redirects?: bool | GuzzleAllowRedirectCfg,
  *   auth?: null | array{string, string} | array{string, string, string},
@@ -281,9 +282,18 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
     {
         $guzzleOptions = [];
 
+        // First we need to merge multi-value options, e.g. HTTP headers. We do not attempt to merge individual
+        // values though, the values in options take precedence.
+        if (isset($options['headers']) && isset($this->httpOptions['headers'])) {
+            $options['headers'] = $options['headers'] + $this->httpOptions['headers'];
+        }
+
+        // Now merge the request options with the default options. In case of merged options above, options will already
+        // contain the result of the merge in case both arrays have an entry for it.
         $options = $options + $this->httpOptions;
 
-        foreach ([ "headers", "body", "verify" ] as $copyopt) {
+        // These options are also known to Guzzle and can directly be passed along
+        foreach ([ "headers", "body", "verify", "query" ] as $copyopt) {
             if (isset($options[$copyopt])) {
                 $guzzleOptions[$copyopt] = $options[$copyopt];
             }

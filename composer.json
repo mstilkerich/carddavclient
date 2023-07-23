@@ -46,7 +46,8 @@
         "phpunit/phpcov": "*",
         "vimeo/psalm": "~5.13.0",
         "psalm/plugin-phpunit": "*",
-        "alexeyshockov/guzzle-psalm-plugin": "*"
+        "alexeyshockov/guzzle-psalm-plugin": "*",
+        "donatj/mock-webserver": "*"
     },
     "extra": {
         "branch-alias": {

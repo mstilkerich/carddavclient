@@ -7,6 +7,8 @@
 - Support preemptive basic authentication, i.e. send basic authentication Authorization header even if not requested by
   server. This is useful in rare use cases where the server allows unauthenticated access and would not challenge the
   client. It might also be useful to reduce the number of requests if the authentication scheme is known to the client.
+- Support specifying additional HTTP headers and query string options to be used with every request sent in association
+  with an account.
 
 ## Version 1.3.0 (to 1.2.3)
 

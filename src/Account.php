@@ -22,7 +22,10 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *   bearertoken?: string,
  *   verify?: bool|string,
  *   preemptive_basic_auth?: bool,
+ *   query?: array<string, string>,
+ *   headers?: array<string, string | list<string>>,
  * }
+ *
  * @psalm-type SerializedAccount = HttpOptions & array{discoveryUri: string, baseUrl?: ?string}
  *
  * @package Public\Entities
@@ -70,6 +73,10 @@ class Account implements \JsonSerializable
      *    - preemptive_basic_auth: Set to true to always submit an Authorization header for HTTP Basic authentication
      *      (username and password options also required in this case) even if not challenged by the server. This may be
      *      required in rare use cases where the server allows unauthenticated access and will not challenge the client.
+     *    - query: Query options to append to every URL queried for this account, as an associative array of query
+     *             options and values.
+     *    - headers: Headers to add to each request sent for this account, an associative array mapping header name to
+     *               header value (string) or header values (list<string>).
      *
      *  Deprecated: username as string for authentication mechanisms requiring username / password.
      * @param string $password

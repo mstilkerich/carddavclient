@@ -200,6 +200,7 @@ jobs:
           DBA_PGUSER: postgres
           DBA_PGPASSWORD: postgres
           DAVICAL_ADMIN_PASS: admin
+          RUN_MIGRATIONS_AT_STARTUP: true
         options: >-
           --health-cmd "nc -z localhost 80"
           --health-interval 10s

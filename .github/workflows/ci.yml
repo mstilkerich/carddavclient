@@ -189,13 +189,17 @@ jobs:
           - 5432:5432
 
       davical:
-        image: tuxnvape/davical-standalone
+        image: fintechstudios/davical
         env:
+          PGHOST: postgres
+          PGPASSWORD: postgres
+          PGUSER: postgres
           HOST_NAME: davical.localdomain
-          PGSQL_ROOT_PASS: postgres
-          PASSDAVDB: postgres
-          DBHOST: postgres
-          ADMINDAVICALPASS: admin
+          ROOT_PGUSER: postgres
+          ROOT_PGPASSWORD: postgres
+          DBA_PGUSER: postgres
+          DBA_PGPASSWORD: postgres
+          DAVICAL_ADMIN_PASS: admin
         options: >-
           --health-cmd "nc -z localhost 80"
           --health-interval 10s

@@ -176,8 +176,9 @@ jobs:
 
     services:
       postgres:
-        image: postgres:12-alpine
+        image: postgres:15-alpine
         env:
+          POSTGRES_USER: 'postgres'
           POSTGRES_PASSWORD: postgres
         options: >-
           --health-cmd pg_isready
@@ -192,17 +193,13 @@ jobs:
         image: fintechstudios/davical
         env:
           PGHOST: postgres
-          PGPASSWORD: postgres
-          PGUSER: postgres
-          HOST_NAME: davical.localdomain
+          PGPASSWORD: davical
+          RUN_MIGRATIONS_AT_STARTUP: true
           ROOT_PGUSER: postgres
           ROOT_PGPASSWORD: postgres
-          DBA_PGUSER: postgres
-          DBA_PGPASSWORD: postgres
           DAVICAL_ADMIN_PASS: admin
-          RUN_MIGRATIONS_AT_STARTUP: true
         options: >-
-          --health-cmd "nc -z localhost 80"
+          --health-cmd "nc -z localhost 8088"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5

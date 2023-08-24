@@ -19,6 +19,7 @@ final class AccountData
 {
     /** @var array<string, TestAccount> */
     public const ACCOUNTS = [
+        /*
         "Google" => [
             "username" => "%GOOGLE_USER%",
             "password" => "%GOOGLE_PASSWORD%",
@@ -26,6 +27,7 @@ final class AccountData
             "syncAllowExtraChanges" => true,
             "featureSet" => TestInfrastructureSrv::SRVFEATS_GOOGLE,
         ],
+        */
         "iCloud" => [
             "username" => "%ICLOUD_USER%",
             "password" => "%ICLOUD_PASSWORD%",
@@ -86,12 +88,14 @@ final class AccountData
 
     /** @var array<string, TestAddressbook> */
     public const ADDRESSBOOKS = [
+        /*
         "Google" => [
             "account" => "Google",
             "url" => "%GOOGLE_URL_ABOOK0%",
             "displayname" => "Address Book",
             "description" => 'My Contacts',
         ],
+        */
         "iCloud" => [
             "account" => "iCloud",
             "url" => "%ICLOUD_URL_ABOOK0%",

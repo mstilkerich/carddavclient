@@ -199,7 +199,7 @@ jobs:
           ROOT_PGPASSWORD: postgres
           DAVICAL_ADMIN_PASS: admin
         options: >-
-          --health-cmd "nc -z localhost 8088"
+          --health-cmd "sleep 10"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5

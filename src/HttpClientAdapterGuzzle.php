@@ -167,8 +167,8 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             $response = $this->client->request($method, $uri, $guzzleOptions);
 
             // Workaround for Sabre/DAV vs. Curl incompatibility
+            // (1) Sometimes, a REPORT is directly rejected without authentication attempt
             if ($doAuth && $this->checkSabreCurlIncompatibility($method, $response)) {
-                Config::$logger->debug("Attempting workaround for Sabre/Dav / curl incompatibility");
                 $guzzleOptions = $this->prepareGuzzleOptions($options, $doAuth);
                 $response = $this->client->request($method, $uri, $guzzleOptions);
             }
@@ -183,6 +183,13 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                     $response = $this->client->request($method, $uri, $guzzleOptions);
 
                     if ($response->getStatusCode() != 401) {
+                        // (2) Othertimes, a REPORT without authentication is first quitted with a 401, but the
+                        //     subsequent digest authentication attempt then gets the empty-body 500 reply
+                        if ($this->checkSabreCurlIncompatibility($method, $response)) {
+                            $guzzleOptions = $this->prepareGuzzleOptions($options, $doAuth);
+                            $response = $this->client->request($method, $uri, $guzzleOptions);
+                        }
+
                         break;
                     } else {
                         $this->failedAuthSchemes[] = $scheme;
@@ -262,6 +269,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         ) {
             $body = (string) $response->getBody();
             if (strpos($body, "The input element to parse is empty. Do not attempt to parse") !== false) {
+                Config::$logger->debug("Attempting workaround for Sabre/Dav / curl incompatibility");
                 $this->authScheme = "curlany";
                 return true;
             }

@@ -50,6 +50,7 @@ jobs:
         with:
           files: testreports/unit/clover.xml
           flags: unittests
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient unit test coverage
 
   interop-nextcloud:
@@ -91,6 +92,7 @@ jobs:
         with:
           files: testreports/interop/clover.xml
           flags: interop
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient nextcloud interoperability test coverage
 
   interop-owncloud:
@@ -132,6 +134,7 @@ jobs:
         with:
           files: testreports/interop/clover.xml
           flags: interop
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient owncloud interoperability test coverage
 
   interop-radicale:
@@ -163,6 +166,7 @@ jobs:
         with:
           files: testreports/interop/clover.xml
           flags: interop
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient radicale interoperability test coverage
 
   interop-davical:
@@ -220,6 +224,7 @@ jobs:
         with:
           files: testreports/interop/clover.xml
           flags: interop
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient Davical interoperability test coverage
 
   interop-icloud:
@@ -247,6 +252,7 @@ jobs:
         with:
           files: testreports/interop/clover.xml
           flags: interop
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient iCloud interoperability test coverage
 
   interop-baikal:
@@ -285,4 +291,5 @@ jobs:
         with:
           files: testreports/interop/clover.xml
           flags: interop
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient Baikal interoperability test coverage

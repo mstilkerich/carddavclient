@@ -213,11 +213,13 @@ final class AddressbookCollectionTest extends TestCase
         $this->assertNotEmpty($cardETag);
         $vcard->NOTE = 'First update';
         $etagUpdated = $abook->updateCard($cardUri, $vcard, $cardETag);
+        $this->assertNotNull($etagUpdated); // null means update failed
 
         [ 'etag' => $etagGet, 'vcard' => $vcardGet ] = $abook->getCard($cardUri);
 
+
         // insertCards etag return is optional
-        if (!empty($etagUpdated)) {
+        if (strlen($etagUpdated) != 0) {
             $this->assertSame($etagUpdated, $etagGet);
         }
         TestInfrastructure::compareVCards($vcard, $vcardGet, true);

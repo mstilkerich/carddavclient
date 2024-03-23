@@ -112,11 +112,11 @@ class Sync
         if (!isset($syncResult)) {
             // Fall back to using the deprecated CTag property to determine whether a collection has changed if
             // sync-token is not supported
-            if (empty($newSyncToken)) {
+            if (!isset($newSyncToken)) {
                 $newSyncToken = $abook->getCTag();
             }
 
-            if (empty($prevSyncToken) || empty($newSyncToken) || ($prevSyncToken !== $newSyncToken)) {
+            if ((strlen($prevSyncToken) == 0) || is_null($newSyncToken) || ($prevSyncToken !== $newSyncToken)) {
                 Config::$logger->debug("Attempting sync by ETag comparison against local state of " . $abook->getUri());
                 $syncResult = $this->determineChangesViaETags($client, $abook, $handler);
             } else {

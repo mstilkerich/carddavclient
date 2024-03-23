@@ -44,7 +44,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": ">= 0.7.0",
         "phpunit/phpunit": "~9",
         "phpunit/phpcov": "*",
-        "vimeo/psalm": "~5.13.0",
+        "vimeo/psalm": "~5.23.0",
         "psalm/plugin-phpunit": "*",
         "alexeyshockov/guzzle-psalm-plugin": "*",
         "donatj/mock-webserver": "*"

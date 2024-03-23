@@ -25,8 +25,8 @@ if [ -n "$ABOOKDESC" ]; then
 fi
 
 curl --no-progress-meter $AUTH -X MKCOL "$ABOOKURL" -v \
-	-H 'Content-Type: application/xml' \
-	--data \
+    -H 'Content-Type: application/xml' \
+    --data \
 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
 <mkcol xmlns=\"DAV:\" xmlns:CARD=\"urn:ietf:params:xml:ns:carddav\">
   <set>
@@ -40,3 +40,5 @@ curl --no-progress-meter $AUTH -X MKCOL "$ABOOKURL" -v \
     </prop>
   </set>
 </mkcol>"
+
+# vim: ts=4:sw=4:expandtab:fenc=utf8:ff=unix:tw=120

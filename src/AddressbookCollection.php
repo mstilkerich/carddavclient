@@ -166,7 +166,7 @@ class AddressbookCollection extends WebDavCollection
     /**
      * Retrieves the getctag property for this addressbook collection (if supported by the server).
      *
-     * @return string The getctag property, or null if not provided by the server.
+     * @return ?string The getctag property, or null if not provided by the server.
      * @api
      */
     public function getCTag(): ?string

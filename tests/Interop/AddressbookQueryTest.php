@@ -425,6 +425,11 @@ final class AddressbookQueryTest extends TestCase
             $expCards = [ 0 ];
         }
         $abook = $this->createSamples($abookname);
+
+        // #27: Have one test that tries a query report on a fresh AddressbookCollection object, so that the underlying
+        // HttpClientAdapter has not negotiated the authentication scheme yet
+        $abook = new AddressbookCollection($abook->getUri(), $abook->getAccount());
+
         $result = $abook->query([['EMAIL', ['/doe/^', '/.com/$', 'matchAll' => true]]], [], false);
         $this->checkExpectedCards($abookname, $result, $expCards);
     }

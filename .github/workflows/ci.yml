@@ -56,7 +56,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextcloud-version: ['26', '27']
+        nextcloud-version: ['27', '28']
 
     runs-on: ubuntu-20.04
 

@@ -1,5 +1,10 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.4.1 (to 1.4.0)
+
+- Report requests to Sabre/DAV servers with Http-Digest authentication failed if issued from an
+  AddressbookCollection object that was not use for any other (non REPORT) requests before (Fixes #27).
+
 ## Version 1.4.0 (to 1.3.0)
 
 - Support servers with multiple addressbook home locations for one principal in the Discovery service.

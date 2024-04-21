@@ -20,7 +20,7 @@ is implemented. For known server issues, see the Known issues section below.
 - Radicale is the CardDAV implementation used by Synology DSM contacts app (again, there may be more I am not aware of).
 
 Feature                     | iCloud | Google | Sabre | Davical | Radicale | SOGo
-----------------------------|--------|--------|-------|---------|----------------
+----------------------------|--------|--------|-------|---------|----------|-----
 sync-collection             |   ✓    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓
 addressbook-multiget        |   ✓    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓
 Partial cards with multiget |   ✗    |   ✗    |   ✗   |   ✗     |   ✗      |  ✗
@@ -197,8 +197,7 @@ Because there are so many issues concerning the handling of the addressbook-quer
 BUG_PROPFILTER_PROPEXISTENCE_IGNORED | Queries for (non-)existence properties in the cards of interest yield wrong result
 --------|----------------------------------------------------------
 Affected servers / services | [SOGo](https://bugs.sogo.nu/view.php?id=5954)
-Description | In addressbook-query, the server yields wrong results when provided a prop-filter element without sub-elements (filter cards that HAVE the property), or with
-an is-not-defined sub-element (filter cards that DO NOT HAVE the property). SOGo will return all cards in response to such queries.
+Description | In addressbook-query, the server yields wrong results when provided a prop-filter element without sub-elements (filter cards that HAVE the property), or with an is-not-defined sub-element (filter cards that DO NOT HAVE the property). SOGo will return all cards in response to such queries.
 Affected operations | `AddressbookCollection::query()`
 User-visibile impact and possible workaround | The `query()` result may contain unexpected cards.
 

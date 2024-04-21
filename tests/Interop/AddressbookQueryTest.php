@@ -105,19 +105,34 @@ final class AddressbookQueryTest extends TestCase
         // so we will notice if we stick to that rule.
         $datasets = [
             // test whether a property is defined / not defined
-            'HasNoEmail' => [ ['EMAIL' => null], [ 2 ], 0, 0 ],
-            'HasEmail' => [ ['EMAIL' => '//'], [ 0, 1, 3 ], 0, 0 ],
+            'HasNoEmail' => [ ['EMAIL' => null], [ 2 ], TIS::BUG_PROPFILTER_PROPEXISTENCE_IGNORED, 0 ],
+            'HasEmail' => [ ['EMAIL' => '//'], [ 0, 1, 3 ], TIS::BUG_PROPFILTER_PROPEXISTENCE_IGNORED, 0 ],
             // check that property names are treated case insensitive
-            'HasNoEmailDiffCase' => [ ['email' => null], [ 2 ], TIS::BUG_CASESENSITIVE_NAMES, 0 ],
-            'HasEmailDiffCase' => [ ['email' => '//'], [ 0, 1, 3 ], TIS::BUG_CASESENSITIVE_NAMES, 0 ],
+            'HasNoEmailDiffCase' => [
+                ['email' => null],
+                [ 2 ],
+                TIS::BUG_CASESENSITIVE_NAMES | TIS::BUG_PROPFILTER_PROPEXISTENCE_IGNORED,
+                0
+            ],
+            'HasEmailDiffCase' => [
+                ['email' => '//'],
+                [ 0, 1, 3 ],
+                TIS::BUG_CASESENSITIVE_NAMES | TIS::BUG_PROPFILTER_PROPEXISTENCE_IGNORED,
+                0
+            ],
 
             // simple text matches against property values
-            'EmailEquals' => [ ['EMAIL' => '/johndoe@example.com/='], [ 0 ], 0, 0 ],
+            'EmailEquals' => [ ['EMAIL' => '/johndoe@example.com/='], [ 0 ], TIS::BUG_PROPFILTER_EQUALS_BROKEN, 0 ],
             'EmailContains' => [ ['EMAIL' => '/mu@ab/'], [ 1 ], 0, 0 ],
             'EmailStartsWith' => [ ['EMAIL' => '/max/^'], [ 1 ], 0, 0 ],
             'EmailEndsWith' => [ ['EMAIL' => '/@example.com/$'], [ 0 ], 0, 0 ],
             // check matching is case insensitive
-            'EmailEqualsDiffCase' => [ ['EMAIL' => '/johNDOE@EXAmple.com/='], [ 0 ], 0, 0 ],
+            'EmailEqualsDiffCase' => [
+                ['EMAIL' => '/johNDOE@EXAmple.com/='],
+                [ 0 ],
+                TIS::BUG_PROPFILTER_EQUALS_BROKEN,
+                0
+            ],
             'EmailContainsDiffCase' => [ ['EMAIL' => '/MU@ab/'], [ 1 ], 0, 0 ],
             'EmailStartsWithDiffCase' => [ ['EMAIL' => '/MAX/^'], [ 1 ], 0, 0 ],
             'EmailEndsWithDiffCase' => [ ['EMAIL' => '/@EXAmple.com/$'], [ 0 ], 0, 0 ],
@@ -127,14 +142,15 @@ final class AddressbookQueryTest extends TestCase
             'EmailEndsNotWith' => [
                 ['EMAIL' => '!/@abcd.com/$'],
                 [ 0, 3 ],
-                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS,
+                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS | TIS::BUG_INVTEXTMATCH_IGNORED,
                 0
             ],
             // Case 2: Some, but not all EMAIL properties match the negated filter
             'EmailContainsNotSome' => [
                 ['EMAIL' => '!/@example.com/'],
                 [ 0, 1, 3 ],
-                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS | TIS::BUG_INVTEXTMATCH_SOMEMATCH,
+                TIS::BUG_INVTEXTMATCH_MATCHES_UNDEF_PROPS | TIS::BUG_INVTEXTMATCH_SOMEMATCH
+                | TIS::BUG_INVTEXTMATCH_IGNORED,
                 0
             ],
 
@@ -282,8 +298,18 @@ final class AddressbookQueryTest extends TestCase
             ],
 
             // tests on properties with group
-            'HasNoGrpEmail' => [ ['item1.EMAIL' => null], [ 0, 1, 2 ], TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY, 0 ],
-            'HasGrpEmail' => [ ['item1.EMAIL' => '//'], [ 3 ], TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY, 0 ],
+            'HasNoGrpEmail' => [
+                ['item1.EMAIL' => null],
+                [ 0, 1, 2 ],
+                TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY | TIS::BUG_PROPFILTER_PROPEXISTENCE_IGNORED,
+                0
+            ],
+            'HasGrpEmail' => [
+                ['item1.EMAIL' => '//'],
+                [ 3 ],
+                TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY | TIS::BUG_PROPFILTER_PROPEXISTENCE_IGNORED,
+                0
+            ],
             'GrpEmailEquals' => [ ['item1.EMAIL' => '/foo@ex.com/='], [ 3 ], TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY, 0 ],
             // must not match card 0
             'GrpEmailContains' => [ ['item1.EMAIL' => '/@ex/'], [ 3 ], TIS::BUG_HANDLE_PROPGROUPS_IN_QUERY, 0 ],
@@ -335,8 +361,20 @@ final class AddressbookQueryTest extends TestCase
         // so we will notice if we stick to that rule.
         $datasets = [
             // test whether a property is defined / not defined
-            'HasTelOrIMPP' => [ false, ['TEL' => '//', 'IMPP' => '//' ], [ 2, 3 ], 0, 0 ],
-            'HasEmailAndIMPP' => [ true, ['EMAIL' => '//', 'IMPP' => '//' ], [ 3 ], 0, TIS::FEAT_FILTER_ALLOF ],
+            'HasTelOrIMPP' => [
+                false,
+                ['TEL' => '//', 'IMPP' => '//' ],
+                [ 2, 3 ],
+                TIS::BUG_PROPFILTER_PROPEXISTENCE_IGNORED,
+                0
+            ],
+            'HasEmailAndIMPP' => [
+                true,
+                ['EMAIL' => '//', 'IMPP' => '//' ],
+                [ 3 ],
+                TIS::BUG_PROPFILTER_PROPEXISTENCE_IGNORED,
+                TIS::FEAT_FILTER_ALLOF
+            ],
 
             // multiple conditions in the same prop-filter
             // this one matches on the same property instance johndoe@example.com

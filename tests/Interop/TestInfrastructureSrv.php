@@ -48,6 +48,7 @@ final class TestInfrastructureSrv
     public const FEAT_MULTIGET = 2 ** 1;
     public const FEAT_CTAG = 2 ** 2;
     // iCloud does not support param-filter, it simply returns all cards
+    // SOGo does not support param-filter, it simply returns an empty result
     public const FEAT_PARAMFILTER = 2 ** 3;
     // iCloud does not support "allof" matching at filter level (i.e. AND of multiple prop-filters)
     public const FEAT_FILTER_ALLOF = 2 ** 4;
@@ -117,6 +118,15 @@ final class TestInfrastructureSrv
     // Server bug: If-match ETag precondition check is not performed, i.e. requests succeeds even in case of mismatch
     public const BUG_ETAGPRECOND_NOTCHECKED = 2 ** 24;
 
+    // Server bug: equals text-match is not properly evaluated
+    public const BUG_PROPFILTER_EQUALS_BROKEN = 2 ** 25;
+
+    // Server bug: A negated text-match is ignored, i.e. the match is applied as if negate-condition="no"
+    public const BUG_INVTEXTMATCH_IGNORED = 2 ** 26;
+
+    // SOGo does not support prop-filter property (non-)existence test, it simply returns all cards
+    public const BUG_PROPFILTER_PROPEXISTENCE_IGNORED = 2 ** 27;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_ALLOF_SINGLEPROP | self::BUG_CASESENSITIVE_NAMES;
 
@@ -154,6 +164,10 @@ final class TestInfrastructureSrv
         // fixed locally | self::BUG_PARAMDEF
         ;
     public const SRVFEATS_SYNOLOGY_CONTACTS = self::SRVFEATS_RADICALE; // uses Radicale
+
+    public const SRVFEATS_SOGO = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG | self::FEAT_FILTER_ALLOF
+        | self::BUG_PROPFILTER_EQUALS_BROKEN | self::BUG_INVTEXTMATCH_IGNORED | self::BUG_HANDLE_PROPGROUPS_IN_QUERY
+        | self::BUG_PROPFILTER_PROPEXISTENCE_IGNORED;
 
     /** @var bool */
     private static $initialized = false;

@@ -70,8 +70,8 @@ class Config
      * @psalm-param LibOptionsInput $options Options to override defaults.
      */
     public static function init(
-        LoggerInterface $logger = null,
-        LoggerInterface $httplogger = null,
+        ?LoggerInterface $logger = null,
+        ?LoggerInterface $httplogger = null,
         array $options = []
     ): void {
         self::$logger = $logger ?? new NullLogger();

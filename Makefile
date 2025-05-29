@@ -17,7 +17,10 @@ stylecheck:
 	vendor/bin/phpcs --colors --standard=PSR12 src/ tests/
 
 phpcompatcheck:
-	vendor/bin/phpcs --colors --standard=PHPCompatibility --runtime-set testVersion 7.1 src/ tests/
+	@for phpvers in 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3 8.4; do \
+	echo Checking PHP $$phpvers compatibility ; \
+	vendor/bin/phpcs --colors --standard=PHPCompatibility --runtime-set testVersion $$phpvers src/ tests/ ; \
+	done
 
 psalmanalysis: tests/Interop/AccountData.php
 	vendor/bin/psalm --threads=8 --no-cache --report=testreports/psalm.txt --report-show-info=true --no-diff $(PSALM_XOPTIONS)

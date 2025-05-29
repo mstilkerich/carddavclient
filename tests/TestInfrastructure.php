@@ -22,7 +22,7 @@ final class TestInfrastructure
     /** @var ?TestLogger Logger object used to store log messages produced during the tests */
     private static $logger;
 
-    public static function init(LoggerInterface $httpLogger = null): void
+    public static function init(?LoggerInterface $httpLogger = null): void
     {
         if (!isset(self::$logger)) {
             self::$logger = new TestLogger();

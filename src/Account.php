@@ -89,7 +89,7 @@ class Account implements \JsonSerializable
      *  discovery with the {@see Services\Discovery} service, this parameter can be omitted.
      * @api
      */
-    public function __construct(string $discoveryUri, $httpOptions, string $password = "", string $baseUrl = null)
+    public function __construct(string $discoveryUri, $httpOptions, string $password = "", ?string $baseUrl = null)
     {
         $this->discoveryUri = $discoveryUri;
         $this->baseUrl = $baseUrl;

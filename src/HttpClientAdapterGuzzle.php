@@ -394,6 +394,8 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                 strstr($authHeader, 'realm="Google APIs"') !== false
                 // Yahoo
                 || strstr($authHeader, 'realm="progrss"') !== false
+                // Nextcloud, user_oidc: https://github.com/nextcloud/user_oidc/issues/603#issuecomment-2575914376
+                || strstr($authHeader, 'realm="Nextcloud"') !== false
             ) {
                 $srvSchemes[] = 'bearer';
             }

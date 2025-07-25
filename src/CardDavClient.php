@@ -54,7 +54,7 @@ class CardDavClient
      */
     public function __construct(string $base_uri, array $httpOptions)
     {
-        $this->base_uri = $base_uri;
+        $this->base_uri = rtrim($base_uri, '/') . '/';
         $this->httpClient = new HttpClientAdapterGuzzle($base_uri, $httpOptions);
     }
 

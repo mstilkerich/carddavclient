@@ -1,5 +1,12 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.4.2 (to 1.4.1)
+
+- Fix: When the URL of the collection was given without a trailing slash, some operations (e.g.
+  AddressbookCollection::createCard) would target the wrong URL (stripping the last component of the base URI).
+  Typically, this would result in the operation to fail because the CardDAV server did not allow the operation for the
+  wrong URI (Fixes #35).
+
 ## Version 1.4.1 (to 1.4.0)
 
 - Report requests to Sabre/DAV servers with Http-Digest authentication failed if issued from an

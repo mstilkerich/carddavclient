@@ -85,6 +85,7 @@ jobs:
           sudo docker exec --user www-data nextcloud php occ maintenance:install --admin-user=ncadm --admin-pass=ncadmPassw0rd
           sudo docker exec --user www-data nextcloud php occ app:install contacts
           sudo docker exec --user www-data nextcloud php occ app:disable contactsinteraction
+          sudo docker exec --user www-data nextcloud php occ config:app:set dav system_addressbook_exposed --value=no
       - name: Create Nextcloud Addressbooks
         run: |
           .github/scripts/createabook.sh "http://localhost:8080/remote.php/dav/addressbooks/users/ncadm/contacts/" Contacts '' ncadm ncadmPassw0rd

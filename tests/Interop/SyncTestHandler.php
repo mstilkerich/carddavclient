@@ -114,7 +114,7 @@ final class SyncTestHandler implements SyncHandler
 
             // the ETag is optional in the expected cards - the server may not report it after the insert in case
             // the card was changed server side
-            if (isset($this->expectedChangedCards[$uri]["etag"])) {
+            if ($this->expectedChangedCards[$uri]["etag"] != "") {
                 Assert::assertEquals(
                     $this->expectedChangedCards[$uri]["etag"],
                     $etag,

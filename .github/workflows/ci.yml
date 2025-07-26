@@ -47,6 +47,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           files: testreports/unit/clover.xml
+          disable_search: true
           flags: unittests
           token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient unit test coverage
@@ -91,6 +92,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
+          disable_search: true
           flags: interop
           token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient nextcloud interoperability test coverage
@@ -131,6 +133,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
+          disable_search: true
           flags: interop
           token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient owncloud interoperability test coverage
@@ -161,6 +164,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
+          disable_search: true
           flags: interop
           token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient radicale interoperability test coverage
@@ -217,6 +221,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
+          disable_search: true
           flags: interop
           token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient Davical interoperability test coverage
@@ -243,6 +248,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
+          disable_search: true
           flags: interop
           token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient iCloud interoperability test coverage
@@ -281,6 +287,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
+          disable_search: true
           flags: interop
           token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient Baikal interoperability test coverage

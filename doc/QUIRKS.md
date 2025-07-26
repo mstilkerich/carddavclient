@@ -283,7 +283,7 @@ User-visibile impact and possible workaround | The `query()` result may contain 
 
 BUG_INVTEXTMATCH_SOMEMATCH | Negated text match misses cards that also have property instances matching the non-negated filter
 --------|----------------------------------------------------------
-Affected servers / services | Google Contacts, [Sabre/DAV](https://github.com/sabre-io/dav/pull/1322), [Radicale](https://github.com/Kozea/Radicale/issues/1140)
+Affected servers / services | Google Contacts, [Sabre/DAV <4.1.5](https://github.com/sabre-io/dav/pull/1322), [Radicale](https://github.com/Kozea/Radicale/issues/1140)
 Description | A negated text-match on a property yields wrong results if there is a property instance matching the text-match and another that does not. This is because the server will simply invert the result of checking all properties, when it should check if there is any property NOT matching the text-filter (!= NO property matching the text filter).
 Affected operations | `AddressbookCollection::query()` when using negated text matches inside the `$conditions` for a property.
 User-visibile impact and possible workaround | The `query()` result may lack cards that match the filter when using negated text matches on properties.
@@ -308,7 +308,7 @@ User-visibile impact and possible workaround | The `query()` result may lack car
 
 BUG_PARAMFILTER_ON_NONEXISTENT_PARAM | Internal server error on param-filter when property lacks the parameter
 --------|----------------------------------------------------------
-Affected servers / services | [Sabre/DAV](https://github.com/sabre-io/dav/pull/1322)
+Affected servers / services | [Sabre/DAV <4.1.5](https://github.com/sabre-io/dav/pull/1322)
 Description | When filtering on a parameter, an internal server error will occur if the server encounters a property of the asked for type that does not have the parameter. Examples: Filtering for `'EMAIL' => ['TYPE', '/foo']` raises a server error when there is a VCard with an `EMAIL` property that does not have a `TYPE` parameter.
 Affected operations | `AddressbookCollection::query()` when using parameter filters
 User-visibile impact and possible workaround | The request will fail with an internal server error.
@@ -316,7 +316,7 @@ User-visibile impact and possible workaround | The request will fail with an int
 
 []() | Negated text-match on parameter yields wrong results
 --------|----------------------------------------------------------
-Affected servers / services | [Sabre/DAV](https://github.com/sabre-io/dav/pull/1322)
+Affected servers / services | [Sabre/DAV <4.1.5](https://github.com/sabre-io/dav/pull/1322)
 Description | A negated text-match on a parameter yields wrong results if there is a property instance with a parameter matching the text-match and another that does not. This is because the server will simply invert the result of checking all properties.
 Affected operations | `AddressbookCollection::query()` when using negated text matches inside the `$conditions` for a parameter filter.
 User-visibile impact and possible workaround | The `query()` result may lack cards that match the filter when using negated text matches on parameters.

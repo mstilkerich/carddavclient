@@ -145,6 +145,8 @@ final class TestInfrastructureSrv
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT
         | self::FEAT_ABOOKQUERY_PARTIALCARDS
         | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH;
+    // BUG_PARAMFILTER_ON_NONEXISTENT_PARAM: Fixed in Sabre 4.1.5 (Baikal 0.9.0)
+    // BUG_INVTEXTMATCH_SOMEMATCH: Fixed in Sabre 4.1.5 (Baikal 0.9.0)
     public const SRVBUGS_SABRE = self::BUG_PARAMFILTER_ON_NONEXISTENT_PARAM
         | self::BUG_INVTEXTMATCH_SOMEMATCH;
     public const SRVFEATS_SABRE = self::SRVFEATSONLY_SABRE | self::SRVBUGS_SABRE;

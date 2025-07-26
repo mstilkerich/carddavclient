@@ -44,7 +44,7 @@ jobs:
       - name: Run unit tests
         run: make unittests
       - name: Upload unit test coverage reports to codecov.io
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: testreports/unit/clover.xml
           flags: unittests
@@ -88,7 +88,7 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-nextcloud test coverage reports to codecov.io
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
           flags: interop
@@ -128,7 +128,7 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-owncloud test coverage reports to codecov.io
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
           flags: interop
@@ -158,7 +158,7 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-radicale test coverage reports to codecov.io
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
           flags: interop
@@ -214,7 +214,7 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-davical test coverage reports to codecov.io
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
           flags: interop
@@ -240,7 +240,7 @@ jobs:
           ICLOUD_URL_ABOOK0: ${{ secrets.ICLOUD_URL_ABOOK0 }}
         run: make tests-interop
       - name: Upload interop-iCloud test coverage reports to codecov.io
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
           flags: interop
@@ -278,7 +278,7 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-baikal test coverage reports to codecov.io
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: testreports/interop/clover.xml
           flags: interop

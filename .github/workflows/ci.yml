@@ -287,6 +287,7 @@ jobs:
       - name: Setup Baikal
         run: |
           .github/scripts/deployBaikal.sh
+          .github/scripts/createBaikalUser.sh
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-baikal test coverage reports to codecov.io

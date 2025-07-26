@@ -71,7 +71,7 @@ class Discovery
         $protocol = $match[2]; // optional
         $host     = $match[4]; // mandatory
         $port     = $match[6]; // optional
-        $path     = $match[7]; // optional
+        $path     = $match[7] ?: '/'; // optional
 
         // plain is only used if http was explicitly given
         $force_ssl = ($protocol !== "http");
@@ -85,12 +85,10 @@ class Discovery
         }
 
         // First try the discovery URI that is stored in the Account
-        if (strlen($path) > 1) {
-            $account->setUrl("$protocol://$host:$port");
-            $addressbooks = $this->tryContextPath($account, $path);
-            if ($addressbooks !== null) {
-                return $addressbooks;
-            }
+        $account->setUrl("$protocol://$host:$port");
+        $addressbooks = $this->tryContextPath($account, $path);
+        if ($addressbooks !== null) {
+            return $addressbooks;
         }
 
         // (1) Discover the hostname and port (may be multiple results for failover setups)
@@ -104,6 +102,9 @@ class Discovery
         if (key_exists($host, self::KNOWN_SERVERS)) {
             $servers[] = [ "host" => self::KNOWN_SERVERS[$host], "port" => $port, "scheme" => $protocol];
         }
+
+        // include the server that is part of the Account URI for discovery via /well-known/ URI
+        $servers[] = [ "host" => $host, "port" => $port, "scheme" => $protocol ];
 
         // (2) Discover the "initial context path" for each servers (until first success)
         foreach ($servers as $server) {

@@ -84,6 +84,15 @@ class Discovery
             $port = $force_ssl ? '443' : '80';
         }
 
+        // First try the discovery URI that is stored in the Account
+        if (strlen($path) > 1) {
+            $account->setUrl("$protocol://$host:$port");
+            $addressbooks = $this->tryContextPath($account, $path);
+            if ($addressbooks !== null) {
+                return $addressbooks;
+            }
+        }
+
         // (1) Discover the hostname and port (may be multiple results for failover setups)
         // $servers is array of:
         //     [host => "contacts.abc.com", port => "443", scheme => "https", dnsrr => '_carddavs._tcp.abc.com']
@@ -91,16 +100,10 @@ class Discovery
         // dnsrr is only set when the server was discovered by lookup of DNS SRV record
         $servers = $this->discoverServers($host, $force_ssl);
 
-        // some builtins for providers that have discovery for the domains known to
-        // users not properly set up
+        // some builtins for providers that have discovery for the domains known to users not properly set up
         if (key_exists($host, self::KNOWN_SERVERS)) {
             $servers[] = [ "host" => self::KNOWN_SERVERS[$host], "port" => $port, "scheme" => $protocol];
         }
-
-        // as a fallback, we will last try what the user provided
-        $servers[] = [ "host" => $host, "port" => $port, "scheme" => $protocol, "userinput" => true ];
-
-        $addressbooks = [];
 
         // (2) Discover the "initial context path" for each servers (until first success)
         foreach ($servers as $server) {
@@ -109,41 +112,56 @@ class Discovery
 
             $contextpaths = $this->discoverContextPath($server);
 
-            // as a fallback, we will last try what the user provided
-            if (($server["userinput"] ?? false) && (!empty($path))) {
-                $contextpaths[] = $path;
-            }
-
             foreach ($contextpaths as $contextpath) {
-                Config::$logger->debug("Try context path $contextpath");
-                // (3) Attempt a PROPFIND asking for the DAV:current-user-principal property
-                $principalUri = $account->findCurrentUserPrincipal($contextpath);
-                if (isset($principalUri)) {
-                    // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
-                    $addressbookHomeUris = $account->findAddressbookHomes($principalUri);
-                    try {
-                        foreach ($addressbookHomeUris ?? [] as $addressbookHomeUri) {
-                            // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
-                            $addressbookHome = new WebDavCollection($addressbookHomeUri, $account);
-
-                            foreach ($addressbookHome->getChildren() as $abookCandidate) {
-                                if ($abookCandidate instanceof AddressbookCollection) {
-                                    $addressbooks[] = $abookCandidate;
-                                }
-                            }
-                        }
-
-                        // We found valid addressbook homes. If they contain no addressbooks, this is fine and the
-                        // result of the discovery is an empty set.
-                        return $addressbooks;
-                    } catch (\Exception $e) {
-                        Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
-                    }
+                $addressbooks = $this->tryContextPath($account, $contextpath);
+                if ($addressbooks !== null) {
+                    return $addressbooks;
                 }
             }
         }
 
         throw new \Exception("Could not determine the addressbook home");
+    }
+
+    /**
+     * Attempts to discover the addressbook home and addressbooks for a given context path.
+     *
+     * @param Account $account The CardDAV account
+     * @param string $contextpath The context URI to try as starting point of the discovery
+     * @psalm-return null|list<AddressbookCollection>
+     * @return null|array<int,AddressbookCollection> The discovered addressbooks.
+     */
+    private function tryContextPath(Account $account, string $contextpath): ?array
+    {
+        Config::$logger->debug("Try context path $contextpath");
+        // (3) Attempt a PROPFIND asking for the DAV:current-user-principal property
+        $principalUri = $account->findCurrentUserPrincipal($contextpath);
+        if (isset($principalUri)) {
+            // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
+            $addressbookHomeUris = $account->findAddressbookHomes($principalUri);
+            try {
+                $addressbooks = [];
+
+                foreach ($addressbookHomeUris ?? [] as $addressbookHomeUri) {
+                    // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
+                    $addressbookHome = new WebDavCollection($addressbookHomeUri, $account);
+
+                    foreach ($addressbookHome->getChildren() as $abookCandidate) {
+                        if ($abookCandidate instanceof AddressbookCollection) {
+                            $addressbooks[] = $abookCandidate;
+                        }
+                    }
+                }
+
+                // We found valid addressbook homes. If they contain no addressbooks, this is fine and the
+                // result of the discovery is an empty set.
+                return $addressbooks;
+            } catch (\Exception $e) {
+                Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
+            }
+        }
+
+        return null;
     }
 
     /**

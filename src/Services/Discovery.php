@@ -180,7 +180,20 @@ class Discovery
         }
 
         if (is_array($dnsresults)) {
-            usort($dnsresults, [self::class, 'orderDnsRecords']);
+            usort(
+                $dnsresults,
+                /**
+                 * @psalm-param SrvRecord $a
+                 * @psalm-param SrvRecord $b
+                 */
+                function (array $a, array $b): int {
+                    if ($a['pri'] != $b['pri']) {
+                        return $b['pri'] - $a['pri'];
+                    }
+
+                    return $a['weight'] - $b['weight'];
+                }
+            );
 
             // build results
             foreach ($dnsresults as $dnsres) {
@@ -198,23 +211,6 @@ class Discovery
         }
 
         return $servers;
-    }
-
-    /**
-     * Orders DNS records by their prio and weight.
-     *
-     * @psalm-param SrvRecord $a
-     * @psalm-param SrvRecord $b
-     *
-     * @todo weight is not quite correctly handled atm, see RFC2782, but this is not crucial to functionality
-     */
-    private static function orderDnsRecords(array $a, array $b): int
-    {
-        if ($a['pri'] != $b['pri']) {
-            return $b['pri'] - $a['pri'];
-        }
-
-        return $a['weight'] - $b['weight'];
     }
 
     /**

@@ -23,7 +23,7 @@ phpcompatcheck:
 	done
 
 psalmanalysis: tests/Interop/AccountData.php
-	vendor/bin/psalm --threads=8 --no-cache --report=testreports/psalm.txt --report-show-info=true --no-diff $(PSALM_XOPTIONS)
+	vendor-bin/psalm/vendor/bin/psalm --threads=8 --no-cache --report=testreports/psalm.txt --report-show-info=true --no-diff $(PSALM_XOPTIONS)
 
 tests: tests-interop unittests
 	vendor/bin/phpcov merge --html testreports/coverage testreports

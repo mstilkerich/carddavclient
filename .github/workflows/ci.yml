@@ -16,6 +16,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up CI environment
         uses: ./.github/actions/setup
+      - name: Install psalm
+        run: composer bin psalm update --no-interaction --no-progress
       - name: Check code style compliance with PSR12
         run: make stylecheck
       - name: Check code compatibility with minimum supported PHP version

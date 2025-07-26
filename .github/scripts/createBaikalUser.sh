@@ -9,8 +9,8 @@ trap 'rm -f -- "$TEMPFILE" "$COOKIES"' EXIT
 BAIKALURL="${1:-http://localhost:8080}"
 NUSER="${2:-citest}"
 NPASS="${3:-citest}"
-NDISP="${4:-CI Test User}"
-NMAIL="${5:-citest@example.org}"
+NDISP="${4:-citest}"
+NMAIL="${5:-citest@example.com}"
 
 # Login
 curl -v -L -X POST\

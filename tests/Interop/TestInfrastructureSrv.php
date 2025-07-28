@@ -127,6 +127,9 @@ final class TestInfrastructureSrv
     // SOGo does not support prop-filter property (non-)existence test, it simply returns all cards
     public const BUG_PROPFILTER_PROPEXISTENCE_IGNORED = 2 ** 27;
 
+    // Google adds a TYPE=PREF parameter to the first EMAIL, TEL, IMPP property
+    public const BUG_ADDED_PREFTYPE_PARAM = 2 ** 28;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_ALLOF_SINGLEPROP | self::BUG_CASESENSITIVE_NAMES;
 
@@ -139,7 +142,8 @@ final class TestInfrastructureSrv
         | self::BUG_INVTEXTMATCH_MATCHES_UNDEF_PARAMS
         | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
         | self::BUG_CASESENSITIVE_NAMES
-        | self::BUG_ETAGPRECOND_NOTCHECKED;
+        | self::BUG_ETAGPRECOND_NOTCHECKED
+        | self::BUG_ADDED_PREFTYPE_PARAM;
 
     public const SRVFEATSONLY_SABRE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT

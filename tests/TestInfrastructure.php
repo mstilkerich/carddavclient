@@ -57,7 +57,7 @@ final class TestInfrastructure
      * CardDAV server to data retrieved back from the server.
      *
      * - Google:
-     *   - Omits TYPE attribute in results from addressbook-query
+     *   - Adds PREF TYPE attribute in results from addressbook-query for first TEL/EMAIL property
      *   - Changes case of the type attribute (work -> WORK)
      *   - Overrides the UID in new cards with a server-side-assigned UID
      */

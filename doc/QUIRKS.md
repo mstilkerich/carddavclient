@@ -185,6 +185,7 @@ User-visibile impact and possible workaround | The user must not assume that a n
 Affected servers / services | Google Contacts
 Description | This is probably within what the server is allowed to do, but something the user should be aware of. Google Contacts will modify VCards stored to the server, probably "lost in translation" to an internal data model and back. Currently, so following have been observed:
  []() | - The `TYPE` parameter that can be used with properties such as `EMAIL` is constrained to a single value. Values not known to Google Contacts are discarded. This includes values explicitly allowed by RFC2426, e.g. *internet* as an `EMAIL` type.
+BUG_ADDED_PREFTYPE_PARAM | - The `TYPE` parameter that can be used with properties such as `EMAIL` will be extended by the PREF value for the first property of each time unless it already exists.
  []() | - For `IMPP` properties, the protocol scheme and `X-SERVICE-TYPE` parameter spelling (e.g. *jabber* becomes *Jabber*) is adapted by the server.
 Affected operations | `AddressbookCollection::createCard()`, `AddressbookCollection::updateCard()`
 User-visibile impact and possible workaround | The user should not expect a VCard stored to the server to be identical with the VCard read back from the server. To preserve custom labels on the server, the `X-ABLabel` extension can be used, however, support by CardDAV client applications is not as good as for the `TYPE` parameter.

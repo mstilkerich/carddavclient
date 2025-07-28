@@ -16,6 +16,7 @@ use MStilkerich\CardDavClient\{Account,AddressbookCollection};
 use MStilkerich\CardDavClient\XmlElements\Filter;
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCard;
+use Sabre\VObject;
 use MStilkerich\Tests\CardDavClient\Interop\TestInfrastructureSrv as TIS;
 
 /**
@@ -158,25 +159,25 @@ final class AddressbookQueryTest extends TestCase
             'ParamNotDefined' => [
                 ['EMAIL' => ['TYPE', null]],
                 [ 1, 3 ],
-                TIS::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS,
+                TIS::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS | TIS::BUG_ADDED_PREFTYPE_PARAM,
                 TIS::FEAT_PARAMFILTER
             ],
             'ParamDefined' => [
                 ['EMAIL' => ['TYPE', '//']],
                 [ 0 ],
-                TIS::BUG_PARAMDEF,
+                TIS::BUG_PARAMDEF | TIS::BUG_ADDED_PREFTYPE_PARAM,
                 TIS::FEAT_PARAMFILTER
             ],
             'ParamNotDefinedDiffCase' => [
                 ['EMAIL' => ['type', null]],
                 [ 1, 3 ],
-                TIS::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS | TIS::BUG_CASESENSITIVE_NAMES,
+                TIS::BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS | TIS::BUG_CASESENSITIVE_NAMES | TIS::BUG_ADDED_PREFTYPE_PARAM,
                 TIS::FEAT_PARAMFILTER
             ],
             'ParamDefinedDiffCase' => [
                 ['EMAIL' => ['type', '//']],
                 [ 0 ],
-                TIS::BUG_PARAMDEF | TIS::BUG_CASESENSITIVE_NAMES,
+                TIS::BUG_PARAMDEF | TIS::BUG_CASESENSITIVE_NAMES | TIS::BUG_ADDED_PREFTYPE_PARAM,
                 TIS::FEAT_PARAMFILTER
             ],
             // property with multiple values, where one has the parameter defined, the other has not -> must not match
@@ -209,7 +210,7 @@ final class AddressbookQueryTest extends TestCase
             'ParamEndsWith' => [
                 ['EMAIL' => ['TYPE', '/ORK/$']],
                 [ 0 ],
-                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::BUG_PARAMTEXTMATCH_BROKEN | TIS::BUG_ADDED_PREFTYPE_PARAM,
                 TIS::FEAT_PARAMFILTER
             ],
             // check matching is case insensitive
@@ -240,7 +241,7 @@ final class AddressbookQueryTest extends TestCase
             'ParamEndsWithDiffCase' => [
                 ['EMAIL' => ['TYPE', '/orK/$']],
                 [ 0 ],
-                TIS::BUG_PARAMTEXTMATCH_BROKEN,
+                TIS::BUG_PARAMTEXTMATCH_BROKEN | TIS::BUG_ADDED_PREFTYPE_PARAM,
                 TIS::FEAT_PARAMFILTER
             ],
 
@@ -557,12 +558,49 @@ final class AddressbookQueryTest extends TestCase
             $this->assertArrayHasKey($expCard["uri"], $result);
             $expUris[] = $expCard["uri"];
             $rcvCard = $result[$expCard["uri"]];
+            $rcvCard["vcard"] = $this->clearPrefType($rcvCard["vcard"]);
             TestInfrastructure::compareVCards($expCard["vcard"], $rcvCard["vcard"], true);
         }
 
         foreach ($result as $uri => $res) {
             $this->assertContains($uri, $expUris, "Unexpected card in result: " . ($res["vcard"]->NICKNAME ?? ""));
         }
+    }
+
+    /**
+     * Clears TYPE=PREF values from EMAIL, TEL and XMPP properties.
+     *
+     * This is another workaround for Google which adds a TYPE=PREF parameter to those properties on the server side.
+     */
+    private function clearPrefType(VCard $vcard): VCard
+    {
+        foreach (['EMAIL', 'TEL', 'IMPP'] as $propName) {
+            if (!isset($vcard->{$propName})) {
+                continue;
+            }
+
+            /** @var VObject\Property $prop */
+            foreach ($vcard->{$propName} as $prop) {
+                if (isset($prop['TYPE'])) {
+                    /** @var VObject\Parameter $typeParam */
+                    $typeParam = $prop['TYPE'];
+                    /** @var list<string> $types */
+                    $types = $typeParam->getParts();
+                    $types = array_filter(
+                        $types,
+                        function (string $t) {
+                            return strcasecmp($t, 'PREF') !== 0;
+                        }
+                    );
+                    if (empty($types)) {
+                        unset($prop['TYPE']);
+                    } else {
+                        $prop['TYPE'] = $types;
+                    }
+                }
+            }
+        }
+        return $vcard;
     }
 
     private function createSamples(string $abookname): AddressbookCollection

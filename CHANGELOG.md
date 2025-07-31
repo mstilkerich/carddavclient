@@ -12,6 +12,8 @@
   i.e. when a single domain hosts multiple carddav services under different URIs, and the discovery could only be set up
   for one of them. Then even when the user gave a specific service URI as discovery URI, it would only be tried after
   the auto-discovery had failed for the others. This is probably not intended and thus this is considered a bugfix.
+- Add Nextcloud user_oidc authorization support via Bearer (#34, thanks @Zepmann)
+- Fix PHP 8.4 deprecation warnings (#33, thanks @fwiep)
 
 ## Version 1.4.1 (to 1.4.0)
 
@@ -51,7 +53,7 @@
 ## Version 1.2.1 (to 1.2.0)
 
 - Change license to less restrictive MIT license
-- Add workaround to enable Bearer authentication with yahoo CardDAV API (#14)
+- Add workaround to enable Bearer authentication with yahoo CardDAV API (#14, thanks @DrFairy)
 
 ## Version 1.2.0 (to 1.1.0)
 

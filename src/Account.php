@@ -21,6 +21,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *   password?: string,
  *   bearertoken?: string,
  *   verify?: bool|string,
+ *   ssl_key?: string,
  *   preemptive_basic_auth?: bool,
  *   query?: array<string, string>,
  *   headers?: array<string, string | list<string>>,
@@ -70,6 +71,8 @@ class Account implements \JsonSerializable
      *                  (note that this defeats the purpose of HTTPS and opens the door for man in the middle attacks).
      *                  Set to the path of a PEM file containing a custom CA bundle to perform verification against a
      *                  custom set of certification authorities.
+     *    - ssl_key: The path to the private key to use for mututal TLS verification, cannot be used with
+     *                  disabled verification.
      *    - preemptive_basic_auth: Set to true to always submit an Authorization header for HTTP Basic authentication
      *      (username and password options also required in this case) even if not challenged by the server. This may be
      *      required in rare use cases where the server allows unauthenticated access and will not challenge the client.
@@ -112,7 +115,7 @@ class Account implements \JsonSerializable
      * @psalm-param SerializedAccount $props
      * @param array<string,?string|bool> $props An associative array containing the Account attributes.
      *  Keys with the meaning from {@see Account::__construct()}:
-     *  `discoveryUri`, `baseUrl`, `username`, `password`, `bearertoken`, `verify`, `preemptive_basic_auth`
+     *  `discoveryUri`, `baseUrl`, `username`, `password`, `bearertoken`, `verify`, `ssl_key`, `preemptive_basic_auth`
      * @see Account::jsonSerialize()
      * @api
      */

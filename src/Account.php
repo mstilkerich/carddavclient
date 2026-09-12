@@ -21,7 +21,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *   password?: string,
  *   bearertoken?: string,
  *   verify?: bool|string,
- *   ssl_key?: string,
+ *   ssl_key?: string | array<string>,
  *   cert?: string,
  *   preemptive_basic_auth?: bool,
  *   query?: array<string, string>,
@@ -73,7 +73,8 @@ class Account implements \JsonSerializable
      *                  Set to the path of a PEM file containing a custom CA bundle to perform verification against a
      *                  custom set of certification authorities.
      *    - ssl_key: The path to the private key to use for mututal TLS verification, cannot be used with
-     *                  disabled verification.
+     *                  disabled verification, Guzzle will accept an array as well as a string, with the first element
+     *                  of the array being the filepath and the second being the password
      *    - cert: The path to the PEM formatted client side certificate
      *    - preemptive_basic_auth: Set to true to always submit an Authorization header for HTTP Basic authentication
      *      (username and password options also required in this case) even if not challenged by the server. This may be
@@ -115,7 +116,7 @@ class Account implements \JsonSerializable
      * This can be used to reconstruct/deserialize an Account from a stored (JSON) representation.
      *
      * @psalm-param SerializedAccount $props
-     * @param array<string,?string|bool> $props An associative array containing the Account attributes.
+     * @param array<string,?string|bool|array<string>> $props An associative array containing the Account attributes.
      *  Keys with the meaning from {@see Account::__construct()}:
      *  `discoveryUri`, `baseUrl`, `username`, `password`, `bearertoken`, `verify`, `ssl_key`, `cert`, `preemptive_basic_auth`
      * @see Account::jsonSerialize()

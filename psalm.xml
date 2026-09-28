@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <psalm
     errorLevel="1"
+    phpVersion="8.2"
+    ensureOverrideAttribute="false"
+    sealAllProperties="false"
     resolveFromConfigFile="true"
     findUnusedVariablesAndParams="true"
     findUnusedPsalmSuppress="true"
@@ -25,10 +28,30 @@
 
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
-        <pluginClass class="AlexS\Guzzle\PsalmPlugin"/>
     </plugins>
 
     <issueHandlers>
+        <!-- Making the public classes final would be a BC break for users that extend them -->
+        <ClassMustBeFinal errorLevel="suppress" />
+        <!-- sabre/vobject 5 documents only some of the dynamic VCard properties with @property, which seals the others -->
+        <UndefinedMagicPropertyFetch>
+            <errorLevel type="suppress">
+                <referencedProperty name="Sabre\VObject\Component\VCard::$FN" />
+                <referencedProperty name="Sabre\VObject\Component\VCard::$NICKNAME" />
+                <referencedProperty name="Sabre\VObject\Component\VCard::$NOTE" />
+                <referencedProperty name="Sabre\VObject\Component\VCard::$UID" />
+                <referencedProperty name="Sabre\VObject\Component\VCard::$VERSION" />
+            </errorLevel>
+        </UndefinedMagicPropertyFetch>
+        <UndefinedMagicPropertyAssignment>
+            <errorLevel type="suppress">
+                <referencedProperty name="Sabre\VObject\Component\VCard::$FN" />
+                <referencedProperty name="Sabre\VObject\Component\VCard::$NICKNAME" />
+                <referencedProperty name="Sabre\VObject\Component\VCard::$NOTE" />
+                <referencedProperty name="Sabre\VObject\Component\VCard::$UID" />
+                <referencedProperty name="Sabre\VObject\Component\VCard::$VERSION" />
+            </errorLevel>
+        </UndefinedMagicPropertyAssignment>
         <UnevaluatedCode>
             <errorLevel type="suppress">
                 <file name="doc/quickstart.php" />

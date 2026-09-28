@@ -240,7 +240,7 @@ class CardDavClient
                 // make up a new random filename until retry limit is hit (append a random integer to the suggested
                 // filename, e.g. /newcard.vcf could become /newcard-1234.vcf)
                 $randint = rand();
-                $uri = preg_replace("/(\.[^.]*)?$/", "-$randint$0", $suggestedUri, 1);
+                $uri = preg_replace("/(\.[^.]*)?$/", "-$randint$0", $suggestedUri, 1) ?? $uri;
             }
         } while (($status == 412) && ($attempt < $retryLimit));
 

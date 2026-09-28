@@ -15,6 +15,7 @@ use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};
 use MStilkerich\CardDavClient\XmlElements\Filter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sabre\VObject\Component\VCard;
 use Sabre\VObject;
 use MStilkerich\Tests\CardDavClient\Interop\TestInfrastructureSrv as TIS;
@@ -93,13 +94,13 @@ final class AddressbookQueryTest extends TestCase
     }
 
     /** @return array<string, array{string, TestAddressbook}> */
-    public function addressbookProvider(): array
+    public static function addressbookProvider(): array
     {
         return TIS::addressbookProvider();
     }
 
     /** @return array<string, array{string, SimpleConditions, list<int>, int, int}> */
-    public function simpleQueriesProvider(): array
+    public static function simpleQueriesProvider(): array
     {
         // Try to have at least one matching and one non-matching card in the result for each filter
         // Some service return an empty result or the entire addressbook without error if they do not support a filter,
@@ -334,8 +335,8 @@ final class AddressbookQueryTest extends TestCase
      * @param list<int> $expCards A list of expected cards, given by their index in self::$insertedCards[$abookname]
      * @param int $inhibitingBugs A mask with bug flags where this test should be skipped
      * @param int $featuresNeeded A mask with server features required for the test.
-     * @dataProvider simpleQueriesProvider
      */
+    #[DataProvider('simpleQueriesProvider')]
     public function testQueryBySimpleConditions(
         string $abookname,
         array $conditions,
@@ -355,7 +356,7 @@ final class AddressbookQueryTest extends TestCase
     }
 
     /** @return array<string, array{string, bool, SimpleConditions | ComplexConditions, list<int>, int, int}> */
-    public function multiConditionQueriesProvider(): array
+    public static function multiConditionQueriesProvider(): array
     {
         // Try to have at least one matching and one non-matching card in the result for each filter
         // Some service return an empty result or the entire addressbook without error if they do not support a filter,
@@ -422,8 +423,8 @@ final class AddressbookQueryTest extends TestCase
      * @param list<int> $expCards A list of expected cards, given by their index in self::$insertedCards[$abookname]
      * @param int $inhibitingBugs A mask with bug flags where this test should be skipped
      * @param int $featuresNeeded A mask with server features required for the test.
-     * @dataProvider multiConditionQueriesProvider
      */
+    #[DataProvider('multiConditionQueriesProvider')]
     public function testQueryByMultipleConditions(
         string $abookname,
         bool $matchAll,
@@ -454,8 +455,8 @@ final class AddressbookQueryTest extends TestCase
      * desired.
      *
      * @param TestAddressbook $cfg
-     * @dataProvider addressbookProvider
      */
+    #[DataProvider('addressbookProvider')]
     public function testAllOfPropFilterAppliesToSamePropertyValue(string $abookname, array $cfg): void
     {
         if (TIS::hasFeature($abookname, TIS::FEAT_ALLOF_SINGLEPROP)) {
@@ -477,8 +478,8 @@ final class AddressbookQueryTest extends TestCase
      * Tests limiting the amount of results returned for an addressbook-query report.
      *
      * @param TestAddressbook $cfg
-     * @dataProvider addressbookProvider
      */
+    #[DataProvider('addressbookProvider')]
     public function testQueryWithLimitedResultsIfSupported(string $abookname, array $cfg): void
     {
         $abook = $this->createSamples($abookname);
@@ -501,8 +502,8 @@ final class AddressbookQueryTest extends TestCase
      * will fail and we will know about the new feature).
      *
      * @param TestAddressbook $cfg
-     * @dataProvider addressbookProvider
      */
+    #[DataProvider('addressbookProvider')]
     public function testQueryWithPartialAddressDataIfSupported(string $abookname, array $cfg): void
     {
         $abook = $this->createSamples($abookname);
@@ -563,7 +564,8 @@ final class AddressbookQueryTest extends TestCase
         }
 
         foreach ($result as $uri => $res) {
-            $this->assertContains($uri, $expUris, "Unexpected card in result: " . ($res["vcard"]->NICKNAME ?? ""));
+            $nick = $res["vcard"]->NICKNAME instanceof VObject\Property ? (string) $res["vcard"]->NICKNAME : "";
+            $this->assertContains($uri, $expUris, "Unexpected card in result: $nick");
         }
     }
 

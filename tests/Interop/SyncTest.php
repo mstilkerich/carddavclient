@@ -15,6 +15,7 @@ use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection};
 use MStilkerich\CardDavClient\Services\Sync;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\{DataProvider, Depends};
 use Sabre\VObject\Component\VCard;
 
 /**
@@ -62,15 +63,15 @@ final class SyncTest extends TestCase
     }
 
     /** @return array<string, array{string, TestAddressbook}> */
-    public function addressbookProvider(): array
+    public static function addressbookProvider(): array
     {
         return TestInfrastructureSrv::addressbookProvider();
     }
 
     /**
      * @param TestAddressbook $cfg
-     * @dataProvider addressbookProvider
      */
+    #[DataProvider('addressbookProvider')]
     public function testInitialSyncWorks(string $abookname, array $cfg): void
     {
         $abook = TestInfrastructureSrv::getAddressbook($abookname);
@@ -99,9 +100,9 @@ final class SyncTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
-     * @depends testInitialSyncWorks
-     * @dataProvider addressbookProvider
      */
+    #[Depends('testInitialSyncWorks')]
+    #[DataProvider('addressbookProvider')]
     public function testImmediateFollowupSyncEmpty(string $abookname, array $cfg): void
     {
         $accountname = AccountData::ADDRESSBOOKS[$abookname]["account"];
@@ -135,9 +136,9 @@ final class SyncTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
-     * @depends testInitialSyncWorks
-     * @dataProvider addressbookProvider
      */
+    #[Depends('testInitialSyncWorks')]
+    #[DataProvider('addressbookProvider')]
     public function testFollowupSyncDifferencesProperlyReported(string $abookname, array $cfg): void
     {
         $accountname = AccountData::ADDRESSBOOKS[$abookname]["account"];
@@ -151,6 +152,7 @@ final class SyncTest extends TestCase
 
         // delete one of the cards inserted earlier
         $delCardUri = array_shift(self::$insertedUris[$abookname]);
+        $this->assertIsString($delCardUri);
         $this->assertNotEmpty($delCardUri);
         $abook->deleteCard($delCardUri);
 

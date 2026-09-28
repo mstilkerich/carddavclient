@@ -4,7 +4,11 @@ inputs:
   php-version:
     description: 'PHP version to use'
     required: true
-    default: '8.2'
+    default: '8.4'
+  composer-flags:
+    description: 'Additional flags for composer update (e.g. --prefer-lowest)'
+    required: false
+    default: ''
 runs:
   using: "composite"
   steps:
@@ -16,5 +20,5 @@ runs:
           extensions: gd, xdebug, curl
           coverage: xdebug
       - name: Install dependencies
-        run: composer update --no-interaction --no-progress
+        run: composer update --no-interaction --no-progress ${{ inputs.composer-flags }}
         shell: bash

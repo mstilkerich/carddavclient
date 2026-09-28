@@ -29,13 +29,13 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
  *   max?: int,
  *   strict?: bool,
  *   referer?: bool,
- *   protocols?: list<string>,
+ *   protocols?: non-empty-list<string>,
  *   on_redirect?: callable(Psr7Request, Psr7Response, Psr7Uri): void,
  *   track_redirects?: bool
  * }
  *
  * @psalm-type GuzzleRequestOptions = array{
- *   headers?: array<string, string | list<string>>,
+ *   headers?: array<string, string | non-empty-list<string>>,
  *   query?: array<string, string>,
  *   body?: string | resource | \Psr\Http\Message\StreamInterface,
  *   allow_redirects?: bool | GuzzleAllowRedirectCfg,
@@ -382,7 +382,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             $authHeader = trim($authHeader);
             $srvSchemes = [];
 
-            foreach (preg_split("/\s*,\s*/", $authHeader) as $challenge) {
+            foreach (preg_split("/\s*,\s*/", $authHeader) ?: [] as $challenge) {
                 if (preg_match("/^([^ =]+)(\s+[^=].*)?$/", $challenge, $matches)) { // filter auth-params
                     $srvSchemes[] = strtolower($matches[1]);
                 }

@@ -1,8 +1,7 @@
 {
     "require-dev": {
-        "vimeo/psalm": "~5.26.1",
-        "alexeyshockov/guzzle-psalm-plugin": "*",
-        "psalm/plugin-phpunit": "*"
+        "vimeo/psalm": "^6.19",
+        "psalm/plugin-phpunit": "^0.19.5"
     },
     "prefer-stable" : true
 }

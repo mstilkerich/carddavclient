@@ -17,7 +17,7 @@ stylecheck:
 	vendor/bin/phpcs --colors --standard=PSR12 src/ tests/
 
 phpcompatcheck:
-	@for phpvers in 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3 8.4; do \
+	@for phpvers in 8.2 8.3 8.4 8.5; do \
 	echo Checking PHP $$phpvers compatibility ; \
 	vendor/bin/phpcs --colors --standard=PHPCompatibility --runtime-set testVersion $$phpvers src/ tests/ ; \
 	done

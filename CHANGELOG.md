@@ -2,6 +2,16 @@
 
 ## Version 1.5.0 (to 1.4.2)
 
+- Require PHP 8.2 or newer. Support for the end-of-life PHP versions 7.1 - 8.1 is dropped. Tested with PHP 8.2 - 8.5.
+- Support newer major versions of dependencies: guzzlehttp/guzzle 8, sabre/vobject 5, sabre/uri 3.
+- Drop support for old major versions of dependencies: guzzlehttp/guzzle 6, psr/http-message 1, psr/log 1,
+  sabre/vobject 3, sabre/xml 2. The new dependency constraints are:
+  - guzzlehttp/guzzle: ^7.9 || ^8.0
+  - psr/http-message: ^2.0
+  - psr/log: ^2.0 || ^3.0
+  - sabre/vobject: ^4.5 || ^5.0
+  - sabre/xml: ^3.0 || ^4.0
+  - sabre/uri: ^2.3 || ^3.0
 - Add options for TLS authentication passed through to Guzzle (#38, thanks @mintsoft)
 - In case unrequested XML elements are encountered in the XML response of the CardDAV server, only log a debug message
   instead of a warning.

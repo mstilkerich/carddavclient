@@ -41,8 +41,8 @@ class StdoutLogger extends AbstractLogger
     public function log($level, $message, array $context = array()): void
     {
         if ($level !== LogLevel::DEBUG) {
-            $ctx = empty($context) ? "" : json_encode($context);
-            echo $message . $ctx . "\n";
+            $ctx = empty($context) ? "" : (string) json_encode($context);
+            echo (string) $message . $ctx . "\n";
         }
     }
 }
@@ -52,7 +52,7 @@ class EchoSyncHandler implements SyncHandler
     public function addressObjectChanged(string $uri, string $etag, ?VCard $card): void
     {
         if (isset($card)) {
-            $fn = $card->FN ?? "<no name>";
+            $fn = $card->FN instanceof \Sabre\VObject\Property ? (string) $card->FN : "<no name>";
             echo "   +++ Changed or new card $uri (ETag $etag): $fn\n";
         } else {
             echo "   +++ Changed or new card $uri (ETag $etag): Error: failed to retrieve/parse card's address data\n";

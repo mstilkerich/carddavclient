@@ -1,5 +1,9 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.5.0 (to 1.4.2)
+
+- Add options for TLS authentication passed through to Guzzle (#38, thanks @mintsoft)
+
 ## Version 1.4.2 (to 1.4.1)
 
 - Fix: When the URL of the collection was given without a trailing slash, some operations (e.g.

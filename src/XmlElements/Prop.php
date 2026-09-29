@@ -193,7 +193,7 @@ class Prop implements \Sabre\Xml\XmlDeserializable
                 break;
 
             default:
-                $err = true;
+                Config::$logger->debug("Ignoring unknown property $name: " . print_r($deserElem["value"], true));
                 break;
         }
 

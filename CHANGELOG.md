@@ -3,6 +3,8 @@
 ## Version 1.5.0 (to 1.4.2)
 
 - Add options for TLS authentication passed through to Guzzle (#38, thanks @mintsoft)
+- In case unrequested XML elements are encountered in the XML response of the CardDAV server, only log a debug message
+  instead of a warning.
 
 ## Version 1.4.2 (to 1.4.1)
 

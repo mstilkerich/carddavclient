@@ -303,7 +303,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         $options = $options + $this->httpOptions;
 
         // These options are also known to Guzzle and can directly be passed along
-        foreach ([ "headers", "body", "verify", "query" ] as $copyopt) {
+        foreach ([ "headers", "body", "verify", "query", "ssl_key", "cert" ] as $copyopt) {
             if (isset($options[$copyopt])) {
                 $guzzleOptions[$copyopt] = $options[$copyopt];
             }

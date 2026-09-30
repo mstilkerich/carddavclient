@@ -12,6 +12,8 @@
   - sabre/vobject: ^4.5 || ^5.0
   - sabre/xml: ^3.0 || ^4.0
   - sabre/uri: ^2.3 || ^3.0
+- Guzzle 8: Digest and NTLM authentication are performed via curl (as with Guzzle 7), since Guzzle 8's own Digest
+  implementation fails for REPORT requests to Sabre/DAV based servers and Guzzle 8 dropped NTLM support.
 - Add options for TLS authentication passed through to Guzzle (#38, thanks @mintsoft)
 - In case unrequested XML elements are encountered in the XML response of the CardDAV server, only log a debug message
   instead of a warning.

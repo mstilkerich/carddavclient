@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace MStilkerich\Tests\CardDavClient\Unit;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use MStilkerich\CardDavClient\XmlElements\{Filter,PropFilter,ParamFilter,TextMatch};
 use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 
@@ -58,7 +59,7 @@ final class FilterTest extends TestCase
      *
      * @return array<string, array{SimpleConditions, array<string,string>}>
      */
-    public function simpleFilterProvider(): array
+    public static function simpleFilterProvider(): array
     {
         return [
             'SinglePropertyNotDefined' => [
@@ -113,10 +114,10 @@ final class FilterTest extends TestCase
     }
 
     /**
-     * @dataProvider simpleFilterProvider
      * @param SimpleConditions $conditions
      * @param array<string,string> $expStruct
      */
+    #[DataProvider('simpleFilterProvider')]
     public function testSimpleFilterConditionsParsedCorrectly(array $conditions, array $expStruct): void
     {
 
@@ -158,7 +159,7 @@ final class FilterTest extends TestCase
      *
      * @return array<string, array{ComplexConditions, list<string>}>
      */
-    public function elaborateFilterProvider(): array
+    public static function elaborateFilterProvider(): array
     {
         return [
             'SinglePropertyNotDefined' => [
@@ -193,10 +194,10 @@ final class FilterTest extends TestCase
     }
 
     /**
-     * @dataProvider elaborateFilterProvider
      * @param ComplexConditions $conditions
      * @param list<string> $expStruct
      */
+    #[DataProvider('elaborateFilterProvider')]
     public function testElaborateFilterConditionsParsedCorrectly(array $conditions, array $expStruct): void
     {
         foreach ([true, false] as $matchAll) {
@@ -227,7 +228,7 @@ final class FilterTest extends TestCase
      *
      * @return array<string, array{array, string}>
      */
-    public function invalidFilterProvider(): array
+    public static function invalidFilterProvider(): array
     {
         return [
             // problem with the property name
@@ -272,10 +273,10 @@ final class FilterTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidFilterProvider
      * @param array $conditions
      * @param string $expErrMsg
      */
+    #[DataProvider('invalidFilterProvider')]
     public function testExceptionOnInvalidFilterConditions(array $conditions, string $expErrMsg): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -290,7 +291,7 @@ final class FilterTest extends TestCase
      *
      * @return list<array{string, ?bool, string, string}>
      */
-    public function textmatchProvider(): array
+    public static function textmatchProvider(): array
     {
         return [
             [ '/foo/', false, 'contains', 'foo' ],
@@ -306,7 +307,6 @@ final class FilterTest extends TestCase
         ];
     }
     /**
-     * @dataProvider textmatchProvider
      *
      * @param string $pattern
      * @param ?bool  $expInv Whether inverted match is expected. Null if the pattern is erroneous and should trigger an
@@ -314,6 +314,7 @@ final class FilterTest extends TestCase
      * @param string $expType The expected match type
      * @param string $expNeedle Expected search string.
      */
+    #[DataProvider('textmatchProvider')]
     public function testTextmatchPatternParsedCorrectly(
         string $pattern,
         ?bool $expInv,

@@ -1,7 +1,17 @@
-<phpunit colors="true" testdox="true" verbose="true">
+<phpunit colors="true" testdox="true" cacheDirectory="../../.phpunit.cache"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnPhpunitDeprecations="true"
+    failOnDeprecation="true"
+    failOnNotice="true"
+    failOnWarning="true"
+    failOnPhpunitWarning="false"
+    >
     <php>
         <var name="TEST_TESTRUN" value="unit"/>
-        <!-- make sure all PHP errors are reported and raise PHPunit exceptions -->
+        <!-- make sure all PHP errors are reported -->
         <ini name="error_reporting" value="-1"/>
     </php>
     <testsuites>
@@ -10,11 +20,13 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true" pathCoverage="true">
+    <source ignoreIndirectDeprecations="true">
         <include>
             <directory suffix=".php">../../src</directory>
         </include>
+    </source>
 
+    <coverage pathCoverage="true">
         <report>
             <php outputFile="../../testreports/unit/coverage.cov"/>
             <clover outputFile="../../testreports/unit/clover.xml"/>

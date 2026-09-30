@@ -128,7 +128,7 @@ final class TestInfrastructure
     {
         $res = [];
         foreach ($nodes as $n) {
-            $res[$n->name][] = $n;
+            $res[$n->name ?? ''][] = $n;
         }
 
         return $res;

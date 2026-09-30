@@ -279,7 +279,7 @@ class Sync
                 if (!isset($etag)) {
                     Config::$logger->warning("Server did not provide an ETag for $url, skipping");
                 } else {
-                    ['path' => $uri] = \Sabre\Uri\parse($url);
+                    $uri = \Sabre\Uri\parse($url)['path'] ?? '';
 
                     // add new or changed cards to the list of changes
                     if (
@@ -287,7 +287,7 @@ class Sync
                         || ($etag !== $localCacheState[$uri])
                     ) {
                         $changes[] = [
-                            'uri' => $uri ?? '',
+                            'uri' => $uri,
                             'etag' => $etag
                         ];
                     }

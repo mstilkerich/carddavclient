@@ -29,13 +29,13 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
  *   max?: int,
  *   strict?: bool,
  *   referer?: bool,
- *   protocols?: list<string>,
+ *   protocols?: non-empty-list<string>,
  *   on_redirect?: callable(Psr7Request, Psr7Response, Psr7Uri): void,
  *   track_redirects?: bool
  * }
  *
  * @psalm-type GuzzleRequestOptions = array{
- *   headers?: array<string, string | list<string>>,
+ *   headers?: array<string, string | non-empty-list<string>>,
  *   query?: array<string, string>,
  *   body?: string | resource | \Psr\Http\Message\StreamInterface,
  *   allow_redirects?: bool | GuzzleAllowRedirectCfg,
@@ -50,15 +50,6 @@ use MStilkerich\CardDavClient\Exception\{ClientException, NetworkException};
  */
 class HttpClientAdapterGuzzle extends HttpClientAdapter
 {
-    /**
-     * A list of authentication schemes that can be handled by Guzzle itself, independent on whether it works only with
-     * the Guzzle Curl HTTP handler or not. Strings must be lowercase!
-     *
-     * @psalm-var list<lowercase-string>
-     * @var array<int, string>
-     */
-    private const GUZZLE_KNOWN_AUTHSCHEMES = [ 'basic', 'digest', 'ntlm' ];
-
     /**
      * A list of authentication schemes that can be handled by this HttpClientAdapter.
      *
@@ -88,8 +79,8 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
     private $failedAuthSchemes = [];
 
     /**
-     * Maps lowercase auth-schemes to their CURLAUTH_XXX constant. Only values not part of GUZZLE_KNOWN_AUTHSCHEMES are
-     * relevant here.
+     * Maps lowercase auth-schemes to their CURLAUTH_XXX constant. Used for all auth-schemes except basic (handled via
+     * the auth option of Guzzle) and bearer (handled by HttpClientAdapterGuzzle directly).
      * @var null|array<lowercase-string, int>
      */
     private static $schemeToCurlOpt;
@@ -107,6 +98,12 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             self::$schemeToCurlOpt = [];
 
             if (extension_loaded("curl")) {
+                // Digest and NTLM are not passed to the auth option of Guzzle: Guzzle 7 used curl for these anyway,
+                // whereas Guzzle 8 does not support NTLM anymore and implements Digest in a middleware that sends the
+                // initial unauthenticated request without body. Sabre/DAV servers answer such a REPORT request with an
+                // error instead of an authentication challenge, making the request fail.
+                self::$schemeToCurlOpt['digest'] = CURLAUTH_DIGEST;
+                self::$schemeToCurlOpt['ntlm'] = CURLAUTH_NTLM;
                 self::$schemeToCurlOpt['curlany'] = CURLAUTH_ANY;
 
                 // if CURL is compiled without support for SPNEGO, CURLAUTH_NEGOTIATE is not defined
@@ -124,11 +121,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             }
         }
 
-        $this->known_authschemes = array_merge(
-            [ 'bearer' ],
-            self::GUZZLE_KNOWN_AUTHSCHEMES,
-            array_keys(self::$schemeToCurlOpt)
-        );
+        $this->known_authschemes = array_merge([ 'bearer', 'basic' ], array_keys(self::$schemeToCurlOpt));
 
         $stack = HandlerStack::create();
 
@@ -325,7 +318,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
         if ($doAuth && isset($authScheme)) {
             Config::$logger->debug("Using auth scheme $authScheme");
 
-            if (in_array($authScheme, self::GUZZLE_KNOWN_AUTHSCHEMES)) {
+            if ($authScheme === 'basic') {
                 $guzzleOptions['auth'] = [
                     $this->httpOptions['username'] ?? "",
                     $this->httpOptions['password'] ?? "",
@@ -335,10 +328,12 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                 if (isset($_SERVER['KRB5CCNAME'])) {
                     putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
                 }
+                // Guzzle 8 only accepts an allow-list of curl options, which contains CURLOPT_USERPWD but not
+                // CURLOPT_USERNAME / CURLOPT_PASSWORD
                 $guzzleOptions["curl"] = [
                     CURLOPT_HTTPAUTH => self::$schemeToCurlOpt[$authScheme],
-                    CURLOPT_USERNAME => $this->httpOptions['username'] ?? "",
-                    CURLOPT_PASSWORD => $this->httpOptions['password'] ?? ""
+                    CURLOPT_USERPWD => ($this->httpOptions['username'] ?? "") . ":"
+                        . ($this->httpOptions['password'] ?? "")
                 ];
             } else { // handled by HttpClientAdapterGuzzle directly
                 if ($authScheme == "bearer" && isset($this->httpOptions['bearertoken'])) {
@@ -382,7 +377,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
             $authHeader = trim($authHeader);
             $srvSchemes = [];
 
-            foreach (preg_split("/\s*,\s*/", $authHeader) as $challenge) {
+            foreach (preg_split("/\s*,\s*/", $authHeader) ?: [] as $challenge) {
                 if (preg_match("/^([^ =]+)(\s+[^=].*)?$/", $challenge, $matches)) { // filter auth-params
                     $srvSchemes[] = strtolower($matches[1]);
                 }

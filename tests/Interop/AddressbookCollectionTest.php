@@ -14,6 +14,7 @@ namespace MStilkerich\Tests\CardDavClient\Interop;
 use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 use MStilkerich\CardDavClient\{Account,AddressbookCollection,WebDavResource};
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\{DataProvider, Depends};
 use Sabre\VObject\Component\VCard;
 use MStilkerich\Tests\CardDavClient\Interop\TestInfrastructureSrv as TIS;
 
@@ -47,15 +48,15 @@ final class AddressbookCollectionTest extends TestCase
     }
 
     /** @return array<string, array{string, TestAddressbook}> */
-    public function addressbookProvider(): array
+    public static function addressbookProvider(): array
     {
         return TIS::addressbookProvider();
     }
 
     /**
      * @param TestAddressbook $cfg
-     * @dataProvider addressbookProvider
      */
+    #[DataProvider('addressbookProvider')]
     public function testPropertiesCorrectlyReported(string $abookname, array $cfg): void
     {
         $abook = TIS::getAddressbook($abookname);
@@ -93,8 +94,8 @@ final class AddressbookCollectionTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
-     * @dataProvider addressbookProvider
      */
+    #[DataProvider('addressbookProvider')]
     public function testCanInsertValidCard(string $abookname, array $cfg): void
     {
         $abook = TIS::getAddressbook($abookname);
@@ -111,9 +112,9 @@ final class AddressbookCollectionTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
-     * @depends testCanInsertValidCard
-     * @dataProvider addressbookProvider
      */
+    #[Depends('testCanInsertValidCard')]
+    #[DataProvider('addressbookProvider')]
     public function testCanRetrieveCreatedCard(string $abookname, array $cfg): void
     {
         $abook = TIS::getAddressbook($abookname);
@@ -145,9 +146,9 @@ final class AddressbookCollectionTest extends TestCase
      * creates a WebDavResource instance for an addressbook object (which is not a collection).
      *
      * @param TestAddressbook $cfg
-     * @depends testCanInsertValidCard
-     * @dataProvider addressbookProvider
      */
+    #[Depends('testCanInsertValidCard')]
+    #[DataProvider('addressbookProvider')]
     public function testCanCreateWebDavResourceForNonCollection(string $abookname, array $cfg): void
     {
         $abook = TIS::getAddressbook($abookname);
@@ -170,10 +171,10 @@ final class AddressbookCollectionTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
-     * @depends testCanInsertValidCard
-     * @depends testCanRetrieveCreatedCard
-     * @dataProvider addressbookProvider
      */
+    #[Depends('testCanInsertValidCard')]
+    #[Depends('testCanRetrieveCreatedCard')]
+    #[DataProvider('addressbookProvider')]
     public function testUpdateFailsWithErroneousCard(string $abookname, array $cfg): void
     {
         $abook = TIS::getAddressbook($abookname);
@@ -199,10 +200,10 @@ final class AddressbookCollectionTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
-     * @depends testCanInsertValidCard
-     * @depends testCanRetrieveCreatedCard
-     * @dataProvider addressbookProvider
      */
+    #[Depends('testCanInsertValidCard')]
+    #[Depends('testCanRetrieveCreatedCard')]
+    #[DataProvider('addressbookProvider')]
     public function testCanUpdateCreatedCard(string $abookname, array $cfg): void
     {
         $abook = TIS::getAddressbook($abookname);
@@ -227,9 +228,9 @@ final class AddressbookCollectionTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
-     * @depends testCanUpdateCreatedCard
-     * @dataProvider addressbookProvider
      */
+    #[Depends('testCanUpdateCreatedCard')]
+    #[DataProvider('addressbookProvider')]
     public function testUpdateOfOutdatedCardFails(string $abookname, array $cfg): void
     {
         if (TIS::hasFeature($abookname, TIS::BUG_ETAGPRECOND_NOTCHECKED)) {
@@ -250,9 +251,9 @@ final class AddressbookCollectionTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
-     * @depends testCanInsertValidCard
-     * @dataProvider addressbookProvider
      */
+    #[Depends('testCanInsertValidCard')]
+    #[DataProvider('addressbookProvider')]
     public function testCanDeleteExistingCard(string $abookname, array $cfg): void
     {
         $abook = TIS::getAddressbook($abookname);
@@ -275,10 +276,10 @@ final class AddressbookCollectionTest extends TestCase
      * Tests that a card with minor/repairable issues (missing FN) can be inserted successfully.
      *
      * @param TestAddressbook $cfg
-     * @depends testCanInsertValidCard
-     * @depends testCanDeleteExistingCard
-     * @dataProvider addressbookProvider
      */
+    #[Depends('testCanInsertValidCard')]
+    #[Depends('testCanDeleteExistingCard')]
+    #[DataProvider('addressbookProvider')]
     public function testCanInsertCardWithMinorProblems(string $abookname, array $cfg): void
     {
         $abook = TIS::getAddressbook($abookname);
@@ -297,8 +298,8 @@ final class AddressbookCollectionTest extends TestCase
 
     /**
      * @param TestAddressbook $cfg
-     * @dataProvider addressbookProvider
      */
+    #[DataProvider('addressbookProvider')]
     public function testGetDetailsProvidesCoreInformation(string $abookname, array $cfg): void
     {
         $abook = TIS::getAddressbook($abookname);

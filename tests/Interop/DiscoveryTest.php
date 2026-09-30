@@ -15,6 +15,7 @@ use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\Services\Discovery;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @psalm-import-type TestAccount from TestInfrastructureSrv
@@ -43,15 +44,15 @@ final class DiscoveryTest extends TestCase
     /**
      * @return array<string, array{string, TestAccount}>
      */
-    public function accountProvider(): array
+    public static function accountProvider(): array
     {
         return TestInfrastructureSrv::accountProvider();
     }
 
     /**
      * @param TestAccount $cfg
-     * @dataProvider accountProvider
      */
+    #[DataProvider('accountProvider')]
     public function testAllAddressbooksCanBeDiscovered(string $accountname, array $cfg): void
     {
         $account = TestInfrastructureSrv::getAccount($accountname);

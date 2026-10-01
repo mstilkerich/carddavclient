@@ -14,13 +14,16 @@ namespace MStilkerich\Tests\CardDavClient\Interop;
 use MStilkerich\CardDavClient\AddressbookCollection;
 
 /**
- * Tests the Sync service using the sync-collection REPORT, if supported by the server.
+ * Tests the Sync service's fallback for servers that do not support the sync-collection REPORT.
+ *
+ * The CTag is still used to detect whether the addressbook changed, and the changes are determined by ETag comparison.
  */
-final class SyncTest extends SyncTestBase
+final class SyncWithoutSyncCollTest extends SyncTestBase
 {
     protected function getSyncAddressbook(string $abookname): AddressbookCollection
     {
-        return TestInfrastructureSrv::getAddressbook($abookname);
+        $abook = TestInfrastructureSrv::getAddressbook($abookname);
+        return new AddressbookCollectionNoSyncColl($abook->getUri(), $abook->getAccount(), false);
     }
 }
 

@@ -60,9 +60,10 @@ tests/Interop/AccountData.php: | tests/Interop/AccountData.php.dist
 .PHONY: codecov-upload
 codecov-upload:
 	if [ -n "$$CODECOV_TOKEN" ]; then \
-		curl -s https://codecov.io/bash >testreports/codecov.sh; \
-		bash testreports/codecov.sh -F unittests -f testreports/unit/clover.xml -n 'Carddavclient unit test coverage'; \
-		bash testreports/codecov.sh -F interop -f testreports/interop/clover.xml -n 'Carddavclient interoperability test coverage'; \
+		curl -s https://cli.codecov.io/latest/linux-arm64/codecov >testreports/codecov; \
+		chmod 755 testreports/codecov; \
+		testreports/codecov upload-process --disable-search --fail-on-error -F unittests -f testreports/unit/clover.xml -n 'Carddavclient unit test coverage'; \
+		testreports/codecov upload-process --disable-search --fail-on-error -F interop -f testreports/interop/clover.xml -n 'Carddavclient interoperability test coverage'; \
 	else \
 		echo "Error: Set CODECOV_TOKEN environment variable first"; \
 		exit 1; \

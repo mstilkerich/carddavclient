@@ -1,6 +1,6 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
-## Version 1.5.0 (to 1.4.2)
+## Version 2.0.0 (to 1.4.2)
 
 - Require PHP 8.2 or newer. Support for the end-of-life PHP versions 7.1 - 8.1 is dropped. Tested with PHP 8.2 - 8.5.
 - Support newer major versions of dependencies: guzzlehttp/guzzle 8, sabre/vobject 5, sabre/uri 3.
@@ -17,6 +17,7 @@
 - Add options for TLS authentication passed through to Guzzle (#38, thanks @mintsoft)
 - In case unrequested XML elements are encountered in the XML response of the CardDAV server, only log a debug message
   instead of a warning.
+- Fix ordering of DNS SRV records according to RFC 2782 in case multiple SRV records are returned.
 
 ## Version 1.4.2 (to 1.4.1)
 

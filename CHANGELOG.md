@@ -18,6 +18,7 @@
 - In case unrequested XML elements are encountered in the XML response of the CardDAV server, only log a debug message
   instead of a warning.
 - Fix ordering of DNS SRV records according to RFC 2782 in case multiple SRV records are returned.
+- Fix fallback to plain http (`_carddav._tcp`) DNS SRV discovery (if explicitly allowed via protocol spec)
 
 ## Version 1.4.2 (to 1.4.1)
 

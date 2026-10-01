@@ -193,7 +193,7 @@ class Discovery
             /** @psalm-var list<SrvRecord> | false */
             $dnsresults = dns_get_record($rrname, DNS_SRV);
 
-            if (is_array($dnsresults)) {
+            if ($dnsresults !== false && !empty($dnsresults)) {
                 break;
             }
         }

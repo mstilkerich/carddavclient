@@ -314,7 +314,6 @@ class CardDavClient
      * @param array<int,string> $requestedVCardProps
      *  A list of the requested VCard properties. If empty array, the full VCards are requested from the server.
      * @param int $limit Tell the server to return at most $limit results. 0 means no limit.
-     * @psalm-return Multistatus
      */
     public function query(
         string $addressbookUri,

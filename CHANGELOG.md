@@ -27,6 +27,9 @@
 - Fix ordering of DNS SRV records according to RFC 2782 in case multiple SRV records are returned.
 - Fix fallback to plain http (`_carddav._tcp`) DNS SRV discovery (if explicitly allowed via protocol spec)
 - Remove the discovery workaround for iCloud (context path `/co`), which is not needed anymore.
+- A request the server answers with an unexpected HTTP status now throws an `HttpStatusException`, which provides the
+  status code (`getStatusCode()`). It extends `\Exception` and its message is unchanged, so existing code is not
+  affected.
 - Add options for TLS authentication passed through to Guzzle (#38, thanks @mintsoft)
 - In case unrequested XML elements are encountered in the XML response of the CardDAV server, only log a debug message
   instead of a warning.

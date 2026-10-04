@@ -252,6 +252,28 @@ final class AddressbookCollectionTest extends TestCase
     /**
      * @param TestAddressbook $cfg
      */
+    #[Depends('testUpdateOfOutdatedCardFails')]
+    #[DataProvider('addressbookProvider')]
+    public function testDeleteOfOutdatedCardFails(string $abookname, array $cfg): void
+    {
+        if (TIS::hasFeature($abookname, TIS::BUG_ETAGPRECOND_NOTCHECKED)) {
+            $this->markTestSkipped("$abookname has a bug: If-Match ETag precondition is ignored by server");
+        }
+
+        $abook = TIS::getAddressbook($abookname);
+        $this->assertInstanceOf(AddressbookCollection::class, $abook);
+        $this->assertArrayHasKey($abookname, self::$insertedCards);
+        [ 'uri' => $cardUri, 'etag' => $cardETag ] = self::$insertedCards[$abookname];
+
+        // the etag is still from the initial insert, missing the update done in testCanUpdateCreatedCard
+        $this->assertNotEmpty($cardETag);
+        $this->assertFalse($abook->deleteCard($cardUri, $cardETag), "delete should have failed with status 412");
+        $abook->getCard($cardUri); // still there
+    }
+
+    /**
+     * @param TestAddressbook $cfg
+     */
     #[Depends('testCanInsertValidCard')]
     #[DataProvider('addressbookProvider')]
     public function testCanDeleteExistingCard(string $abookname, array $cfg): void
@@ -262,7 +284,8 @@ final class AddressbookCollectionTest extends TestCase
         [ 'uri' => $cardUri ] = self::$insertedCards[$abookname];
         unset(self::$insertedCards[$abookname]);
 
-        $abook->deleteCard($cardUri);
+        [ 'etag' => $currentETag ] = $abook->getCard($cardUri);
+        $this->assertTrue($abook->deleteCard($cardUri, $currentETag));
 
         try {
             $abook->getCard($cardUri);

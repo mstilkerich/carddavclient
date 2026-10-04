@@ -202,13 +202,21 @@ class AddressbookCollection extends WebDavCollection
     /**
      * Deletes a VCard from the addressbook.
      *
+     * If an ETag is provided, the delete request to the server will be made conditional depending on that it matches
+     * that on the server, meaning that the card has not been changed on the server in the meantime. Otherwise, the card
+     * is deleted unconditionally.
+     *
      * @param string $uri The URI of the VCard to be deleted.
+     * @param ?string $etag The ETag of the card that was originally retrieved, if the deletion should be conditional.
+     * @return bool True if the card was deleted, false in case of ETag precondition failure. For other errors, an
+     *              exception is thrown.
      * @api
      */
-    public function deleteCard(string $uri): void
+    public function deleteCard(string $uri, ?string $etag = null): bool
     {
         $client = $this->getClient();
-        $client->deleteResource($uri);
+
+        return $client->deleteResource($uri, $etag);
     }
 
     /**

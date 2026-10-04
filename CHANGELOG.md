@@ -4,6 +4,8 @@
 
 - `AddressbookCollection::deleteCard()` takes an optional ETag to make the deletion conditional (`If-Match`), like
   `updateCard()`, and returns false instead of deleting if the card changed on the server in the meantime.
+- `AddressbookCollection::createCard()` and `updateCard()` take an optional `$validate` parameter (default true). If
+  false, the VCard is sent to the server as it is, without validation and repair.
 - Require PHP 8.2 or newer. Support for the end-of-life PHP versions 7.1 - 8.1 is dropped. Tested with PHP 8.2 - 8.5.
 - Support newer major versions of dependencies: guzzlehttp/guzzle 8, sabre/vobject 5, sabre/uri 3.
 - Drop support for old major versions of dependencies: guzzlehttp/guzzle 6, psr/http-message 1, psr/log 1,

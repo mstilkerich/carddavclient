@@ -229,13 +229,16 @@ class AddressbookCollection extends WebDavCollection
      * last path component (filename) is derived from the UID of the VCard.
      *
      * @param VCard $vcard The VCard to be stored.
+     * @param bool $validate Whether to validate (and repair, where possible) the VCard before sending it, see
+     *                       {@see validateCard()}. If false, the VCard is sent as it is, and it is up to the server to
+     *                       accept it.
      * @psalm-return array{uri: string, etag: string}
      * @return array<string,string> Associative array with keys
      *   - uri (string): URI of the new resource if the request was successful
      *   - etag (string): Entity tag of the created resource if returned by server, otherwise empty string.
      * @api
      */
-    public function createCard(VCard $vcard): array
+    public function createCard(VCard $vcard, bool $validate = true): array
     {
         $props = $this->getProperties();
 
@@ -250,8 +253,10 @@ class AddressbookCollection extends WebDavCollection
             $uid = str_replace("urn:uuid:", "", $uid);
         }
 
-        // Assert validity of the Card for CardDAV, including valid UID property
-        $this->validateCard($vcard);
+        if ($validate) {
+            // Assert validity of the Card for CardDAV, including valid UID property
+            $this->validateCard($vcard);
+        }
 
         $client = $this->getClient();
 
@@ -284,16 +289,21 @@ class AddressbookCollection extends WebDavCollection
      * @param string $uri The URI of the card to update.
      * @param VCard $vcard The updated VCard to be stored.
      * @param string $etag The ETag of the card that was originally retrieved and modified.
+     * @param bool $validate Whether to validate (and repair, where possible) the VCard before sending it, see
+     *                       {@see validateCard()}. If false, the VCard is sent as it is, and it is up to the server to
+     *                       accept it.
      * @return ?string On success, returns the ETag of the updated card if provided by the server, an empty string
      *                 otherwise. In the latter case, it must be assumed that the server stored the card with
      *                 modifications and the card should be read back from the server (this is a good idea anyway).
      *                 In case of ETag precondition failure, null is returned. For other errors, an exception is thrown.
      * @api
      */
-    public function updateCard(string $uri, VCard $vcard, string $etag): ?string
+    public function updateCard(string $uri, VCard $vcard, string $etag, bool $validate = true): ?string
     {
-        // Assert validity of the Card for CardDAV, including valid UID property
-        $this->validateCard($vcard);
+        if ($validate) {
+            // Assert validity of the Card for CardDAV, including valid UID property
+            $this->validateCard($vcard);
+        }
 
         $client = $this->getClient();
         $etag = $client->updateResource($vcard->serialize(), $uri, $etag);

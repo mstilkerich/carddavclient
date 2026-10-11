@@ -146,10 +146,10 @@ class CardDavClient
      * @return bool
      *  True if the resource was deleted, false if it was not because the server-side ETag did not match the given one.
      */
-    public function deleteResource(string $uri, ?string $etag = null): bool
+    public function deleteResource(string $uri, string $etag = ""): bool
     {
         $headers = [];
-        if ($etag !== null) {
+        if ($etag !== "") {
             $headers["If-Match"] = $etag;
         }
 
@@ -178,7 +178,7 @@ class CardDavClient
     public function updateResource(string $body, string $uri, string $etag = ""): ?string
     {
         $headers = [ "Content-Type" => "text/vcard" ];
-        if (!empty($etag)) {
+        if ($etag !== "") {
             $headers["If-Match"] = $etag;
         }
 

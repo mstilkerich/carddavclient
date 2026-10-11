@@ -57,6 +57,28 @@ final class CardDavClientTest extends TestCase
         $this->assertSame('"abc"', $request->getHeaders()['If-Match']);
     }
 
+    public function testDeleteWithETagZeroIsConditional(): void
+    {
+        self::$server->setDefaultResponse(new Response('', [], 204));
+
+        $this->assertTrue($this->client()->deleteResource('/card.vcf', '0'));
+
+        $request = self::$server->getLastRequest();
+        $this->assertNotNull($request);
+        $this->assertSame('0', $request->getHeaders()['If-Match']);
+    }
+
+    public function testUpdateWithETagZeroIsConditional(): void
+    {
+        self::$server->setDefaultResponse(new Response('', [ 'ETag' => '"new"' ], 204));
+
+        $this->assertSame('"new"', $this->client()->updateResource('BEGIN:VCARD', '/card.vcf', '0'));
+
+        $request = self::$server->getLastRequest();
+        $this->assertNotNull($request);
+        $this->assertSame('0', $request->getHeaders()['If-Match']);
+    }
+
     public function testDeleteReturnsFalseIfETagDoesNotMatch(): void
     {
         self::$server->setDefaultResponse(new Response('', [], 412));

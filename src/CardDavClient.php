@@ -128,7 +128,7 @@ class CardDavClient
         // "A response to a GET request targeted at an address object resource MUST contain an ETag response header
         // field indicating the current value of the strong entity tag of the address object resource."
         $etag = $response->getHeaderLine("ETag");
-        if (empty($etag)) {
+        if ($etag === "") {
             throw new \Exception("Response to address object $uri GET request does not include ETag header");
         }
 

@@ -179,7 +179,7 @@ final class TestInfrastructureSrv
 
     public const SRVFEATS_SOGO = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG | self::FEAT_FILTER_ALLOF
         | self::BUG_PROPFILTER_EQUALS_BROKEN | self::BUG_INVTEXTMATCH_IGNORED | self::BUG_HANDLE_PROPGROUPS_IN_QUERY
-        | self::BUG_PROPFILTER_PROPEXISTENCE_IGNORED;
+        | self::BUG_PROPFILTER_PROPEXISTENCE_IGNORED | self::BUG_ETAGPRECOND_NOTCHECKED_DEL;
 
     /** @var bool */
     private static $initialized = false;

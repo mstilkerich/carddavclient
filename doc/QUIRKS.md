@@ -154,7 +154,7 @@ User-visibile impact and possible workaround | Changes of another client could b
 
 BUG_ETAGPRECOND_NOTCHECKED_DEL | ETag precondition ignored when deleting a vcard
 --------|----------------------------------------------------------
-Affected servers / services | iCloud
+Affected servers / services | iCloud, Google Contacts, SOGo
 Description | When deleting a vcard on the server, one can make the operation dependent on the precondition that the ETag of the server-side card still is the same as for the card that was locally used as base date for the delete decision. If another client changed the card at the server in the meantime, this makes the delete fail and avoids deleting the other client's changes. iCloud ignores the precondition and performs the delete even in case of ETag mismatch.
 Affected operations | `AddressbookCollection::deleteCard()` when called with a non-empty `$etag` parameter.
 User-visibile impact and possible workaround | Changes of another client could be deleted. No workaround available.

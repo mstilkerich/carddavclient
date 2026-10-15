@@ -256,7 +256,7 @@ final class AddressbookCollectionTest extends TestCase
     #[DataProvider('addressbookProvider')]
     public function testDeleteOfOutdatedCardFails(string $abookname, array $cfg): void
     {
-        if (TIS::hasFeature($abookname, TIS::BUG_ETAGPRECOND_NOTCHECKED)) {
+        if (TIS::hasFeature($abookname, TIS::BUG_ETAGPRECOND_NOTCHECKED_DEL)) {
             $this->markTestSkipped("$abookname has a bug: If-Match ETag precondition is ignored by server");
         }
 

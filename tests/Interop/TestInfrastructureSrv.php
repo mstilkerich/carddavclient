@@ -115,7 +115,8 @@ final class TestInfrastructureSrv
     // Server bug: parameter values with a quoted comma are considered as multiple values by the server
     public const BUG_PARAMCOMMAVALUE = 2 ** 23;
 
-    // Server bug: If-match ETag precondition check is not performed, i.e. requests succeeds even in case of mismatch
+    // Server bug: If-match ETag precondition check is not performed on PUT requests, i.e. PUT succeeds even in case of
+    // mismatch
     public const BUG_ETAGPRECOND_NOTCHECKED = 2 ** 24;
 
     // Server bug: equals text-match is not properly evaluated
@@ -130,8 +131,12 @@ final class TestInfrastructureSrv
     // Google adds a TYPE=PREF parameter to the first EMAIL, TEL, IMPP property
     public const BUG_ADDED_PREFTYPE_PARAM = 2 ** 28;
 
+    // Server bug: If-match ETag precondition check is not performed on delete request, i.e. delete succeeds even in
+    // case of mismatch
+    public const BUG_ETAGPRECOND_NOTCHECKED_DEL = 2 ** 29;
+
     public const SRVFEATS_ICLOUD = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
-        | self::FEAT_ALLOF_SINGLEPROP | self::BUG_CASESENSITIVE_NAMES;
+        | self::FEAT_ALLOF_SINGLEPROP | self::BUG_CASESENSITIVE_NAMES | self::BUG_ETAGPRECOND_NOTCHECKED_DEL;
 
     public const SRVFEATS_GOOGLE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT | self::FEAT_ABOOKQUERY_PARTIALCARDS
@@ -143,7 +148,8 @@ final class TestInfrastructureSrv
         | self::BUG_MULTIPARAM_NOINDIVIDUAL_MATCH
         | self::BUG_CASESENSITIVE_NAMES
         | self::BUG_ETAGPRECOND_NOTCHECKED
-        | self::BUG_ADDED_PREFTYPE_PARAM;
+        | self::BUG_ADDED_PREFTYPE_PARAM
+        | self::BUG_ETAGPRECOND_NOTCHECKED_DEL;
 
     public const SRVFEATSONLY_SABRE = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
         | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_RESULTLIMIT

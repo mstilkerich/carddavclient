@@ -138,11 +138,30 @@ class CardDavClient
 
     /**
      * Requests the server to delete the given resource.
+     *
+     * Normally, the ETag of the existing expected server-side resource should be given to make the deletion
+     * conditional on that no other changes have been done to the server-side resource, otherwise lost updates might
+     * occur. However, if no ETag is given, the server-side resource is deleted unconditionally.
+     *
+     * @return bool
+     *  True if the resource was deleted, false if it was not because the server-side ETag did not match the given one.
      */
-    public function deleteResource(string $uri): void
+    public function deleteResource(string $uri, string $etag = ""): bool
     {
-        $response = $this->httpClient->sendRequest('DELETE', $uri);
+        $headers = [];
+        if ($etag !== "") {
+            $headers["If-Match"] = $etag;
+        }
+
+        $response = $this->httpClient->sendRequest('DELETE', $uri, [ "headers" => $headers ]);
+
+        if ($response->getStatusCode() == 412) {
+            return false;
+        }
+
         self::assertHttpStatus($response, 200, 204, "DELETE $uri");
+
+        return true;
     }
 
     /**
@@ -159,7 +178,7 @@ class CardDavClient
     public function updateResource(string $body, string $uri, string $etag = ""): ?string
     {
         $headers = [ "Content-Type" => "text/vcard" ];
-        if (!empty($etag)) {
+        if ($etag !== "") {
             $headers["If-Match"] = $etag;
         }
 

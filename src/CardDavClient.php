@@ -17,6 +17,7 @@ use MStilkerich\CardDavClient\XmlElements\Filter;
 use MStilkerich\CardDavClient\XmlElements\Multistatus;
 use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
 use MStilkerich\CardDavClient\XmlElements\Deserializers;
+use MStilkerich\CardDavClient\Exception\HttpStatusException;
 use MStilkerich\CardDavClient\Exception\XmlParseException;
 
 /**
@@ -506,7 +507,7 @@ class CardDavClient
             $reason = $davReply->getReasonPhrase();
             $body = (string) $davReply->getBody();
 
-            throw new \Exception("$nfo HTTP request was not successful ($status $reason): $body");
+            throw new HttpStatusException("$nfo HTTP request was not successful ($status $reason): $body", $status);
         }
     }
 

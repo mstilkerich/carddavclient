@@ -38,6 +38,12 @@ class Sync
      * @param string $prevSyncToken
      *  Sync-token of a previous sync when performing an incremental sync. Empty string to perform a full sync (all
      *  cards of the addressbook will be reported as changed).
+     * @param int $limit
+     *  If greater than 0, retrieve the changes from the server in batches of at most this number of changes, to limit
+     *  the size of the individual server responses. The batches are transparent to the $handler. With the
+     *  sync-collection REPORT, the limit is requested from the server (RFC 6578 DAV:limit). If the server cannot honor
+     *  the limit, or if it does not support the sync-collection REPORT, the changes are determined by ETag comparison;
+     *  in this case, the changed cards are fetched in batches of at most this number of cards. 0 means no limit.
      * @return string
      *  The sync token corresponding to the just synchronized (or slightly earlier) state of the collection.
      *
@@ -47,14 +53,16 @@ class Sync
         AddressbookCollection $abook,
         SyncHandler $handler,
         array $requestedVCardProps = [],
-        string $prevSyncToken = ""
+        string $prevSyncToken = "",
+        int $limit = 0
     ): string {
-        // just in case - never sync more than this number of batches in one call
+        // just in case - never sync more than this number of batches in one call, unless the batches are created due to
+        // the limit requested by the client
         $batchLimit = 10;
 
         do {
             --$batchLimit;
-            $syncResult = $this->synchronizeOneBatch($abook, $handler, $requestedVCardProps, $prevSyncToken);
+            $syncResult = $this->synchronizeOneBatch($abook, $handler, $requestedVCardProps, $prevSyncToken, $limit);
 
             if ($syncResult->syncAgain) {
                 // if the server replies with 507 insufficient storage, it needs to provide a sync-token,
@@ -62,12 +70,17 @@ class Sync
                 if (empty($syncResult->syncToken)) {
                     Config::$logger->warning("Server reported partial changes only, but no sync-token - not repeating");
                     break;
+                } elseif ($syncResult->syncToken === $prevSyncToken) {
+                    Config::$logger->warning("Server reported partial changes only, but sync-token unchanged");
+                    break;
                 } else {
                     Config::$logger->debug("Server reported partial changes only, repeating sync for next batch");
                     $prevSyncToken = $syncResult->syncToken;
                 }
             }
-        } while ($syncResult->syncAgain && ($batchLimit > 0));
+        } while ($syncResult->syncAgain && ($limit > 0 || $batchLimit > 0));
+
+        $handler->finalizeSync();
 
         return $syncResult->syncToken;
     }
@@ -77,13 +90,15 @@ class Sync
      *
      * @psalm-param list<string> $requestedVCardProps
      * @param array<int,string> $requestedVCardProps
+     * @param int $limit Maximum number of changes to process per batch; 0 for no limit.
      * @return SyncResult The synchronization result object.
      */
     private function synchronizeOneBatch(
         AddressbookCollection $abook,
         SyncHandler $handler,
         array $requestedVCardProps,
-        string $prevSyncToken
+        string $prevSyncToken,
+        int $limit
     ): SyncResult {
         $client = $abook->getClient();
 
@@ -101,8 +116,10 @@ class Sync
                 // that future syncs may use the sync-collection report
                 $newSyncToken = $abook->getSyncToken();
 
-                $syncResult = $this->syncCollection($client, $abook, $prevSyncToken);
+                $syncResult = $this->syncCollection($client, $abook, $prevSyncToken, $limit);
             } catch (\Exception $e) {
+                // This includes a server that cannot honor the requested limit (RFC 6578: it MUST fail the request with
+                // a DAV:number-of-matches-within-limits post-condition error). The ETag-based sync honors the limit.
                 Config::$logger->error("sync-collection REPORT produced exception", [ 'exception' => $e ]);
             }
         }
@@ -131,41 +148,79 @@ class Sync
         }
 
         // FETCH THE CHANGED ADDRESS OBJECTS
-        if (!empty($syncResult->changedObjects)) {
-            if ($abook->supportsMultiGet()) {
-                try {
-                    $this->multiGetChanges($client, $abook, $syncResult, $requestedVCardProps);
-                } catch (\Exception $e) {
-                    // if the multiget failed, we can still try to get each card individually
-                    Config::$logger->error("addressbook-multiget REPORT produced exception", [ 'exception' => $e ]);
-                }
-            }
+        // The changes reported by the sync-collection REPORT are already limited by the server, but the ETag-based sync
+        // determines all changes at once. To honor the limit, fetch and report the changed cards in batches.
+        $changedObjects = $syncResult->changedObjects;
+        $syncResult->changedObjects = [];
+        if ($limit > 0 && count($changedObjects) > $limit) {
+            $batches = array_chunk($changedObjects, $limit);
+        } else {
+            $batches = [ $changedObjects ];
+        }
 
-            // try to manually fill all VCards where multiget did not provide VCF data
-            foreach ($syncResult->changedObjects as &$objref) {
-                if (!isset($objref["vcf"])) {
-                    Config::$logger->debug("Fetching " . $objref['uri'] . " via GET");
-                    [
-                        'etag' => $objref["etag"],
-                        'vcf' => $objref["vcf"],
-                        'vcard' => $objref["vcard"]
-                    ] = $abook->getCard($objref["uri"]);
-                }
-            }
-            unset($objref);
+        foreach ($batches as $batchChanges) {
+            $batch = new SyncResult($syncResult->syncToken);
+            $batch->changedObjects = $batchChanges;
+            $this->fetchAndReportChanges($client, $abook, $handler, $batch, $requestedVCardProps);
+        }
 
-            if ($syncResult->createVCards() === false) {
-                Config::$logger->warning("Not for all changed objects, the VCard data was provided by the server");
-            }
+        return $syncResult;
+    }
 
-            foreach ($syncResult->changedObjects as $obj) {
-                $handler->addressObjectChanged($obj["uri"], $obj["etag"], $obj["vcard"] ?? null);
+    /**
+     * Fetches the changed cards of a batch from the server and reports them to the sync handler.
+     *
+     * @param CardDavClient $client
+     *  The client to use for communicating with the server.
+     * @param AddressbookCollection $abook
+     *  The addressbook to fetch the cards from.
+     * @param SyncHandler $handler
+     *  The application-side sync handler to report the changed cards to.
+     * @param SyncResult $batch
+     *  The SyncResult object containing the URIs of the changed cards to fetch.
+     * @psalm-param list<string> $requestedVCardProps
+     * @param array<int,string> $requestedVCardProps
+     */
+    private function fetchAndReportChanges(
+        CardDavClient $client,
+        AddressbookCollection $abook,
+        SyncHandler $handler,
+        SyncResult $batch,
+        array $requestedVCardProps
+    ): void {
+        if (empty($batch->changedObjects)) {
+            return;
+        }
+
+        if ($abook->supportsMultiGet()) {
+            try {
+                $this->multiGetChanges($client, $abook, $batch, $requestedVCardProps);
+            } catch (\Exception $e) {
+                // if the multiget failed, we can still try to get each card individually
+                Config::$logger->error("addressbook-multiget REPORT produced exception", [ 'exception' => $e ]);
             }
         }
 
-        $handler->finalizeSync();
+        // try to manually fill all VCards where multiget did not provide VCF data
+        foreach ($batch->changedObjects as &$objref) {
+            if (!isset($objref["vcf"])) {
+                Config::$logger->debug("Fetching " . $objref['uri'] . " via GET");
+                [
+                    'etag' => $objref["etag"],
+                    'vcf' => $objref["vcf"],
+                    'vcard' => $objref["vcard"]
+                ] = $abook->getCard($objref["uri"]);
+            }
+        }
+        unset($objref);
 
-        return $syncResult;
+        if ($batch->createVCards() === false) {
+            Config::$logger->warning("Not for all changed objects, the VCard data was provided by the server");
+        }
+
+        foreach ($batch->changedObjects as $obj) {
+            $handler->addressObjectChanged($obj["uri"], $obj["etag"], $obj["vcard"] ?? null);
+        }
     }
 
     /**
@@ -177,16 +232,19 @@ class Sync
      *  The addressbook that should be synchronized.
      * @param string $prevSyncToken
      *  The sync token of the last sync, or empty string if this is the initial sync.
+     * @param int $limit
+     *  The maximum number of changes the server should report; 0 for no limit.
      * @return SyncResult
      *  Changes to the addressbook reported by the server with respect to $prevSyncToken, including a new sync token.
      */
     private function syncCollection(
         CardDavClient $client,
         AddressbookCollection $abook,
-        string $prevSyncToken
+        string $prevSyncToken,
+        int $limit
     ): SyncResult {
         $abookUrl = $abook->getUri();
-        $multistatus = $client->syncCollection($abookUrl, $prevSyncToken);
+        $multistatus = $client->syncCollection($abookUrl, $prevSyncToken, $limit);
 
         if (!isset($multistatus->synctoken)) {
             throw new \Exception("No sync token contained in response to sync-collection REPORT.");

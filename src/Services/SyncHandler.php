@@ -83,6 +83,9 @@ interface SyncHandler
     /**
      * Called upon completion of the synchronization process to enable the handler to perform final actions if needed.
      *
+     * It is called once per call to {@see Sync::synchronize()}, after all changes have been reported, even if the
+     * changes were processed in multiple batches.
+     *
      * @see Sync
      * @api
      */

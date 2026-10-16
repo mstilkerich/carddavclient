@@ -2,6 +2,15 @@
 
 ## Version 2.0.0 (to 1.4.2)
 
+- Support result limiting for the sync-collection REPORT (RFC 6578 `DAV:limit`): `Sync::synchronize()` and
+  `CardDavClient::syncCollection()` take an optional `$limit` parameter. With a limit, `Sync::synchronize()` retrieves
+  the changes in multiple batches until all changes are synchronized.
+  If the server rejects the limit or does not support the sync-collection REPORT, the ETag-based synchronization fetches
+  and reports the changed cards in batches of the requested size.
+- `Sync::synchronize()` stops requesting followup batches if the server reports a truncated result but does not
+  advance the sync-token.
+- `SyncHandler::finalizeSync()` is called only once at the end of `Sync::synchronize()`, as documented. Previously,
+  it was called after each batch if the server truncated the result of the sync-collection REPORT.
 - `AddressbookCollection::deleteCard()` takes an optional ETag to make the deletion conditional (`If-Match`), like
   `updateCard()`, and returns false instead of deleting if the card changed on the server in the meantime.
 - A request the server answers with an unexpected HTTP status now throws an `HttpStatusException`, which provides the

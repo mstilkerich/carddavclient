@@ -66,15 +66,29 @@ class CardDavClient
      * It will respond with 400 Bad Request and error message "Request contains an invalid argument."
      *
      * The Google issues have been reported to Google: https://issuetracker.google.com/issues/160190530
+     *
+     * @param string $addressbookUri The URI of the addressbook collection to synchronize
+     * @param string $syncToken The sync token of a previous sync, or empty string for an initial sync
+     * @param int $limit
+     *  Tell the server to report at most $limit changes (RFC 6578 DAV:limit). 0 means no limit. If the server truncates
+     *  the result, it reports a status 507 for the addressbook collection, and the returned sync token can be used to
+     *  retrieve the remaining changes with a followup sync-collection REPORT.
      */
-    public function syncCollection(string $addressbookUri, string $syncToken): Multistatus
+    public function syncCollection(string $addressbookUri, string $syncToken, int $limit = 0): Multistatus
     {
         $srv = self::getParserService();
-        $body = $srv->write(XmlEN::REPORT_SYNCCOLL, [
+
+        $reportOptions = [
             XmlEN::SYNCTOKEN => $syncToken,
             XmlEN::SYNCLEVEL => "1",
             XmlEN::PROP => [ XmlEN::GETETAG => null ]
-        ]);
+        ];
+
+        if ($limit > 0) {
+            $reportOptions[XmlEN::DAV_LIMIT] = [ XmlEN::DAV_NRESULTS => (string) $limit ];
+        }
+
+        $body = $srv->write(XmlEN::REPORT_SYNCCOLL, $reportOptions);
 
         // RFC6578: Depth: 0 header is required for sync-collection report
         // Google requires a Depth: 1 header or the REPORT will only target the collection itself

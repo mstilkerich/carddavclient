@@ -18,6 +18,11 @@ use MStilkerich\Tests\CardDavClient\TestInfrastructure;
 
 final class CardDavClientTest extends TestCase
 {
+    private const XMLHDR = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
+
+    private const SYNCCOLL_RESPONSE = '<?xml version="1.0" encoding="utf-8"?>'
+        . '<d:multistatus xmlns:d="DAV:"><d:sync-token>newtoken</d:sync-token></d:multistatus>';
+
     /** @var MockWebServer */
     private static $server;
 
@@ -93,6 +98,33 @@ final class CardDavClientTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageMatches('/DELETE .*HTTP.*500/');
         $this->client()->deleteResource('/card.vcf', '"abc"');
+    }
+
+    public function testSyncCollectionWithoutLimitHasNoLimitElement(): void
+    {
+        self::$server->setDefaultResponse(new Response(self::SYNCCOLL_RESPONSE, self::XMLHDR, 207));
+
+        $this->client()->syncCollection('/abook/', 'token');
+
+        $request = self::$server->getLastRequest();
+        $this->assertNotNull($request);
+        $this->assertSame('REPORT', $request->getRequestMethod());
+        $this->assertStringNotContainsString('limit', $request->getInput());
+    }
+
+    public function testSyncCollectionWithLimitHasLimitElement(): void
+    {
+        self::$server->setDefaultResponse(new Response(self::SYNCCOLL_RESPONSE, self::XMLHDR, 207));
+
+        $this->client()->syncCollection('/abook/', 'token', 25);
+
+        $request = self::$server->getLastRequest();
+        $this->assertNotNull($request);
+
+        $this->assertMatchesRegularExpression(
+            ';<DAV:limit>\s*<DAV:nresults>25</DAV:nresults>\s*</DAV:limit>;',
+            $request->getInput()
+        );
     }
 
     private function client(): CardDavClient

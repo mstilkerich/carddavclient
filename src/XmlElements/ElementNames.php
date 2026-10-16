@@ -46,6 +46,8 @@ class ElementNames
 
     public const SYNCTOKEN = "{" . self::NSDAV . "}sync-token";
     public const SYNCLEVEL = "{" . self::NSDAV . "}sync-level";
+    public const DAV_LIMIT = "{" . self::NSDAV . "}limit";
+    public const DAV_NRESULTS = "{" . self::NSDAV . "}nresults";
 
     public const SUPPORTED_ADDRDATA = "{" . self::NSCARDDAV . "}supported-address-data";
     public const ADDRDATA = "{" . self::NSCARDDAV . "}address-data";

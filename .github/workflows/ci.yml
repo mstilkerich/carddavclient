@@ -265,11 +265,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        baikal-version: ['0.12.1', '0.11.1']
+        baikal-version: ['0.10.1', '0.9.5']
         sabre-patch: ['']
         include:
-          # Sabre 4.7.1 CardDAV PDO backend patched to apply a default limit of 1 to sync-collection results
-          - baikal-version: '0.12.1'
+          # Sabre 4.7 CardDAV PDO backend patched to apply a default limit of 1 to sync-collection results
+          - baikal-version: '0.10.1'
             sabre-patch: 'Sabre471-carddav-sync-defaultlimit1.patch'
     runs-on: ubuntu-latest
 

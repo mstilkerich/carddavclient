@@ -1,0 +1,57 @@
+--- a/lib/CardDAV/Backend/PDO.php
++++ b/lib/CardDAV/Backend/PDO.php
+@@ -457,6 +457,7 @@
+      */
+     public function getChangesForAddressBook($addressBookId, $syncToken, $syncLevel, $limit = null)
+     {
++        $limit = $limit ?: 1;
+         // Current synctoken
+         $stmt = $this->pdo->prepare('SELECT synctoken FROM '.$this->addressBooksTableName.' WHERE id = ?');
+         $stmt->execute([$addressBookId]);
+@@ -474,9 +475,10 @@
+         ];
+ 
+         if ($syncToken) {
+-            $query = 'SELECT uri, operation FROM '.$this->addressBookChangesTableName.' WHERE synctoken >= ? AND synctoken < ? AND addressbookid = ? ORDER BY synctoken';
++            $query = 'SELECT uri, operation, synctoken FROM '.$this->addressBookChangesTableName.' WHERE synctoken >= ? AND synctoken < ? AND addressbookid = ? ORDER BY synctoken';
+             if ($limit > 0) {
+-                $query .= ' LIMIT '.(int) $limit;
++                // Fetch one more row to detect result truncation
++                $query .= ' LIMIT '.((int) $limit + 1);
+             }
+ 
+             // Fetching all changes
+@@ -484,11 +486,33 @@
+             $stmt->execute([$syncToken, $currentToken, $addressBookId]);
+ 
+             $changes = [];
++            $rowCount = 0;
++            $truncated = false;
++            $lastToken = null;
+ 
+             // This loop ensures that any duplicates are overwritten, only the
+             // last change on a node is relevant.
+             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
++                if ($limit > 0 && !isset($changes[$row['uri']]) && count($changes) >= $limit) {
++                    $truncated = true;
++                    break;
++                }
++                ++$rowCount;
+                 $changes[$row['uri']] = $row['operation'];
++                $lastToken = $row['synctoken'];
++            }
++
++            // If every fetched row was consumed (because some were duplicates)
++            // there may still be more changes we have not looked at.
++            if ($limit > 0 && $rowCount > $limit) {
++                $truncated = true;
++            }
++
++            if ($truncated) {
++                // The returned token must only cover the changes we actually
++                // report, so the client can continue from there.
++                $result['syncToken'] = $lastToken + 1;
++                $result['result_truncated'] = true;
+             }
+ 
+             foreach ($changes as $uri => $operation) {

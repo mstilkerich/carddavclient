@@ -265,7 +265,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        baikal-version: ['0.10.1', '0.9.5']
+        baikal-version: ['0.12.1', '0.11.1']
+        sabre-patch: ['']
+        include:
+          # Sabre 4.7.1 CardDAV PDO backend patched to apply a default limit of 1 to sync-collection results
+          - baikal-version: '0.12.1'
+            sabre-patch: 'Sabre471-carddav-sync-defaultlimit1.patch'
     runs-on: ubuntu-latest
 
     env:
@@ -285,6 +290,14 @@ jobs:
         uses: actions/checkout@v7
       - name: Set up CI environment
         uses: ./.github/actions/setup
+      - name: Patch Sabre CardDAV PDO backend
+        if: matrix.sabre-patch != ''
+        run: |
+          PDOFILE=/var/www/baikal/vendor/sabre/dav/lib/CardDAV/Backend/PDO.php
+          sudo docker cp "baikal:$PDOFILE" "$RUNNER_TEMP/PDO.php"
+          sudo patch "$RUNNER_TEMP/PDO.php" ".github/patches/${{ matrix.sabre-patch }}"
+          sudo docker cp "$RUNNER_TEMP/PDO.php" "baikal:$PDOFILE"
+          sudo docker exec baikal chmod 644 "$PDOFILE"
       - name: Setup Baikal
         run: |
           .github/scripts/deployBaikal.sh

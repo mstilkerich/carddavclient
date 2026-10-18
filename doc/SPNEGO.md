@@ -14,6 +14,25 @@ machine (e. g. `/etc/krb5.conf`), provide the kerberos principal name as usernam
 (empty string). If your server provides additional authentication options in case a ticket is not available, provide the
 password for that mechanism.
 
+### Delegated credentials in a web application
+
+If the library is used by a web application (e.g. a webmail client) that itself authenticates its users with
+SPNEGO, the webserver can delegate the user's Kerberos credentials to the application. With Apache's
+mod\_auth\_gssapi, this is enabled with the `GssapiDelegCcacheDir` setting (see the configuration below). The webserver
+then stores the user's tickets in a credential cache and passes the location of that cache to the application as the
+request variable `KRB5CCNAME`. This allows the application to authenticate with the CardDAV server on behalf of the
+user.
+
+PHP provides this variable in `$_SERVER`, but not in the environment of the process, where the GSSAPI library used by
+curl looks for the credential cache. Therefore, if `$_SERVER['KRB5CCNAME']` is set, the library copies it to the
+process environment (using `putenv()`) before it performs SPNEGO authentication.
+
+Note that the environment is shared by all threads of a process, and `putenv()` is not thread-safe. With a thread-safe
+(ZTS) PHP build that handles requests of different users concurrently in one process (e.g. mod\_php with Apache's
+worker or event MPM, or FrankenPHP), a request may use the credential cache of a different user's concurrent request.
+Use delegated credentials only with a setup that handles one request at a time per process, such as PHP-FPM or
+mod\_php with Apache's prefork MPM.
+
 ## Notes on server-side setup
 
 It is quite common that CardDAV servers running inside a webserver let the webserver handle the authentication for

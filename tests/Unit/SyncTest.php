@@ -185,6 +185,79 @@ final class SyncTest extends TestCase
     }
 
     /**
+     * A card that cannot be retrieved via GET must not abort the sync; it is reported to the handler without VCard.
+     */
+    public function testFailedGetOfOneCardDoesNotAbortSync(): void
+    {
+        self::$server->setResponseOfPath('/abook/', new ResponseByMethod([
+            'PROPFIND' => new ResponseStack($this->propfindResponse(false, false), $this->listingResponse()),
+        ]));
+        self::$server->setResponseOfPath('/abook/c2.vcf', $this->getResponse('c2'));
+        self::$server->setResponseOfPath('/abook/c3.vcf', new Response('Not Found', [], 404));
+        self::$server->setResponseOfPath('/abook/c4.vcf', $this->getResponse('c4'));
+
+        $handler = new RecordingSyncHandler(self::LOCAL_ETAGS);
+        $synctoken = (new Sync())->synchronize($this->abook(), $handler, [], 'c0');
+
+        $this->assertSame('tnew', $synctoken);
+        $this->assertSame(
+            ['D /abook/gone.vcf', 'C /abook/c2.vcf', 'N /abook/c3.vcf', 'C /abook/c4.vcf', 'F'],
+            $handler->ops
+        );
+        TestInfrastructure::logger()->expectMessage('error', '/abook/c3.vcf');
+        TestInfrastructure::logger()->expectMessage('warning', 'Not for all changed objects');
+    }
+
+    /**
+     * A card deleted on the server between the listing and the multiget is missing from the multiget result. The GET
+     * fallback for that card fails with 404, which must not abort the sync.
+     */
+    public function testCardDeletedDuringSyncDoesNotAbortSync(): void
+    {
+        self::$server->setResponseOfPath('/abook/', new ResponseByMethod([
+            'PROPFIND' => new ResponseStack($this->propfindResponse(false, true), $this->listingResponse()),
+            'REPORT' => $this->multigetResponse(['c2', 'c4']),
+        ]));
+        self::$server->setResponseOfPath('/abook/c3.vcf', new Response('Not Found', [], 404));
+
+        $handler = new RecordingSyncHandler(self::LOCAL_ETAGS);
+        $synctoken = (new Sync())->synchronize($this->abook(), $handler, [], 'c0');
+
+        $this->assertSame('tnew', $synctoken);
+        $this->assertSame(
+            ['D /abook/gone.vcf', 'C /abook/c2.vcf', 'N /abook/c3.vcf', 'C /abook/c4.vcf', 'F'],
+            $handler->ops
+        );
+        TestInfrastructure::logger()->expectMessage('warning', 'Server did not return data for /abook/c3.vcf');
+        TestInfrastructure::logger()->expectMessage('error', '/abook/c3.vcf');
+        TestInfrastructure::logger()->expectMessage('warning', 'Not for all changed objects');
+    }
+
+    /**
+     * Address data that parses to something other than a VCard must be reported to the handler without VCard.
+     */
+    public function testAddressDataThatIsNoVCardIsReportedWithoutCard(): void
+    {
+        $vcalendar = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Test//EN\r\nEND:VCALENDAR\r\n";
+
+        self::$server->setResponseOfPath('/abook/', new ResponseByMethod([
+            'PROPFIND' => new ResponseStack($this->propfindResponse(false, true), $this->listingResponse()),
+            'REPORT' => $this->multigetResponse(['c2', 'c3', 'c4'], ['c3' => $vcalendar]),
+        ]));
+
+        $handler = new RecordingSyncHandler(self::LOCAL_ETAGS);
+        $synctoken = (new Sync())->synchronize($this->abook(), $handler, [], 'c0');
+
+        $this->assertSame('tnew', $synctoken);
+        $this->assertSame(
+            ['D /abook/gone.vcf', 'C /abook/c2.vcf', 'N /abook/c3.vcf', 'C /abook/c4.vcf', 'F'],
+            $handler->ops
+        );
+        TestInfrastructure::logger()->expectMessage('error', '/abook/c3.vcf');
+        TestInfrastructure::logger()->expectMessage('warning', 'Not for all changed objects');
+    }
+
+    /**
      * Local state for the ETag-based sync tests: c1 unchanged, c2 changed, gone.vcf deleted on the server.
      * The server additionally has the new cards c3 and c4.
      */
@@ -272,20 +345,35 @@ final class SyncTest extends TestCase
 
     /**
      * @param list<string> $cards
+     * @param array<string,string> $addressData Address data to return for a card instead of a valid VCard
      */
-    private function multigetResponse(array $cards): Response
+    private function multigetResponse(array $cards, array $addressData = []): Response
     {
         $body = '<?xml version="1.0" encoding="utf-8"?>'
             . '<d:multistatus xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">';
         foreach ($cards as $card) {
             $etag = '"e' . substr($card, 1) . '"';
-            $vcf = "BEGIN:VCARD\r\nVERSION:3.0\r\nUID:$card\r\nFN:$card\r\nEND:VCARD\r\n";
+            $vcf = $addressData[$card] ?? $this->vcard($card);
             $body .= "<d:response><d:href>/abook/$card.vcf</d:href><d:propstat><d:prop>"
                 . "<d:getetag>$etag</d:getetag><card:address-data>$vcf</card:address-data>"
                 . '</d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response>';
         }
         $body .= '</d:multistatus>';
         return new Response($body, self::XMLHDR, 207);
+    }
+
+    private function vcard(string $card): string
+    {
+        return "BEGIN:VCARD\r\nVERSION:3.0\r\nUID:$card\r\nFN:$card\r\nEND:VCARD\r\n";
+    }
+
+    /**
+     * Response to the GET request of a card with ETag "e<n>" for card c<n>.
+     */
+    private function getResponse(string $card): Response
+    {
+        $etag = '"e' . substr($card, 1) . '"';
+        return new Response($this->vcard($card), [ 'Content-Type' => 'text/vcard', 'ETag' => $etag ], 200);
     }
 
     private function syncResponse(string $token, string $deletedUri, bool $truncated): Response

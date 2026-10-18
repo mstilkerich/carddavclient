@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace MStilkerich\Tests\CardDavClient\Unit;
 
-use PHPUnit\Framework\TestCase;
 use MStilkerich\CardDavClient\Services\SyncHandler;
 use Sabre\VObject\Component\VCard;
 
@@ -23,7 +22,8 @@ final class RecordingSyncHandler implements SyncHandler
     /**
      * @var list<string> The reported operations in the order reported
      *
-     * Each entry is one of "D <uri>" (deleted), "C <uri>" (changed) or "F" (finalizeSync).
+     * Each entry is one of "D <uri>" (deleted), "C <uri>" (changed), "N <uri>" (changed, but no VCard available) or
+     * "F" (finalizeSync).
      */
     public $ops = [];
 
@@ -40,8 +40,7 @@ final class RecordingSyncHandler implements SyncHandler
 
     public function addressObjectChanged(string $uri, string $etag, ?VCard $card): void
     {
-        TestCase::assertNotNull($card, "No VCard provided for changed card $uri");
-        $this->ops[] = "C $uri";
+        $this->ops[] = (isset($card) ? "C" : "N") . " $uri";
     }
 
     public function addressObjectDeleted(string $uri): void

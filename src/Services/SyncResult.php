@@ -65,8 +65,9 @@ class SyncResult
      * Creates VCard objects for all changed cards.
      *
      * The objects are inserted into the {@see SyncResult::$changedObjects} array. In case the VCard object cannot be
-     * created for some of the cards (for example parse error), an error is logged. If no vcard string data is available
-     * in {@see SyncResult::$changedObjects} for a VCard, a warning is logged.
+     * created for some of the cards (for example parse error, or the data is not a VCard), an error is logged. Cards
+     * without vcard string data in {@see SyncResult::$changedObjects} are skipped; the failure to retrieve the data is
+     * expected to have been logged by the caller.
      *
      * @return bool
      *  True if a VCard could be created for all cards in {@see SyncResult::$changedObjects}, false otherwise.
@@ -76,18 +77,21 @@ class SyncResult
         $ret = true;
 
         foreach ($this->changedObjects as &$obj) {
-            if (!isset($obj["vcard"])) {
-                if (isset($obj["vcf"])) {
-                    try {
-                        $obj["vcard"] = \Sabre\VObject\Reader::read($obj["vcf"]);
-                    } catch (\Exception $e) {
-                        Config::$logger->error("Could not parse VCF for " . $obj["uri"], [ 'exception' => $e ]);
-                        $ret = false;
+            if (!isset($obj["vcard"]) && isset($obj["vcf"])) {
+                try {
+                    $vcard = \Sabre\VObject\Reader::read($obj["vcf"]);
+                    if ($vcard instanceof VCard) {
+                        $obj["vcard"] = $vcard;
+                    } else {
+                        Config::$logger->error("Address data for " . $obj["uri"] . " is not a VCard");
                     }
-                } else {
-                    Config::$logger->warning("No VCF for address object " . $obj["uri"] . " available");
-                    $ret = false;
+                } catch (\Exception $e) {
+                    Config::$logger->error("Could not parse VCF for " . $obj["uri"], [ 'exception' => $e ]);
                 }
+            }
+
+            if (!isset($obj["vcard"])) {
+                $ret = false;
             }
         }
         unset($obj);

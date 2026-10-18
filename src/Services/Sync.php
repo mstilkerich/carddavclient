@@ -205,11 +205,16 @@ class Sync
         foreach ($batch->changedObjects as &$objref) {
             if (!isset($objref["vcf"])) {
                 Config::$logger->debug("Fetching " . $objref['uri'] . " via GET");
-                [
-                    'etag' => $objref["etag"],
-                    'vcf' => $objref["vcf"],
-                    'vcard' => $objref["vcard"]
-                ] = $abook->getCard($objref["uri"]);
+                try {
+                    [
+                        'etag' => $objref["etag"],
+                        'vcf' => $objref["vcf"],
+                        'vcard' => $objref["vcard"]
+                    ] = $abook->getCard($objref["uri"]);
+                } catch (\Exception $e) {
+                    // the card is reported to the SyncHandler without VCard
+                    Config::$logger->error("Could not retrieve " . $objref['uri'] . " via GET", [ 'exception' => $e ]);
+                }
             }
         }
         unset($objref);

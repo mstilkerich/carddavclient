@@ -11,6 +11,10 @@
   advance the sync-token.
 - `SyncHandler::finalizeSync()` is called only once at the end of `Sync::synchronize()`, as documented. Previously,
   it was called after each batch if the server truncated the result of the sync-collection REPORT.
+- `Sync::synchronize()` no longer aborts if a changed card cannot be retrieved or its address data is not a VCard (for
+  example, a card deleted on the server during the sync). As documented, the card is reported to
+  `SyncHandler::addressObjectChanged()` with a null VCard. Previously, an exception aborted the sync, or a non-VCard
+  object was passed to the handler, causing a TypeError.
 - `AddressbookCollection::deleteCard()` takes an optional ETag to make the deletion conditional (`If-Match`), like
   `updateCard()`, and returns false instead of deleting if the card changed on the server in the meantime.
 - A request the server answers with an unexpected HTTP status now throws an `HttpStatusException`, which provides the

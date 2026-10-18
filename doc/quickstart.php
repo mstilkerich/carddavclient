@@ -77,10 +77,10 @@ class EchoSyncHandler implements SyncHandler
 $log = new StdoutLogger();
 $httplog = new NullLogger(); // parameter could simply be omitted for the same effect
 
-// Initialize the library. Currently, only objects for logging need to be provided, which are two optional logger
-// objects implementing the PSR-3 logger interface. The first object logs the log messages of the library itself, the
-// second can be used to log the HTTP traffic. If no logger is given, no log output will be created. For that, simply
-// call Config::init() and the library will internally use NullLogger objects.
+// Initialize the library. This call is mandatory and must happen before any other API of the library is used.
+// Currently, only objects for logging can be provided, which are two optional logger objects implementing the PSR-3
+// logger interface. The first object logs the log messages of the library itself, the second can be used to log the
+// HTTP traffic. If no logger is given, no log output will be created (Config::init() without arguments).
 Config::init($log, $httplog);
 
 // Now create an Account object that contains credentials and discovery information

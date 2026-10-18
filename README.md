@@ -77,6 +77,10 @@ The autoloader will take care of loading this and other PSR-0/PSR-4 autoloader-c
 
 ### Quickstart
 
+Before using any other API of the library, an application must initialize the library by calling
+*MStilkerich\CardDavClient\Config::init()*. The call optionally takes PSR-3 logger objects for the log messages of the
+library and for the HTTP traffic.
+
 Generally, an application using this library will want to do some or all of the following things:
 
 1. Discover addressbooks from the information provided by a user: For this operation, the library provides a service

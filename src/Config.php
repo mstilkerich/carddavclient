@@ -34,11 +34,11 @@ class Config
     public const GUZZLE_LOGFMT_SHORT =
         '"{method} {target} HTTP/{version}" {code} {res_header_Content-Length}';
 
-    /** @var LoggerInterface */
-    public static $logger;
+    /** Logger for the log messages of the library. Set by {@see Config::init()}. */
+    public static LoggerInterface $logger;
 
-    /** @var LoggerInterface */
-    public static $httplogger;
+    /** Logger for the HTTP traffic. Set by {@see Config::init()}. */
+    public static LoggerInterface $httplogger;
 
     /**
      * Configuration options of the library.
@@ -51,6 +51,8 @@ class Config
 
     /**
      * Initialize the library.
+     *
+     * This function must be called once before any other API of the library is used.
      *
      * The functions accepts two logger objects complying with the standard PSR-3 Logger interface, one of which is used
      * by the carddavclient lib itself, the other is passed to the HTTP client library to log the HTTP traffic. Pass

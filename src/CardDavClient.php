@@ -564,7 +564,7 @@ class CardDavClient
      * @param string $uri The target of the request
      * @param RequestOptions $options Additional options for the request
      *
-     * @psalm-return array{redirected: bool, location: string, response: Psr7Response}
+     * @psalm-return array{location: string, response: Psr7Response}
      * @return array<string, mixed>
      */
     private function requestWithRedirectionTarget(string $method, string $uri, array $options = []): array
@@ -595,7 +595,6 @@ class CardDavClient
         } while ($redirAttempt < $redirLimit);
 
         return [
-            "redirected" => ($redirAttempt == 0),
             "location" => $uri,
             "response" => $response
         ];

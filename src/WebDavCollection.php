@@ -61,6 +61,10 @@ class WebDavCollection extends WebDavResource
     /**
      * Returns the child resources of this collection.
      *
+     * Only direct members of the collection are returned, i.e. resources with the same origin as the collection and
+     * the collection's path plus one path segment. Other resources reported by the server are ignored, so that the
+     * account's credentials are not sent to locations outside the collection.
+     *
      * @psalm-return list<WebDavResource>
      * @return array<int,WebDavResource> The children of this collection.
      * @api
@@ -71,14 +75,31 @@ class WebDavCollection extends WebDavResource
 
         try {
             $client = $this->getClient();
-            $children = $client->findProperties($this->getUri(), [ XmlEN::RESTYPE ], "1");
+            $result = $client->findPropertiesWithLocation($this->getUri(), [ XmlEN::RESTYPE ], "1");
+            $location = $result["location"];
 
-            $path = $this->getUriPath();
+            // If the request was redirected, the children are located at the redirect target. As the children will
+            // be accessed with the account's credentials, only accept them if the credentials may be sent there.
+            if (!$client->mayAuthenticate($location)) {
+                Config::$logger->warning("Ignoring children of {$this->uri}: redirected to $location");
+                return [];
+            }
 
-            foreach ($children as $child) {
-                $obj = parent::createInstance($child["uri"], $this->account, $child["props"][XmlEN::RESTYPE] ?? null);
-                if ($obj->getUriPath() != $path) {
-                    $childObjs[] = $obj;
+            foreach ($result["results"] as $child) {
+                $childUri = $child["uri"];
+
+                if (CardDavClient::isDirectMember($location, $childUri)) {
+                    $childObjs[] = parent::createInstance(
+                        $childUri,
+                        $this->account,
+                        $child["props"][XmlEN::RESTYPE] ?? null
+                    );
+                } elseif (
+                    !HttpClientAdapter::isSameOrigin($location, $childUri)
+                    || !CardDavClient::compareUrlPaths($location, $childUri)
+                ) {
+                    // the collection itself is part of the result, all others must be direct members
+                    Config::$logger->warning("Ignoring $childUri: not a member of collection $location");
                 }
             }
         } catch (\Exception $e) {

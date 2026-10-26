@@ -222,8 +222,12 @@ class WebDavResource implements \JsonSerializable
     /**
      * Downloads the content of a given resource.
      *
+     * The account's credentials are only sent with the request if the given URI has the same origin as this resource,
+     * or the auth_origin_callback of the account permits it. Therefore, this method can be used to download resources
+     * from URIs of untrusted sources, such as photo URIs contained in VCards.
+     *
      * @param string $uri
-     *  URI of the requested resource.
+     *  URI of the requested resource. If relative, it is taken relative to the URI of this resource.
      *
      * @psalm-return array{body: string}
      * @return array<string,string>

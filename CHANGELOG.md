@@ -2,6 +2,23 @@
 
 ## Version 1.5.0 (to 1.4.2)
 
+- Security: The credentials of an account are only sent to the origin (scheme, host and port) of the URL of the
+  resource a request is made for. Previously, credentials were sent to any host whose last two domain name labels
+  matched those of the resource, e.g. from `a.co.uk` to `evil.co.uk`, or for IP addresses, to any IP address with the
+  same last two octets. Credentials are never sent over plain HTTP if the resource uses HTTPS.
+- Security: With the curl-based authentication schemes used for SPNEGO and the workaround for Sabre/DAV Digest
+  authentication, the credentials were sent using Basic authentication to the target of a redirect to a different
+  origin. Guzzle versions before 6.5.8 / 7.4.5 additionally send the credentials of most authentication schemes to
+  redirect targets on other origins; the minimum required Guzzle versions are raised accordingly.
+- New HTTP option `auth_origin_callback` for an `Account`: A callback that decides whether the credentials may be sent
+  to a different origin. It is not included in the serialized form of the Account; use the new method
+  `Account::setAuthOriginCallback()` to set it after deserialization.
+- Discovery: Credentials are sent to servers within the discovery domain (the domain and its subdomains) only. Other
+  servers, e.g. targets of redirects or addressbook homes on other domains, require permission by the
+  `auth_origin_callback`. DNS SRV targets outside the discovery domain are still used if no callback is configured,
+  otherwise the callback decides. See `Discovery::discoverAddressbooks()` for details.
+- `WebDavCollection::getChildren()` only returns direct members of the collection (same origin, path of the collection
+  plus one path segment). If the collection was redirected, the collection itself is no longer returned as a child.
 - Documentation: Creating a `WebDavResource` for a URI permits sending the account's credentials to the origin of the
   URI. Account-level `headers` are sent to all origins.
 - Fix ordering of DNS SRV records according to RFC 2782 in case multiple SRV records are returned.

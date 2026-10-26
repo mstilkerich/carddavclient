@@ -413,6 +413,30 @@ class CardDavClient
         array $props,
         string $depth = "0"
     ): array {
+        return $this->findPropertiesWithLocation($uri, $props, $depth)["results"];
+    }
+
+    /**
+     * Retrieves a set of WebDAV properties for a resource, and provides the final request URI after redirects.
+     *
+     * @param string $uri The URI of the resource to retrieve properties for.
+     * @psalm-param list<string> $props
+     * @param array<int,string> $props
+     *  List of properties to retrieve, given as XML element names
+     * @psalm-param "0"|"1"|"infinity" $depth
+     * @param string $depth Value for the Depth header
+     *
+     * @psalm-return array{location: string, results: list<array{uri: string, props: PropTypes}>}
+     * @return array<string, mixed>
+     *  Associative array with keys
+     *   - location (string): Absolute URI of the resource after following redirects
+     *   - results (array): The retrieved properties as returned by {@see CardDavClient::findProperties()}
+     */
+    public function findPropertiesWithLocation(
+        string $uri,
+        array $props,
+        string $depth = "0"
+    ): array {
         $srv = self::getParserService();
         $body = $srv->write(XmlEN::PROPFIND, [
             XmlEN::PROP => array_fill_keys($props, null)
@@ -455,7 +479,7 @@ class CardDavClient
             }
         }
 
-        return $resultProperties;
+        return [ "location" => $result["location"], "results" => $resultProperties ];
     }
 
     /**
@@ -576,6 +600,57 @@ class CardDavClient
     public static function concatUrl(string $baseurl, string $relurl): string
     {
         return \Sabre\Uri\resolve($baseurl, $relurl);
+    }
+
+    /**
+     * Checks whether the credentials of this client may be sent with a request to the given URI.
+     *
+     * @see HttpClientAdapter::mayAuthenticate()
+     */
+    public function mayAuthenticate(string $uri): bool
+    {
+        return $this->httpClient->mayAuthenticate($this->absoluteUrl($uri));
+    }
+
+    /**
+     * Checks whether a URI identifies a direct member of a collection.
+     *
+     * A direct (internal) member of a collection has the same origin as the collection, and its path consists of the
+     * path of the collection plus one additional path segment (RFC 4918, section 5.2). Path segments are compared after
+     * percent-decoding them, and empty path segments (e.g. from trailing slashes) are ignored.
+     *
+     * @param string $collectionUri The absolute URI of the collection
+     * @param string $memberUri The absolute URI to check
+     * @return bool True if $memberUri identifies a direct member of the collection identified by $collectionUri
+     */
+    public static function isDirectMember(string $collectionUri, string $memberUri): bool
+    {
+        if (!HttpClientAdapter::isSameOrigin($collectionUri, $memberUri)) {
+            return false;
+        }
+
+        $collSegments = self::getPathSegments($collectionUri);
+        $memberSegments = self::getPathSegments($memberUri);
+        $numCollSegments = count($collSegments);
+
+        return count($memberSegments) === ($numCollSegments + 1)
+            && array_slice($memberSegments, 0, $numCollSegments) === $collSegments;
+    }
+
+    /**
+     * Provides the percent-decoded, non-empty path segments of a URI.
+     *
+     * @return list<string>
+     */
+    private static function getPathSegments(string $uri): array
+    {
+        $segments = [];
+        foreach (explode('/', \Sabre\Uri\parse($uri)['path'] ?? '') as $segment) {
+            if ($segment !== '') {
+                $segments[] = rawurldecode($segment);
+            }
+        }
+        return $segments;
     }
 
     public static function compareUrlPaths(string $url1, string $url2): bool

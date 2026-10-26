@@ -26,6 +26,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *   preemptive_basic_auth?: bool,
  *   query?: array<string, string>,
  *   headers?: array<string, string | list<string>>,
+ *   auth_origin_callback?: callable(string, string): bool,
  * }
  *
  * @psalm-type SerializedAccount = HttpOptions & array{discoveryUri: string, baseUrl?: ?string}
@@ -82,7 +83,24 @@ class Account implements \JsonSerializable
      *    - query: Query options to append to every URL queried for this account, as an associative array of query
      *             options and values.
      *    - headers: Headers to add to each request sent for this account, an associative array mapping header name to
-     *               header value (string) or header values (list<string>).
+     *               header value (string) or header values (list<string>). Note that these headers are sent with all
+     *               requests, including requests to other origins than that of the CardDAV server (e.g. after
+     *               redirects), with the exception of Authorization and Cookie headers, which the HTTP client library
+     *               removes on redirects to other origins. Do not use this option to pass credentials, use the
+     *               username/password or bearertoken options instead.
+     *    - auth_origin_callback: The credentials are only sent to the origin (scheme, host and port) of the URL of
+     *      the resource the request is made for (or the base URL of this Account for requests not related to a
+     *      specific resource). A callback function `function (string $targetUri, string $baseUri): bool` can be given
+     *      to decide whether the credentials may be sent with a request to a different origin, e.g. after a redirect.
+     *      $targetUri is the URI of the request, $baseUri the URI the credentials are bound to. Return true to send
+     *      the credentials to $targetUri. The callback is not consulted for redirects that are followed by the HTTP
+     *      client library automatically; credentials are never sent to a different origin for those. Credentials are
+     *      never sent over plain HTTP if $baseUri uses HTTPS, regardless of the callback. Note that this option is
+     *      not included in the serialized form of the Account ({@see Account::jsonSerialize()}) and must be set again
+     *      after reconstructing the Account, e.g. using {@see Account::setAuthOriginCallback()}. During discovery, the
+     *      callback
+     *      is also consulted for servers outside the discovery domain, see
+     *      {@see Services\Discovery::discoverAddressbooks()}.
      *
      *  Deprecated: username as string for authentication mechanisms requiring username / password.
      * @param string $password
@@ -149,10 +167,14 @@ class Account implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
+        // a callback cannot be serialized
+        $httpOptions = $this->httpOptions;
+        unset($httpOptions['auth_origin_callback']);
+
         return [
             "discoveryUri" => $this->discoveryUri,
             "baseUrl" => $this->baseUrl
-        ] + $this->httpOptions;
+        ] + $httpOptions;
     }
 
     /**
@@ -168,7 +190,49 @@ class Account implements \JsonSerializable
     public function getClient(?string $baseUrl = null): CardDavClient
     {
         $clientUri = $baseUrl ?? $this->getUrl();
-        return new CardDavClient($clientUri, $this->httpOptions);
+
+        // The client consults the auth_origin_callback currently set for this account, so that a callback set later
+        // using setAuthOriginCallback() also applies to clients created earlier (e.g. by WebDavResource objects)
+        $httpOptions = $this->httpOptions;
+        $httpOptions['auth_origin_callback'] = function (string $targetUri, string $baseUri): bool {
+            $callback = $this->getAuthOriginCallback();
+            return isset($callback) && $callback($targetUri, $baseUri);
+        };
+
+        return new CardDavClient($clientUri, $httpOptions);
+    }
+
+    /**
+     * Returns the callback that decides whether the credentials may be sent to a different origin, if any.
+     *
+     * @psalm-return null|callable(string, string): bool
+     * @see Account::setAuthOriginCallback()
+     * @api
+     */
+    public function getAuthOriginCallback(): ?callable
+    {
+        return $this->httpOptions['auth_origin_callback'] ?? null;
+    }
+
+    /**
+     * Sets the callback that decides whether the credentials may be sent to a different origin.
+     *
+     * This is equivalent to the auth_origin_callback HTTP option (see {@see Account::__construct()}). As the callback
+     * is not included in the serialized form of the Account, this method can be used to set it again after
+     * reconstructing an Account using {@see Account::constructFromArray()}. The callback applies to all requests
+     * made for this account, including those for resources created before setting the callback.
+     *
+     * @psalm-param null|callable(string, string): bool $callback
+     * @param ?callable $callback The callback, or null to remove the callback.
+     * @api
+     */
+    public function setAuthOriginCallback(?callable $callback): void
+    {
+        if (isset($callback)) {
+            $this->httpOptions['auth_origin_callback'] = $callback;
+        } else {
+            unset($this->httpOptions['auth_origin_callback']);
+        }
     }
 
     /**

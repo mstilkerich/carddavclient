@@ -151,8 +151,8 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      * Sends a PSR-7 request and returns a PSR-7 response.
      *
      * The given URI may be relative to the base URI given on construction of this object or a full URL.
-     * Authentication is only attempted in case the domain name of the request URI matches that of the base URI
-     * (subdomains may differ).
+     * Authentication is only attempted in case the request URI has the same origin as the base URI, or the
+     * auth_origin_callback permits it (see {@see HttpClientAdapter::mayAuthenticate()}).
      *
      * @psalm-param RequestOptions $options
      * @param array<string,mixed> $options
@@ -161,7 +161,7 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
      */
     public function sendRequest(string $method, string $uri, array $options = []): Psr7Response
     {
-        $doAuth = $this->checkSameDomainAsBase($uri);
+        $doAuth = $this->mayAuthenticate($uri);
         $triedSabreWorkaround = false;
 
         try {
@@ -335,10 +335,13 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                 if (isset($_SERVER['KRB5CCNAME'])) {
                     putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
                 }
+                // CURLOPT_USERPWD must be used instead of CURLOPT_USERNAME / CURLOPT_PASSWORD: On redirects to a
+                // different origin, Guzzle only removes CURLOPT_HTTPAUTH and CURLOPT_USERPWD. Remaining username and
+                // password options would make curl send them to the redirect target using Basic authentication.
                 $guzzleOptions["curl"] = [
                     CURLOPT_HTTPAUTH => self::$schemeToCurlOpt[$authScheme],
-                    CURLOPT_USERNAME => $this->httpOptions['username'] ?? "",
-                    CURLOPT_PASSWORD => $this->httpOptions['password'] ?? ""
+                    CURLOPT_USERPWD => ($this->httpOptions['username'] ?? "") . ":"
+                        . ($this->httpOptions['password'] ?? "")
                 ];
             } else { // handled by HttpClientAdapterGuzzle directly
                 if ($authScheme == "bearer" && isset($this->httpOptions['bearertoken'])) {

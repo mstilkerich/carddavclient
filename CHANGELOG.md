@@ -2,6 +2,8 @@
 
 ## Version 1.5.0 (to 1.4.2)
 
+- Documentation: Creating a `WebDavResource` for a URI permits sending the account's credentials to the origin of the
+  URI. Account-level `headers` are sent to all origins.
 - Fix ordering of DNS SRV records according to RFC 2782 in case multiple SRV records are returned.
 - Fix fallback to plain http (`_carddav._tcp`) DNS SRV discovery (if explicitly allowed via protocol spec)
 - Remove the discovery workaround for iCloud (context path `/co`), which is not needed anymore.

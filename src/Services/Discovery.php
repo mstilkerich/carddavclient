@@ -199,20 +199,7 @@ class Discovery
         }
 
         if (is_array($dnsresults)) {
-            usort(
-                $dnsresults,
-                /**
-                 * @psalm-param SrvRecord $a
-                 * @psalm-param SrvRecord $b
-                 */
-                function (array $a, array $b): int {
-                    if ($a['pri'] != $b['pri']) {
-                        return $b['pri'] - $a['pri'];
-                    }
-
-                    return $a['weight'] - $b['weight'];
-                }
-            );
+            $dnsresults = self::sortSrvRecords($dnsresults);
 
             // build results
             foreach ($dnsresults as $dnsres) {
@@ -230,6 +217,31 @@ class Discovery
         }
 
         return $servers;
+    }
+
+    /**
+     * Orders DNS SRV records by preference according to RFC 2782.
+     *
+     * Records are sorted by ascending priority, as lower priority values are preferred. Records with the same priority
+     * are sorted by descending weight. RFC 2782 actually requires a weighted random selection among records with the
+     * same priority; ordering by descending weight is a deterministic approximation that prefers the targets the server
+     * administrator assigned the largest share of the load to.
+     *
+     * @psalm-param list<SrvRecord> $records
+     * @param array $records The SRV records as returned by dns_get_record()
+     * @psalm-return list<SrvRecord>
+     * @return array The SRV records in the order they should be tried.
+     */
+    private static function sortSrvRecords(array $records): array
+    {
+        usort(
+            $records,
+            function (array $a, array $b): int {
+                return [$a['pri'], $b['weight']] <=> [$b['pri'], $a['weight']];
+            }
+        );
+
+        return $records;
     }
 
     /**

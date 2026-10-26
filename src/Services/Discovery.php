@@ -264,7 +264,6 @@ class Discovery
 
         $contextpaths[] = '/.well-known/carddav';
         $contextpaths[] = '/';
-        $contextpaths[] = '/co'; // workaround for iCloud
 
         return $contextpaths;
     }

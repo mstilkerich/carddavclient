@@ -191,9 +191,9 @@ class Discovery
 
             // query SRV records
             /** @psalm-var list<SrvRecord> | false */
-            $dnsresults = dns_get_record($rrname, DNS_SRV);
+            $dnsresults = $this->dnsGetRecord($rrname, DNS_SRV);
 
-            if (is_array($dnsresults)) {
+            if ($dnsresults !== false && !empty($dnsresults)) {
                 break;
             }
         }
@@ -263,7 +263,7 @@ class Discovery
 
         if (isset($server["dnsrr"])) {
             /** @psalm-var list<TxtRecord> | false */
-            $dnsresults = dns_get_record($server["dnsrr"], DNS_TXT);
+            $dnsresults = $this->dnsGetRecord($server["dnsrr"], DNS_TXT);
             if (is_array($dnsresults)) {
                 foreach ($dnsresults as $dnsresult) {
                     if (preg_match('/^path=(.+)/', $dnsresult['txt'] ?? "", $match)) {
@@ -278,6 +278,20 @@ class Discovery
         $contextpaths[] = '/';
 
         return $contextpaths;
+    }
+
+    /**
+     * Queries DNS resource records.
+     *
+     * This is a wrapper for dns_get_record() that allows to replace the DNS lookups in tests.
+     *
+     * @param string $hostname The DNS name to query
+     * @param int $type The type of the resource records to query (DNS_SRV, DNS_TXT)
+     * @return array|false The resource records as returned by dns_get_record(), false on error
+     */
+    protected function dnsGetRecord(string $hostname, int $type)
+    {
+        return dns_get_record($hostname, $type);
     }
 }
 

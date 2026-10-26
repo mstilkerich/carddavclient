@@ -2,6 +2,7 @@
 
 ## Version 2.0.0 (to 1.4.2)
 
+- Remove the discovery workaround for iCloud (context path `/co`), which is not needed anymore.
 - Support result limiting for the sync-collection REPORT (RFC 6578 `DAV:limit`): `Sync::synchronize()` and
   `CardDavClient::syncCollection()` take an optional `$limit` parameter. With a limit, `Sync::synchronize()` retrieves
   the changes in multiple batches until all changes are synchronized.

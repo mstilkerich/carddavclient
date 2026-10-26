@@ -17,6 +17,13 @@ use MStilkerich\CardDavClient\XmlElements\Prop;
 /**
  * Represents a resource on a WebDAV server.
  *
+ * The credentials of the {@see Account} used to create a resource are sent to the origin (scheme, host and port) of
+ * the resource's URI. Creating a resource with a URI is therefore considered a permission to send the account's
+ * credentials to that origin. Do not create resources with URIs from untrusted sources, such as URIs contained in
+ * VCards (e.g. photo URIs); use {@see WebDavResource::downloadResource()} on the addressbook instead, which only sends
+ * the credentials to the origin of the addressbook. See the auth_origin_callback option of
+ * {@see Account::__construct()} for requests to other origins.
+ *
  * @psalm-import-type PropTypes from Prop
  *
  * @package Public\Entities
@@ -68,7 +75,8 @@ class WebDavResource implements \JsonSerializable
      * using the constructor.
      *
      * @param string $uri
-     *  The target URI of the resource.
+     *  The target URI of the resource. The account's credentials are sent to the origin of this URI, see
+     *  {@see WebDavResource}.
      * @param Account $account
      *  The account by which the URI shall be accessed.
      * @psalm-param null|list<string> $restype
@@ -98,7 +106,8 @@ class WebDavResource implements \JsonSerializable
      * Constructs a WebDavResource object.
      *
      * @param string $uri
-     *  The target URI of the resource.
+     *  The target URI of the resource. The account's credentials are sent to the origin of this URI, see
+     *  {@see WebDavResource}.
      * @param Account $account
      *  The account by which the URI shall be accessed.
      * @api

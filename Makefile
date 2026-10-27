@@ -36,7 +36,10 @@ unittests: tests/Unit/phpunit.xml
 	@echo  ==========================================================
 	@echo
 	@mkdir -p testreports/unit
-	vendor/bin/phpunit -c tests/Unit/phpunit.xml
+	@# donatj/mock-webserver leaves its temp files behind; confine them to a private dir removed after the run
+	@tmpdir=$$(mktemp -d -t carddavclient-unittests.XXXXXX) && \
+		TMPDIR="$$tmpdir" vendor/bin/phpunit -c tests/Unit/phpunit.xml; \
+		rc=$$?; rm -rf "$$tmpdir"; exit $$rc
 
 .PHONY: tests-interop
 tests-interop: tests/Interop/phpunit.xml tests/Interop/AccountData.php

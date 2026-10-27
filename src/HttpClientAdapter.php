@@ -95,31 +95,90 @@ abstract class HttpClientAdapter
     abstract public function sendRequest(string $method, string $uri, array $options = []): Psr7Response;
 
     /**
-     * Checks whether the given URI has the same domain as the base URI of this HTTP client.
+     * Checks whether the credentials may be sent with a request to the given URI.
      *
-     * If the given URI does not contain a domain part, true is returned (as when used, it will
-     * get that part from the base URI).
+     * The credentials are bound to the origin (scheme, host and port) of the base URI of this HTTP client. For a
+     * request to a different origin, the auth_origin_callback of the HTTP options decides if configured, otherwise the
+     * credentials are not sent. Independent of the callback, credentials are never sent over plain HTTP if the base
+     * URI uses HTTPS.
      *
-     * @param string $uri The URI to check
-     * @return bool True if the URI shares the same domain as the base URI.
+     * @param string $uri The target URI of the request. If relative, it is taken relative to the base URI.
+     * @return bool True if the credentials may be sent with the request.
      */
-    protected function checkSameDomainAsBase(string $uri): bool
+    public function mayAuthenticate(string $uri): bool
     {
-        $compUri = \Sabre\Uri\parse($uri);
+        $targetUri = \Sabre\Uri\resolve($this->baseUri, $uri);
 
-        // if the URI is relative, the domain is the same
-        if (isset($compUri["host"])) {
-            $compBase = \Sabre\Uri\parse($this->baseUri);
-
-            $result = strcasecmp(
-                self::getDomainFromSubdomain($compUri["host"]),
-                self::getDomainFromSubdomain($compBase["host"] ?? "")
-            ) === 0;
-        } else {
-            $result = true;
+        if (self::isSameOrigin($targetUri, $this->baseUri)) {
+            return true;
         }
 
-        return $result;
+        $targetScheme = strtolower(\Sabre\Uri\parse($targetUri)['scheme'] ?? '');
+        $baseScheme = strtolower(\Sabre\Uri\parse($this->baseUri)['scheme'] ?? '');
+        if ($baseScheme === 'https' && $targetScheme !== 'https') {
+            Config::$logger->debug("Not sending credentials to $targetUri: no HTTPS");
+            return false;
+        }
+
+        $callback = $this->httpOptions['auth_origin_callback'] ?? null;
+        if (isset($callback) && $callback($targetUri, $this->baseUri)) {
+            Config::$logger->debug("Sending credentials to $targetUri as permitted by auth_origin_callback");
+            return true;
+        }
+
+        Config::$logger->debug("Not sending credentials to $targetUri: different origin than {$this->baseUri}");
+        return false;
+    }
+
+    /**
+     * Checks whether two absolute URIs have the same origin, i.e. the same scheme, host and port.
+     *
+     * The comparison is case-insensitive and considers the default port of the scheme if the port is not given. IP
+     * addresses are compared by their binary value, so different notations of the same IPv6 address and the
+     * IPv4-mapped IPv6 notation of an IPv4 address are considered the same host.
+     *
+     * @return bool True if both URIs have the same origin. False if not, or if any of the URIs lacks scheme or host.
+     */
+    public static function isSameOrigin(string $uri1, string $uri2): bool
+    {
+        $origin1 = self::getOrigin($uri1);
+        return isset($origin1) && $origin1 === self::getOrigin($uri2);
+    }
+
+    /**
+     * Provides a normalized string representation of the origin of an absolute URI.
+     *
+     * The result is a URL of the form scheme://host:port, with scheme and host in lowercase. If the URI does not
+     * contain a port, the default port of the scheme is used for http and https; for other schemes, the port is
+     * omitted. IP addresses are converted to their canonical notation, with IPv4-mapped IPv6 addresses converted to the
+     * IPv4 address.
+     *
+     * @return ?string The normalized origin, null if the URI lacks scheme or host.
+     */
+    private static function getOrigin(string $uri): ?string
+    {
+        $comp = \Sabre\Uri\parse($uri);
+        $scheme = strtolower($comp['scheme'] ?? '');
+        $host = strtolower($comp['host'] ?? '');
+
+        if ($scheme === '' || $host === '') {
+            return null;
+        }
+
+        $ip = inet_pton(trim($host, '[]'));
+        if ($ip !== false) {
+            // IPv4-mapped IPv6 address (::ffff:a.b.c.d) is the same host as the IPv4 address a.b.c.d
+            if (strlen($ip) === 16 && strncmp($ip, str_repeat("\0", 10) . "\xff\xff", 12) === 0) {
+                $ip = substr($ip, 12);
+            }
+            $ipText = inet_ntop($ip);
+            if ($ipText !== false) {
+                $host = (strlen($ip) === 4) ? $ipText : "[$ipText]";
+            }
+        }
+
+        $port = $comp['port'] ?? [ 'http' => 80, 'https' => 443 ][$scheme] ?? null;
+        return isset($port) ? "$scheme://$host:$port" : "$scheme://$host";
     }
 
     /**
@@ -139,26 +198,6 @@ abstract class HttpClientAdapter
         }
 
         return true;
-    }
-
-    /**
-     * Extracts the domain name from a subdomain.
-     *
-     * If the given string does not have a subdomain (i.e. top-level domain or domain only),
-     * it is returned as provided.
-     *
-     * @param string $subdomain The subdomain (e.g. sub.example.com)
-     * @return string The domain of $subdomain (e.g. example.com)
-     */
-    protected static function getDomainFromSubdomain(string $subdomain): string
-    {
-        $parts = explode(".", $subdomain);
-
-        if (count($parts) > 2) {
-            $subdomain = implode(".", array_slice($parts, -2));
-        }
-
-        return $subdomain;
     }
 }
 

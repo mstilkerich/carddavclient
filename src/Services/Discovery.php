@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Services;
 
-use MStilkerich\CardDavClient\{Account, AddressbookCollection, CardDavClient, Config, WebDavCollection};
+use MStilkerich\CardDavClient\{Account, AddressbookCollection, Config, HttpClientAdapter, WebDavCollection};
 
 /**
  * Provides a service to discover the addressbooks for a CardDAV account.
@@ -50,6 +50,24 @@ class Discovery
     /**
      * Discover the addressbooks for a CardDAV account.
      *
+     * The discovery may involve several servers, found via DNS SRV records, redirects or the URLs reported by the
+     * servers. The account's credentials are only sent to some of them:
+     *  - The discovery domain is the host given in the discovery URI of the account. Credentials are sent to servers
+     *    within the discovery domain, i.e. the domain itself or any of its subdomains, if they use HTTPS (or HTTP, if
+     *    HTTP was explicitly requested in the discovery URI). If the discovery URI contains an IP address, only that
+     *    IP address is considered to be within the discovery domain.
+     *  - For other servers, the auth_origin_callback of the account (see {@see Account::__construct()}) decides.
+     *    Without a callback, the credentials are not sent to them, and such servers will typically not be usable for
+     *    the discovery.
+     *  - Servers found via DNS SRV records are used if they are within the discovery domain. For servers outside the
+     *    discovery domain (e.g. a custom domain hosted by a provider), RFC 6764 recommends that the user confirms that
+     *    the server is suitable. The auth_origin_callback of the account is asked (`$targetUri` is the server's URL,
+     *    `$baseUri` the URL of the discovery domain), and the server is used only if it returns true. Without a
+     *    callback, such servers are not used.
+     *
+     * The rules above only apply during discovery. Afterwards, the auth_origin_callback of the account is the same as
+     * before, also for the discovered addressbooks.
+     *
      * @param Account $account The CardDAV account providing credentials and initial discovery URI.
      * @psalm-return list<AddressbookCollection>
      * @return array<int,AddressbookCollection> The discovered addressbooks.
@@ -84,8 +102,59 @@ class Discovery
             $port = $force_ssl ? '443' : '80';
         }
 
+        // During discovery, the credentials may be sent to HTTPS servers within the domain of the discovery URI (and
+        // to HTTP servers if HTTP was explicitly requested). For other servers, the application's callback decides.
+        $appCallback = $account->getAuthOriginCallback();
+        $account->setAuthOriginCallback(
+            function (string $targetUri, string $baseUri) use ($host, $protocol, $appCallback): bool {
+                return self::isWithinDomain($targetUri, $host, $protocol)
+                    || (isset($appCallback) && $appCallback($targetUri, $baseUri));
+            }
+        );
+
+        try {
+            return $this->discoverWithinDomainPolicy(
+                $account,
+                $protocol,
+                $host,
+                $port,
+                $path,
+                $force_ssl,
+                $appCallback
+            );
+        } finally {
+            $account->setAuthOriginCallback($appCallback);
+        }
+    }
+
+    /**
+     * Performs the discovery steps for discoverAddressbooks().
+     *
+     * The account's auth_origin_callback must be set to the discovery policy when calling this function.
+     *
+     * @param Account $account The account to discover the addressbooks for
+     * @param string $protocol The protocol of the discovery URI (http or https)
+     * @param string $host The host of the discovery URI (the discovery domain)
+     * @param string $port The port of the discovery URI
+     * @param string $path The path of the discovery URI
+     * @param bool $force_ssl Whether only HTTPS shall be used
+     * @psalm-param null|callable(string, string): bool $appCallback
+     * @param ?callable $appCallback The auth_origin_callback provided by the application
+     * @psalm-return list<AddressbookCollection>
+     * @return array<int,AddressbookCollection> The discovered addressbooks.
+     */
+    private function discoverWithinDomainPolicy(
+        Account $account,
+        string $protocol,
+        string $host,
+        string $port,
+        string $path,
+        bool $force_ssl,
+        ?callable $appCallback
+    ): array {
         // First try the discovery URI that is stored in the Account
-        $account->setUrl("$protocol://$host:$port");
+        $discoveryUri = "$protocol://$host:$port";
+        $account->setUrl($discoveryUri);
         $addressbooks = $this->tryContextPath($account, $path);
         if ($addressbooks !== null) {
             return $addressbooks;
@@ -96,7 +165,19 @@ class Discovery
         //     [host => "contacts.abc.com", port => "443", scheme => "https", dnsrr => '_carddavs._tcp.abc.com']
         // servers in the array are ordered by precedence, highest first
         // dnsrr is only set when the server was discovered by lookup of DNS SRV record
-        $servers = $this->discoverServers($host, $force_ssl);
+        $servers = [];
+        foreach ($this->discoverServers($host, $force_ssl) as $server) {
+            // RFC 6764: If the target is not in the queried domain, the user should confirm that it is suitable
+            $serverUri = $server["scheme"] . "://" . $server["host"] . ":" . $server["port"];
+            if (
+                self::isWithinDomain($serverUri, $host, $protocol)
+                || (isset($appCallback) && $appCallback($serverUri, $discoveryUri))
+            ) {
+                $servers[] = $server;
+            } else {
+                Config::$logger->notice("Ignoring DNS SRV target $serverUri outside of the domain $host");
+            }
+        }
 
         // some builtins for providers that have discovery for the domains known to users not properly set up
         if (key_exists($host, self::KNOWN_SERVERS)) {
@@ -125,6 +206,35 @@ class Discovery
     }
 
     /**
+     * Checks whether a URI points to a server within the domain used for discovery.
+     *
+     * The host of the URI must be the domain itself or one of its subdomains. The URI must use HTTPS, or HTTP if the
+     * discovery was explicitly requested using HTTP. If the discovery domain is an IP address, only that IP address is
+     * considered to be within the domain.
+     *
+     * @param string $uri The absolute URI to check
+     * @param string $domain The domain (or IP address) of the discovery URI
+     * @param string $protocol The protocol of the discovery URI (http or https)
+     */
+    private static function isWithinDomain(string $uri, string $domain, string $protocol): bool
+    {
+        $comp = \Sabre\Uri\parse($uri);
+        $scheme = strtolower($comp["scheme"] ?? "");
+        $uriHost = strtolower($comp["host"] ?? "");
+        $domain = strtolower($domain);
+
+        if ($scheme !== "https" && ($scheme !== "http" || $protocol !== "http")) {
+            return false;
+        }
+
+        if (inet_pton(trim($domain, "[]")) !== false) {
+            return HttpClientAdapter::isSameOrigin($uri, "$scheme://$domain");
+        }
+
+        return $uriHost === $domain || substr($uriHost, -strlen(".$domain")) === ".$domain";
+    }
+
+    /**
      * Attempts to discover the addressbook home and addressbooks for a given context path.
      *
      * @param Account $account The CardDAV account
@@ -142,8 +252,18 @@ class Discovery
             $addressbookHomeUris = $account->findAddressbookHomes($principalUri);
             try {
                 $addressbooks = [];
+                $client = $account->getClient();
+                $homeFound = false;
 
                 foreach ($addressbookHomeUris ?? [] as $addressbookHomeUri) {
+                    // The addressbook home is accessed with the account's credentials, so it must be a location
+                    // where the credentials may be sent to
+                    if (!$client->mayAuthenticate($addressbookHomeUri)) {
+                        Config::$logger->info("Ignoring addressbook home $addressbookHomeUri");
+                        continue;
+                    }
+                    $homeFound = true;
+
                     // (5) Attempt PROPFIND (Depth 1) to discover all addressbooks of the user
                     $addressbookHome = new WebDavCollection($addressbookHomeUri, $account);
 
@@ -156,7 +276,9 @@ class Discovery
 
                 // We found valid addressbook homes. If they contain no addressbooks, this is fine and the
                 // result of the discovery is an empty set.
-                return $addressbooks;
+                if ($homeFound) {
+                    return $addressbooks;
+                }
             } catch (\Exception $e) {
                 Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
             }
@@ -191,7 +313,7 @@ class Discovery
 
             // query SRV records
             /** @psalm-var list<SrvRecord> | false */
-            $dnsresults = dns_get_record($rrname, DNS_SRV);
+            $dnsresults = $this->dnsGetRecord($rrname, DNS_SRV);
 
             if ($dnsresults !== false && !empty($dnsresults)) {
                 break;
@@ -263,7 +385,7 @@ class Discovery
 
         if (isset($server["dnsrr"])) {
             /** @psalm-var list<TxtRecord> | false */
-            $dnsresults = dns_get_record($server["dnsrr"], DNS_TXT);
+            $dnsresults = $this->dnsGetRecord($server["dnsrr"], DNS_TXT);
             if (is_array($dnsresults)) {
                 foreach ($dnsresults as $dnsresult) {
                     if (preg_match('/^path=(.+)/', $dnsresult['txt'] ?? "", $match)) {
@@ -278,6 +400,20 @@ class Discovery
         $contextpaths[] = '/';
 
         return $contextpaths;
+    }
+
+    /**
+     * Queries DNS resource records.
+     *
+     * This is a wrapper for dns_get_record() that allows to replace the DNS lookups in tests.
+     *
+     * @param string $hostname The DNS name to query
+     * @param int $type The type of the resource records to query (DNS_SRV, DNS_TXT)
+     * @return array|false The resource records as returned by dns_get_record(), false on error
+     */
+    protected function dnsGetRecord(string $hostname, int $type): array|false
+    {
+        return dns_get_record($hostname, $type);
     }
 }
 

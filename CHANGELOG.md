@@ -2,6 +2,18 @@
 
 ## Version 2.0.0 (to 1.4.2)
 
+- Security: The credentials of an account are only sent to the origin (scheme, host and port) of the URL of the
+  resource a request is made for. Previously, credentials were sent to any host whose last two domain name labels
+  matched those of the resource, e.g. from `a.co.uk` to `evil.co.uk`, or for IP addresses, to any IP address with the
+  same last two octets. Credentials are never sent over plain HTTP if the resource uses HTTPS.
+- New HTTP option `auth_origin_callback` for an `Account`: A callback that decides whether the credentials may be sent
+  to a different origin. It is not included in the serialized form of the Account; use the new method
+  `Account::setAuthOriginCallback()` to set it after deserialization.
+- Discovery: Credentials are sent to servers within the discovery domain (the domain and its subdomains) only. Other
+  servers, e.g. targets of redirects, addressbook homes on other domains and DNS SRV targets outside the discovery
+  domain, require permission by the `auth_origin_callback`. See `Discovery::discoverAddressbooks()` for details.
+- `WebDavCollection::getChildren()` only returns direct members of the collection (same origin, path of the collection
+  plus one path segment). If the collection was redirected, the collection itself is no longer returned as a child.
 - Documentation: Creating a `WebDavResource` for a URI permits sending the account's credentials to the origin of the
   URI. Account-level `headers` are sent to all origins.
 - Remove the discovery workaround for iCloud (context path `/co`), which is not needed anymore.

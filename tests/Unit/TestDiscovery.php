@@ -21,6 +21,9 @@ final class TestDiscovery extends Discovery
     /** @var array<string, list<array>> Maps DNS names to the SRV/TXT records returned for that name */
     private $records;
 
+    /** @var list<string> The DNS names queried, in the order of the queries */
+    public $queries = [];
+
     /**
      * @param array<string, list<array>> $records Maps DNS names to the SRV/TXT records returned for that name
      */
@@ -34,6 +37,7 @@ final class TestDiscovery extends Discovery
      */
     protected function dnsGetRecord(string $hostname, int $type)
     {
+        $this->queries[] = $hostname;
         return $this->records[$hostname] ?? [];
     }
 }

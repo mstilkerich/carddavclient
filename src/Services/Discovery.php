@@ -51,11 +51,13 @@ class Discovery
      * Discover the addressbooks for a CardDAV account.
      *
      * The discovery may involve several servers, found via DNS SRV records, redirects or the URLs reported by the
-     * servers. The account's credentials are only sent to some of them:
+     * servers. If the discovery URI contains an IP address, no DNS lookups are performed; only the path given in the
+     * discovery URI and the well-known URI are tried on that server. The account's credentials are only sent to some of
+     * the servers:
      *  - The discovery domain is the host given in the discovery URI of the account. Credentials are sent to servers
      *    within the discovery domain, i.e. the domain itself or any of its subdomains, if they use HTTPS (or HTTP, if
      *    HTTP was explicitly requested in the discovery URI). If the discovery URI contains an IP address, only that
-     *    IP address is considered to be within the discovery domain.
+     *    IP address is considered to be within the discovery domain. Any port is accepted.
      *  - For other servers, the auth_origin_callback of the account (see {@see Account::__construct()}) decides.
      *    Without a callback, the credentials are not sent to them, and such servers will typically not be usable for
      *    the discovery.
@@ -83,25 +85,10 @@ class Discovery
     {
         $uri = $account->getDiscoveryUri();
         Config::$logger->debug("Starting discovery with input $uri");
-        if (!preg_match(';^(([^:]+)://)?(([^/:]+)(:([0-9]+))?)(/?.*)$;', $uri, $match)) {
-            throw new \InvalidArgumentException("The account's discovery URI must contain a hostname (got: $uri)");
-        }
-
-        $protocol = $match[2]; // optional
-        $host     = $match[4]; // mandatory
-        $port     = $match[6]; // optional
-        $path     = $match[7] ?: '/'; // optional
+        [ $protocol, $host, $port, $path ] = self::parseDiscoveryUri($uri);
 
         // plain is only used if http was explicitly given
         $force_ssl = ($protocol !== "http");
-
-        // setup default values if no user values given
-        if (strlen($protocol) == 0) {
-            $protocol = $force_ssl ? 'https' : 'http';
-        }
-        if (strlen($port) == 0) {
-            $port = $force_ssl ? '443' : '80';
-        }
 
         // During discovery, the credentials may be sent to HTTPS servers within the domain of the discovery URI (and
         // to HTTP servers if HTTP was explicitly requested). For other servers, the application's callback decides.
@@ -166,8 +153,9 @@ class Discovery
         //     [host => "contacts.abc.com", port => "443", scheme => "https", dnsrr => '_carddavs._tcp.abc.com']
         // servers in the array are ordered by precedence, highest first
         // dnsrr is only set when the server was discovered by lookup of DNS SRV record
+        // DNS SRV lookups only apply to domain names, not to IP addresses
         $servers = [];
-        foreach ($this->discoverServers($host, $force_ssl) as $server) {
+        foreach (self::isIpAddress($host) ? [] : $this->discoverServers($host, $force_ssl) as $server) {
             // RFC 6764: If the target is not in the queried domain, the user should confirm that it is suitable. For
             // compatibility with earlier versions of this library, such targets are used if the application did not
             // provide an auth_origin_callback to decide.
@@ -211,11 +199,63 @@ class Discovery
     }
 
     /**
+     * Parses the discovery URI of an account.
+     *
+     * The discovery URI may lack the scheme, in which case https is used. If it lacks the port, the default port of the
+     * scheme is used. If it lacks the path, / is used.
+     *
+     * @param string $uri The discovery URI
+     * @psalm-return array{string, string, string, string}
+     * @return array The protocol (http or https), host (lowercase, IPv6 address in brackets), port and path of the
+     *               discovery URI. A query or fragment is dropped.
+     *
+     * @throws \InvalidArgumentException If the URI lacks a host, has a scheme other than http/https, or contains user
+     *                                   information
+     */
+    private static function parseDiscoveryUri(string $uri): array
+    {
+        if (!preg_match(';^[a-z][a-z0-9+.-]*://;i', $uri)) {
+            $uri = "https://$uri";
+        }
+
+        $comp = \Sabre\Uri\parse($uri);
+        $protocol = strtolower($comp["scheme"] ?? "");
+        $host = strtolower($comp["host"] ?? "");
+
+        if ($host === "") {
+            throw new \InvalidArgumentException("The account's discovery URI must contain a hostname (got: $uri)");
+        }
+        if ($protocol !== "http" && $protocol !== "https") {
+            throw new \InvalidArgumentException("The account's discovery URI must use http or https (got: $uri)");
+        }
+        if (isset($comp["user"])) {
+            throw new \InvalidArgumentException(
+                "The account's discovery URI must not contain user information, use the HTTP options (got: $uri)"
+            );
+        }
+
+        $port = (string) ($comp["port"] ?? ($protocol === "https" ? 443 : 80));
+        $path = ($comp["path"] ?? "") ?: "/";
+
+        return [ $protocol, $host, $port, $path ];
+    }
+
+    /**
+     * Checks whether the host part of a URI is an IP address.
+     *
+     * @param string $host The host part of a URI, IPv6 addresses enclosed in brackets
+     */
+    private static function isIpAddress(string $host): bool
+    {
+        return inet_pton(trim($host, "[]")) !== false;
+    }
+
+    /**
      * Checks whether a URI points to a server within the domain used for discovery.
      *
      * The host of the URI must be the domain itself or one of its subdomains. The URI must use HTTPS, or HTTP if the
      * discovery was explicitly requested using HTTP. If the discovery domain is an IP address, only that IP address is
-     * considered to be within the domain.
+     * considered to be within the domain. In both cases, any port is accepted.
      *
      * @param string $uri The absolute URI to check
      * @param string $domain The domain (or IP address) of the discovery URI
@@ -232,8 +272,9 @@ class Discovery
             return false;
         }
 
-        if (inet_pton(trim($domain, "[]")) !== false) {
-            return HttpClientAdapter::isSameOrigin($uri, "$scheme://$domain");
+        if (self::isIpAddress($domain)) {
+            // compare the hosts only, isSameOrigin() takes care of different notations of the same IP address
+            return HttpClientAdapter::isSameOrigin("$scheme://$uriHost", "$scheme://$domain");
         }
 
         return $uriHost === $domain || substr($uriHost, -strlen(".$domain")) === ".$domain";

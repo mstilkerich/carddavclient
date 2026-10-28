@@ -17,6 +17,9 @@
   servers, e.g. targets of redirects or addressbook homes on other domains, require permission by the
   `auth_origin_callback`. DNS SRV targets outside the discovery domain are still used if no callback is configured,
   otherwise the callback decides. See `Discovery::discoverAddressbooks()` for details.
+- Discovery: If the discovery URI contains an IP address, no DNS SRV/TXT lookups are performed. Discovery URIs with
+  IPv6 addresses (e.g. `https://[2001:db8::1]:8443/`) are supported. Discovery URIs with a scheme other than http/https
+  or with user information (e.g. `https://user@example.com/`) are rejected.
 - `WebDavCollection::getChildren()` only returns direct members of the collection (same origin, path of the collection
   plus one path segment). If the collection was redirected, the collection itself is no longer returned as a child.
 - Documentation: Creating a `WebDavResource` for a URI permits sending the account's credentials to the origin of the

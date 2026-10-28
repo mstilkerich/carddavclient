@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up CI environment
         uses: ./.github/actions/setup
       - name: Install psalm
@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
+        php-version: ['7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
 
     runs-on: ubuntu-latest
 
@@ -39,13 +39,15 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up CI environment
         uses: ./.github/actions/setup
+        with:
+          php-version: ${{ matrix.php-version }}
       - name: Run unit tests
         run: make unittests
       - name: Upload unit test coverage reports to codecov.io
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: testreports/unit/clover.xml
           disable_search: true
@@ -75,7 +77,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up CI environment
         uses: ./.github/actions/setup
       - name: Setup Nextcloud
@@ -90,7 +92,7 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-nextcloud test coverage reports to codecov.io
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: testreports/interop/clover.xml
           disable_search: true
@@ -125,13 +127,13 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up CI environment
         uses: ./.github/actions/setup
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-owncloud test coverage reports to codecov.io
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: testreports/interop/clover.xml
           disable_search: true
@@ -148,7 +150,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Start Radicale
         run: |
           mkdir -p ${{ github.workspace }}/.github/configs/radicale/data
@@ -162,7 +164,7 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-radicale test coverage reports to codecov.io
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: testreports/interop/clover.xml
           disable_search: true
@@ -210,7 +212,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up CI environment
         uses: ./.github/actions/setup
       - name: Create Davical Addressbooks
@@ -219,7 +221,7 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-davical test coverage reports to codecov.io
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: testreports/interop/clover.xml
           disable_search: true
@@ -236,7 +238,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up CI environment
         uses: ./.github/actions/setup
       - name: Run interop tests
@@ -246,7 +248,7 @@ jobs:
           ICLOUD_URL_ABOOK0: ${{ secrets.ICLOUD_URL_ABOOK0 }}
         run: make tests-interop
       - name: Upload interop-iCloud test coverage reports to codecov.io
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: testreports/interop/clover.xml
           disable_search: true
@@ -285,7 +287,7 @@ jobs:
       - name: Run interop tests
         run: make tests-interop
       - name: Upload interop-baikal test coverage reports to codecov.io
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: testreports/interop/clover.xml
           disable_search: true

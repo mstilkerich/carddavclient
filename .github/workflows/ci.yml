@@ -277,7 +277,7 @@ jobs:
 
     steps:
       - name: Checkout carddavclient
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up CI environment
         uses: ./.github/actions/setup
       - name: Setup Baikal

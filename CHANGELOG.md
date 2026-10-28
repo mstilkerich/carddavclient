@@ -11,7 +11,9 @@
   `Account::setAuthOriginCallback()` to set it after deserialization.
 - Discovery: Credentials are sent to servers within the discovery domain (the domain and its subdomains) only. Other
   servers, e.g. targets of redirects, addressbook homes on other domains and DNS SRV targets outside the discovery
-  domain, require permission by the `auth_origin_callback`. See `Discovery::discoverAddressbooks()` for details.
+  domain, require permission by the `auth_origin_callback`. Servers within the domain of a builtin discovery server for
+  a public provider (e.g. www.googleapis.com for gmail.com) are treated like servers within the discovery domain. See
+  `Discovery::discoverAddressbooks()` for details.
 - Discovery: If the discovery URI contains an IP address, no DNS SRV/TXT lookups are performed. Discovery URIs with
   IPv6 addresses (e.g. `https://[2001:db8::1]:8443/`) are supported. Discovery URIs with a scheme other than http/https
   or with user information (e.g. `https://user@example.com/`) are rejected.

@@ -42,7 +42,7 @@ class Discovery
      *
      * @var array<string,string>
      */
-    private const KNOWN_SERVERS = [
+    protected const KNOWN_SERVERS = [
         "gmail.com" => "www.googleapis.com",
         "googlemail.com" => "www.googleapis.com",
     ];
@@ -58,6 +58,9 @@ class Discovery
      *    within the discovery domain, i.e. the domain itself or any of its subdomains, if they use HTTPS (or HTTP, if
      *    HTTP was explicitly requested in the discovery URI). If the discovery URI contains an IP address, only that
      *    IP address is considered to be within the discovery domain. Any port is accepted.
+     *  - For some public providers, the library has a builtin server that is used for discovery (e.g.
+     *    www.googleapis.com for gmail.com). Servers within the domain of the builtin server are treated like servers
+     *    within the discovery domain.
      *  - For other servers, the auth_origin_callback of the account (see {@see Account::__construct()}) decides.
      *    Without a callback, the credentials are not sent to them, and such servers will typically not be usable for
      *    the discovery.
@@ -90,11 +93,14 @@ class Discovery
         $force_ssl = ($protocol !== "http");
 
         // During discovery, the credentials may be sent to HTTPS servers within the domain of the discovery URI (and
-        // to HTTP servers if HTTP was explicitly requested). For other servers, the application's callback decides.
+        // to HTTP servers if HTTP was explicitly requested), or within the domain of the builtin server for it. For
+        // other servers, the application's callback decides.
         $appCallback = $account->getAuthOriginCallback();
+        $knownServer = static::KNOWN_SERVERS[$host] ?? null;
         $account->setAuthOriginCallback(
-            function (string $targetUri, string $baseUri) use ($host, $protocol, $appCallback): bool {
+            function (string $targetUri, string $baseUri) use ($host, $knownServer, $protocol, $appCallback): bool {
                 return self::isWithinDomain($targetUri, $host, $protocol)
+                    || (isset($knownServer) && self::isWithinDomain($targetUri, $knownServer, $protocol))
                     || (isset($appCallback) && $appCallback($targetUri, $baseUri));
             }
         );
@@ -168,8 +174,8 @@ class Discovery
         }
 
         // some builtins for providers that have discovery for the domains known to users not properly set up
-        if (key_exists($host, self::KNOWN_SERVERS)) {
-            $servers[] = [ "host" => self::KNOWN_SERVERS[$host], "port" => $port, "scheme" => $protocol];
+        if (key_exists($host, static::KNOWN_SERVERS)) {
+            $servers[] = [ "host" => static::KNOWN_SERVERS[$host], "port" => $port, "scheme" => $protocol];
         }
 
         // include the server that is part of the Account URI for discovery via /well-known/ URI

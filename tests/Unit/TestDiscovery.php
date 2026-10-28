@@ -18,6 +18,9 @@ use MStilkerich\CardDavClient\Services\Discovery;
  */
 final class TestDiscovery extends Discovery
 {
+    /** @var array<string,string> Builtin server for a discovery domain that is outside of that domain */
+    protected const KNOWN_SERVERS = [ 'sub.localhost' => 'localhost' ];
+
     /** @var array<string, list<array>> Maps DNS names to the SRV/TXT records returned for that name */
     private $records;
 

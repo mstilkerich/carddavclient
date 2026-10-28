@@ -234,6 +234,31 @@ final class DiscoveryCredentialsTest extends TestCase
         $this->assertSame([], $discovery->queries);
     }
 
+    public function testBuiltinServerDomainIsAuthenticated(): void
+    {
+        // The builtin server for sub.localhost is localhost, which redirects to dav.localhost. dav.localhost is outside
+        // the discovery domain, but within the domain of the builtin server.
+        $this->route('/.well-known/carddav', [ 'localhost' => $this->redirect($this->uri('dav.localhost', '/dav/')) ]);
+        $this->route('/dav/', [ 'dav.localhost' => $this->propResponse(
+            '/dav/',
+            '<d:current-user-principal><d:href>/dav/principal/</d:href></d:current-user-principal>'
+        ) ]);
+        $this->route('/dav/principal/', [ 'dav.localhost' => $this->propResponse(
+            '/dav/principal/',
+            '<card:addressbook-home-set><d:href>/dav/home/</d:href></card:addressbook-home-set>'
+        ) ]);
+        $this->route('/dav/home/', [ 'dav.localhost' => $this->childrenResponse('/dav/home/', [ '/dav/home/book/' ]) ]);
+
+        $account = new Account(
+            'http://sub.localhost:' . self::$server->getPort(),
+            [ 'username' => 'user', 'password' => 'pw', 'preemptive_basic_auth' => true ]
+        );
+        $abooks = (new TestDiscovery())->discoverAddressbooks($account);
+
+        $this->assertSame([ $this->uri('dav.localhost', '/dav/home/book/') ], $this->uris($abooks));
+        $this->assertAuthenticated(['sub.localhost' => true, 'localhost' => true, 'dav.localhost' => true]);
+    }
+
     public function testAddressbookHomeOutsideDomainIsIgnored(): void
     {
         $this->route('/.well-known/carddav', [ 'localhost' => $this->redirect('/dav/') ]);

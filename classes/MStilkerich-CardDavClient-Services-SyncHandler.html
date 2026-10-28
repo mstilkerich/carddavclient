@@ -2,18 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CardDAV Client Library</title>
+            <title>CardDAV Client Library</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
     <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
-            <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/js/all.min.js" integrity="sha256-0vuk8LXoyrmCjp1f0O300qo1M75ZQyhH9X3J6d+scmk=" crossorigin="anonymous"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -47,35 +56,69 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-    
-    <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/mstilkerich.html"><abbr title="\MStilkerich">MStilkerich</abbr></a></h4>
-                <ul class="phpdocumentor-list">
-                                            <li><a href="namespaces/mstilkerich-carddavclient.html"><abbr title="\MStilkerich\CardDavClient">CardDavClient</abbr></a></li>
-                                    </ul>
-                        </section>
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/mstilkerich.html" class="">MStilkerich</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/mstilkerich-carddavclient.html" class="">CardDavClient</a>
+                
+            </li>
+            </ul>
 
-        <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
-                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
-                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
-                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
-                            </ul>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
-                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
-                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
-                            </ul>
                         </section>
-    
-    <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Application.html" class="">Application</a>
+</h4>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Public.html" class="">Public</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Public-Entities.html" class="">Entities</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Infrastructure.html" class="">Infrastructure</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Exceptions.html" class="">Exceptions</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Services.html" class="">Services</a>
+                
+            </li>
+            </ul>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Internal.html" class="">Internal</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Internal-Communication.html" class="">Communication</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-Services.html" class="">Services</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-XmlElements.html" class="">XmlElements</a>
+                
+            </li>
+            </ul>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="graphs/classes.html">Class Diagram</a></h3>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
@@ -83,14 +126,15 @@
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich.html">MStilkerich</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich-carddavclient.html">CardDavClient</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich-carddavclient-services.html">Services</a></li>
@@ -111,10 +155,12 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncHandler.php"><a href="files/src-services-synchandler.html"><abbr title="src/Services/SyncHandler.php">SyncHandler.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">38</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">24</span>
+
+    </aside>
 
             <p class="phpdocumentor-summary">Interface for application-level synchronization handler.</p>
+
 
     <section class="phpdocumentor-description"><p>During an addressbook synchronization, the corresponding methods of this interface are invoked for events such as
 changed or deleted address objects, to be handled in an application-specific manner.</p>
@@ -122,48 +168,63 @@ changed or deleted address objects, to be handled in an application-specific man
 
 
 
-
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+
+
+
+
+
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
-                    <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectChanged">addressObjectChanged()</a>
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectChanged">addressObjectChanged()</a>
     <span>
-                        &nbsp;: void    </span>
+                                &nbsp;: void    </span>
 </dt>
 <dd>This method is called for each changed address object, including new address objects.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectDeleted">addressObjectDeleted()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectDeleted">addressObjectDeleted()</a>
     <span>
-                        &nbsp;: void    </span>
+                                &nbsp;: void    </span>
 </dt>
 <dd>This method is called for each deleted address object.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_finalizeSync">finalizeSync()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_finalizeSync">finalizeSync()</a>
     <span>
-                        &nbsp;: void    </span>
+                                &nbsp;: void    </span>
 </dt>
 <dd>Called upon completion of the synchronization process to enable the handler to perform final actions if needed.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_getExistingVCardETags">getExistingVCardETags()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_getExistingVCardETags">getExistingVCardETags()</a>
     <span>
-                        &nbsp;: array&lt;string, string&gt;    </span>
+                                &nbsp;: array&lt;string, string&gt;    </span>
 </dt>
 <dd>Provides the URIs and ETags of all VCards existing locally.</dd>
 
-        </dl>
+    </dl>
 
 
+
+
+        
 
         
 
@@ -171,6 +232,7 @@ changed or deleted address objects, to be handled in an application-specific man
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
             <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="phpdocumentor-element
@@ -181,19 +243,26 @@ changed or deleted address objects, to be handled in an application-specific man
     <h4 class="phpdocumentor-element__name" id="method_addressObjectChanged">
         addressObjectChanged()
         <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectChanged" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncHandler.php"><a href="files/src-services-synchandler.html"><abbr title="src/Services/SyncHandler.php">SyncHandler.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">58</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">44</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">This method is called for each changed address object, including new address objects.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">addressObjectChanged</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$etag</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\VObject\Component\VCard">VCard</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$card</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">addressObjectChanged</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$etag</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type"><abbr title="\Sabre\VObject\Component\VCard">VCard</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$card</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
+
+        </div>
+    
         <section class="phpdocumentor-description"><p>In case an error occurs attempting to retrieve or to parse the address data for an URI that the server reported
 as changed, this method is invoked with a null $card parameter. This allows the client to know that there was a
 change that is missing from the sync, and to handle or ignore it as it sees fit.</p>
@@ -202,8 +271,8 @@ change that is missing from the sync, and to handle or ignore it as it sees fit.
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$uri</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$uri</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>URI of the changed or added address object.</p>
@@ -211,8 +280,8 @@ change that is missing from the sync, and to handle or ignore it as it sees fit.
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$etag</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$etag</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>ETag of the retrieved version of the address object.</p>
@@ -220,8 +289,8 @@ change that is missing from the sync, and to handle or ignore it as it sees fit.
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$card</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\VObject\Component\VCard">VCard</abbr>|null</span>
+                <span class="phpdocumentor-argument-list__argument__name">$card</span>
+                : <span class="phpdocumentor-argument-list__argument__type"><abbr title="\Sabre\VObject\Component\VCard">VCard</abbr>|null</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>A (partial) VCard containing (at least, if available)the requested VCard properties. Null in case an error
@@ -232,27 +301,23 @@ occurred retrieving or parsing the VCard retrieved from the server.</p>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_addressObjectChanged_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectChanged_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/MStilkerich-CardDavClient-Services-Sync.html"><abbr title="\MStilkerich\CardDavClient\Services\Sync">Sync</abbr></a></span>
-                                        
-                                                 <section class="phpdocumentor-description"></section>
-
+                                                                
                                     </dd>
                         </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
+    
     
 </article>
                     <article
@@ -264,26 +329,32 @@ occurred retrieving or parsing the VCard retrieved from the server.</p>
     <h4 class="phpdocumentor-element__name" id="method_addressObjectDeleted">
         addressObjectDeleted()
         <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectDeleted" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncHandler.php"><a href="files/src-services-synchandler.html"><abbr title="src/Services/SyncHandler.php">SyncHandler.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">55</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">This method is called for each deleted address object.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">addressObjectDeleted</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">addressObjectDeleted</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
 
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$uri</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$uri</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>URI of the deleted address object.</p>
@@ -293,27 +364,23 @@ occurred retrieving or parsing the VCard retrieved from the server.</p>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_addressObjectDeleted_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectDeleted_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/MStilkerich-CardDavClient-Services-Sync.html"><abbr title="\MStilkerich\CardDavClient\Services\Sync">Sync</abbr></a></span>
-                                        
-                                                 <section class="phpdocumentor-description"></section>
-
+                                                                
                                     </dd>
                         </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
+    
     
 </article>
                     <article
@@ -325,44 +392,46 @@ occurred retrieving or parsing the VCard retrieved from the server.</p>
     <h4 class="phpdocumentor-element__name" id="method_finalizeSync">
         finalizeSync()
         <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_finalizeSync" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncHandler.php"><a href="files/src-services-synchandler.html"><abbr title="src/Services/SyncHandler.php">SyncHandler.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">103</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">89</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Called upon completion of the synchronization process to enable the handler to perform final actions if needed.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">finalizeSync</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">finalizeSync</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
 
+        </div>
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="method_finalizeSync_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_finalizeSync_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/MStilkerich-CardDavClient-Services-Sync.html"><abbr title="\MStilkerich\CardDavClient\Services\Sync">Sync</abbr></a></span>
-                                        
-                                                 <section class="phpdocumentor-description"></section>
-
+                                                                
                                     </dd>
                         </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
+    
     
 </article>
                     <article
@@ -374,19 +443,26 @@ occurred retrieving or parsing the VCard retrieved from the server.</p>
     <h4 class="phpdocumentor-element__name" id="method_getExistingVCardETags">
         getExistingVCardETags()
         <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_getExistingVCardETags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Services/SyncHandler.php"><a href="files/src-services-synchandler.html"><abbr title="src/Services/SyncHandler.php">SyncHandler.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">95</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">81</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Provides the URIs and ETags of all VCards existing locally.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getExistingVCardETags</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getExistingVCardETags</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
 
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
+
+        </div>
+    
         <section class="phpdocumentor-description"><p>During synchronization, it may be required to identify the version of locally existing address objects to
 determine whether the server-side version is newer than the local version. This is the case if the server does
 not support the sync-collection report, or if the sync-token has expired on the server and thus the server is not
@@ -405,34 +481,67 @@ construction is done on demand in this method, which will not be called if the d
 
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_getExistingVCardETags_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_getExistingVCardETags_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/MStilkerich-CardDavClient-Services-Sync.html"><abbr title="\MStilkerich\CardDavClient\Services\Sync">Sync</abbr></a></span>
-                                        
-                                                 <section class="phpdocumentor-description"></section>
-
+                                                                
                                     </dd>
                         </dl>
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>Associative array with URIs (URL path component without server) as keys, ETags as values.</p>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Associative array with URIs (URL path component without server) as keys, ETags as values.</p>
 </section>
 
-    
+            </section>
+
 </article>
             </section>
 
+        
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                                                                <li><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectChanged">addressObjectChanged()</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_addressObjectDeleted">addressObjectDeleted()</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_finalizeSync">finalizeSync()</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#method_getExistingVCardETags">getExistingVCardETags()</a></li>
+                                            </ul>
+                </li>
+            
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -443,7 +552,6 @@ construction is done on demand in this method, which will not be called if the d
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/MStilkerich-CardDavClient-Services-SyncHandler.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
@@ -452,5 +560,9 @@ construction is done on demand in this method, which will not be called if the d
     <script>
         cssVars({});
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
 </body>
 </html>

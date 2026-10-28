@@ -2,18 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CardDAV Client Library</title>
+            <title>CardDAV Client Library</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
     <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
-            <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/js/all.min.js" integrity="sha256-0vuk8LXoyrmCjp1f0O300qo1M75ZQyhH9X3J6d+scmk=" crossorigin="anonymous"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -47,35 +56,69 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-    
-    <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/mstilkerich.html"><abbr title="\MStilkerich">MStilkerich</abbr></a></h4>
-                <ul class="phpdocumentor-list">
-                                            <li><a href="namespaces/mstilkerich-carddavclient.html"><abbr title="\MStilkerich\CardDavClient">CardDavClient</abbr></a></li>
-                                    </ul>
-                        </section>
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/mstilkerich.html" class="">MStilkerich</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/mstilkerich-carddavclient.html" class="">CardDavClient</a>
+                
+            </li>
+            </ul>
 
-        <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
-                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
-                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
-                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
-                            </ul>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
-                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
-                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
-                            </ul>
                         </section>
-    
-    <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Application.html" class="">Application</a>
+</h4>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Public.html" class="">Public</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Public-Entities.html" class="">Entities</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Infrastructure.html" class="">Infrastructure</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Exceptions.html" class="">Exceptions</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Services.html" class="">Services</a>
+                
+            </li>
+            </ul>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Internal.html" class="">Internal</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Internal-Communication.html" class="">Communication</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-Services.html" class="">Services</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-XmlElements.html" class="">XmlElements</a>
+                
+            </li>
+            </ul>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="graphs/classes.html">Class Diagram</a></h3>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
@@ -83,14 +126,15 @@
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich.html">MStilkerich</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich-carddavclient.html">CardDavClient</a></li>
     </ul>
@@ -111,13 +155,22 @@
     
     </h2>
 
+<div class="phpdocumentor-label-line">
+
+
+    <div class="phpdocumentor-label phpdocumentor-label--success"><span>Abstract</span><span>Yes</span></div>
+
+</div>
+
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">58</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">40</span>
+
+    </aside>
 
             <p class="phpdocumentor-summary">Abstract base class for the internal HTTP client adapter.</p>
+
 
     <section class="phpdocumentor-description"><p>This class intends to decouple the rest of this library from the underlying HTTP client library to allow for
 future replacement.</p>
@@ -132,15 +185,15 @@ considering a potential later refactoring.</p>
 
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>RequestOptions = array {
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-type</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>RequestOptions = array{
 allow_redirects?: bool,
 body?: string,
 headers?: array&lt;string, string | list<string>&gt;
@@ -148,89 +201,117 @@ headers?: array&lt;string, string | list<string>&gt;
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>Credentials = array{
-username?: string,
-password?: string,
-bearertoken?: string
-}</p>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-import-type</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>HttpOptions from Account</p>
 </section>
 
                                     </dd>
                         </dl>
 
-
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+
+
+
+<h4 id="toc-constants">
+    Constants
+    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -constant -protected">
-    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#constant_NEEDED_AUTHNFO">NEEDED_AUTHNFO</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#constant_NEEDED_AUTHNFO">NEEDED_AUTHNFO</a>
     <span>
-        &nbsp;= [&#039;basic&#039; =&gt; [&#039;username&#039;, &#039;password&#039;], &#039;digest&#039; =&gt; [&#039;username&#039;, &#039;password&#039;], &#039;bearer&#039; =&gt; [&#039;bearertoken&#039;]]                    </span>
+        &nbsp;: mixed&nbsp;= [&#039;basic&#039; =&gt; [&#039;username&#039;, &#039;password&#039;], &#039;digest&#039;...                            </span>
 </dt>
 <dd>Defines which credential attributes are required for auth mechanisms.</dd>
 
-                <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_baseUri">$baseUri</a>
+    </dl>
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a class="" href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_baseUri">$baseUri</a>
     <span>
-                &nbsp;: string            </span>
+                        &nbsp;: string            </span>
 </dt>
 <dd>The base URI for requests.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_credentials">$credentials</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_httpOptions">$httpOptions</a>
     <span>
-                &nbsp;: <abbr title="\MStilkerich\CardDavClient\Credentials">Credentials</abbr>            </span>
+                        &nbsp;: <abbr title="\MStilkerich\CardDavClient\HttpOptions">HttpOptions</abbr>            </span>
 </dt>
-<dd>The credentials to use for authentication</dd>
+<dd>The HTTP options to use for communication, including authentication credentials.</dd>
 
-                <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_sendRequest">sendRequest()</a>
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_isSameOrigin">isSameOrigin()</a>
     <span>
-                        &nbsp;: <abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr>    </span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Checks whether two absolute URIs have the same origin, i.e. the same scheme, host and port.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_mayAuthenticate">mayAuthenticate()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Checks whether the credentials may be sent with a request to the given URI.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_sendRequest">sendRequest()</a>
+    <span>
+                                &nbsp;: <abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr>    </span>
 </dt>
 <dd>Sends an HTTP request and returns a PSR-7 response.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method___construct">__construct()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method___construct">__construct()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>Constructs a HttpClientAdapter object.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkCredentialsAvailable">checkCredentialsAvailable()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkCredentialsAvailable">checkCredentialsAvailable()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>Checks if the needed credentials for an authentication scheme are available.</dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkSameDomainAsBase">checkSameDomainAsBase()</a>
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a class="" href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_getOrigin">getOrigin()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: string|null    </span>
 </dt>
-<dd>Checks whether the given URI has the same domain as the base URI of this HTTP client.</dd>
+<dd>Provides a normalized string representation of the origin of an absolute URI.</dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_getDomainFromSubdomain">getDomainFromSubdomain()</a>
-    <span>
-                        &nbsp;: string    </span>
-</dt>
-<dd>Extracts the domain name from a subdomain.</dd>
-
-        </dl>
+    </dl>
 
 
 
@@ -239,24 +320,28 @@ bearertoken?: string
         <h3 class="phpdocumentor-elements__header" id="constants">
             Constants
             <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article class="phpdocumentor-element -constant -protected ">
     <h4 class="phpdocumentor-element__name" id="constant_NEEDED_AUTHNFO">
         NEEDED_AUTHNFO
         <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#constant_NEEDED_AUTHNFO" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">64</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">46</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Defines which credential attributes are required for auth mechanisms.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-    <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">NEEDED_AUTHNFO</span>
     = <span class="phpdocumentor-signature__default-value">[&#039;basic&#039; =&gt; [&#039;username&#039;, &#039;password&#039;], &#039;digest&#039; =&gt; [&#039;username&#039;, &#039;password&#039;], &#039;bearer&#039; =&gt; [&#039;bearertoken&#039;]]</span>
 </code>
@@ -266,8 +351,10 @@ bearertoken?: string
 </section>
 
     
+    
 
-</article>
+        
+    </article>
             </section>
 
         
@@ -275,37 +362,44 @@ bearertoken?: string
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
             <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_baseUri">
         $baseUri
         <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_baseUri" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">74</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">56</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">The base URI for requests.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$baseUri</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
     
+    
+    
+
+        
+        
 
 </article>
                     <article
@@ -313,31 +407,37 @@ bearertoken?: string
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
-    <h4 class="phpdocumentor-element__name" id="property_credentials">
-        $credentials
-        <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_credentials" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_httpOptions">
+        $httpOptions
+        <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_httpOptions" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">80</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">62</span>
 
-        <p class="phpdocumentor-summary">The credentials to use for authentication</p>
+    </aside>
 
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><abbr title="\MStilkerich\CardDavClient\Credentials">Credentials</abbr></span>
-    <span class="phpdocumentor-signature__name">$credentials</span>
-    </code>
-
-        <section class="phpdocumentor-description"></section>
+        <p class="phpdocumentor-summary">The HTTP options to use for communication, including authentication credentials.</p>
 
     
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type"><abbr title="\MStilkerich\CardDavClient\HttpOptions">HttpOptions</abbr></span>
+    <span class="phpdocumentor-signature__name">$httpOptions</span>
+    </code>
+
+    
+    
+    
+
+        
+        
 
 </article>
             </section>
@@ -346,7 +446,132 @@ bearertoken?: string
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
             <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isSameOrigin">
+        isSameOrigin()
+        <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_isSameOrigin" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">142</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Checks whether two absolute URIs have the same origin, i.e. the same scheme, host and port.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">isSameOrigin</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri1</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri2</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><p>The comparison is case-insensitive and considers the default port of the scheme if the port is not given. IP
+addresses are compared by their binary value, so different notations of the same IPv6 address and the
+IPv4-mapped IPv6 notation of an IPv4 address are considered the same host.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$uri1</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$uri2</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if both URIs have the same origin. False if not, or if any of the URIs lacks scheme or host.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_mayAuthenticate">
+        mayAuthenticate()
+        <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_mayAuthenticate" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">108</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Checks whether the credentials may be sent with a request to the given URI.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">mayAuthenticate</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><p>The credentials are bound to the origin (scheme, host and port) of the base URI of this HTTP client. For a
+request to a different origin, the auth_origin_callback of the HTTP options decides if configured, otherwise the
+credentials are not sent. Independent of the callback, credentials are never sent over plain HTTP if the base
+URI uses HTTPS.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$uri</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The target URI of the request. If relative, it is taken relative to the base URI.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if the credentials may be sent with the request.</p>
+</section>
+
+            </section>
+
+</article>
                     <article
         class="phpdocumentor-element
             -method
@@ -356,26 +581,30 @@ bearertoken?: string
     <h4 class="phpdocumentor-element__name" id="method_sendRequest">
         sendRequest()
         <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_sendRequest" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">113</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">95</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Sends an HTTP request and returns a PSR-7 response.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__abstract">abstract</span>            <span class="phpdocumentor-signature__name">sendRequest</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr></span></code>
+    <span class="phpdocumentor-signature__abstract">abstract</span>                <span class="phpdocumentor-signature__name">sendRequest</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">array&lt;string, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr></span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$method</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$method</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The request method (GET, PROPFIND, etc.)</p>
@@ -383,8 +612,8 @@ bearertoken?: string
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$uri</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$uri</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The target URI. If relative, taken relative to the internal base URI of the HTTP client</p>
@@ -392,9 +621,9 @@ bearertoken?: string
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$options</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string, mixed&gt;</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+                <span class="phpdocumentor-argument-list__argument__name">$options</span>
+                : <span class="phpdocumentor-argument-list__argument__type">array&lt;string, mixed&gt;</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">[]</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Request-specific options, merged with/override the default options of the client. Supported options are:</p>
 <ul>
@@ -408,61 +637,56 @@ bearertoken?: string
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_sendRequest_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_sendRequest_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-param</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>RequestOptions $options</p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-param</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>RequestOptions $options</p>
 </section>
 
                                     </dd>
-                                                <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">throws</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">throws</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                 <span class="phpdocumentor-tag-link"><abbr title="\Psr\Http\Client\ClientExceptionInterface">ClientExceptionInterface</abbr></span>
-                                                            
-                                                 <section class="phpdocumentor-description"><p>if request could not be sent or response could not be parsed</p>
+                                                                                        <section class="phpdocumentor-description"><p>if request could not be sent or response could not be parsed</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">throws</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                 <span class="phpdocumentor-tag-link"><abbr title="\Psr\Http\Client\RequestExceptionInterface">RequestExceptionInterface</abbr></span>
-                                                            
-                                                 <section class="phpdocumentor-description"><p>if request is not a well-formed HTTP request or is missing
+                                                                                        <section class="phpdocumentor-description"><p>if request is not a well-formed HTTP request or is missing
 some critical piece of information (such as a Host or Method)</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">throws</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                 <span class="phpdocumentor-tag-link"><abbr title="\Psr\Http\Client\NetworkExceptionInterface">NetworkExceptionInterface</abbr></span>
-                                                            
-                                                 <section class="phpdocumentor-description"><p>if the request cannot be sent due to a network failure of  any
+                                                                                        <section class="phpdocumentor-description"><p>if the request cannot be sent due to a network failure of  any
 kind, including a timeout</p>
 </section>
 
                                     </dd>
                         </dl>
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr></span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>The response retrieved from the server.</p>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Http\Message\ResponseInterface">ResponseInterface</abbr></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The response retrieved from the server.</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -473,26 +697,30 @@ kind, including a timeout</p>
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
         <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">87</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">69</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Constructs a HttpClientAdapter object.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$base_uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Credentials">Credentials</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$credentials</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$base_uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type"><abbr title="\MStilkerich\CardDavClient\HttpOptions">HttpOptions</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$httpOptions</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$base_uri</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$base_uri</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Base URI to be used when relative URIs are given to requests.</p>
@@ -500,8 +728,8 @@ kind, including a timeout</p>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$credentials</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\MStilkerich\CardDavClient\Credentials">Credentials</abbr></span>
+                <span class="phpdocumentor-argument-list__argument__name">$httpOptions</span>
+                : <span class="phpdocumentor-argument-list__argument__type"><abbr title="\MStilkerich\CardDavClient\HttpOptions">HttpOptions</abbr></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Credentials used to authenticate with the server.</p>
@@ -512,11 +740,8 @@ kind, including a timeout</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
+    
     
 </article>
                     <article
@@ -528,26 +753,90 @@ kind, including a timeout</p>
     <h4 class="phpdocumentor-element__name" id="method_checkCredentialsAvailable">
         checkCredentialsAvailable()
         <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkCredentialsAvailable" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">149</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">190</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Checks if the needed credentials for an authentication scheme are available.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                <span class="phpdocumentor-signature__name">checkCredentialsAvailable</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$scheme</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">checkCredentialsAvailable</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">lowercase-string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$scheme</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$scheme</span>
+                : <span class="phpdocumentor-argument-list__argument__type">lowercase-string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The authentication scheme to check for</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if the credentials needed for the scheme are available.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getOrigin">
+        getOrigin()
+        <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_getOrigin" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">158</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Provides a normalized string representation of the origin of an absolute URI.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">getOrigin</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><p>The result is a URL of the form scheme://host:port, with scheme and host in lowercase. If the URI does not
+contain a port, the default port of the scheme is used for http and https; for other schemes, the port is
+omitted. IP addresses are converted to their canonical notation, with IPv4-mapped IPv6 addresses converted to the
+IPv4 address.</p>
+</section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$scheme</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$uri</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -556,116 +845,69 @@ kind, including a timeout</p>
 
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>True if the credentials needed for the scheme are available.</p>
+        <span class="phpdocumentor-signature__response_type">string|null</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The normalized origin, null if the URI lacks scheme or host.</p>
 </section>
 
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_checkSameDomainAsBase">
-        checkSameDomainAsBase()
-        <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkSameDomainAsBase" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">124</span>
-</aside>
+            </section>
 
-        <p class="phpdocumentor-summary">Checks whether the given URI has the same domain as the base URI of this HTTP client.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-                <span class="phpdocumentor-signature__name">checkSameDomainAsBase</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
-
-        <section class="phpdocumentor-description"><p>If the given URI does not contain a domain part, true is returned (as when used, it will
-get that part from the base URI).</p>
-</section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$uri</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The URI to check</p>
-</section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>True if the URI shares the same domain as the base URI.</p>
-</section>
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -protected
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_getDomainFromSubdomain">
-        getDomainFromSubdomain()
-        <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_getDomainFromSubdomain" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/HttpClientAdapter.php"><a href="files/src-httpclientadapter.html"><abbr title="src/HttpClientAdapter.php">HttpClientAdapter.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">171</span>
-</aside>
-
-        <p class="phpdocumentor-summary">Extracts the domain name from a subdomain.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getDomainFromSubdomain</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$subdomain</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-        <section class="phpdocumentor-description"><p>If the given string does not have a subdomain (i.e. top-level domain or domain only),
-it is returned as provided.</p>
-</section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$subdomain</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The subdomain (e.g. sub.example.com)</p>
-</section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>The domain of $subdomain (e.g. example.com)</p>
-</section>
-
-    
 </article>
             </section>
 
+        
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                        <li><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#toc-constants">Constants</a></li>
+                                                            <li><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#constant_NEEDED_AUTHNFO">NEEDED_AUTHNFO</a></li>
+                                            </ul>
+                </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_baseUri">$baseUri</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_httpOptions">$httpOptions</a></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_isSameOrigin">isSameOrigin()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_mayAuthenticate">mayAuthenticate()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_sendRequest">sendRequest()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method___construct">__construct()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkCredentialsAvailable">checkCredentialsAvailable()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_getOrigin">getOrigin()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -676,7 +918,6 @@ it is returned as provided.</p>
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/MStilkerich-CardDavClient-HttpClientAdapter.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
@@ -685,5 +926,9 @@ it is returned as provided.</p>
     <script>
         cssVars({});
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
 </body>
 </html>

@@ -2,18 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CardDAV Client Library</title>
+            <title>CardDAV Client Library</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
     <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
-            <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/js/all.min.js" integrity="sha256-0vuk8LXoyrmCjp1f0O300qo1M75ZQyhH9X3J6d+scmk=" crossorigin="anonymous"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -47,35 +56,69 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-    
-    <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/mstilkerich.html"><abbr title="\MStilkerich">MStilkerich</abbr></a></h4>
-                <ul class="phpdocumentor-list">
-                                            <li><a href="namespaces/mstilkerich-carddavclient.html"><abbr title="\MStilkerich\CardDavClient">CardDavClient</abbr></a></li>
-                                    </ul>
-                        </section>
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/mstilkerich.html" class="">MStilkerich</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/mstilkerich-carddavclient.html" class="">CardDavClient</a>
+                
+            </li>
+            </ul>
 
-        <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
-                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
-                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
-                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
-                            </ul>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
-                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
-                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
-                            </ul>
                         </section>
-    
-    <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Application.html" class="">Application</a>
+</h4>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Public.html" class="">Public</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Public-Entities.html" class="">Entities</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Infrastructure.html" class="">Infrastructure</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Exceptions.html" class="">Exceptions</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Services.html" class="">Services</a>
+                
+            </li>
+            </ul>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Internal.html" class="">Internal</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Internal-Communication.html" class="">Communication</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-Services.html" class="">Services</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-XmlElements.html" class="">XmlElements</a>
+                
+            </li>
+            </ul>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="graphs/classes.html">Class Diagram</a></h3>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
@@ -83,14 +126,15 @@
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich.html">MStilkerich</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich-carddavclient.html">CardDavClient</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich-carddavclient-xmlelements.html">XmlElements</a></li>
@@ -115,13 +159,20 @@
     
     </h2>
 
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Filter.php"><a href="files/src-xmlelements-filter.html"><abbr title="src/XmlElements/Filter.php">Filter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">43</span>
+
+    </aside>
 
             <p class="phpdocumentor-summary">Represents XML urn:ietf:params:xml:ns:carddav:filter elements as PHP objects (RFC 6352).</p>
+
 
     <section class="phpdocumentor-description"><p>From RFC 6352:
 The &quot;filter&quot; element specifies the search filter used to match address objects that should be returned by a report.
@@ -137,141 +188,128 @@ in order for the overall filter to match.</p>
 
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>PropName = string</p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-type</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>PropName = string</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>NotDefined = null</p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>NotDefined = null</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>TextMatchSpec = string</p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>TextMatchSpec = string</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>ParamFilterSpec = array{string, NotDefined | TextMatchSpec}</p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>ParamFilterSpec = array{string, NotDefined | TextMatchSpec}</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>SimpleCondition = NotDefined|TextMatchSpec|ParamFilterSpec</p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>SimpleCondition = NotDefined|TextMatchSpec|ParamFilterSpec</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>SimpleConditions = array&lt;PropName, SimpleCondition&gt;</p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>SimpleConditions = array&lt;PropName, SimpleCondition&gt;</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>ComplexCondition = array{matchAll?: bool} &amp; array&lt;int,SimpleCondition&gt;</p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>ComplexCondition = array{matchAll?: bool} &amp; array&lt;int,SimpleCondition&gt;</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-type</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>ComplexConditions = list&lt;array{PropName,ComplexCondition}&gt;</p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>ComplexConditions = list&lt;array{PropName,ComplexCondition}&gt;</p>
 </section>
 
                                     </dd>
                         </dl>
 
-
-
-
-<h3 id="interfaces_class_traits">
-    Interfaces, Classes and Traits
-    <a href="#interfaces_class_traits" class="headerlink"><i class="fas fa-link"></i></a>
-</h3>
-
-<dl class="phpdocumentor-table-of-contents">
-            <dt class="phpdocumentor-table-of-contents__entry -interface"><abbr title="\Sabre\Xml\XmlSerializable">XmlSerializable</abbr></dt>
-        <dd></dd>
     
     
-    </dl>
-
-
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+    <h4 id="toc-interfaces">
+        Interfaces
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#toc-interfaces" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <dl class="phpdocumentor-table-of-contents">
+                    <dt class="phpdocumentor-table-of-contents__entry -interface"><abbr title="\Sabre\Xml\XmlSerializable">XmlSerializable</abbr></dt>    </dl>
+
+
+
+
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
-                <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_propFilters">$propFilters</a>
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_propFilters">$propFilters</a>
     <span>
-                &nbsp;: array&lt;int, <a href="classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\PropFilter">PropFilter</abbr></a>&gt;            </span>
+                        &nbsp;: array&lt;int, <a href="classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\PropFilter">PropFilter</abbr></a>&gt;            </span>
 </dt>
 <dd>The PropFilter child elements of this filter.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_testType">$testType</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_testType">$testType</a>
     <span>
-                &nbsp;: string            </span>
+                        &nbsp;: string            </span>
 </dt>
 <dd>Semantics of match for multiple conditions (AND or OR).</dd>
 
-                <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method___construct">__construct()</a>
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method___construct">__construct()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>Constructs a Filter consisting of zero or more PropFilter elements.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method_xmlAttributes">xmlAttributes()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method_xmlAttributes">xmlAttributes()</a>
     <span>
-                        &nbsp;: array&lt;string, string&gt;    </span>
+                                &nbsp;: array&lt;string, string&gt;    </span>
 </dt>
 <dd>Produces a list of attributes for this filter suitable to pass to a Sabre XML Writer.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method_xmlSerialize">xmlSerialize()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method_xmlSerialize">xmlSerialize()</a>
     <span>
-                        &nbsp;: void    </span>
+                                &nbsp;: void    </span>
 </dt>
 <dd>This function encodes the element&#039;s value (not the element itself!) to the given XML writer.</dd>
 
-        </dl>
+    </dl>
 
 
 
@@ -282,60 +320,65 @@ in order for the overall filter to match.</p>
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
             <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="
             phpdocumentor-element
             -property
             -public
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_propFilters">
         $propFilters
         <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_propFilters" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Filter.php"><a href="files/src-xmlelements-filter.html"><abbr title="src/XmlElements/Filter.php">Filter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">73</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">59</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">The PropFilter child elements of this filter.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\PropFilter">PropFilter</abbr></a>&gt;</span>
+        <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-XmlElements-PropFilter.html"><abbr title="\MStilkerich\CardDavClient\XmlElements\PropFilter">PropFilter</abbr></a>&gt;</span>
     <span class="phpdocumentor-signature__name">$propFilters</span>
      = <span class="phpdocumentor-signature__default-value">[]</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="property_propFilters_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_propFilters_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-var</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>list<PropFilter></p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-var</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>list&lt;PropFilter&gt;</p>
 </section>
 
                                     </dd>
-                                                <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-readonly</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"></section>
-
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-readonly</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                        
                                     </dd>
                         </dl>
+
+        
+        
 
 </article>
                     <article
@@ -343,54 +386,58 @@ in order for the overall filter to match.</p>
             phpdocumentor-element
             -property
             -public
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_testType">
         $testType
         <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_testType" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Filter.php"><a href="files/src-xmlelements-filter.html"><abbr title="src/XmlElements/Filter.php">Filter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">65</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">51</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Semantics of match for multiple conditions (AND or OR).</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$testType</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="property_testType_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_testType_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-var</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>'anyof'|'allof'</p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-var</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>'anyof'|'allof'</p>
 </section>
 
                                     </dd>
-                                                <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-readonly</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"></section>
-
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-readonly</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                        
                                     </dd>
                         </dl>
+
+        
+        
 
 </article>
             </section>
@@ -399,6 +446,7 @@ in order for the overall filter to match.</p>
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
             <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="phpdocumentor-element
@@ -409,19 +457,24 @@ in order for the overall filter to match.</p>
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
         <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Filter.php"><a href="files/src-xmlelements-filter.html"><abbr title="src/XmlElements/Filter.php">Filter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">124</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">110</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Constructs a Filter consisting of zero or more PropFilter elements.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$conditions</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$matchAll</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$conditions</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$matchAll</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <section class="phpdocumentor-description"><p>For ease of use, the $conditions parameter can take a simple form, which allows exactly one match criterion per
 VCard property. Or it can take a more elaborate form where for each property, <em>several</em> lists of match criteria
 can be defined.</p>
@@ -435,18 +488,13 @@ or a two-element array{string,?string} where the first element is the name of a 
 string for TextMatch or null with a meaning as for a property filter.</p>
 <p>Examples for the simple form:</p>
 <ul>
-<li>
-<code class="prettyprint">['EMAIL' =&gt; null]</code>: Matches all VCards that do NOT have an EMAIL property</li>
-<li>
-<code class="prettyprint">['EMAIL' =&gt; &quot;//&quot;]</code>: Matches all VCards that DO have an EMAIL property (with any value)</li>
-<li>
-<code class="prettyprint">['EMAIL' =&gt; '/@example.com/$']</code>:
+<li><code class="prettyprint">['EMAIL' =&gt; null]</code>: Matches all VCards that do NOT have an EMAIL property</li>
+<li><code class="prettyprint">['EMAIL' =&gt; &quot;//&quot;]</code>: Matches all VCards that DO have an EMAIL property (with any value)</li>
+<li><code class="prettyprint">['EMAIL' =&gt; '/@example.com/$']</code>:
 Matches all VCards that have an EMAIL property with an email address of the example.com domain</li>
-<li>
-<code class="prettyprint">['EMAIL' =&gt; '/@example.com/$', 'N' =&gt; '/Mustermann;/^']</code>:
+<li><code class="prettyprint">['EMAIL' =&gt; '/@example.com/$', 'N' =&gt; '/Mustermann;/^']</code>:
 Like before, but additionally/alternatively the surname must be Mustermann (depending on $matchAll)</li>
-<li>
-<code class="prettyprint">['EMAIL' =&gt; ['TYPE' =&gt; '/home/=']]</code>:
+<li><code class="prettyprint">['EMAIL' =&gt; ['TYPE' =&gt; '/home/=']]</code>:
 Matches all VCards with an EMAIL property that has a TYPE parameter with value home</li>
 </ul>
 <p><strong>Elaborate form</strong></p>
@@ -456,8 +504,7 @@ conditions of which all/any need to apply, plus an optional key &quot;matchAll&q
 that all conditions need to match (AND semantics).</p>
 <p>Examples for the elaborate form:</p>
 <ul>
-<li>
-<code class="prettyprint">[['EMAIL', ['/@example.com/$', ['TYPE', '/home/='], 'matchAll' =&gt; true]], ['N', '/Mustermann;/^']]</code>:
+<li><code class="prettyprint">[['EMAIL', ['/@example.com/$', ['TYPE', '/home/='], 'matchAll' =&gt; true]], ['N', '/Mustermann;/^']]</code>:
 Matches all VCards, that have an EMAIL property with an address in the domain example.com and at the same
 time a TYPE parameter with value home, and/or an N property with a surname of Mustermann.</li>
 </ul>
@@ -468,8 +515,8 @@ used for the elaborate form filters.</p>
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$conditions</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                <span class="phpdocumentor-argument-list__argument__name">$conditions</span>
+                : <span class="phpdocumentor-argument-list__argument__type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The match conditions for the query, or for one property filter. An empty array will cause all VCards to match.</p>
@@ -477,8 +524,8 @@ used for the elaborate form filters.</p>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$matchAll</span>
-                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                <span class="phpdocumentor-argument-list__argument__name">$matchAll</span>
+                : <span class="phpdocumentor-argument-list__argument__type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Whether all or any of the conditions needs to match.</p>
@@ -488,27 +535,24 @@ used for the elaborate form filters.</p>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method___construct_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method___construct_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-param</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>SimpleConditions|ComplexConditions $conditions</p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-param</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>SimpleConditions|ComplexConditions $conditions</p>
 </section>
 
                                     </dd>
                         </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
+    
     
 </article>
                     <article
@@ -520,37 +564,44 @@ used for the elaborate form filters.</p>
     <h4 class="phpdocumentor-element__name" id="method_xmlAttributes">
         xmlAttributes()
         <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method_xmlAttributes" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Filter.php"><a href="files/src-xmlelements-filter.html"><abbr title="src/XmlElements/Filter.php">Filter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">165</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">152</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Produces a list of attributes for this filter suitable to pass to a Sabre XML Writer.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">xmlAttributes</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">xmlAttributes</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <section class="phpdocumentor-description"><p>The attributes produced are:</p>
 <ul>
-<li>
-<code class="prettyprint">test=&quot;allof/anyof&quot;</code>
-</li>
+<li><code class="prettyprint">test=&quot;allof/anyof&quot;</code></li>
 </ul>
 </section>
 
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>A list of attributes (attrname =&gt; attrvalue)</p>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>A list of attributes (attrname =&gt; attrvalue)</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -561,26 +612,30 @@ used for the elaborate form filters.</p>
     <h4 class="phpdocumentor-element__name" id="method_xmlSerialize">
         xmlSerialize()
         <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method_xmlSerialize" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/Filter.php"><a href="files/src-xmlelements-filter.html"><abbr title="src/XmlElements/Filter.php">Filter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">146</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">133</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">This function encodes the element&#039;s value (not the element itself!) to the given XML writer.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">xmlSerialize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Writer">Writer</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$writer</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">xmlSerialize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type"><abbr title="\Sabre\Xml\Writer">Writer</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$writer</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$writer</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Sabre\Xml\Writer">Writer</abbr></span>
+                <span class="phpdocumentor-argument-list__argument__name">$writer</span>
+                : <span class="phpdocumentor-argument-list__argument__type"><abbr title="\Sabre\Xml\Writer">Writer</abbr></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -589,17 +644,51 @@ used for the elaborate form filters.</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
+    
     
 </article>
             </section>
 
+        
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                                            <li><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_propFilters">$propFilters</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#property_testType">$testType</a></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method___construct">__construct()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method_xmlAttributes">xmlAttributes()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#method_xmlSerialize">xmlSerialize()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -610,7 +699,6 @@ used for the elaborate form filters.</p>
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/MStilkerich-CardDavClient-XmlElements-Filter.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
@@ -619,5 +707,9 @@ used for the elaborate form filters.</p>
     <script>
         cssVars({});
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
 </body>
 </html>

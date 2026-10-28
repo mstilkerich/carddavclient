@@ -2,18 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CardDAV Client Library</title>
+            <title>CardDAV Client Library</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
     <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
-            <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/js/all.min.js" integrity="sha256-0vuk8LXoyrmCjp1f0O300qo1M75ZQyhH9X3J6d+scmk=" crossorigin="anonymous"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -47,35 +56,69 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-    
-    <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/mstilkerich.html"><abbr title="\MStilkerich">MStilkerich</abbr></a></h4>
-                <ul class="phpdocumentor-list">
-                                            <li><a href="namespaces/mstilkerich-carddavclient.html"><abbr title="\MStilkerich\CardDavClient">CardDavClient</abbr></a></li>
-                                    </ul>
-                        </section>
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/mstilkerich.html" class="">MStilkerich</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/mstilkerich-carddavclient.html" class="">CardDavClient</a>
+                
+            </li>
+            </ul>
 
-        <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
-                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
-                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
-                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
-                            </ul>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
-                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
-                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
-                            </ul>
                         </section>
-    
-    <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Application.html" class="">Application</a>
+</h4>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Public.html" class="">Public</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Public-Entities.html" class="">Entities</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Infrastructure.html" class="">Infrastructure</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Exceptions.html" class="">Exceptions</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Services.html" class="">Services</a>
+                
+            </li>
+            </ul>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Internal.html" class="">Internal</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Internal-Communication.html" class="">Communication</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-Services.html" class="">Services</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-XmlElements.html" class="">XmlElements</a>
+                
+            </li>
+            </ul>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="graphs/classes.html">Class Diagram</a></h3>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
@@ -83,14 +126,15 @@
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich.html">MStilkerich</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich-carddavclient.html">CardDavClient</a></li>
     </ul>
@@ -114,177 +158,195 @@
     
     </h2>
 
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavCollection.php"><a href="files/src-webdavcollection.html"><abbr title="src/WebDavCollection.php">WebDavCollection.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">21</span>
+
+    </aside>
 
             <p class="phpdocumentor-summary">Represents a collection on a WebDAV server.</p>
 
-    <section class="phpdocumentor-description"></section>
 
 
 
 
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+
+
+
+<h4 id="toc-constants">
+    Constants
+    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -constant -private">
-    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#constant_PROPNAMES">PROPNAMES</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavCollection.html#constant_PROPNAMES">PROPNAMES</a>
     <span>
-        &nbsp;= [MStilkerichCardDavClientXmlElementsElementNames::SYNCTOKEN, MStilkerichCardDavClientXmlElementsElementNames::SUPPORTED_REPORT_SET, MStilkerichCardDavClientXmlElementsElementNames::ADD_MEMBER]                    </span>
+        &nbsp;: mixed&nbsp;= [\MStilkerich\CardDavClient\XmlElements\Element...                            </span>
 </dt>
 <dd>List of properties to query in refreshProperties() and returned by getProperties().</dd>
 
-                <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_account">$account</a>
+    </dl>
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_account">$account</a>
     <span>
-                &nbsp;: <a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>            </span>
+                        &nbsp;: <a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>            </span>
 </dt>
 <dd>The CardDAV account this resource is associated/accessible with</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_uri">$uri</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_uri">$uri</a>
     <span>
-                &nbsp;: string            </span>
+                        &nbsp;: string            </span>
 </dt>
 <dd>URI of the resource</dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_client">$client</a>
-    <span>
-                &nbsp;: <a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a>            </span>
-</dt>
-<dd>CardDavClient object for the account&#039;s base URI</dd>
+    </dl>
 
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_props">$props</a>
-    <span>
-                &nbsp;: array&lt;string, mixed&gt;            </span>
-</dt>
-<dd>Cached WebDAV properties of the resource</dd>
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
 
-                <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method___construct">__construct()</a>
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method___construct">__construct()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>Constructs a WebDavResource object.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_createInstance">createInstance()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_createInstance">createInstance()</a>
     <span>
-                        &nbsp;: <a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>    </span>
+                                &nbsp;: <a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>    </span>
 </dt>
 <dd>Factory for WebDavResource objects.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_downloadResource">downloadResource()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_downloadResource">downloadResource()</a>
     <span>
-                        &nbsp;: array&lt;string, string&gt;    </span>
+                                &nbsp;: array&lt;string, string&gt;    </span>
 </dt>
 <dd>Downloads the content of a given resource.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getAccount">getAccount()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getAccount">getAccount()</a>
     <span>
-                        &nbsp;: <a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>    </span>
+                                &nbsp;: <a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>    </span>
 </dt>
 <dd>Returns the Account this resource belongs to.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getBasename">getBasename()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getBasename">getBasename()</a>
     <span>
-                        &nbsp;: string    </span>
+                                &nbsp;: string    </span>
 </dt>
 <dd>Returns the basename (last path component) of the URI of this resource.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getChildren">getChildren()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getChildren">getChildren()</a>
     <span>
-                        &nbsp;: array&lt;int, <a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>&gt;    </span>
+                                &nbsp;: array&lt;int, <a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>&gt;    </span>
 </dt>
 <dd>Returns the child resources of this collection.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getClient">getClient()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getClient">getClient()</a>
     <span>
-                        &nbsp;: <a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a>    </span>
+                                &nbsp;: <a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a>    </span>
 </dt>
 <dd>Provides a CardDavClient object to interact with the server for this resource.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getSyncToken">getSyncToken()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getSyncToken">getSyncToken()</a>
     <span>
-                        &nbsp;: string|null    </span>
+                                &nbsp;: string|null    </span>
 </dt>
 <dd>Returns the sync token of this collection.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getUri">getUri()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getUri">getUri()</a>
     <span>
-                        &nbsp;: string    </span>
+                                &nbsp;: string    </span>
 </dt>
 <dd>Returns the URI of this resource.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getUriPath">getUriPath()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getUriPath">getUriPath()</a>
     <span>
-                        &nbsp;: string    </span>
+                                &nbsp;: string    </span>
 </dt>
 <dd>Returns the path component of the URI of this resource.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_jsonSerialize">jsonSerialize()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_jsonSerialize">jsonSerialize()</a>
     <span>
-                        &nbsp;: array&lt;string, string&gt;    </span>
+                                &nbsp;: array&lt;string, string&gt;    </span>
 </dt>
 <dd>Allows to serialize WebDavResource object to JSON.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_refreshProperties">refreshProperties()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_refreshProperties">refreshProperties()</a>
     <span>
-                        &nbsp;: void    </span>
+                                &nbsp;: void    </span>
 </dt>
 <dd>Forces a refresh of the cached standard WebDAV properties for this resource.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_supportsSyncCollection">supportsSyncCollection()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_supportsSyncCollection">supportsSyncCollection()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>Queries whether the server supports the sync-collection REPORT on this collection.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getNeededCollectionPropertyNames">getNeededCollectionPropertyNames()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getNeededCollectionPropertyNames">getNeededCollectionPropertyNames()</a>
     <span>
-                        &nbsp;: array&lt;int, string&gt;    </span>
+                                &nbsp;: array&lt;int, string&gt;    </span>
 </dt>
 <dd>Provides the list of property names that should be requested upon call of refreshProperties().</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getProperties">getProperties()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getProperties">getProperties()</a>
     <span>
-                        &nbsp;: array&lt;string, mixed&gt;    </span>
+                                &nbsp;: array&lt;string, mixed&gt;    </span>
 </dt>
 <dd>Returns the standard WebDAV properties for this resource.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_supportsReport">supportsReport()</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_supportsReport">supportsReport()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>Checks if the server supports the given REPORT on this collection.</dd>
 
-        </dl>
+    </dl>
 
 
 
@@ -293,67 +355,65 @@
         <h3 class="phpdocumentor-elements__header" id="constants">
             Constants
             <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article class="phpdocumentor-element -constant -private ">
     <h4 class="phpdocumentor-element__name" id="constant_PROPNAMES">
         PROPNAMES
         <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#constant_PROPNAMES" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavCollection.php"><a href="files/src-webdavcollection.html"><abbr title="src/WebDavCollection.php">WebDavCollection.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">43</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">29</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">List of properties to query in refreshProperties() and returned by getProperties().</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">PROPNAMES</span>
-    = <span class="phpdocumentor-signature__default-value">[MStilkerichCardDavClientXmlElementsElementNames::SYNCTOKEN, MStilkerichCardDavClientXmlElementsElementNames::SUPPORTED_REPORT_SET, MStilkerichCardDavClientXmlElementsElementNames::ADD_MEMBER]</span>
+    = <span class="phpdocumentor-signature__default-value">[\MStilkerich\CardDavClient\XmlElements\ElementNames::SYNCTOKEN, \MStilkerich\CardDavClient\XmlElements\ElementNames::SUPPORTED_REPORT_SET, \MStilkerich\CardDavClient\XmlElements\ElementNames::ADD_MEMBER]</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="constant_PROPNAMES_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#constant_PROPNAMES_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-var</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>list<string></p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-var</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>list<string></p>
 </section>
 
                                     </dd>
-                                                <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getProperties"><abbr title="\MStilkerich\CardDavClient\WebDavResource::getProperties()">WebDavResource::getProperties()</abbr></a></span>
-                                        
-                                                 <section class="phpdocumentor-description"></section>
-
+                                                                
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_refreshProperties"><abbr title="\MStilkerich\CardDavClient\WebDavResource::refreshProperties()">WebDavResource::refreshProperties()</abbr></a></span>
-                                        
-                                                 <section class="phpdocumentor-description"></section>
-
+                                                                
                                     </dd>
                         </dl>
 
-</article>
+        
+    </article>
             </section>
 
         
@@ -361,37 +421,44 @@
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
             <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_account">
         $account
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_account" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">58</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">50</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">The CardDAV account this resource is associated/accessible with</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span>
     <span class="phpdocumentor-signature__name">$account</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
     
+    
+    
+
+        
+        
 
 </article>
                     <article
@@ -399,110 +466,37 @@
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_uri">
         $uri
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_uri" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">37</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">URI of the resource</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$uri</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_client">
-        $client
-        <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_client" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">64</span>
-</aside>
-
-        <p class="phpdocumentor-summary">CardDavClient object for the account&#039;s base URI</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a></span>
-    <span class="phpdocumentor-signature__name">$client</span>
-    </code>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_props">
-        $props
-        <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_props" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">52</span>
-</aside>
-
-        <p class="phpdocumentor-summary">Cached WebDAV properties of the resource</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">array&lt;string, mixed&gt;</span>
-    <span class="phpdocumentor-signature__name">$props</span>
-     = <span class="phpdocumentor-signature__default-value">[]</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-var</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>PropTypes</p>
-</section>
-
-                                    </dd>
-                        </dl>
+        
+        
 
 </article>
             </section>
@@ -511,6 +505,7 @@
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
             <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="phpdocumentor-element
@@ -521,35 +516,42 @@
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">121</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">115</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Constructs a WebDavResource object.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$account</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$account</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
 
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$uri</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$uri</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The target URI of the resource.</p>
+                    <section class="phpdocumentor-description"><p>The target URI of the resource. The account's credentials are sent to the origin of this URI, see
+<a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>.</p>
 </section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$account</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span>
+                <span class="phpdocumentor-argument-list__argument__name">$account</span>
+                : <span class="phpdocumentor-argument-list__argument__type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The account by which the URI shall be accessed.</p>
@@ -560,11 +562,8 @@
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
+    
     
 </article>
                     <article
@@ -576,19 +575,26 @@
     <h4 class="phpdocumentor-element__name" id="method_createInstance">
         createInstance()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_createInstance" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">95</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">88</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Factory for WebDavResource objects.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">createInstance</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$account</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">null|array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$restype</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a></span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">createInstance</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$account</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">null|array&lt;int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$restype</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a></span></code>
 
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
+
+        </div>
+    
         <section class="phpdocumentor-description"><p>Given an account and URI, it attempts to create an instance of the most specific subclass matching the
 resource identified by the given URI. In case no resource can be accessed via the given account and
 URI, an exception is thrown.</p>
@@ -600,17 +606,18 @@ using the constructor.</p>
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$uri</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$uri</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The target URI of the resource.</p>
+                    <section class="phpdocumentor-description"><p>The target URI of the resource. The account's credentials are sent to the origin of this URI, see
+<a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>.</p>
 </section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$account</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span>
+                <span class="phpdocumentor-argument-list__argument__name">$account</span>
+                : <span class="phpdocumentor-argument-list__argument__type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The account by which the URI shall be accessed.</p>
@@ -618,9 +625,9 @@ using the constructor.</p>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$restype</span>
-                : <span class="phpdocumentor-signature__argument__return-type">null|array&lt;int, string&gt;</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+                <span class="phpdocumentor-argument-list__argument__name">$restype</span>
+                : <span class="phpdocumentor-argument-list__argument__type">null|array&lt;int, string&gt;</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Array with the DAV:resourcetype properties of the URI (if already available saves the query)</p>
 </section>
@@ -629,29 +636,33 @@ using the constructor.</p>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_createInstance_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_createInstance_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-param</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>null|list<string> $restype</p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-param</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>null|list<string> $restype</p>
 </section>
 
                                     </dd>
                         </dl>
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a></span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>An object that is an instance of the most suited subclass of WebDavResource.</p>
+        <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>An object that is an instance of the most suited subclass of WebDavResource.</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -662,58 +673,72 @@ using the constructor.</p>
     <h4 class="phpdocumentor-element__name" id="method_downloadResource">
         downloadResource()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_downloadResource" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">239</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">237</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Downloads the content of a given resource.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">downloadResource</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">downloadResource</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uri</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
+
+        </div>
+    
+        <section class="phpdocumentor-description"><p>The account's credentials are only sent with the request if the given URI has the same origin as this resource,
+or the auth_origin_callback of the account permits it. Therefore, this method can be used to download resources
+from URIs of untrusted sources, such as photo URIs contained in VCards.</p>
+</section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$uri</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$uri</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>URI of the requested resource.</p>
+                    <section class="phpdocumentor-description"><p>URI of the requested resource. If relative, it is taken relative to the URI of this resource.</p>
 </section>
 
             </dd>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_downloadResource_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_downloadResource_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-return</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>array{body: string}</p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-return</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>array{body: string}</p>
 </section>
 
                                     </dd>
                         </dl>
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>An associative array where the key 'body' maps to the content of the requested resource.</p>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>An associative array where the key 'body' maps to the content of the requested resource.</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -724,30 +749,37 @@ using the constructor.</p>
     <h4 class="phpdocumentor-element__name" id="method_getAccount">
         getAccount()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getAccount" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">179</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">173</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Returns the Account this resource belongs to.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getAccount</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">getAccount</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
 
+        </div>
+    
+    
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
+        <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-Account.html"><abbr title="\MStilkerich\CardDavClient\Account">Account</abbr></a></span>
+            </section>
 
-    
 </article>
                     <article
         class="phpdocumentor-element
@@ -758,30 +790,37 @@ using the constructor.</p>
     <h4 class="phpdocumentor-element__name" id="method_getBasename">
         getBasename()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getBasename" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">220</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">214</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Returns the basename (last path component) of the URI of this resource.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getBasename</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">getBasename</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
 
+        </div>
+    
+    
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
 
-    
 </article>
                     <article
         class="phpdocumentor-element
@@ -792,46 +831,60 @@ using the constructor.</p>
     <h4 class="phpdocumentor-element__name" id="method_getChildren">
         getChildren()
         <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getChildren" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavCollection.php"><a href="files/src-webdavcollection.html"><abbr title="src/WebDavCollection.php">WebDavCollection.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">72</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Returns the child resources of this collection.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getChildren</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getChildren</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>&gt;</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
+
+        </div>
+    
+        <section class="phpdocumentor-description"><p>Only direct members of the collection are returned, i.e. resources with the same origin as the collection and
+the collection's path plus one path segment. Other resources reported by the server are ignored, so that the
+account's credentials are not sent to locations outside the collection.</p>
+</section>
 
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_getChildren_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getChildren_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-return</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>list<WebDavResource></p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-return</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>list&lt;WebDavResource&gt;</p>
 </section>
 
                                     </dd>
                         </dl>
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>&gt;</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>The children of this collection.</p>
+        <span class="phpdocumentor-signature__response_type">array&lt;int, <a href="classes/MStilkerich-CardDavClient-WebDavResource.html"><abbr title="\MStilkerich\CardDavClient\WebDavResource">WebDavResource</abbr></a>&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The children of this collection.</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -842,32 +895,41 @@ using the constructor.</p>
     <h4 class="phpdocumentor-element__name" id="method_getClient">
         getClient()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getClient" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">192</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">186</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Provides a CardDavClient object to interact with the server for this resource.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getClient</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">getClient</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a></span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <section class="phpdocumentor-description"><p>The base URL used by the returned client is the URL of this resource.</p>
 </section>
 
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a></span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>A CardDavClient object to interact with the server for this resource.</p>
+        <span class="phpdocumentor-signature__response_type"><a href="classes/MStilkerich-CardDavClient-CardDavClient.html"><abbr title="\MStilkerich\CardDavClient\CardDavClient">CardDavClient</abbr></a></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>A CardDavClient object to interact with the server for this resource.</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -878,19 +940,26 @@ using the constructor.</p>
     <h4 class="phpdocumentor-element__name" id="method_getSyncToken">
         getSyncToken()
         <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getSyncToken" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavCollection.php"><a href="files/src-webdavcollection.html"><abbr title="src/WebDavCollection.php">WebDavCollection.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">59</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">45</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Returns the sync token of this collection.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getSyncToken</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
+                    <span class="phpdocumentor-signature__name">getSyncToken</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
+
+        </div>
+    
         <section class="phpdocumentor-description"><p>Note that the value may be cached. If this resource was just created, this is not an issue, but if a property
 cache may exist for a longer time call <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_refreshProperties"><abbr title="\MStilkerich\CardDavClient\WebDavResource::refreshProperties()">WebDavResource::refreshProperties()</abbr></a> first to ensure an up to date
 sync token is provided.</p>
@@ -899,13 +968,17 @@ sync token is provided.</p>
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string|null</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>The sync token, or null if the server does not provide a sync-token for this collection.</p>
+        <span class="phpdocumentor-signature__response_type">string|null</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The sync token, or null if the server does not provide a sync-token for this collection.</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -916,30 +989,37 @@ sync token is provided.</p>
     <h4 class="phpdocumentor-element__name" id="method_getUri">
         getUri()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getUri" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">201</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">195</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Returns the URI of this resource.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getUri</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">getUri</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
 
+        </div>
+    
+    
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
 
-    
 </article>
                     <article
         class="phpdocumentor-element
@@ -950,30 +1030,37 @@ sync token is provided.</p>
     <h4 class="phpdocumentor-element__name" id="method_getUriPath">
         getUriPath()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getUriPath" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">210</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">204</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Returns the path component of the URI of this resource.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getUriPath</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">getUriPath</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
 
+        </div>
+    
+    
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
 
-    
 </article>
                     <article
         class="phpdocumentor-element
@@ -984,31 +1071,39 @@ sync token is provided.</p>
     <h4 class="phpdocumentor-element__name" id="method_jsonSerialize">
         jsonSerialize()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_jsonSerialize" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">170</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">164</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Allows to serialize WebDavResource object to JSON.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">jsonSerialize</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">jsonSerialize</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>Associative array of attributes to serialize.</p>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Associative array of attributes to serialize.</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1019,44 +1114,46 @@ sync token is provided.</p>
     <h4 class="phpdocumentor-element__name" id="method_refreshProperties">
         refreshProperties()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_refreshProperties" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">153</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">147</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Forces a refresh of the cached standard WebDAV properties for this resource.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">refreshProperties</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">refreshProperties</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
 
+        </div>
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="method_refreshProperties_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_refreshProperties_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getProperties"><abbr title="\MStilkerich\CardDavClient\WebDavResource::getProperties()">WebDavResource::getProperties()</abbr></a></span>
-                                        
-                                                 <section class="phpdocumentor-description"></section>
-
+                                                                
                                     </dd>
                         </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
+    
     
 </article>
                     <article
@@ -1068,31 +1165,41 @@ sync token is provided.</p>
     <h4 class="phpdocumentor-element__name" id="method_supportsSyncCollection">
         supportsSyncCollection()
         <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_supportsSyncCollection" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavCollection.php"><a href="files/src-webdavcollection.html"><abbr title="src/WebDavCollection.php">WebDavCollection.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">70</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">56</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Queries whether the server supports the sync-collection REPORT on this collection.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">supportsSyncCollection</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">supportsSyncCollection</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    <div class="phpdocumentor-label-line">
+            <div class="phpdocumentor-label phpdocumentor-label--success"><span>API</span><span>Yes</span></div>
 
+        </div>
+    
+    
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>True if sync-collection is supported for this collection.</p>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if sync-collection is supported for this collection.</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1103,31 +1210,39 @@ sync token is provided.</p>
     <h4 class="phpdocumentor-element__name" id="method_getNeededCollectionPropertyNames">
         getNeededCollectionPropertyNames()
         <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getNeededCollectionPropertyNames" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavCollection.php"><a href="files/src-webdavcollection.html"><abbr title="src/WebDavCollection.php">WebDavCollection.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">108</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">115</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Provides the list of property names that should be requested upon call of refreshProperties().</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                <span class="phpdocumentor-signature__name">getNeededCollectionPropertyNames</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getNeededCollectionPropertyNames</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').</p>
+        <span class="phpdocumentor-signature__response_type">array&lt;int, string&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>A list of property names including namespace prefix (e. g. '{DAV:}resourcetype').</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1138,48 +1253,57 @@ sync token is provided.</p>
     <h4 class="phpdocumentor-element__name" id="method_getProperties">
         getProperties()
         <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getProperties" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavResource.php"><a href="files/src-webdavresource.html"><abbr title="src/WebDavResource.php">WebDavResource.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">139</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">133</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Returns the standard WebDAV properties for this resource.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                <span class="phpdocumentor-signature__name">getProperties</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, mixed&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">getProperties</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, mixed&gt;</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <section class="phpdocumentor-description"><p>Retrieved from the server on first request, cached afterwards. Use <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_refreshProperties"><abbr title="\MStilkerich\CardDavClient\WebDavResource::refreshProperties()">WebDavResource::refreshProperties()</abbr></a> to
 force update of cached properties.</p>
 </section>
 
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_getProperties_tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getProperties_tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">psalm-return</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>PropTypes</p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">psalm-return</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>PropTypes</p>
 </section>
 
                                     </dd>
                         </dl>
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string, mixed&gt;</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>Array mapping property name to corresponding value(s). The value type depends on the property.</p>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, mixed&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Array mapping property name to corresponding value(s). The value type depends on the property.</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1190,26 +1314,30 @@ force update of cached properties.</p>
     <h4 class="phpdocumentor-element__name" id="method_supportsReport">
         supportsReport()
         <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_supportsReport" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/WebDavCollection.php"><a href="files/src-webdavcollection.html"><abbr title="src/WebDavCollection.php">WebDavCollection.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">122</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">129</span>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Checks if the server supports the given REPORT on this collection.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                <span class="phpdocumentor-signature__name">supportsReport</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reportElement</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">supportsReport</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reportElement</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$reportElement</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-argument-list__argument__name">$reportElement</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The XML element name of the REPORT of interest, including namespace (e.g. {DAV:}sync-collection).</p>
@@ -1220,18 +1348,79 @@ force update of cached properties.</p>
 
     
 
+        
+    
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>True if the report is supported on this collection.</p>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if the report is supported on this collection.</p>
 </section>
 
-    
+            </section>
+
 </article>
             </section>
 
+        
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                        <li><a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#toc-constants">Constants</a></li>
+                                                            <li><a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#constant_PROPNAMES">PROPNAMES</a></li>
+                                            </ul>
+                </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_account">$account</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#property_uri">$uri</a></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method___construct">__construct()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_createInstance">createInstance()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_downloadResource">downloadResource()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getAccount">getAccount()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getBasename">getBasename()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getChildren">getChildren()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getClient">getClient()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getSyncToken">getSyncToken()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getUri">getUri()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getUriPath">getUriPath()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_jsonSerialize">jsonSerialize()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_refreshProperties">refreshProperties()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_supportsSyncCollection">supportsSyncCollection()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_getNeededCollectionPropertyNames">getNeededCollectionPropertyNames()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavResource.html#method_getProperties">getProperties()</a></li>
+                                            <li class=""><a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#method_supportsReport">supportsReport()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -1242,7 +1431,6 @@ force update of cached properties.</p>
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/MStilkerich-CardDavClient-WebDavCollection.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
@@ -1251,5 +1439,9 @@ force update of cached properties.</p>
     <script>
         cssVars({});
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
 </body>
 </html>

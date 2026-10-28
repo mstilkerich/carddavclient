@@ -2,18 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CardDAV Client Library</title>
+            <title>CardDAV Client Library</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
     <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
-            <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/js/all.min.js" integrity="sha256-0vuk8LXoyrmCjp1f0O300qo1M75ZQyhH9X3J6d+scmk=" crossorigin="anonymous"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -47,35 +56,69 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-    
-    <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/mstilkerich.html"><abbr title="\MStilkerich">MStilkerich</abbr></a></h4>
-                <ul class="phpdocumentor-list">
-                                            <li><a href="namespaces/mstilkerich-carddavclient.html"><abbr title="\MStilkerich\CardDavClient">CardDavClient</abbr></a></li>
-                                    </ul>
-                        </section>
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/mstilkerich.html" class="">MStilkerich</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/mstilkerich-carddavclient.html" class="">CardDavClient</a>
+                
+            </li>
+            </ul>
 
-        <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Default.html"><abbr title="\Default">Default</abbr></a></h3>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Public.html"><abbr title="\Public">Public</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Public-Entities.html"><abbr title="\Public\Entities">Entities</abbr></a></li>
-                                    <li><a href="packages/Public-Infrastructure.html"><abbr title="\Public\Infrastructure">Infrastructure</abbr></a></li>
-                                    <li><a href="packages/Public-Exceptions.html"><abbr title="\Public\Exceptions">Exceptions</abbr></a></li>
-                                    <li><a href="packages/Public-Services.html"><abbr title="\Public\Services">Services</abbr></a></li>
-                            </ul>
-                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Internal.html"><abbr title="\Internal">Internal</abbr></a></h3>
-                        <ul class="phpdocumentor-list">
-                                    <li><a href="packages/Internal-Communication.html"><abbr title="\Internal\Communication">Communication</abbr></a></li>
-                                    <li><a href="packages/Internal-Services.html"><abbr title="\Internal\Services">Services</abbr></a></li>
-                                    <li><a href="packages/Internal-XmlElements.html"><abbr title="\Internal\XmlElements">XmlElements</abbr></a></li>
-                            </ul>
                         </section>
-    
-    <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Application.html" class="">Application</a>
+</h4>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Public.html" class="">Public</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Public-Entities.html" class="">Entities</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Infrastructure.html" class="">Infrastructure</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Exceptions.html" class="">Exceptions</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Public-Services.html" class="">Services</a>
+                
+            </li>
+            </ul>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Internal.html" class="">Internal</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Internal-Communication.html" class="">Communication</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-Services.html" class="">Services</a>
+                
+            </li>
+                    <li>
+                <a href="packages/Internal-XmlElements.html" class="">XmlElements</a>
+                
+            </li>
+            </ul>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="graphs/classes.html">Class Diagram</a></h3>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
@@ -83,14 +126,15 @@
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich.html">MStilkerich</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich-carddavclient.html">CardDavClient</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/mstilkerich-carddavclient-xmlelements.html">XmlElements</a></li>
@@ -112,13 +156,20 @@
     
     </h2>
 
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">36</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">22</span>
+
+    </aside>
 
             <p class="phpdocumentor-summary">Defines constants with fully-qualified XML element names.</p>
+
 
     <section class="phpdocumentor-description"><p>The syntax used is clark notation, i.e. including the namespace as a braced prefix. This syntax is understood by the
 Sabre libraries.</p>
@@ -126,305 +177,276 @@ Sabre libraries.</p>
 
 
 
-
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+
+
+
+<h4 id="toc-constants">
+    Constants
+    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ABOOK_DESC">ABOOK_DESC</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ABOOK_DESC">ABOOK_DESC</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-description&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-description&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ABOOK_HOME">ABOOK_HOME</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ABOOK_HOME">ABOOK_HOME</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-home-set&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-home-set&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADD_MEMBER">ADD_MEMBER</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADD_MEMBER">ADD_MEMBER</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}add-member&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}add-member&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATA">ADDRDATA</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATA">ADDRDATA</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}address-data&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}address-data&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATATYPE">ADDRDATATYPE</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATATYPE">ADDRDATATYPE</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}address-data-type&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}address-data-type&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_CURUSRPRINC">CURUSRPRINC</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_CURUSRPRINC">CURUSRPRINC</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}current-user-principal&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}current-user-principal&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_DISPNAME">DISPNAME</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_DISPNAME">DISPNAME</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}displayname&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}displayname&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_FILTER">FILTER</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_FILTER">FILTER</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}filter&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}filter&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETCTAG">GETCTAG</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETCTAG">GETCTAG</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCS . &quot;}getctag&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCS . &quot;}getctag&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETETAG">GETETAG</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETETAG">GETETAG</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}getetag&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}getetag&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_HREF">HREF</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_HREF">HREF</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}href&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}href&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ISNOTDEFINED">ISNOTDEFINED</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ISNOTDEFINED">ISNOTDEFINED</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}is-not-defined&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}is-not-defined&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_LIMIT">LIMIT</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_LIMIT">LIMIT</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}limit&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}limit&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MAX_RESSIZE">MAX_RESSIZE</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MAX_RESSIZE">MAX_RESSIZE</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}max-resource-size&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}max-resource-size&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MULTISTATUS">MULTISTATUS</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MULTISTATUS">MULTISTATUS</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}multistatus&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}multistatus&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NRESULTS">NRESULTS</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NRESULTS">NRESULTS</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}nresults&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}nresults&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCARDDAV">NSCARDDAV</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCARDDAV">NSCARDDAV</a>
     <span>
-        &nbsp;= &#039;urn:ietf:params:xml:ns:carddav&#039;                    </span>
+        &nbsp;: string&nbsp;= &#039;urn:ietf:params:xml:ns:carddav&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCS">NSCS</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCS">NSCS</a>
     <span>
-        &nbsp;= &#039;http://calendarserver.org/ns/&#039;                    </span>
+        &nbsp;: string&nbsp;= &#039;http://calendarserver.org/ns/&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSDAV">NSDAV</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSDAV">NSDAV</a>
     <span>
-        &nbsp;= &#039;DAV:&#039;                    </span>
+        &nbsp;: string&nbsp;= &#039;DAV:&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PARAMFILTER">PARAMFILTER</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PARAMFILTER">PARAMFILTER</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}param-filter&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}param-filter&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROP">PROP</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROP">PROP</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}prop&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}prop&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFILTER">PROPFILTER</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFILTER">PROPFILTER</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}prop-filter&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}prop-filter&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFIND">PROPFIND</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFIND">PROPFIND</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}propfind&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}propfind&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPSTAT">PROPSTAT</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPSTAT">PROPSTAT</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}propstat&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}propstat&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT">REPORT</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT">REPORT</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}report&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}report&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_MULTIGET">REPORT_MULTIGET</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_MULTIGET">REPORT_MULTIGET</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-multiget&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-multiget&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_QUERY">REPORT_QUERY</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_QUERY">REPORT_QUERY</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-query&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-query&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_SYNCCOLL">REPORT_SYNCCOLL</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_SYNCCOLL">REPORT_SYNCCOLL</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}sync-collection&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}sync-collection&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESPONSE">RESPONSE</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESPONSE">RESPONSE</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}response&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}response&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE">RESTYPE</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE">RESTYPE</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}resourcetype&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}resourcetype&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_ABOOK">RESTYPE_ABOOK</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_ABOOK">RESTYPE_ABOOK</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}addressbook&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_COLL">RESTYPE_COLL</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_COLL">RESTYPE_COLL</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}collection&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}collection&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_STATUS">STATUS</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_STATUS">STATUS</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}status&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}status&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_ADDRDATA">SUPPORTED_ADDRDATA</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_ADDRDATA">SUPPORTED_ADDRDATA</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}supported-address-data&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}supported-address-data&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_FILTER">SUPPORTED_FILTER</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_FILTER">SUPPORTED_FILTER</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}supported-filter&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}supported-filter&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_REPORT">SUPPORTED_REPORT</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_REPORT">SUPPORTED_REPORT</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}supported-report&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}supported-report&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_REPORT_SET">SUPPORTED_REPORT_SET</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_REPORT_SET">SUPPORTED_REPORT_SET</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}supported-report-set&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}supported-report-set&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SYNCLEVEL">SYNCLEVEL</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SYNCLEVEL">SYNCLEVEL</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}sync-level&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}sync-level&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SYNCTOKEN">SYNCTOKEN</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SYNCTOKEN">SYNCTOKEN</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSDAV . &quot;}sync-token&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSDAV . &quot;}sync-token&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_TEXTMATCH">TEXTMATCH</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_TEXTMATCH">TEXTMATCH</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}text-match&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}text-match&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_VCFPROP">VCFPROP</a>
+    <a class="" href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_VCFPROP">VCFPROP</a>
     <span>
-        &nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}prop&quot;                    </span>
+        &nbsp;: string&nbsp;= &quot;{&quot; . self::NSCARDDAV . &quot;}prop&quot;                            </span>
 </dt>
-<dd></dd>
 
-                </dl>
+    </dl>
+
+
+
 
 
 
@@ -433,1080 +455,1312 @@ Sabre libraries.</p>
         <h3 class="phpdocumentor-elements__header" id="constants">
             Constants
             <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_ABOOK_DESC">
         ABOOK_DESC
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ABOOK_DESC" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">93</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">79</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">ABOOK_DESC</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-description&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_ABOOK_HOME">
         ABOOK_HOME
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ABOOK_HOME" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">48</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">34</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">ABOOK_HOME</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-home-set&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_ADD_MEMBER">
         ADD_MEMBER
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADD_MEMBER" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
 
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">65</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">ADD_MEMBER</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}add-member&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_ADDRDATA">
-        ADDRDATA
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATA" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">87</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">ADDRDATA</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}address-data&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_ADDRDATATYPE">
-        ADDRDATATYPE
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATATYPE" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">89</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">ADDRDATATYPE</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}address-data-type&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_CURUSRPRINC">
-        CURUSRPRINC
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_CURUSRPRINC" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">46</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">CURUSRPRINC</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}current-user-principal&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_DISPNAME">
-        DISPNAME
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_DISPNAME" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">51</span>
-</aside>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">DISPNAME</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}displayname&quot;</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">ADD_MEMBER</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}add-member&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_FILTER">
-        FILTER
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_FILTER" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
+    <h4 class="phpdocumentor-element__name" id="constant_ADDRDATA">
+        ADDRDATA
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATA" class="headerlink"><i class="fas fa-link"></i></a>
 
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">118</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">FILTER</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}filter&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_GETCTAG">
-        GETCTAG
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETCTAG" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">60</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">GETCTAG</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCS . &quot;}getctag&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_GETETAG">
-        GETETAG
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETETAG" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">62</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">GETETAG</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}getetag&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_HREF">
-        HREF
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_HREF" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">110</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">HREF</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}href&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_ISNOTDEFINED">
-        ISNOTDEFINED
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ISNOTDEFINED" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">126</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">ISNOTDEFINED</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}is-not-defined&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_LIMIT">
-        LIMIT
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_LIMIT" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">112</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">LIMIT</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}limit&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_MAX_RESSIZE">
-        MAX_RESSIZE
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MAX_RESSIZE" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">95</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">MAX_RESSIZE</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}max-resource-size&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_MULTISTATUS">
-        MULTISTATUS
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MULTISTATUS" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">98</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">MULTISTATUS</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}multistatus&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_NRESULTS">
-        NRESULTS
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NRESULTS" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">114</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">NRESULTS</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}nresults&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_NSCARDDAV">
-        NSCARDDAV
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCARDDAV" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">41</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">NSCARDDAV</span>
-    = <span class="phpdocumentor-signature__default-value">&#039;urn:ietf:params:xml:ns:carddav&#039;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_NSCS">
-        NSCS
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCS" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">43</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">NSCS</span>
-    = <span class="phpdocumentor-signature__default-value">&#039;http://calendarserver.org/ns/&#039;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_NSDAV">
-        NSDAV
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSDAV" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">39</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">NSDAV</span>
-    = <span class="phpdocumentor-signature__default-value">&#039;DAV:&#039;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_PARAMFILTER">
-        PARAMFILTER
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PARAMFILTER" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">122</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">PARAMFILTER</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}param-filter&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_PROP">
-        PROP
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROP" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">108</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">PROP</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}prop&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_PROPFILTER">
-        PROPFILTER
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFILTER" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">120</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">PROPFILTER</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}prop-filter&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_PROPFIND">
-        PROPFIND
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFIND" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">104</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">PROPFIND</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}propfind&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_PROPSTAT">
-        PROPSTAT
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPSTAT" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">106</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">PROPSTAT</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}propstat&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_REPORT">
-        REPORT
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">71</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">REPORT</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}report&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_REPORT_MULTIGET">
-        REPORT_MULTIGET
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_MULTIGET" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">75</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">REPORT_MULTIGET</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-multiget&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_REPORT_QUERY">
-        REPORT_QUERY
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_QUERY" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">77</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">REPORT_QUERY</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-query&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_REPORT_SYNCCOLL">
-        REPORT_SYNCCOLL
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_SYNCCOLL" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">73</span>
-</aside>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">REPORT_SYNCCOLL</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}sync-collection&quot;</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">ADDRDATA</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}address-data&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_RESPONSE">
-        RESPONSE
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESPONSE" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="constant_ADDRDATATYPE">
+        ADDRDATATYPE
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATATYPE" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">75</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">ADDRDATATYPE</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}address-data-type&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_CURUSRPRINC">
+        CURUSRPRINC
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_CURUSRPRINC" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">32</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">CURUSRPRINC</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}current-user-principal&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_DISPNAME">
+        DISPNAME
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_DISPNAME" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">37</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">DISPNAME</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}displayname&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_FILTER">
+        FILTER
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_FILTER" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">104</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">FILTER</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}filter&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_GETCTAG">
+        GETCTAG
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETCTAG" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">46</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">GETCTAG</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCS . &quot;}getctag&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_GETETAG">
+        GETETAG
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETETAG" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">48</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">GETETAG</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}getetag&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_HREF">
+        HREF
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_HREF" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">96</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">HREF</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}href&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_ISNOTDEFINED">
+        ISNOTDEFINED
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ISNOTDEFINED" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">112</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">ISNOTDEFINED</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}is-not-defined&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_LIMIT">
+        LIMIT
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_LIMIT" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">98</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">LIMIT</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}limit&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_MAX_RESSIZE">
+        MAX_RESSIZE
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MAX_RESSIZE" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">81</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">MAX_RESSIZE</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}max-resource-size&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_MULTISTATUS">
+        MULTISTATUS
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MULTISTATUS" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">84</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">MULTISTATUS</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}multistatus&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_NRESULTS">
+        NRESULTS
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NRESULTS" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">100</span>
-</aside>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">RESPONSE</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}response&quot;</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">NRESULTS</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}nresults&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_RESTYPE">
-        RESTYPE
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="constant_NSCARDDAV">
+        NSCARDDAV
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCARDDAV" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">27</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">RESTYPE</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}resourcetype&quot;</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">NSCARDDAV</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;urn:ietf:params:xml:ns:carddav&#039;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_RESTYPE_ABOOK">
-        RESTYPE_ABOOK
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_ABOOK" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="constant_NSCS">
+        NSCS
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCS" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">29</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">NSCS</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;http://calendarserver.org/ns/&#039;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_NSDAV">
+        NSDAV
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSDAV" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">25</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">NSDAV</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;DAV:&#039;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_PARAMFILTER">
+        PARAMFILTER
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PARAMFILTER" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">108</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">PARAMFILTER</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}param-filter&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_PROP">
+        PROP
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROP" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">94</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">PROP</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}prop&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_PROPFILTER">
+        PROPFILTER
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFILTER" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">106</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">PROPFILTER</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}prop-filter&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_PROPFIND">
+        PROPFIND
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFIND" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">90</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">PROPFIND</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}propfind&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_PROPSTAT">
+        PROPSTAT
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPSTAT" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">92</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">PROPSTAT</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}propstat&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_REPORT">
+        REPORT
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">57</span>
-</aside>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">RESTYPE_ABOOK</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}addressbook&quot;</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">REPORT</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}report&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_RESTYPE_COLL">
-        RESTYPE_COLL
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_COLL" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="constant_REPORT_MULTIGET">
+        REPORT_MULTIGET
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_MULTIGET" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">55</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">61</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">REPORT_MULTIGET</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-multiget&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_REPORT_QUERY">
+        REPORT_QUERY
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_QUERY" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">63</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">REPORT_QUERY</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}addressbook-query&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_REPORT_SYNCCOLL">
+        REPORT_SYNCCOLL
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_SYNCCOLL" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">59</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">REPORT_SYNCCOLL</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}sync-collection&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_RESPONSE">
+        RESPONSE
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESPONSE" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">86</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">RESPONSE</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}response&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_RESTYPE">
+        RESTYPE
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">39</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">RESTYPE</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}resourcetype&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_RESTYPE_ABOOK">
+        RESTYPE_ABOOK
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_ABOOK" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">43</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">RESTYPE_ABOOK</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}addressbook&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_RESTYPE_COLL">
+        RESTYPE_COLL
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_COLL" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">41</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">RESTYPE_COLL</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}collection&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_STATUS">
         STATUS
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_STATUS" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">88</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">STATUS</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}status&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_SUPPORTED_ADDRDATA">
+        SUPPORTED_ADDRDATA
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_ADDRDATA" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">71</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">SUPPORTED_ADDRDATA</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}supported-address-data&quot;</span>
+</code>
+
+
+    
+    
+    
+
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_SUPPORTED_FILTER">
+        SUPPORTED_FILTER
+        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_FILTER" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">102</span>
-</aside>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">STATUS</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}status&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_SUPPORTED_ADDRDATA">
-        SUPPORTED_ADDRDATA
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_ADDRDATA" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">85</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">SUPPORTED_ADDRDATA</span>
-    = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}supported-address-data&quot;</span>
-</code>
-
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_SUPPORTED_FILTER">
-        SUPPORTED_FILTER
-        <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_FILTER" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">116</span>
-</aside>
-
-    
-    <code class="phpdocumentor-signature phpdocumentor-code ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">SUPPORTED_FILTER</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}supported-filter&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_SUPPORTED_REPORT">
         SUPPORTED_REPORT
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_REPORT" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">69</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">55</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">SUPPORTED_REPORT</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}supported-report&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_SUPPORTED_REPORT_SET">
         SUPPORTED_REPORT_SET
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_REPORT_SET" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">67</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">53</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">SUPPORTED_REPORT_SET</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}supported-report-set&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_SYNCLEVEL">
         SYNCLEVEL
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SYNCLEVEL" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">68</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">SYNCLEVEL</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}sync-level&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_SYNCTOKEN">
         SYNCTOKEN
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SYNCTOKEN" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">80</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">66</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">SYNCTOKEN</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSDAV . &quot;}sync-token&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_TEXTMATCH">
         TEXTMATCH
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_TEXTMATCH" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">124</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">110</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">TEXTMATCH</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}text-match&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_VCFPROP">
         VCFPROP
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_VCFPROP" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/XmlElements/ElementNames.php"><a href="files/src-xmlelements-elementnames.html"><abbr title="src/XmlElements/ElementNames.php">ElementNames.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">91</span>
-</aside>
+    <span class="phpdocumentor-element-found-in__line">77</span>
 
+    </aside>
+
+    
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">VCFPROP</span>
     = <span class="phpdocumentor-signature__default-value">&quot;{&quot; . self::NSCARDDAV . &quot;}prop&quot;</span>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
-</article>
+        
+    </article>
             </section>
 
         
 
         
+        
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                        <li><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#toc-constants">Constants</a></li>
+                                                                            </ul>
+            </li>
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ABOOK_DESC">ABOOK_DESC</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ABOOK_HOME">ABOOK_HOME</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADD_MEMBER">ADD_MEMBER</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATA">ADDRDATA</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ADDRDATATYPE">ADDRDATATYPE</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_CURUSRPRINC">CURUSRPRINC</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_DISPNAME">DISPNAME</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_FILTER">FILTER</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETCTAG">GETCTAG</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_GETETAG">GETETAG</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_HREF">HREF</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_ISNOTDEFINED">ISNOTDEFINED</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_LIMIT">LIMIT</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MAX_RESSIZE">MAX_RESSIZE</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_MULTISTATUS">MULTISTATUS</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NRESULTS">NRESULTS</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCARDDAV">NSCARDDAV</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSCS">NSCS</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_NSDAV">NSDAV</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PARAMFILTER">PARAMFILTER</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROP">PROP</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFILTER">PROPFILTER</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPFIND">PROPFIND</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_PROPSTAT">PROPSTAT</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT">REPORT</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_MULTIGET">REPORT_MULTIGET</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_QUERY">REPORT_QUERY</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_REPORT_SYNCCOLL">REPORT_SYNCCOLL</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESPONSE">RESPONSE</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE">RESTYPE</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_ABOOK">RESTYPE_ABOOK</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_RESTYPE_COLL">RESTYPE_COLL</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_STATUS">STATUS</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_ADDRDATA">SUPPORTED_ADDRDATA</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_FILTER">SUPPORTED_FILTER</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_REPORT">SUPPORTED_REPORT</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SUPPORTED_REPORT_SET">SUPPORTED_REPORT_SET</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SYNCLEVEL">SYNCLEVEL</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_SYNCTOKEN">SYNCTOKEN</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_TEXTMATCH">TEXTMATCH</a></li>
+                                                    <li class=""><a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#constant_VCFPROP">VCFPROP</a></li>
+                                            </ul>
+                </li>
+            
+            
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -1517,7 +1771,6 @@ Sabre libraries.</p>
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/MStilkerich-CardDavClient-XmlElements-ElementNames.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
@@ -1526,5 +1779,9 @@ Sabre libraries.</p>
     <script>
         cssVars({});
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
 </body>
 </html>

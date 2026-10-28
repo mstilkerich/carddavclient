@@ -26,6 +26,16 @@ Search.appendIndex(
             "summary": "Provides\u0020a\u0020CardDavClient\u0020object\u0020to\u0020interact\u0020with\u0020the\u0020server\u0020for\u0020this\u0020account.",
             "url": "classes/MStilkerich-CardDavClient-Account.html#method_getClient"
         },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003AgetAuthOriginCallback\u0028\u0029",
+            "name": "getAuthOriginCallback",
+            "summary": "Returns\u0020the\u0020callback\u0020that\u0020decides\u0020whether\u0020the\u0020credentials\u0020may\u0020be\u0020sent\u0020to\u0020a\u0020different\u0020origin,\u0020if\u0020any.",
+            "url": "classes/MStilkerich-CardDavClient-Account.html#method_getAuthOriginCallback"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003AsetAuthOriginCallback\u0028\u0029",
+            "name": "setAuthOriginCallback",
+            "summary": "Sets\u0020the\u0020callback\u0020that\u0020decides\u0020whether\u0020the\u0020credentials\u0020may\u0020be\u0020sent\u0020to\u0020a\u0020different\u0020origin.",
+            "url": "classes/MStilkerich-CardDavClient-Account.html#method_setAuthOriginCallback"
+        },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003AgetDiscoveryUri\u0028\u0029",
             "name": "getDiscoveryUri",
             "summary": "Returns\u0020the\u0020discovery\u0020URI\u0020for\u0020this\u0020Account.",
@@ -51,15 +61,15 @@ Search.appendIndex(
             "summary": "Queries\u0020the\u0020given\u0020URI\u0020for\u0020the\u0020current\u002Duser\u002Dprincipal\u0020property.",
             "url": "classes/MStilkerich-CardDavClient-Account.html#method_findCurrentUserPrincipal"
         },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003AfindAddressbookHome\u0028\u0029",
-            "name": "findAddressbookHome",
+            "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003AfindAddressbookHomes\u0028\u0029",
+            "name": "findAddressbookHomes",
             "summary": "Queries\u0020the\u0020given\u0020URI\u0020for\u0020the\u0020CARDDAV\u003Aaddressbook\u002Dhome\u002Dset\u0020property.",
-            "url": "classes/MStilkerich-CardDavClient-Account.html#method_findAddressbookHome"
+            "url": "classes/MStilkerich-CardDavClient-Account.html#method_findAddressbookHomes"
         },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024credentials",
-            "name": "credentials",
-            "summary": "The\u0020credentials\u0020for\u0020authentication,\u0020null\u0020to\u0020disable\u0020authentication.",
-            "url": "classes/MStilkerich-CardDavClient-Account.html#property_credentials"
+            "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024httpOptions",
+            "name": "httpOptions",
+            "summary": "Options\u0020for\u0020the\u0020HTTP\u0020communication,\u0020including\u0020authentication\u0020credentials.",
+            "url": "classes/MStilkerich-CardDavClient-Account.html#property_httpOptions"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Account\u003A\u003A\u0024discoveryUri",
             "name": "discoveryUri",
@@ -80,6 +90,16 @@ Search.appendIndex(
             "name": "getName",
             "summary": "Returns\u0020a\u0020displayname\u0020for\u0020the\u0020addressbook.",
             "url": "classes/MStilkerich-CardDavClient-AddressbookCollection.html#method_getName"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\AddressbookCollection\u003A\u003AgetDisplayName\u0028\u0029",
+            "name": "getDisplayName",
+            "summary": "Returns\u0020value\u0020of\u0020the\u0020DAV\u003Adisplayname\u0020for\u0020the\u0020addressbook\u0020collection.",
+            "url": "classes/MStilkerich-CardDavClient-AddressbookCollection.html#method_getDisplayName"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\AddressbookCollection\u003A\u003AgetDescription\u0028\u0029",
+            "name": "getDescription",
+            "summary": "Returns\u0020value\u0020of\u0020the\u0020CARDDAV\u003Aaddressbook\u002Ddescription\u0020for\u0020the\u0020addressbook\u0020collection.",
+            "url": "classes/MStilkerich-CardDavClient-AddressbookCollection.html#method_getDescription"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\AddressbookCollection\u003A\u003A__toString\u0028\u0029",
             "name": "__toString",
@@ -206,6 +226,11 @@ Search.appendIndex(
             "summary": "Retrieves\u0020a\u0020set\u0020of\u0020WebDAV\u0020properties\u0020for\u0020a\u0020resource.",
             "url": "classes/MStilkerich-CardDavClient-CardDavClient.html#method_findProperties"
         },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient\u003A\u003AfindPropertiesWithLocation\u0028\u0029",
+            "name": "findPropertiesWithLocation",
+            "summary": "Retrieves\u0020a\u0020set\u0020of\u0020WebDAV\u0020properties\u0020for\u0020a\u0020resource,\u0020and\u0020provides\u0020the\u0020final\u0020request\u0020URI\u0020after\u0020redirects.",
+            "url": "classes/MStilkerich-CardDavClient-CardDavClient.html#method_findPropertiesWithLocation"
+        },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient\u003A\u003AaddRequiredVCardProperties\u0028\u0029",
             "name": "addRequiredVCardProperties",
             "summary": "Adds\u0020required\u0020VCard\u0020properties\u0020to\u0020a\u0020set\u0020specified\u0020by\u0020the\u0020user.",
@@ -235,6 +260,21 @@ Search.appendIndex(
             "name": "concatUrl",
             "summary": "",
             "url": "classes/MStilkerich-CardDavClient-CardDavClient.html#method_concatUrl"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient\u003A\u003AmayAuthenticate\u0028\u0029",
+            "name": "mayAuthenticate",
+            "summary": "Checks\u0020whether\u0020the\u0020credentials\u0020of\u0020this\u0020client\u0020may\u0020be\u0020sent\u0020with\u0020a\u0020request\u0020to\u0020the\u0020given\u0020URI.",
+            "url": "classes/MStilkerich-CardDavClient-CardDavClient.html#method_mayAuthenticate"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient\u003A\u003AisDirectMember\u0028\u0029",
+            "name": "isDirectMember",
+            "summary": "Checks\u0020whether\u0020a\u0020URI\u0020identifies\u0020a\u0020direct\u0020member\u0020of\u0020a\u0020collection.",
+            "url": "classes/MStilkerich-CardDavClient-CardDavClient.html#method_isDirectMember"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient\u003A\u003AgetPathSegments\u0028\u0029",
+            "name": "getPathSegments",
+            "summary": "Provides\u0020the\u0020percent\u002Ddecoded,\u0020non\u002Dempty\u0020path\u0020segments\u0020of\u0020a\u0020URI.",
+            "url": "classes/MStilkerich-CardDavClient-CardDavClient.html#method_getPathSegments"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\CardDavClient\u003A\u003AcompareUrlPaths\u0028\u0029",
             "name": "compareUrlPaths",
@@ -268,8 +308,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Config\u003A\u003Ainit\u0028\u0029",
             "name": "init",
-            "summary": "",
+            "summary": "Initialize\u0020the\u0020library.",
             "url": "classes/MStilkerich-CardDavClient-Config.html#method_init"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Config\u003A\u003AGUZZLE_LOGFMT_DEBUG",
+            "name": "GUZZLE_LOGFMT_DEBUG",
+            "summary": "",
+            "url": "classes/MStilkerich-CardDavClient-Config.html#constant_GUZZLE_LOGFMT_DEBUG"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Config\u003A\u003AGUZZLE_LOGFMT_SHORT",
+            "name": "GUZZLE_LOGFMT_SHORT",
+            "summary": "",
+            "url": "classes/MStilkerich-CardDavClient-Config.html#constant_GUZZLE_LOGFMT_SHORT"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Config\u003A\u003A\u0024logger",
             "name": "logger",
@@ -280,6 +330,11 @@ Search.appendIndex(
             "name": "httplogger",
             "summary": "",
             "url": "classes/MStilkerich-CardDavClient-Config.html#property_httplogger"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Config\u003A\u003A\u0024options",
+            "name": "options",
+            "summary": "Configuration\u0020options\u0020of\u0020the\u0020library.",
+            "url": "classes/MStilkerich-CardDavClient-Config.html#property_options"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Exception\\ClientException",
             "name": "ClientException",
@@ -326,20 +381,25 @@ Search.appendIndex(
             "summary": "Sends\u0020an\u0020HTTP\u0020request\u0020and\u0020returns\u0020a\u0020PSR\u002D7\u0020response.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_sendRequest"
         },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003AcheckSameDomainAsBase\u0028\u0029",
-            "name": "checkSameDomainAsBase",
-            "summary": "Checks\u0020whether\u0020the\u0020given\u0020URI\u0020has\u0020the\u0020same\u0020domain\u0020as\u0020the\u0020base\u0020URI\u0020of\u0020this\u0020HTTP\u0020client.",
-            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkSameDomainAsBase"
+            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003AmayAuthenticate\u0028\u0029",
+            "name": "mayAuthenticate",
+            "summary": "Checks\u0020whether\u0020the\u0020credentials\u0020may\u0020be\u0020sent\u0020with\u0020a\u0020request\u0020to\u0020the\u0020given\u0020URI.",
+            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_mayAuthenticate"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003AisSameOrigin\u0028\u0029",
+            "name": "isSameOrigin",
+            "summary": "Checks\u0020whether\u0020two\u0020absolute\u0020URIs\u0020have\u0020the\u0020same\u0020origin,\u0020i.e.\u0020the\u0020same\u0020scheme,\u0020host\u0020and\u0020port.",
+            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_isSameOrigin"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003AgetOrigin\u0028\u0029",
+            "name": "getOrigin",
+            "summary": "Provides\u0020a\u0020normalized\u0020string\u0020representation\u0020of\u0020the\u0020origin\u0020of\u0020an\u0020absolute\u0020URI.",
+            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_getOrigin"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003AcheckCredentialsAvailable\u0028\u0029",
             "name": "checkCredentialsAvailable",
             "summary": "Checks\u0020if\u0020the\u0020needed\u0020credentials\u0020for\u0020an\u0020authentication\u0020scheme\u0020are\u0020available.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_checkCredentialsAvailable"
-        },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003AgetDomainFromSubdomain\u0028\u0029",
-            "name": "getDomainFromSubdomain",
-            "summary": "Extracts\u0020the\u0020domain\u0020name\u0020from\u0020a\u0020subdomain.",
-            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#method_getDomainFromSubdomain"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003ANEEDED_AUTHNFO",
             "name": "NEEDED_AUTHNFO",
@@ -351,10 +411,10 @@ Search.appendIndex(
             "summary": "The\u0020base\u0020URI\u0020for\u0020requests.",
             "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_baseUri"
         },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003A\u0024credentials",
-            "name": "credentials",
-            "summary": "The\u0020credentials\u0020to\u0020use\u0020for\u0020authentication",
-            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_credentials"
+            "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapter\u003A\u003A\u0024httpOptions",
+            "name": "httpOptions",
+            "summary": "The\u0020HTTP\u0020options\u0020to\u0020use\u0020for\u0020communication,\u0020including\u0020authentication\u0020credentials.",
+            "url": "classes/MStilkerich-CardDavClient-HttpClientAdapter.html#property_httpOptions"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\HttpClientAdapterGuzzle",
             "name": "HttpClientAdapterGuzzle",
@@ -426,20 +486,50 @@ Search.appendIndex(
             "summary": "Discover\u0020the\u0020addressbooks\u0020for\u0020a\u0020CardDAV\u0020account.",
             "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_discoverAddressbooks"
         },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AdiscoverWithinDomainPolicy\u0028\u0029",
+            "name": "discoverWithinDomainPolicy",
+            "summary": "Performs\u0020the\u0020discovery\u0020steps\u0020for\u0020discoverAddressbooks\u0028\u0029.",
+            "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_discoverWithinDomainPolicy"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AparseDiscoveryUri\u0028\u0029",
+            "name": "parseDiscoveryUri",
+            "summary": "Parses\u0020the\u0020discovery\u0020URI\u0020of\u0020an\u0020account.",
+            "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_parseDiscoveryUri"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AisIpAddress\u0028\u0029",
+            "name": "isIpAddress",
+            "summary": "Checks\u0020whether\u0020the\u0020host\u0020part\u0020of\u0020a\u0020URI\u0020is\u0020an\u0020IP\u0020address.",
+            "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_isIpAddress"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AisWithinDomain\u0028\u0029",
+            "name": "isWithinDomain",
+            "summary": "Checks\u0020whether\u0020a\u0020URI\u0020points\u0020to\u0020a\u0020server\u0020within\u0020the\u0020domain\u0020used\u0020for\u0020discovery.",
+            "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_isWithinDomain"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AtryContextPath\u0028\u0029",
+            "name": "tryContextPath",
+            "summary": "Attempts\u0020to\u0020discover\u0020the\u0020addressbook\u0020home\u0020and\u0020addressbooks\u0020for\u0020a\u0020given\u0020context\u0020path.",
+            "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_tryContextPath"
+        },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AdiscoverServers\u0028\u0029",
             "name": "discoverServers",
             "summary": "Discovers\u0020the\u0020CardDAV\u0020service\u0020for\u0020the\u0020given\u0020domain\u0020using\u0020DNS\u0020SRV\u0020lookups.",
             "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_discoverServers"
         },                {
-            "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AorderDnsRecords\u0028\u0029",
-            "name": "orderDnsRecords",
-            "summary": "Orders\u0020DNS\u0020records\u0020by\u0020their\u0020prio\u0020and\u0020weight.",
-            "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_orderDnsRecords"
+            "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AsortSrvRecords\u0028\u0029",
+            "name": "sortSrvRecords",
+            "summary": "Orders\u0020DNS\u0020SRV\u0020records\u0020by\u0020preference\u0020according\u0020to\u0020RFC\u00202782.",
+            "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_sortSrvRecords"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AdiscoverContextPath\u0028\u0029",
             "name": "discoverContextPath",
             "summary": "Provides\u0020a\u0020list\u0020of\u0020URIs\u0020to\u0020check\u0020for\u0020discovering\u0020the\u0020location\u0020of\u0020the\u0020CardDAV\u0020service.",
             "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_discoverContextPath"
+        },                {
+            "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AdnsGetRecord\u0028\u0029",
+            "name": "dnsGetRecord",
+            "summary": "Queries\u0020DNS\u0020resource\u0020records.",
+            "url": "classes/MStilkerich-CardDavClient-Services-Discovery.html#method_dnsGetRecord"
         },                {
             "fqsen": "\\MStilkerich\\CardDavClient\\Services\\Discovery\u003A\u003AKNOWN_SERVERS",
             "name": "KNOWN_SERVERS",

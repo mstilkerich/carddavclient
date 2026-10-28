@@ -209,6 +209,31 @@ final class DiscoveryCredentialsTest extends TestCase
         $this->assertSame([ [ "http://127.0.0.1:$port", "http://localhost:$port" ] ], $calls->getArrayCopy());
     }
 
+    public function testNoDnsLookupForIpAddress(): void
+    {
+        $this->route('/.well-known/carddav', [ '127.0.0.1' => $this->redirect('/dav/') ]);
+        // if the SRV record was used, its target (permitted by the callback) would be tried before the well-known URI
+        // of the discovery URI's host
+        $discovery = new TestDiscovery([ '_carddav._tcp.127.0.0.1' => [ $this->srv('localhost') ] ]);
+
+        $account = new Account(
+            'http://127.0.0.1:' . self::$server->getPort(),
+            [
+                'username' => 'user',
+                'password' => 'pw',
+                'preemptive_basic_auth' => true,
+                'auth_origin_callback' => function (): bool {
+                    return true;
+                },
+            ]
+        );
+        $abooks = $discovery->discoverAddressbooks($account);
+
+        $this->assertSame([ $this->uri('127.0.0.1', '/dav/home/book/') ], $this->uris($abooks));
+        $this->assertAuthenticated(['127.0.0.1' => true]);
+        $this->assertSame([], $discovery->queries);
+    }
+
     public function testAddressbookHomeOutsideDomainIsIgnored(): void
     {
         $this->route('/.well-known/carddav', [ 'localhost' => $this->redirect('/dav/') ]);

@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - v1
       - issue*
 
 jobs:
@@ -64,7 +65,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextcloud-version: ['30', '31']
+        nextcloud-version: ['33', '34', '35']
 
     runs-on: ubuntu-latest
 
@@ -109,7 +110,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        owncloud-version: ['10']
+        owncloud-version: ['10', '11']
 
     runs-on: ubuntu-latest
 

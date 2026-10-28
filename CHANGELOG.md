@@ -27,6 +27,8 @@
 - Add options for TLS authentication passed through to Guzzle (#38, thanks @mintsoft)
 - In case unrequested XML elements are encountered in the XML response of the CardDAV server, only log a debug message
   instead of a warning.
+- `SyncHandler::finalizeSync()` is called only once at the end of `Sync::synchronize()`, as documented. Previously,
+  it was called after each batch if the server truncated the result of the sync-collection REPORT.
 
 ## Version 1.4.2 (to 1.4.1)
 

@@ -69,6 +69,8 @@ class Sync
             }
         } while ($syncResult->syncAgain && ($batchLimit > 0));
 
+        $handler->finalizeSync();
+
         return $syncResult->syncToken;
     }
 
@@ -162,8 +164,6 @@ class Sync
                 $handler->addressObjectChanged($obj["uri"], $obj["etag"], $obj["vcard"] ?? null);
             }
         }
-
-        $handler->finalizeSync();
 
         return $syncResult;
     }

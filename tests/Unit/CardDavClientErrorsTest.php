@@ -62,10 +62,12 @@ final class CardDavClientErrorsTest extends TestCase
         } catch (HttpStatusException $e) {
             $this->assertSame($status, $e->getStatusCode());
             $this->assertSame($status, $e->getCode());
+            $this->assertSame('Nope', $e->getBody());
             $this->assertMatchesRegularExpression(
-                "/GET \\/card.vcf HTTP request was not successful \\($status .*\\): Nope/",
+                "/GET \\/card.vcf HTTP request was not successful \\($status .*\\)$/",
                 $e->getMessage()
             );
+            $this->assertStringNotContainsString('Nope', $e->getMessage());
         }
     }
 }

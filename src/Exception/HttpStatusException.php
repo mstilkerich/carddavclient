@@ -22,10 +22,14 @@ class HttpStatusException extends \Exception
     /** @var int */
     private $statusCode;
 
-    public function __construct(string $message, int $statusCode, ?\Throwable $previous = null)
+    /** @var string */
+    private $body;
+
+    public function __construct(string $message, int $statusCode, string $body = '', ?\Throwable $previous = null)
     {
         parent::__construct($message, $statusCode, $previous);
         $this->statusCode = $statusCode;
+        $this->body = $body;
     }
 
     /**
@@ -34,6 +38,14 @@ class HttpStatusException extends \Exception
     public function getStatusCode(): int
     {
         return $this->statusCode;
+    }
+
+    /**
+     * Returns the body of the server's response.
+     */
+    public function getBody(): string
+    {
+        return $this->body;
     }
 }
 

@@ -545,7 +545,7 @@ class CardDavClient
             $reason = $davReply->getReasonPhrase();
             $body = (string) $davReply->getBody();
 
-            throw new HttpStatusException("$nfo HTTP request was not successful ($status $reason): $body", $status);
+            throw new HttpStatusException("$nfo HTTP request was not successful ($status $reason)", $status, $body);
         }
     }
 

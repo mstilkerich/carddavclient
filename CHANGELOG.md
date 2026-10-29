@@ -38,8 +38,11 @@
 - `AddressbookCollection::deleteCard()` takes an optional ETag to make the deletion conditional (`If-Match`), like
   `updateCard()`, and returns false instead of deleting if the card changed on the server in the meantime.
 - A request the server answers with an unexpected HTTP status now throws an `HttpStatusException`, which provides the
-  status code (`getStatusCode()`). It extends `\Exception` and its message is unchanged, so existing code is not
-  affected.
+  status code (`getStatusCode()`) and the body of the response (`getBody()`). It extends `\Exception`, so existing
+  code is not affected.
+- Security: The message of the exception thrown for an unexpected HTTP status no longer includes the body of the
+  server's response, which might expose information where the message is displayed or logged. The body is available
+  via `HttpStatusException::getBody()`.
 - Require PHP 8.2 or newer. Support for the end-of-life PHP versions 7.1 - 8.1 is dropped. Tested with PHP 8.2 - 8.5.
 - Support newer major versions of dependencies: guzzlehttp/guzzle 8, sabre/vobject 5, sabre/uri 3.
 - Drop support for old major versions of dependencies: guzzlehttp/guzzle 6, psr/http-message 1, psr/log 1,

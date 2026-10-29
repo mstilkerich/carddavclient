@@ -1,5 +1,14 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.5.1 (to 1.5.0)
+
+- A request the server answers with an unexpected HTTP status now throws an `HttpStatusException`, which provides the
+  status code (`getStatusCode()`) and the body of the response (`getBody()`). It extends `\Exception`, so existing
+  code is not affected.
+- Security: The message of the exception thrown for an unexpected HTTP status no longer includes the body of the
+  server's response, which might expose information where the message is displayed or logged. The body is available
+  via `HttpStatusException::getBody()`.
+
 ## Version 1.5.0 (to 1.4.2)
 
 - Security: The credentials of an account are only sent to the origin (scheme, host and port) of the URL of the
@@ -27,12 +36,6 @@
 - Fix ordering of DNS SRV records according to RFC 2782 in case multiple SRV records are returned.
 - Fix fallback to plain http (`_carddav._tcp`) DNS SRV discovery (if explicitly allowed via protocol spec)
 - Remove the discovery workaround for iCloud (context path `/co`), which is not needed anymore.
-- A request the server answers with an unexpected HTTP status now throws an `HttpStatusException`, which provides the
-  status code (`getStatusCode()`) and the body of the response (`getBody()`). It extends `\Exception`, so existing
-  code is not affected.
-- Security: The message of the exception thrown for an unexpected HTTP status no longer includes the body of the
-  server's response, which might expose information where the message is displayed or logged. The body is available
-  via `HttpStatusException::getBody()`.
 - Add options for TLS authentication passed through to Guzzle (#38, thanks @mintsoft)
 - In case unrequested XML elements are encountered in the XML response of the CardDAV server, only log a debug message
   instead of a warning.

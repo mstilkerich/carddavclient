@@ -1,4 +1,6 @@
 DOCDIR := doc/api/
+PLANTUML_JAR ?= /usr/local/bin/plantuml-gplv2-1.2026.8.jar
+PLANTUML_PORT ?= 18123
 
 # Set some options on Github actions
 ifeq ($(CI),true)
@@ -51,9 +53,15 @@ tests-interop: tests/Interop/phpunit.xml tests/Interop/AccountData.php
 	@mkdir -p testreports/interop
 	vendor/bin/phpunit -c tests/Interop/phpunit.xml
 
+# The phpDocumentor phar cannot run a local plantuml binary (it uses a phar:// path as working directory for the
+# process), so we start a local PlantUML server for the duration of the doc generation and use the server renderer
 doc:
 	rm -rf $(DOCDIR)
-	phpDocumentor.phar -d src/ -t $(DOCDIR) --title="CardDAV Client Library" --setting=graphs.enabled=true --validate
+	@java -Djava.awt.headless=true -jar $(PLANTUML_JAR) -picoweb:$(PLANTUML_PORT):127.0.0.1 >/dev/null 2>&1 & \
+		pid=$$!; trap "kill $$pid" EXIT; \
+		for i in $$(seq 60); do curl -s -o /dev/null http://127.0.0.1:$(PLANTUML_PORT)/ && break; sleep 0.5; done; \
+		PHPDOC_PLANTUML=plantuml-server PHPDOC_PLANTUML_SERVER=http://127.0.0.1:$(PLANTUML_PORT)/plantuml/svg \
+		phpDocumentor.phar -d src/ -t $(DOCDIR) --title="CardDAV Client Library" --setting=graphs.enabled=true --validate
 	[ -d ../carddavclient-pages ] && rsync -r --delete --exclude .git doc/api/ ../carddavclient-pages
 
 # For github CI system - if AccountData.php is not available, create from AccountData.php.dist

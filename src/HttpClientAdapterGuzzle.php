@@ -328,8 +328,12 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
                 if (isset($_SERVER['KRB5CCNAME'])) {
                     putenv("KRB5CCNAME=" . $_SERVER['KRB5CCNAME']);
                 }
-                // Guzzle 8 only accepts an allow-list of curl options, which contains CURLOPT_USERPWD but not
-                // CURLOPT_USERNAME / CURLOPT_PASSWORD
+                // CURLOPT_USERPWD must be used instead of CURLOPT_USERNAME / CURLOPT_PASSWORD:
+                // - On redirects to a different origin, Guzzle only removes CURLOPT_HTTPAUTH and CURLOPT_USERPWD.
+                //   Remaining username and password options would make curl send them to the redirect target using
+                //   Basic authentication.
+                // - Guzzle 8 only accepts an allow-list of curl options, which contains CURLOPT_USERPWD but not
+                //   CURLOPT_USERNAME / CURLOPT_PASSWORD
                 $guzzleOptions["curl"] = [
                     CURLOPT_HTTPAUTH => self::$schemeToCurlOpt[$authScheme],
                     CURLOPT_USERPWD => ($this->httpOptions['username'] ?? "") . ":"

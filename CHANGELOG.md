@@ -1,27 +1,11 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
-## Version 2.0.0 (to 1.4.2)
+## Version 2.0.0 (to 1.5.1)
 
-- Security: The credentials of an account are only sent to the origin (scheme, host and port) of the URL of the
-  resource a request is made for. Previously, credentials were sent to any host whose last two domain name labels
-  matched those of the resource, e.g. from `a.co.uk` to `evil.co.uk`, or for IP addresses, to any IP address with the
-  same last two octets. Credentials are never sent over plain HTTP if the resource uses HTTPS.
-- New HTTP option `auth_origin_callback` for an `Account`: A callback that decides whether the credentials may be sent
-  to a different origin. It is not included in the serialized form of the Account; use the new method
-  `Account::setAuthOriginCallback()` to set it after deserialization.
-- Discovery: Credentials are sent to servers within the discovery domain (the domain and its subdomains) only. Other
-  servers, e.g. targets of redirects, addressbook homes on other domains and DNS SRV targets outside the discovery
-  domain, require permission by the `auth_origin_callback`. Servers within the domain of a builtin discovery server for
-  a public provider (e.g. www.googleapis.com for gmail.com) are treated like servers within the discovery domain. See
-  `Discovery::discoverAddressbooks()` for details.
-- Discovery: If the discovery URI contains an IP address, no DNS SRV/TXT lookups are performed. Discovery URIs with
-  IPv6 addresses (e.g. `https://[2001:db8::1]:8443/`) are supported. Discovery URIs with a scheme other than http/https
-  or with user information (e.g. `https://user@example.com/`) are rejected.
-- `WebDavCollection::getChildren()` only returns direct members of the collection (same origin, path of the collection
-  plus one path segment). If the collection was redirected, the collection itself is no longer returned as a child.
-- Documentation: Creating a `WebDavResource` for a URI permits sending the account's credentials to the origin of the
-  URI. Account-level `headers` are sent to all origins.
-- Remove the discovery workaround for iCloud (context path `/co`), which is not needed anymore.
+- Discovery: DNS SRV targets outside the discovery domain require permission by the `auth_origin_callback` of the
+  account. Previously, such targets were used if no callback was configured. Servers within the domain of a builtin
+  discovery server for a public provider (e.g. www.googleapis.com for gmail.com) are treated like servers within the
+  discovery domain. See `Discovery::discoverAddressbooks()` for details.
 - Support result limiting for the sync-collection REPORT (RFC 6578 `DAV:limit`): `Sync::synchronize()` and
   `CardDavClient::syncCollection()` take an optional `$limit` parameter. With a limit, `Sync::synchronize()` retrieves
   the changes in multiple batches until all changes are synchronized.
@@ -29,37 +13,60 @@
   and reports the changed cards in batches of the requested size.
 - `Sync::synchronize()` stops requesting followup batches if the server reports a truncated result but does not
   advance the sync-token.
-- `SyncHandler::finalizeSync()` is called only once at the end of `Sync::synchronize()`, as documented. Previously,
-  it was called after each batch if the server truncated the result of the sync-collection REPORT.
 - `Sync::synchronize()` no longer aborts if a changed card cannot be retrieved or its address data is not a VCard (for
   example, a card deleted on the server during the sync). As documented, the card is reported to
   `SyncHandler::addressObjectChanged()` with a null VCard. Previously, an exception aborted the sync, or a non-VCard
   object was passed to the handler, causing a TypeError.
 - `AddressbookCollection::deleteCard()` takes an optional ETag to make the deletion conditional (`If-Match`), like
   `updateCard()`, and returns false instead of deleting if the card changed on the server in the meantime.
+- Require PHP 8.2 or newer. Support for the end-of-life PHP versions 7.1 - 8.1 is dropped.
+- Support newer major versions of dependencies: guzzlehttp/guzzle 8, sabre/vobject 5, sabre/uri 3.
+- Drop support for old major versions of dependencies: guzzlehttp/guzzle 6, psr/http-message 1, psr/log 1,
+  sabre/vobject 3, sabre/xml 2.
+- Guzzle 8: Digest and NTLM authentication are performed via curl (as with Guzzle 7), since Guzzle 8's own Digest
+  implementation fails for REPORT requests to Sabre/DAV based servers and Guzzle 8 dropped NTLM support.
+
+## Version 1.5.1 (to 1.5.0)
+
 - A request the server answers with an unexpected HTTP status now throws an `HttpStatusException`, which provides the
   status code (`getStatusCode()`) and the body of the response (`getBody()`). It extends `\Exception`, so existing
   code is not affected.
 - Security: The message of the exception thrown for an unexpected HTTP status no longer includes the body of the
   server's response, which might expose information where the message is displayed or logged. The body is available
   via `HttpStatusException::getBody()`.
-- Require PHP 8.2 or newer. Support for the end-of-life PHP versions 7.1 - 8.1 is dropped. Tested with PHP 8.2 - 8.5.
-- Support newer major versions of dependencies: guzzlehttp/guzzle 8, sabre/vobject 5, sabre/uri 3.
-- Drop support for old major versions of dependencies: guzzlehttp/guzzle 6, psr/http-message 1, psr/log 1,
-  sabre/vobject 3, sabre/xml 2. The new dependency constraints are:
-  - guzzlehttp/guzzle: ^7.9 || ^8.0
-  - psr/http-message: ^2.0
-  - psr/log: ^2.0 || ^3.0
-  - sabre/vobject: ^4.5 || ^5.0
-  - sabre/xml: ^3.0 || ^4.0
-  - sabre/uri: ^2.3 || ^3.0
-- Guzzle 8: Digest and NTLM authentication are performed via curl (as with Guzzle 7), since Guzzle 8's own Digest
-  implementation fails for REPORT requests to Sabre/DAV based servers and Guzzle 8 dropped NTLM support.
+
+## Version 1.5.0 (to 1.4.2)
+
+- Security: The credentials of an account are only sent to the origin (scheme, host and port) of the URL of the
+  resource a request is made for. Previously, credentials were sent to any host whose last two domain name labels
+  matched those of the resource, e.g. from `a.co.uk` to `evil.co.uk`, or for IP addresses, to any IP address with the
+  same last two octets. Credentials are never sent over plain HTTP if the resource uses HTTPS.
+- Security: With the curl-based authentication schemes used for SPNEGO and the workaround for Sabre/DAV Digest
+  authentication, the credentials were sent using Basic authentication to the target of a redirect to a different
+  origin. Guzzle versions before 6.5.8 / 7.4.5 additionally send the credentials of most authentication schemes to
+  redirect targets on other origins; the minimum required Guzzle versions are raised accordingly.
+- New HTTP option `auth_origin_callback` for an `Account`: A callback that decides whether the credentials may be sent
+  to a different origin. It is not included in the serialized form of the Account; use the new method
+  `Account::setAuthOriginCallback()` to set it after deserialization.
+- Discovery: Credentials are sent to servers within the discovery domain (the domain and its subdomains) only. Other
+  servers, e.g. targets of redirects or addressbook homes on other domains, require permission by the
+  `auth_origin_callback`. DNS SRV targets outside the discovery domain are still used if no callback is configured,
+  otherwise the callback decides. See `Discovery::discoverAddressbooks()` for details.
+- Discovery: If the discovery URI contains an IP address, no DNS SRV/TXT lookups are performed. Discovery URIs with
+  IPv6 addresses (e.g. `https://[2001:db8::1]:8443/`) are supported. Discovery URIs with a scheme other than http/https
+  or with user information (e.g. `https://user@example.com/`) are rejected.
+- `WebDavCollection::getChildren()` only returns direct members of the collection (same origin, path of the collection
+  plus one path segment). If the collection was redirected, the collection itself is no longer returned as a child.
+- Documentation: Creating a `WebDavResource` for a URI permits sending the account's credentials to the origin of the
+  URI. Account-level `headers` are sent to all origins.
+- Fix ordering of DNS SRV records according to RFC 2782 in case multiple SRV records are returned.
+- Fix fallback to plain http (`_carddav._tcp`) DNS SRV discovery (if explicitly allowed via protocol spec)
+- Remove the discovery workaround for iCloud (context path `/co`), which is not needed anymore.
 - Add options for TLS authentication passed through to Guzzle (#38, thanks @mintsoft)
 - In case unrequested XML elements are encountered in the XML response of the CardDAV server, only log a debug message
   instead of a warning.
-- Fix ordering of DNS SRV records according to RFC 2782 in case multiple SRV records are returned.
-- Fix fallback to plain http (`_carddav._tcp`) DNS SRV discovery (if explicitly allowed via protocol spec)
+- `SyncHandler::finalizeSync()` is called only once at the end of `Sync::synchronize()`, as documented. Previously,
+  it was called after each batch if the server truncated the result of the sync-collection REPORT.
 
 ## Version 1.4.2 (to 1.4.1)
 

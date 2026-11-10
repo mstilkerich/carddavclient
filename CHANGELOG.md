@@ -1,5 +1,16 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.6.0 (to 1.5.1)
+
+- New HTTP option `allow_host_callback` for an `Account`: A callback that decides for each request whether it may be
+  sent, given the host, port and IP addresses of the target. This allows applications to restrict the hosts that can be
+  accessed, e.g. to prevent users who can choose the server of an account from accessing internal services
+  (server-side request forgery). The callback is consulted for every request, including servers found during
+  discovery, redirect targets and hostnames resolving to other addresses; the HTTP client is bound to the checked
+  addresses to prevent DNS rebinding (requires the curl extension). A refused request throws a
+  `ForbiddenHostException`. Without a callback, requests are not restricted as before. See `Account::__construct()`
+  for details.
+
 ## Version 1.5.1 (to 1.5.0)
 
 - A request the server answers with an unexpected HTTP status now throws an `HttpStatusException`, which provides the

@@ -27,6 +27,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames as XmlEN;
  *   query?: array<string, string>,
  *   headers?: array<string, string | list<string>>,
  *   auth_origin_callback?: callable(string, string): bool,
+ *   allow_host_callback?: callable(string, int, list<string>): bool,
  * }
  *
  * @psalm-type SerializedAccount = HttpOptions & array{discoveryUri: string, baseUrl?: ?string}
@@ -101,6 +102,26 @@ class Account implements \JsonSerializable
      *      callback
      *      is also consulted for servers outside the discovery domain, see
      *      {@see Services\Discovery::discoverAddressbooks()}.
+     *    - allow_host_callback: A callback function
+     *      `function (string $host, int $port, array $addresses): bool` that decides whether a request may be sent
+     *      to a host. It allows the application to restrict the hosts that can be accessed, for example to prevent
+     *      users who can choose the server of an account from accessing services in the internal network of the
+     *      application (server-side request forgery). The callback is called for every request for this account,
+     *      including requests to servers found during discovery and to targets of redirects. $host is the host of the
+     *      request URI (a hostname in lowercase without trailing dot, or an IP address), $port the port, $addresses
+     *      the IP addresses the connection may be made to: For a hostname, these are the addresses it resolves to, or
+     *      an empty list if it cannot be resolved; for an IP address, the list contains this address. IP addresses are
+     *      given in their canonical notation without brackets, independent of the notation used in the URI;
+     *      IPv4-mapped IPv6 addresses (`::ffff:a.b.c.d`) are given as the IPv4 address, IPv6 addresses with a zone
+     *      identifier (`fe80::1%eth0`) without the zone identifier. If the callback
+     *      returns false, the request is refused with a {@see Exception\ForbiddenHostException} without connecting
+     *      to the host. If it returns true for a hostname, the HTTP client is bound to connect to one of the given
+     *      addresses, so that a different result of another name resolution cannot circumvent the decision; this
+     *      requires the curl extension. If a proxy is used, the proxy resolves the hostnames and must enforce such
+     *      restrictions. Without a callback (the default), requests are not restricted. Like the
+     *      auth_origin_callback, this option is not included in the serialized form of the Account and must be set
+     *      again after reconstructing the Account, e.g. by adding it to the array passed to
+     *      {@see Account::constructFromArray()}.
      *
      *  Deprecated: username as string for authentication mechanisms requiring username / password.
      * @param string $password
@@ -169,7 +190,7 @@ class Account implements \JsonSerializable
     {
         // a callback cannot be serialized
         $httpOptions = $this->httpOptions;
-        unset($httpOptions['auth_origin_callback']);
+        unset($httpOptions['auth_origin_callback'], $httpOptions['allow_host_callback']);
 
         return [
             "discoveryUri" => $this->discoveryUri,

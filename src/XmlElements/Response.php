@@ -43,8 +43,6 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * <!ELEMENT response (href, ((href*, status)|(propstat+)), error?, responsedescription? , location?) >
  * ```
  *
- * @psalm-immutable
- *
  * @psalm-import-type DeserializedElem from Deserializers
  *
  * @package Internal\XmlElements

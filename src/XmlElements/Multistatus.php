@@ -31,7 +31,6 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * <!ELEMENT multistatus (response*, responsedescription?, sync-token?) >
  * ```
  *
- * @psalm-immutable
  * @template RT of Response
  *
  * @psalm-import-type DeserializedElem from Deserializers
@@ -44,14 +43,14 @@ class Multistatus implements \Sabre\Xml\XmlDeserializable
      * The optional sync-token child element of this multistatus.
      * @var ?string $synctoken
      */
-    public $synctoken;
+    public readonly ?string $synctoken;
 
     /**
      * The reponse children of this multistatus element.
      * @psalm-var list<RT>
      * @var array<int, Response>
      */
-    public $responses = [];
+    public readonly array $responses;
 
     /**
      * @psalm-param list<RT> $responses

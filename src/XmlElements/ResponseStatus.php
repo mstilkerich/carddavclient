@@ -17,8 +17,6 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
 /**
  * Represents XML DAV:response elements with status children as PHP objects.
  *
- * @psalm-immutable
- *
  * @package Internal\XmlElements
  */
 class ResponseStatus extends Response
@@ -28,13 +26,13 @@ class ResponseStatus extends Response
      * @psalm-var list<string>
      * @var array<int,string>
      */
-    public $hrefs;
+    public readonly array $hrefs;
 
     /**
      * The HTTP status value of this response.
      * @var string
      */
-    public $status;
+    public readonly string $status;
 
     /**
      * Constructs a new ResponseStatus object.

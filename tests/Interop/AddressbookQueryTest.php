@@ -583,9 +583,8 @@ final class AddressbookQueryTest extends TestCase
 
             /** @var VObject\Property $prop */
             foreach ($vcard->{$propName} as $prop) {
-                if (isset($prop['TYPE'])) {
-                    /** @var VObject\Parameter $typeParam */
-                    $typeParam = $prop['TYPE'];
+                $typeParam = $prop['TYPE'];
+                if ($typeParam instanceof VObject\Parameter) {
                     /** @var list<string> $types */
                     $types = $typeParam->getParts();
                     $types = array_filter(

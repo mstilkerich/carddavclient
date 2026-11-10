@@ -57,6 +57,31 @@
                 <file name="doc/quickstart.php" />
             </errorLevel>
         </UnevaluatedCode>
+        <!-- Converting a PSR-3 Stringable message calls an impure __toString(), which the psr/log stub does not allow.
+             Annotating the sample logger with capabilities would only clutter the quickstart example. -->
+        <ImmutableDependency>
+            <errorLevel type="suppress">
+                <file name="doc/quickstart.php" />
+            </errorLevel>
+        </ImmutableDependency>
+        <!-- The quickstart is a CLI script, its output is not interpreted as HTML -->
+        <TaintedHtml>
+            <errorLevel type="suppress">
+                <file name="doc/quickstart.php" />
+            </errorLevel>
+        </TaintedHtml>
+        <TaintedTextWithQuotes>
+            <errorLevel type="suppress">
+                <file name="doc/quickstart.php" />
+            </errorLevel>
+        </TaintedTextWithQuotes>
+        <!-- Requesting URIs reported by the server (e.g. Location header) is inherent to (Card)DAV. Credentials are
+             only sent to the same origin as the base URI (see HttpClientAdapter::mayAuthenticate()). -->
+        <TaintedSSRF>
+            <errorLevel type="suppress">
+                <file name="src/HttpClientAdapterGuzzle.php" />
+            </errorLevel>
+        </TaintedSSRF>
     </issueHandlers>
 </psalm>
 <!-- vim: set ts=4 sw=4 expandtab fenc=utf8 ff=unix tw=120: -->

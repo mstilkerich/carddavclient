@@ -26,8 +26,6 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
  * <!ELEMENT propstat (prop, status, error?, responsedescription?) >
  * ```
  *
- * @psalm-immutable
- *
  * @psalm-import-type DeserializedElem from Deserializers
  *
  * @package Internal\XmlElements
@@ -38,13 +36,13 @@ class Propstat implements \Sabre\Xml\XmlDeserializable
      * Holds a single HTTP status-line.
      * @var string
      */
-    public $status;
+    public readonly string $status;
 
     /**
      * Contains properties related to a resource.
      * @var Prop
      */
-    public $prop;
+    public readonly Prop $prop;
 
     /**
      * Constructs a Propstat element.

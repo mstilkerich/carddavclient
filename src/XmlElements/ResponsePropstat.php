@@ -17,8 +17,6 @@ use MStilkerich\CardDavClient\Exception\XmlParseException;
 /**
  * Represents XML DAV:response elements with propstat children as PHP objects.
  *
- * @psalm-immutable
- *
  * @package Internal\XmlElements
  */
 class ResponsePropstat extends Response
@@ -27,14 +25,14 @@ class ResponsePropstat extends Response
      * URI the response applies to. MUST contain a URI or a relative reference.
      * @var string
      */
-    public $href;
+    public readonly string $href;
 
     /**
      * Propstat child elements.
      * @psalm-var list<Propstat>
      * @var array<int, Propstat>
      */
-    public $propstat;
+    public readonly array $propstat;
 
     /**
      * Constructs a new ResponsePropstat element.

@@ -83,11 +83,13 @@ class TestLogger extends AbstractLogger
      * @param string $message
      * @param array $context
      * @return void
+     * @psalm-capabilities read-props|write-this-props|write-props|read-globals|write-globals|io|time
      */
     public function log($level, $message, array $context = array()): void
     {
-        TestCase::assertIsString($level);
-        TestCase::assertNotNull(self::LOGLEVELS[$level]);
+        if (!is_string($level) || !isset(self::LOGLEVELS[$level])) {
+            throw new \InvalidArgumentException("Invalid log level: " . var_export($level, true));
+        }
 
         $levelNumeric = self::LOGLEVELS[$level];
         $levelShort = self::LOGLEVELS_SHORT[$level];

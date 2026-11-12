@@ -1,7 +1,15 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
-## Version 2.0.0 (to 1.5.1)
+## Version 2.0.0 (to 1.6.0)
 
+- If the discovery of addressbooks fails, `Discovery::discoverAddressbooks()` throws a `DiscoveryException` (a subclass
+  of `\Exception`, with the same message as before) that provides the errors that occurred for the locations tried
+  during the discovery (`getErrors()`). This allows applications to determine the cause of the failure, e.g. refused
+  credentials, a network error or a request refused by the `allow_host_callback`. Previously, these errors were only
+  logged.
+- `Account::findCurrentUserPrincipal()` and `Account::findAddressbookHomes()` throw an exception if the request fails,
+  instead of logging the error and returning null. `findAddressbookHomes()` returns an empty list if the server does
+  not provide an addressbook home.
 - Discovery: DNS SRV targets outside the discovery domain require permission by the `auth_origin_callback` of the
   account. Previously, such targets were used if no callback was configured. Servers within the domain of a builtin
   discovery server for a public provider (e.g. www.googleapis.com for gmail.com) are treated like servers within the
@@ -25,6 +33,17 @@
   sabre/vobject 3, sabre/xml 2.
 - Guzzle 8: Digest and NTLM authentication are performed via curl (as with Guzzle 7), since Guzzle 8's own Digest
   implementation fails for REPORT requests to Sabre/DAV based servers and Guzzle 8 dropped NTLM support.
+
+## Version 1.6.0 (to 1.5.1)
+
+- New HTTP option `allow_host_callback` for an `Account`: A callback that decides for each request whether it may be
+  sent, given the host, port and IP addresses of the target. This allows applications to restrict the hosts that can be
+  accessed, e.g. to prevent users who can choose the server of an account from accessing internal services
+  (server-side request forgery). The callback is consulted for every request, including servers found during
+  discovery, redirect targets and hostnames resolving to other addresses; the HTTP client is bound to the checked
+  addresses to prevent DNS rebinding (requires the curl extension). A refused request throws a
+  `ForbiddenHostException`. Without a callback, requests are not restricted as before. See `Account::__construct()`
+  for details.
 
 ## Version 1.5.1 (to 1.5.0)
 

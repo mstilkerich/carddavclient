@@ -125,6 +125,11 @@ class HttpClientAdapterGuzzle extends HttpClientAdapter
 
         $stack = HandlerStack::create();
 
+        // Middlewares pushed here are invoked for every request sent, including those resulting from redirects
+        if (isset($httpOptions['allow_host_callback'])) {
+            $stack->push((new ConnectionGuard($httpOptions['allow_host_callback']))->middleware());
+        }
+
         if (!(Config::$httplogger instanceof NullLogger)) {
             $stack->push(Middleware::log(
                 Config::$httplogger,

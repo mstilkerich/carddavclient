@@ -11,7 +11,15 @@ declare(strict_types=1);
 
 namespace MStilkerich\CardDavClient\Services;
 
-use MStilkerich\CardDavClient\{Account, AddressbookCollection, Config, HttpClientAdapter, WebDavCollection};
+use MStilkerich\CardDavClient\{
+    Account,
+    AddressbookCollection,
+    CardDavClient,
+    Config,
+    HttpClientAdapter,
+    WebDavCollection
+};
+use MStilkerich\CardDavClient\Exception\DiscoveryException;
 
 /**
  * Provides a service to discover the addressbooks for a CardDAV account.
@@ -26,6 +34,8 @@ use MStilkerich\CardDavClient\{Account, AddressbookCollection, Config, HttpClien
  *   dnsrr?: string,
  *   userinput?: bool
  * }
+ *
+ * @psalm-import-type DiscoveryError from DiscoveryException
  *
  * @psalm-type SrvRecord = array{pri: int, weight: int, target: string, port: int}
  * @psalm-type TxtRecord = array{txt: string}
@@ -46,6 +56,13 @@ class Discovery
         "gmail.com" => "www.googleapis.com",
         "googlemail.com" => "www.googleapis.com",
     ];
+
+    /**
+     * The errors that occurred for the locations tried during the current discovery.
+     * @psalm-var list<DiscoveryError>
+     * @var array
+     */
+    private $errors = [];
 
     /**
      * Discover the addressbooks for a CardDAV account.
@@ -77,14 +94,18 @@ class Discovery
      * @psalm-return list<AddressbookCollection>
      * @return array<int,AddressbookCollection> The discovered addressbooks.
      *
+     * @throws DiscoveryException
+     *  If the addressbooks could not be discovered with any of the locations tried. The exception provides the errors
+     *  that occurred for the individual locations, see {@see DiscoveryException::getErrors()}.
      * @throws \Exception
-     *  In case of error, sub-classes of \Exception are thrown, with an error message contained within the \Exception
-     *  object.
+     *  In case of other errors (e.g. an invalid discovery URI), sub-classes of \Exception are thrown, with an error
+     *  message contained within the \Exception object.
      *
      * @api
      */
     public function discoverAddressbooks(Account $account): array
     {
+        $this->errors = [];
         $uri = $account->getDiscoveryUri();
         Config::$logger->debug("Starting discovery with input $uri");
         [ $protocol, $host, $port, $path ] = self::parseDiscoveryUri($uri);
@@ -196,7 +217,7 @@ class Discovery
             }
         }
 
-        throw new \Exception("Could not determine the addressbook home");
+        throw new DiscoveryException("Could not determine the addressbook home", $this->errors);
     }
 
     /**
@@ -292,17 +313,18 @@ class Discovery
     private function tryContextPath(Account $account, string $contextpath): ?array
     {
         Config::$logger->debug("Try context path $contextpath");
-        // (3) Attempt a PROPFIND asking for the DAV:current-user-principal property
-        $principalUri = $account->findCurrentUserPrincipal($contextpath);
-        if (isset($principalUri)) {
-            // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
-            $addressbookHomeUris = $account->findAddressbookHomes($principalUri);
-            try {
+
+        try {
+            // (3) Attempt a PROPFIND asking for the DAV:current-user-principal property
+            $principalUri = $account->findCurrentUserPrincipal($contextpath);
+            if (isset($principalUri)) {
+                // (4) Attempt a PROPFIND asking for the addressbook home of the user on the principal URI
+                $addressbookHomeUris = $account->findAddressbookHomes($principalUri);
                 $addressbooks = [];
                 $client = $account->getClient();
                 $homeFound = false;
 
-                foreach ($addressbookHomeUris ?? [] as $addressbookHomeUri) {
+                foreach ($addressbookHomeUris as $addressbookHomeUri) {
                     // The addressbook home is accessed with the account's credentials, so it must be a location
                     // where the credentials may be sent to
                     if (!$client->mayAuthenticate($addressbookHomeUri)) {
@@ -326,9 +348,13 @@ class Discovery
                 if ($homeFound) {
                     return $addressbooks;
                 }
-            } catch (\Exception $e) {
-                Config::$logger->info("Exception while querying addressbooks: " . $e->getMessage());
             }
+        } catch (\Exception $e) {
+            // Any error makes the discovery continue with the next location. The errors are reported to the application
+            // if the discovery fails for all locations.
+            $uri = CardDavClient::concatUrl($account->getUrl(), $contextpath);
+            Config::$logger->info("Discovery with $uri failed: " . $e->getMessage());
+            $this->errors[] = [ 'uri' => $uri, 'exception' => $e ];
         }
 
         return null;

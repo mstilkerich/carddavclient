@@ -1,6 +1,6 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
-## Version 2.0.0 (to 1.6.0)
+## Version 2.0.0 (to 1.6.1)
 
 - If the discovery of addressbooks fails, `Discovery::discoverAddressbooks()` throws a `DiscoveryException` (a subclass
   of `\Exception`, with the same message as before) that provides the errors that occurred for the locations tried
@@ -33,6 +33,12 @@
   sabre/vobject 3, sabre/xml 2.
 - Guzzle 8: Digest and NTLM authentication are performed via curl (as with Guzzle 7), since Guzzle 8's own Digest
   implementation fails for REPORT requests to Sabre/DAV based servers and Guzzle 8 dropped NTLM support.
+
+## Version 1.6.1 (to 1.6.0)
+
+- Fix: Normalize URI path before comparing. Otherwise the library may mistake the same paths for different paths e.g.
+  when raw vs. URL-encoded paths are used (e.g. one supplied as user input, one returned by server), or different
+  spellings in the URL-encoding (lower vs. uppercase) are used. Encountered when adding Stalwart to interop tests.
 
 ## Version 1.6.0 (to 1.5.1)
 

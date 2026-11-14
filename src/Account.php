@@ -171,7 +171,6 @@ class Account implements \JsonSerializable
             }
         }
 
-        /** @psalm-var SerializedAccount $props vimeo/psalm#10853 */
         $discoveryUri = $props["discoveryUri"];
         $baseUrl = $props["baseUrl"] ?? null;
         unset($props["discoveryUri"], $props["baseUrl"]);

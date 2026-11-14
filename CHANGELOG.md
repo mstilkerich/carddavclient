@@ -1,5 +1,11 @@
 # Changelog for CardDAV client library for PHP ("PHP-CardDavClient")
 
+## Version 1.6.1 (to 1.6.0)
+
+- Fix: Normalize URI path before comparing. Otherwise the library may mistake the same paths for different paths e.g.
+  when raw vs. URL-encoded paths are used (e.g. one supplied as user input, one returned by server), or different
+  spellings in the URL-encoding (lower vs. uppercase) are used. Encountered when adding Stalwart to interop tests.
+
 ## Version 1.6.0 (to 1.5.1)
 
 - New HTTP option `allow_host_callback` for an `Account`: A callback that decides for each request whether it may be

@@ -654,13 +654,22 @@ class CardDavClient
         return $segments;
     }
 
+    /**
+     * Checks whether the paths of two URIs are equivalent.
+     *
+     * Only the path components are compared; scheme, host, port, query and fragment are ignored. The paths are
+     * normalized before the comparison, so that different percent-encodings of the same path (e.g. @ vs. %40, or %c3
+     * vs. %C3) and dot segments do not matter. Leading and trailing slashes are ignored.
+     *
+     * @param string $url1 The first URI (absolute, or a path)
+     * @param string $url2 The second URI (absolute, or a path)
+     * @return bool True if the paths of both URIs are equivalent
+     */
     public static function compareUrlPaths(string $url1, string $url2): bool
     {
-        $comp1 = \Sabre\Uri\parse($url1);
-        $comp2 = \Sabre\Uri\parse($url2);
-        $p1 = trim(rtrim($comp1["path"] ?? '', "/"), "/");
-        $p2 = trim(rtrim($comp2["path"] ?? '', "/"), "/");
-        return $p1 === $p2;
+        $p1 = \Sabre\Uri\parse(\Sabre\Uri\normalize($url1))["path"] ?? '';
+        $p2 = \Sabre\Uri\parse(\Sabre\Uri\normalize($url2))["path"] ?? '';
+        return trim($p1, "/") === trim($p2, "/");
     }
 
     private static function getParserService(): \Sabre\Xml\Service

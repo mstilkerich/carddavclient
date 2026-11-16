@@ -19,17 +19,17 @@ is implemented. For known server issues, see the Known issues section below.
 - Sabre/DAV is the CardDAV implementation used by Nextcloud, Owncloud, Baïkal, and grammm (and possibly more).
 - Radicale is the CardDAV implementation used by Synology DSM contacts app (again, there may be more I am not aware of).
 
-Feature                     | iCloud | Google | Sabre | Davical | Radicale | SOGo
-----------------------------|--------|--------|-------|---------|----------|-----
-sync-collection             |   ✓    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓
-addressbook-multiget        |   ✓    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓
-Partial cards with multiget |   ✗    |   ✗    |   ✗   |   ✗     |   ✗      |  ✗
-addressbook-query           |   ✓    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓
-Partial cards with query    |   ✗    |   ✓    |   ✓   |   ✓     |   ✗      |  ✗
-Result limitation with query|   ✗    |   ✓    |   ✓   |   ✓     |   ✗      |  ✗
-FEAT_FILTER_ALLOF           |   ✗    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓
-FEAT_PARAMFILTER            |   ✗    |   ✓    |   ✓   |   ✓     |   ✓      |  ✗
-FEAT_ALLOF_SINGLEPROP       |   ✓    |   ✗    |   ✗   |   ✓     |   ✗      |  ✗
+Feature                     | iCloud | Google | Sabre | Davical | Radicale | SOGo| Stalwart
+----------------------------|--------|--------|-------|---------|----------|-----|---------
+sync-collection             |   ✓    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓  |    ✓
+addressbook-multiget        |   ✓    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓  |    ✓
+Partial cards with multiget |   ✗    |   ✗    |   ✗   |   ✗     |   ✗      |  ✗  |    ✓
+addressbook-query           |   ✓    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓  |    ✓
+Partial cards with query    |   ✗    |   ✓    |   ✓   |   ✓     |   ✗      |  ✗  |    ✓
+Result limitation with query|   ✗    |   ✓    |   ✓   |   ✓     |   ✗      |  ✗  |    ✓
+FEAT_FILTER_ALLOF           |   ✗    |   ✓    |   ✓   |   ✓     |   ✓      |  ✓  |    ✓
+FEAT_PARAMFILTER            |   ✗    |   ✓    |   ✓   |   ✓     |   ✓      |  ✗  |    ✓
+FEAT_ALLOF_SINGLEPROP       |   ✓    |   ✗    |   ✗   |   ✓     |   ✗      |  ✗  |    ✓
 
 
 ### Feature descriptions
@@ -347,7 +347,7 @@ User-visibile impact and possible workaround | The `query()` result may contain 
 
 BUG_PARAMNOTDEF_SOMEMATCH | Wrong result when matching for non-defined parameters
 --------|----------------------------------------------------------
-Affected servers / services | [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/16)
+Affected servers / services | [Davical](https://gitlab.com/davical-project/awl/-/merge_requests/16), Stalwart 1.1.0
 Description | addressbook-query with a param-filter for a not-defined parameter yields wrong results for cards where the parameter is present for some properties, but not all (it must not be present at all for a match)
 Affected operations | `AddressbookCollection::query()` when using parameter filters matching for non-defined parameters.
 User-visibile impact and possible workaround | The `query()` result may contain unexpected results.

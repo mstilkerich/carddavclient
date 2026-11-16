@@ -82,9 +82,9 @@ final class TestInfrastructureSrv
     // match vCards where the property does not exist.
     public const BUG_PARAMNOTDEF_MATCHES_UNDEF_PROPS = 2 ** 14;
 
-    // Server bug in Davical: A prop-filter with a param-filter/is-not-defined filter will match if there is at least
-    // one property of the asked for type that lacks the parameter, but it must only match if the parameter occurs with
-    // no property of the asked for type
+    // Server bug in Davical/Stalwart: A prop-filter with a param-filter/is-not-defined filter will match if there is at
+    // least one property of the asked for type that lacks the parameter, but it must only match if the parameter occurs
+    // with no property of the asked for type
     public const BUG_PARAMNOTDEF_SOMEMATCH = 2 ** 15;
 
     // Server bug in Davical: A text-match for a param-filter is performed on the property value, not the parameter
@@ -180,6 +180,10 @@ final class TestInfrastructureSrv
     public const SRVFEATS_SOGO = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG | self::FEAT_FILTER_ALLOF
         | self::BUG_PROPFILTER_EQUALS_BROKEN | self::BUG_INVTEXTMATCH_IGNORED | self::BUG_HANDLE_PROPGROUPS_IN_QUERY
         | self::BUG_PROPFILTER_PROPEXISTENCE_IGNORED | self::BUG_ETAGPRECOND_NOTCHECKED_DEL;
+
+    public const SRVFEATS_STALWART = self::FEAT_SYNCCOLL | self::FEAT_MULTIGET | self::FEAT_CTAG
+        | self::FEAT_PARAMFILTER | self::FEAT_FILTER_ALLOF | self::FEAT_ALLOF_SINGLEPROP | self::FEAT_RESULTLIMIT
+        | self::FEAT_ABOOKQUERY_PARTIALCARDS | self::BUG_PARAMNOTDEF_SOMEMATCH;
 
     /** @var bool */
     private static $initialized = false;

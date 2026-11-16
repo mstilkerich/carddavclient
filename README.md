@@ -47,6 +47,7 @@ Currently, this library has been tested to interoperate with:
 * Baïkal 0.7 (Digest Auth and GSSAPI/Kerberos 5) and later
 * Davical 1.1.7 and later
 * SOGo 5.10
+* Stalwart 1.1.0
 
 In theory, it should work with any CardDAV server. If it does not, please open an issue.
 

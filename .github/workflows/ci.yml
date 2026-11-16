@@ -178,6 +178,44 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           name: Carddavclient radicale interoperability test coverage
 
+  interop-stalwart:
+    strategy:
+      fail-fast: false
+      matrix:
+        stalwart-version: ['v1.0', 'v1.1']
+        account: ['Stalwart']
+        include:
+          # Bearer authentication using an API key as token
+          - stalwart-version: 'v1.1'
+            account: 'StalwartBearer'
+
+    runs-on: ubuntu-latest
+
+    env:
+      XDEBUG_MODE: coverage
+      CARDDAVCLIENT_INTEROP_SRV: ${{ matrix.account }}
+
+    steps:
+      - name: Checkout carddavclient
+        uses: actions/checkout@v7
+      - name: Set up CI environment
+        uses: ./.github/actions/setup
+      - name: Setup Stalwart
+        run: sudo .github/scripts/deployStalwart.sh "${{ matrix.stalwart-version }}" 1 "$GITHUB_ENV"
+      - name: Run interop tests
+        run: make tests-interop
+      - name: Show Stalwart logs
+        if: failure()
+        run: sudo docker logs carddavclient-ci-stalwart
+      - name: Upload interop-stalwart test coverage reports to codecov.io
+        uses: codecov/codecov-action@v7
+        with:
+          files: testreports/interop/clover.xml
+          disable_search: true
+          flags: interop
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: Carddavclient Stalwart interoperability test coverage
+
   interop-davical:
     runs-on: ubuntu-latest
 

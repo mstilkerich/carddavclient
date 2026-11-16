@@ -84,6 +84,28 @@ final class AccountData
               // Bug is fixed in Sabre/DAV 4.1.5
             "featureSet" => TestInfrastructureSrv::SRVFEATS_SABRE,
         ],
+        "Stalwart" => [
+            "username" => "citest@example.org",
+            "password" => "c1test-Passw0rd",
+            "discoveryUri" => "http://localhost:8080/",
+            "syncAllowExtraChanges" => false,
+            // Time in microseconds to wait after creating cards before issuing addressbook-query requests. Needed for
+            // servers that index new cards asynchronously, so that a query immediately following the creation of a
+            // card may not match it yet. Defaults to 0 if not set.
+            "queryDelayAfterCreate" => 500000,
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_STALWART,
+        ],
+        // Same Stalwart account, but authenticating with an API key as bearer token (created by deployStalwart.sh).
+        // Uses the same addressbook as the Stalwart account, so do not run tests for both in the same test run.
+        "StalwartBearer" => [
+            "httpOptions" => [
+                "bearertoken" => "%STALWART_APIKEY%",
+            ],
+            "discoveryUri" => "http://localhost:8080/",
+            "syncAllowExtraChanges" => false,
+            "queryDelayAfterCreate" => 500000,
+            "featureSet" => TestInfrastructureSrv::SRVFEATS_STALWART,
+        ],
     ];
 
     /** @var array<string, TestAddressbook> */
@@ -139,6 +161,18 @@ final class AccountData
             "url" => "http://localhost:8080/dav.php/addressbooks/citest/default/",
             "displayname" => "Default Address Book",
             "description" => "Default Address Book for citest",
+        ],
+        "Stalwart" => [
+            "account" => "Stalwart",
+            "url" => "http://localhost:8080/dav/card/citest%40example.org/default/",
+            "displayname" => "Stalwart Address Book (citest@example.org)",
+            "description" => null,
+        ],
+        "StalwartBearer" => [
+            "account" => "StalwartBearer",
+            "url" => "http://localhost:8080/dav/card/citest%40example.org/default/",
+            "displayname" => "Stalwart Address Book (citest@example.org)",
+            "description" => null,
         ],
     ];
 }

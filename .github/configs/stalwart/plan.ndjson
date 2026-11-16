@@ -1,0 +1,3 @@
+{"@type":"upsert","object":"Domain","matchOn":["name"],"value":{"dom-ci":{"name":"example.org","certificateManagement":{"@type":"Manual"},"dkimManagement":{"@type":"Automatic"},"dnsManagement":{"@type":"Manual"}}}}
+{"@type":"upsert","object":"Account","matchOn":["name"],"value":{"usr-citest":{"@type":"User","name":"citest","domainId":"#dom-ci","credentials":{"0":{"@type":"Password","secret":"c1test-Passw0rd"}},"description":"CI test user"}}}
+{"@type":"update","object":"SystemSettings","value":{"defaultHostname":"stalwart.example.org","defaultDomainId":"#dom-ci"}}

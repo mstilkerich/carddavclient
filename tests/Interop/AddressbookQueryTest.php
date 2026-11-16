@@ -629,6 +629,14 @@ final class AddressbookQueryTest extends TestCase
             self::$insertedCards[$abookname][] = $createResult;
         }
 
+        // Some servers (Stalwart) index new cards asynchronously, so that queries issued right after the creation of a
+        // card may not find it yet. For such servers, a delay can be configured in the account settings.
+        $accountCfg = AccountData::ACCOUNTS[AccountData::ADDRESSBOOKS[$abookname]["account"]];
+        $delay = $accountCfg["queryDelayAfterCreate"] ?? 0;
+        if ($delay > 0) {
+            usleep($delay);
+        }
+
         return $abook;
     }
 }

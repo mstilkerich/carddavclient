@@ -28,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  *   oAuthScopes?: string,
  *   discoveryUri: string,
  *   syncAllowExtraChanges: bool,
+ *   queryDelayAfterCreate?: int,
  *   featureSet: int,
  *   httpOptions?: HttpOptions,
  * }
@@ -222,6 +223,10 @@ final class TestInfrastructureSrv
 
         if (isset($cfg['httpOptions'])) {
             $cred = $cred + $cfg['httpOptions'];
+        }
+
+        if (isset($cred['bearertoken'])) {
+            $cred['bearertoken'] = self::replaceEnvVar($cred['bearertoken']);
         }
 
         if (
